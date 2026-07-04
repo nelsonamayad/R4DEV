@@ -1,0 +1,15 @@
+project:
+  type: website
+  output-dir: _blog
+
+website:
+  navbar:
+    right:
+      - about.qmd
+format:
+  html:
+    code-tools: true
+    theme: darkly
+    
+comments: 
+  hypothesis: true

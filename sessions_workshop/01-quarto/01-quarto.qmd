@@ -1,0 +1,133 @@
+---
+title: Blogging with Quarto 📓
+subtitle: Learn how to work with Quarto, and create and publish a blog created in RStudio
+author: "Nelson Amaya"
+description: "Learn to work with Quarto, to write prose and analise data at the same time. Create and update a blog using Quarto and then publish it online using Netlify"
+categories:
+  - netlify
+  - quarto
+  - website
+  - blog
+  - hypothesis
+  - bootswatch
+date: "2022-07-30"
+date-modified: last-modified
+image: swordfish.gif
+citation:
+  url: https://r4dev.netlify.app/sessions_workshop/01-quarto/01-quarto
+---
+
+> "*[...] there is growing evidence documenting the prevalence of publication bias in economics and other scientific fields, as well as specification searching, and widespread inability to replicate empirical findings*."<br>-- [Christensen & Miguel (2018)](https://www.aeaweb.org/articles?id=10.1257/jel.20171350)
+
+In this first lesson you will build and publish a blog online for free using [Quarto](https://quarto.org/docs/reference/projects/websites.html) and [Netlify](https://www.netlify.com/).
+
+## Your blog online for free in 5 minutes
+
+You are lucky.
+
+In 2022, RMarkdown was given a big upgrade: [Quarto](https://quarto.org/). This page you're looking at right now was built with Quarto, and now you'll learn how to create one for yourself and publish it online for free.
+
+Quarto is the new publication software that helps you build all the reproducible workflow. It goes beyond R, and can handle [Python](https://www.python.org/), [Julia](https://juliacomputing.com/) and other languages, and has lots of new features to publish content online. It will continue to improve.
+
+Let's build a blog-type website from scratch and publish it. It will take like 5 minutes total.
+
+::: callout-tip
+## [**Netlify**](https://www.netlify.com/)
+
+Quarto creates static sites, and you can deploy them online using [Netlify](https://www.netlify.com/), which is a professional platform for online content. Open a Netlify account and see how to deploy a site you create using Quarto [here](https://quarto.org/docs/publishing/netlify.html)
+:::
+
+### Step 1: Download and install Quarto, and create a Quarto Website Project from RStudio
+
+[Click here](https://quarto.org/docs/get-started/) to download Quarto and install it in your computer. Then open Rstudio and create **New Project**. You see a few new options. Select **Quarto Blog**:
+
+::: {#website-1 layout-ncol=2}
+![New Project ➡️ Quarto Blog](website-project-1.png)
+
+![Name the blog](website-project-2.png){#website-2}
+
+Build the website as an RStudio Project
+:::
+
+### Step 2: YML the details and the face of the blog
+
+By creating the website as a Quarto Blog project, a few files will be created automatically in the folder you chose. The most important files are the **`quarto.yml`** file, which is the configuration file for all the website, and the **`index.qmd`**, which organises the default page of the blog.
+
+In the **`quarto.yml`** YML file you can include myriad options --from the title, logo, search box, header, footer, side bars, navigation bars, everything. In this file you will also format the output, which in this case is an HTML and you can include, just like in Shiny apps, Bootswatch themes, change fonts, colors, anything you want. Quarto is very versatile.
+
+In the **`index.qmd`** file you basically design how the opening page of the blog will look like, what goes where and information on the author. The key option here is the [Listings](https://quarto.org/docs/websites/website-listings.html) so you can define how each blog post appears in the blog, and define the folder name where you will store all blog posts --conveniently called **posts**. You can add buttons to sort the posts or filter them.
+
+::: {layout-ncol=2}
+![Configuration of the blog: The \_quarto.yml file](website-yml.png){#website-3}
+
+![Face of the blog: The index file](website-index.png){#website-4}
+
+YML and index files in your blog
+:::
+
+::: callout-warning
+## Careful with YML indentation!
+
+Indentation order, and the space between options, is really important in YML documents.
+:::
+
+### Step 3: Build one blog post at a time
+
+Notice that in the index Quarto document the listings include the folder **posts** that is already in your blog folder. Each entry of the blog should be a folder within posts with whatever you want to include, and the listings will include them in the opening page of the blog in the order you choose.
+
+::: callout-tip
+## Brilliant theming with [**`bslib`**](https://rstudio.github.io/bslib/)
+
+One of the best customisation features for Quarto. With a few parameters you can completely change the look of a website, including colors, fonts and more. You can also use preexisting [bootswatch themes](https://bootswatch.com/)
+:::
+
+Every Quarto document in **posts** will be included in the blog. In this case we'll create a post for every practice you'll do in this workshop.
+
+### Step 4: Render to HTML
+
+Now you can build your blog by opening the **`index.qmd`** document and clicking the "Render" button ![Render button](render-button.png) or typing in the console **`quarto::quarto_render()`**. A new folder with all the HTML files and supporting configuration files will be built in the Quarto Blog project folder.
+
+I've created two posts for each practice assignment from this workshop, added some images for each one, and here is the result:
+
+![MyBlog after rendering](website-main.png){#website-5}
+
+::: callout-tip
+## Feeback: Annotate and Highlight R4DEV with Hypothesis
+
+Commenting for the workshop is enabled using [**Hypothesis**](https://web.hypothes.is/start/). 
+
+In the upper-right corner of each page there is a small menu you can click, and once you have registered with username-password, you can *Annotate*, *Highlight* or comment different parts of the site.<br><br>If you find errors, or things that need to be clarified, please signal them.
+:::
+
+### Step 5: Drag and drop to Netlify
+
+Now that you built the blog, go to your new Netlify account and **"Add a new site"** and choose the option **"Deploy manually"**. You will then be asked to drag and drop all the files to the browser, so drag the **`_blog`** folder with all the HTML files for the website where indicated. In a minute or so the blog should be live.
+
+Change the website name in **"Site settings"** to something like [myblog-r4dev-practice.netlify.app](https://myblog-r4dev-practice.netlify.app) and voila.
+
+Do you want to know how to publish and update the blog directly from RStudio? [Read this](https://quarto.org/docs/publishing/netlify.html)
+
+::: callout-tip
+## Quarto customisation
+
+Bookmark the [Quarto Guide](https://quarto.org/docs/guide/) and [Quarto References](https://quarto.org/docs/reference/), you'll need them both.
+:::
+
+## 🏗 Practice 1: Create a Quarto blog {.unnumbered}
+
+This is the first Practice. You'll have to publish all practice exercises for each session in your new blog.
+
+::: {.callout-note icon="false" collapse="false"}
+# Easy
+- Create a free **[Netlify](https://www.netlify.com/)** account
+- Create and publish your Quarto blog. The URL should be **http://r4dev-yourname.netlify.app**. In this blog you will publish all practice exercises
+- Choose and apply the base [Bootswatch theme](https://bootswatch.com/) for your blog
+- Enable [**Hypothesis**](https://web.hypothes.is/start/) commenting in your blog by adding `comments: hypothesis: true` in the YML (remember indentation!). Then create a group in Hypothesis with your name and share the link with me, so I can comment your site and provide suggestions.
+- In your YML under the `html` option, include `code-tools: true`
+
+Your YML file should look like this, in this case, using a Bootswatch theme called [journal](https://bootswatch.com/journal/):
+
+![](practice-yml.png)
+
+- Customise the About page of your Quarto blog (Tip: [Check the About page in Quarto](https://quarto.org/docs/websites/website-about.html))
+:::

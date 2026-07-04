@@ -1,0 +1,47 @@
+meta:
+  name:
+    short: R4DEV
+    full: "R4DEV — R for Development"
+  description: "Data workshop on reproducible analysis and visualisation with R, created by Nelson Amaya D."
+  link:
+    home: https://r4dev.netlify.app
+
+logo:
+  images:
+    main:
+      path: logo/r4dev_logo.png
+      alt: "R4DEV logo"
+  small: main
+  medium: main
+
+color:
+  palette:
+    teal: "#226F7F"        # navbar / primary accent
+    orange: "#F75431"      # links and highlights
+    ice: "#ddeaf1"         # page background
+    sky: "skyblue"         # footer band
+    dark-grey: "#222222"
+    black: "#000000"
+    white: "#ffffff"
+  background: ice
+  foreground: dark-grey
+  primary: teal
+  link: orange
+
+typography:
+  fonts:
+    - family: News Cycle
+      source: google
+      weight: [400, 700]
+    - family: Fira Code
+      source: google
+      weight: [400, 500]
+  base: News Cycle
+  headings:
+    family: News Cycle
+    weight: 700
+  monospace: Fira Code
+  monospace-block:
+    background-color: black
+  link:
+    color: orange

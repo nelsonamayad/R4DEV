@@ -1,0 +1,315 @@
+---
+title: "RetractionWatch"
+subtitle: "Working hard to hardly work using Quarto parametrised reports"
+description: "This report describes the state of scientific articles that have been retracted, focusing on researchers from `r params$country`"
+author: "R4DEV"
+date: last-modified
+params: 
+  country: "France"
+bibliography: RetractionWatch.bib
+csl: oecd.csl
+link-citations: true
+---
+
+> *Tracking retractions as a window into the scientific process*
+
+```{r raw-data}
+#| include: false
+library(tidyverse)
+
+# Data ####
+retractionwatch_raw <- readr::read_csv("retractions.csv") |>
+  janitor::clean_names() 
+
+# Separate authors by country and reasons for retraction ###
+retractionwatch_df <- retractionwatch_raw |>
+  tidyr::separate_rows(country ,sep=";") |>
+  tidyr::separate_rows(reason, sep=";") |>
+  dplyr::mutate(iso3c = countrycode::countrycode(sourcevar = country, origin = "country.name", destination = "iso3c")) |>
+  dplyr::mutate(country = str_remove_all(country,"'"))
+
+# Summaries ####
+total_retractions <- n_distinct(retractionwatch_raw)
+
+retractions_country <- retractionwatch_df |>
+      dplyr::count(country) |>
+      dplyr::filter(country==params$country) |> 
+      dplyr::select(n) |>
+      as.integer()
+  
+country_prop <- retractions_country/total_retractions |> 
+  round(digits=2)
+
+country_rank <-  retractionwatch_df |>
+  dplyr::count(country) |>
+  dplyr::mutate(rank = dense_rank(desc(n))) |>
+  dplyr::filter(country==params$country) |> 
+  dplyr::select(rank) |>
+  as.integer()
+
+country_top_reason <- retractionwatch_df |>
+  dplyr::filter(country==params$country) |> 
+  dplyr::filter(reason!="", !is.na(reason)) |>
+  dplyr::count(reason) |>
+  dplyr::slice_max(order_by = n, n = 1) |>
+  dplyr::select(reason) |>
+  as.character()
+
+```
+
+# Retractions worldwide ⚠️
+
+**Retraction Watch** plays an important role in the scientific community by tracking and reporting on retractions of research papers. They help maintain the integrity of the scientific record by highlighting instances where research may be flawed, fraudulent, or unethical, preventing the proliferation of incorrect information. Additionally, by analyzing and reporting on the reasons for retractions, **Retraction Watch** shows some common pitfalls in research practices, encouraging researchers, publishers, and institutions to adopt higher standards.
+
+The number of retractions identified by [**Retraction Watch**](https://retractionwatch.com/) (\@@oransky_retraction_2024) reached `r total_retractions`. In this report we will focus on describing retractions of articles published by authors from `r params$country`.
+
+The data recently became public thanks to CrossRef (@rosa-clark_news_nodate) and you can directly download it from [this link](https://www.crossref.org/blog/news-crossref-and-retraction-watch/).
+
+**Retraction Watch** has recently been featured in many articles (@the_economist, @van_noorden_more_2023). Their work has been Check out the map of retractions below (@fig-map).
+
+```{r map}
+#| label: fig-map
+library(ggiraph)
+library(sf)
+library(tidyverse)
+library(countrycode) 
+library(ggthemes)
+library(gapminder)
+library(rnaturalearth)
+library(ggiraph)
+library(ggthemes)
+library(viridis)
+
+# Map ####
+world_sf <- rnaturalearth::ne_countries(returnclass = "sf", scale="medium") |>
+  dplyr::select(iso3c=adm0_a3, geometry)
+
+# Data for parametrised country ####
+retractionwatch_param_country <- retractionwatch_df |>
+  dplyr::count(country) |>
+  dplyr::filter(country==params$country) |>
+  dplyr::mutate(iso3c = countrycode::countrycode(sourcevar = country, origin = "country.name", destination = "iso3c")) |>
+  dplyr::left_join(world_sf, by=c("iso3c")) |>
+  dplyr::mutate(centroid =  st_centroid(geometry)) |>
+  dplyr::mutate(coord = map(centroid, ~st_coordinates(.) |> as_tibble())) |>
+  tidyr::unnest_wider(col = coord, names_sep = "_")
+
+# ggplot ####
+retractionwatch_map_gg <- retractionwatch_df |>
+  dplyr::count(country) |>
+   dplyr::mutate(iso3c = countrycode::countrycode(sourcevar = country, origin = "country.name", destination = "iso3c")) |>
+  dplyr::left_join(world_sf, 
+                   by=c("iso3c")) |>
+  ggplot()+
+  ggiraph::geom_sf_interactive(
+    aes(geometry=geometry,
+        fill=n, 
+        data_id=country,
+        tooltip=paste0(country,
+                       "<br>Authors involved in retractions: ", 
+                       n |> round(digits=0) |> format(big.mark=" "))))+
+  ggiraph::geom_label_repel_interactive(
+    data = retractionwatch_param_country,
+    show.legend = FALSE,
+    aes(x = coord_X,
+        y = coord_Y,
+        label = country
+       ))+
+  ggiraph::scale_fill_gradient_interactive(
+      transform = "log10",
+      label = scales::label_number(), 
+      name = NULL, 
+      low = "royalblue1", 
+      high = "red3",
+      na.value = "grey50")+
+  ggthemes::theme_map()
+
+# Girafe ####
+ggiraph::girafe(ggobj = retractionwatch_map_gg)
+
+```
+
+# What's going on in `r params$country`?
+
+Retractions for authors from `r params$country` reached `r retractions_country`, and represented `r country_prop` % of all retractions registered. How does `r params$country` compare to other countries? What are the main reasons articles written by authors from `r params$country` are retracted? Who are the most retracted authors in `r params$country`?
+
+::: {.panel-tabset .nav-pills}
+## 🗺️ Comparisons
+
+Putting `r params$country` in an international perspective. `r params$country` ranks `r country_rank` in retractions (@fig-top).
+
+```{r top}
+#| label: fig-top
+
+library(ggiraph)
+library(tidyverse)
+library(countrycode) 
+library(ggiraph)
+
+# First build the pipe for ggplot ####
+retraction_country_gg <- retractionwatch_df |>
+  dplyr::count(country) |>
+  dplyr::filter(country==params$country) #
+
+retraction_top_countries_gg <- retractionwatch_df |>
+  dplyr::count(country) |>
+  dplyr::mutate(iso3c = countrycode::countrycode(
+    sourcevar = country, 
+    origin = "country.name", 
+    destination = "iso3c")) |>
+  dplyr::slice_max(order_by = n, n = 10) |> 
+  ggplot(aes(x=n,y=country |> reorder(n),fill=country))+
+  geom_col_interactive(
+    aes(fill=n, 
+        data_id=country,
+        tooltip=paste0(country,
+                       "<br>Authors involved in retractions: ", 
+                       n |> round(digits=0) |> format(big.mark=" "))))+
+  geom_col_interactive(
+    data = retraction_country_gg,
+    aes(fill=n, 
+        data_id=country,
+        tooltip=paste0(country,
+                       "<br>Authors involved in retractions: ", 
+                       n |> round(digits=0) |> format(big.mark=" "))))+
+  scale_fill_distiller_interactive(
+      palette = "Set1",
+      na.value = "grey50")+
+  labs(y=NULL)+
+  theme_classic()+
+  theme(legend.position = "none")
+
+                      
+# Then ggiraph ####  
+ggiraph::girafe(
+  ggobj = retraction_top_countries_gg
+)
+
+```
+
+## 🤔 Reasons
+
+Why were the articles retracted? The most frequent reason authors from `r params$country` have their articles retracted is *`r country_top_reason`* (@fig-reasons)
+
+```{r reasons}
+#| label: fig-reasons
+
+library(ggiraph)
+library(tidyverse)
+library(countrycode) 
+library(ggiraph)
+
+# First build the pipe for ggplot ####
+retraction_reasons_gg <- retractionwatch_df |>
+  dplyr::filter(country==params$country) |>
+  dplyr::count(reason) |>
+  dplyr::filter(reason!="", !is.na(reason)) |>
+  dplyr::slice_max(order_by = n, n = 15) |> 
+  ggplot(aes(x=n,y=reason |> reorder(n),fill=reason))+
+  geom_col_interactive(
+    aes(fill=n, 
+        data_id=reason,
+        tooltip=paste0(reason,
+                       "<br>Reasons for retractions: ", 
+                       n |> round(digits=0) |> format(big.mark=" "))))+
+  scale_fill_distiller_interactive(
+      palette = "Set1",
+      na.value = "grey50")+
+  labs(y=NULL)+
+  theme_classic()+
+  theme(legend.position = "none")
+
+                      
+# Then ggiraph ####  
+ggiraph::girafe(
+  ggobj = retraction_reasons_gg
+)
+
+```
+
+## 👨‍🔬 Authors
+
+Who are the most retracted authors in `r params$country`. Let's look at specific researchers (@fig-authors).
+
+```{r authors}
+#| label: fig-authors
+
+library(ggiraph)
+library(tidyverse)
+library(countrycode) 
+library(ggiraph)
+
+# First build the pipe for ggplot ####
+retraction_country_authors_gg <- retractionwatch_df |>
+  dplyr::filter(country==params$country) |>
+  tidyr::separate_rows(author ,sep=";") |>
+  dplyr::count(author) |>
+  dplyr::slice_max(order_by = n, n = 10) |> 
+  ggplot(aes(x=n,y=author |> reorder(n),fill=author))+
+  geom_col_interactive(
+    aes(fill=n, 
+        data_id=author,
+        tooltip=paste0(author,
+                       "<br>Retractions: ", 
+                       n |> round(digits=0) |> format(big.mark=" "))))+
+  scale_fill_distiller_interactive(
+      palette = "Set1",
+      na.value = "grey50")+
+  labs(y=NULL)+
+  theme_classic()+
+  theme(legend.position = "none")
+
+                      
+# Then ggiraph ####  
+ggiraph::girafe(
+  ggobj = retraction_country_authors_gg
+)
+
+```
+
+## 🧑‍🔬 Institutions
+
+Which institutions host the most retracted authors in `r params$country`? (@fig-institutions).
+
+```{r institutions}
+#| label: fig-institutions
+
+library(ggiraph)
+library(tidyverse)
+library(countrycode) 
+library(ggiraph)
+
+# First build the pipe for ggplot ####
+retraction_inst_gg <- retractionwatch_df |>
+  dplyr::filter(country==params$country) |>
+  tidyr::separate_rows(institution ,sep=";") |>
+  dplyr::count(institution) |>
+  dplyr::slice_max(order_by = n, n = 10) |> 
+  dplyr::filter(!is.na(institution), institution!="") |>
+  ggplot(aes(x=n,y=institution |> reorder(n),fill=institution))+
+  geom_col_interactive(
+    aes(fill=n, 
+        data_id=institution,
+        tooltip=paste0(institution,
+                       "<br>Retractions: ", 
+                       n |> round(digits=0) |> format(big.mark=" "))))+
+  scale_y_discrete(label = scales::label_wrap(50))+
+  scale_fill_distiller_interactive(
+      palette = "Set1",
+      na.value = "grey50")+
+  labs(y=NULL)+
+  theme_classic()+
+  theme(legend.position = "none")
+
+# Then ggiraph ####  
+ggiraph::girafe(
+  ggobj = retraction_inst_gg
+)
+
+```
+:::
+
+# References
+
+::: {#refs}
+:::

@@ -1,0 +1,6 @@
+---
+title: "Practice 2"
+date: "2022-10-25"
+categories: [ggplot2]
+image: "image.jpg"
+---

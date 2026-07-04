@@ -1,0 +1,120 @@
+project:
+  type: website
+  output-dir: _blog
+
+execute:
+  freeze: auto      # only re-execute R code in files that changed
+  warning: false
+
+lang: en
+
+website:
+  title: "R4DEV"
+  description: "Data workshop on reproducible analysis and visualisation with R, created by Nelson Amaya D."
+  favicon: logo/r4dev_logo.png
+  site-url: https://r4dev.netlify.app/
+
+  google-analytics:
+    tracking-id: "G-CE27LT98M2"
+  cookie-consent: true
+
+  twitter-card:
+    image: logo/r4dev_logo.png
+    title: "R4DEV"
+    description: "Data workshop created by Nelson Amaya D."
+    card-style: summary
+    creator: "@nelsonamayad"
+
+  open-graph:
+    image: logo/r4dev_logo.png
+    title: "R4DEV"
+    description: "Data workshop created by Nelson Amaya D."
+
+  search:
+    location: navbar
+    type: overlay
+
+  page-navigation: true
+  back-to-top-navigation: true
+
+  navbar:
+    logo: logo/r4dev_logo.png
+    title: false
+    background: primary
+    foreground: white
+    style: floating
+
+    left:
+      - text: "1. Quarto"
+        icon: "book-half"
+        href: sessions_workshop/01-quarto/01-quarto.qmd
+      - text: "2. Plot"
+        icon: "music-note-list"
+        href: sessions_workshop/02-plots/02-plots.qmd
+      - text: "3. Text"
+        icon: "textarea-t"
+        href: sessions_workshop/03-text/03-text.qmd
+      - text: "4. Animate"
+        icon: "film"
+        href: sessions_workshop/04-animate/04-animate.qmd
+      - text: "5. Map"
+        icon: "globe"
+        href: sessions_workshop/05-maps/05-maps.qmd
+      - text: "6. Scrap"
+        icon: "wifi"
+        href: sessions_workshop/06-scrap/06-scrap.qmd
+      - text: "7. Apps"
+        icon: "stars"
+        href: sessions_workshop/07-shiny/07-shiny.qmd
+      - text: "8. Report"
+        icon: "android2"
+        href: sessions_workshop/08-reports/08-reports.qmd
+      - text: "Practice"
+        icon: "trophy"
+        href: sessions_tools/09-practice/09-practice.qmd
+      - text: "R-sources"
+        icon: "eye-fill"
+        href: sessions_tools/10-resources/10-resources.qmd
+      - text: "Feedback"
+        icon: "activity"
+        href: sessions_tools/11-feedback/11-feedback.qmd
+
+    right:
+      - text: "Wait, what did I get myself into?"
+        icon: "question-circle-fill"
+        href: about.qmd
+
+  page-footer:
+    left: "📉 R4DEV 📈"
+
+    center: |
+      <span class="faux-block">Licensed under<br>[{{< fa brands creative-commons >}} {{< fa brands creative-commons-by >}} Creative Commons CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)</span>
+
+    right: |
+      <span class="faux-block">Created with {{< fa brands r-project >}} and [Quarto](https://quarto.org/)</span>
+
+    background: skyblue
+
+format:
+  html:
+    theme: [journal, brand]
+    toc: true
+    toc-location: left
+    code-fold: show
+    code-summary: "Click me!"
+    code-tools:
+      toggle: true
+      source: false
+    code-link: true
+    code-copy: true
+    code-annotations: hover
+    code-block-bg: "#000000"
+    highlight-style: arrow-dark
+    footnotes-hover: true
+    link-external-newwindow: true
+    smooth-scroll: true
+    lightbox: true
+    css: style.css
+
+comments:
+  hypothesis: true

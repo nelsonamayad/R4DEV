@@ -1,0 +1,69 @@
+---
+title: "Wait, what did I get myself into?"
+subtitle: "Data workshop" 
+author: 
+  - name: Nelson Amaya D.
+    affiliations: OECD | IOM
+    orcid: 0009-0000-8216-8656
+    email: nelson.amaya.d@gmail.com
+date: "2022-07-31"
+date-modified: last-modified
+about:
+  template: trestles
+  image: logo/r4dev_logo.png
+  image-shape: rectangle
+format: 
+  html: 
+    toc: false
+    page-layout: full
+---
+
+## 💡 What is R4DEV?
+
+I created the **R for Development (R4DEV)** workshop while working at the OECD to train my constantly rotating team. Word got around and eventually over 80 people joined R4DEV from across the organisation. 
+
+Here's what the workshop is all about:
+
+## 🦾 What you can expect to learn {.unnumbered}
+
+::: {.callout-tip appearance="simple" collapse = true icon=false}
+# Click here
+
+-   {{< fa person-digging >}} `Wrangling:` Clean, transform and prepare data for analysis with [dplyr](https://dplyr.tidyverse.org/index.html), [tidyr](https://tidyr.tidyverse.org/), [stringr](https://stringr.tidyverse.org/), [lubridate](https://lubridate.tidyverse.org/), [forcats](https://forcats.tidyverse.org/), [tibble](https://tibble.tidyverse.org/)
+
+-   {{< fa eye >}} `Visualization:` Build static and interactive plots with [ggplot2](https://ggplot2.tidyverse.org/), [plotly](https://plotly.com/r/), [ggiraph](http://davidgohel.github.io/ggiraph/), [tidygraph](https://cran.r-project.org/web/packages/ggraph/vignettes/tidygraph.html) and learn to do animations using [gganimate](https://gganimate.com/articles/gganimate.html). Explore many [ggplot2 extensions](https://exts.ggplot2.tidyverse.org/).
+
+-   {{< fa book-open >}} `Text analysis:` Transform characters, words, sentences, pages and books into data with [tidytext](https://cran.r-project.org/web/packages/tidytext/vignettes/tidytext.html), [regex](https://stringr.tidyverse.org/articles/regular-expressions.html) and [ggwordcloud](https://lepennec.github.io/ggwordcloud/)
+
+-   {{< fa file-shield >}} `Reporting:` Write reports with prose and data at the same time [Quarto](https://quarto.org/docs/computations/r.html) and learn how to manage references with [Zotero](https://www.zotero.org/)
+
+-   {{< fa earth-americas >}}️ `Mapping:` visualize geospatial data with [sf](https://r-spatial.github.io/sf/), and go interactive with [leaflet](https://rstudio.github.io/leaflet/) and spectacular with [rayshader](https://www.rayshader.com/)
+
+-   {{< fa user-secret >}} `Data recovery:` Import data from online sources and webpages with [rvest](https://rvest.tidyverse.org/), [pdftools](https://ropensci.org/blog/2016/03/01/pdftools-and-jeroen/), [readr](https://readr.tidyverse.org/)
+
+-   {{< fa upload >}} `Publishing:` Create apps and dashboard with [shiny](https://shiny.rstudio.com/). Build entire websites with [quarto](https://quarto.org/docs/computations/r.html)
+:::
+
+## 💫 Apply it to your own project!
+
+::: {.callout-tip appearance="simple" collapse = true icon=false}
+# Click here
+
+If you want, you can start your own project (a thesis, a blog, a paper, etc.) during the workshop.
+
+The idea of this project is not to burden you with extra work, but to avoid that 6 months from now you'll say *"wait, that looks familiar but, of course, I didn't use it for a while and now I can't remember anything!"*. All of these are practical and important tools for your work, and applying them to something you are already passionate about will let you keep all these lessons beyond your time working with us.
+:::
+
+## 🔥 Extra content {.unnumbered}
+
+::: {.callout-tip appearance="simple" collapse = true icon=false}
+# Click here
+
+If time allows, these are additional topics that we'll cover with overly enthusiastic and committed students:
+
+-   {{< fa repeat >}} `Iteration`: You'll learn to write better and shorter code with functional programming [purrr](https://purrr.tidyverse.org/)
+
+-   {{< fa robot >}} `Models`: Learn how to build reproducible and tractable models with [tidymodels](https://www.tidymodels.org/)
+
+-   {{< fa chart-area >}} `Bayesian analysis`: You need to unlearn a lot of what you were taught on statistics, but I'll help you along and so will [rethinking](https://github.com/rmcelreath/rethinking), [rstanarm](https://mc-stan.org/rstanarm/), [bayesplot](http://mc-stan.org/bayesplot/index.html), [brms](https://paul-buerkner.github.io/brms/) and [bayesrules](https://www.bayesrulesbook.com/)
+:::

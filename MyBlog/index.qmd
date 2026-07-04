@@ -1,0 +1,13 @@
+---
+title: "MyBlog"
+author: "My Name is" 
+listing:
+  contents: posts
+  sort: "date desc"
+  type: default
+  categories: true
+  sort-ui: false
+  filter-ui: false
+page-layout: full
+title-block-banner: "#9B00FF"
+---

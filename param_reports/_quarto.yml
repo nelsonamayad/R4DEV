@@ -1,0 +1,18 @@
+project:
+  type: website
+  output-dir: _reports
+
+format:
+  html:
+    theme: lumen
+    link-external-newwindow: true
+    code-fold: true
+    code-tools: true
+  pdf: 
+    toc: true
+    number-sections: true
+    colorlinks: true
+    
+execute: 
+  warning: false
+  echo: false

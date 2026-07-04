@@ -1,0 +1,55 @@
+---
+title: Think Bayes 🤔
+subtitle: A very short introduction to bayesian analysis
+description: "Bayesian analysis is "
+categories:
+  - statistics
+  - probability
+  - bayes
+  - mcmc
+date: "2023-02-28" 
+image: bayes.gif
+execute: 
+  eval: false
+  include: false
+draft: true
+---
+
+> *"It appears to be a quite general principle that, whenever there is a randomized way of doing something, then there is a nonrandomized way that delivers better performance but requires more thought."* <br>--E.T. Jaynes
+
+## Part I: Why Bayes?
+
+### Logic
+### Shiny example
+
+### What proportion of the earth does my country occupy?
+
+```{r globe}
+
+# install and load the packages
+library(sf)
+library(rgl)
+library(spData)
+library(sp)
+library(tidyverse)
+
+# Load the world dataset
+world <- sf::st_as_sf(spData::world) |>
+  ggplot2::fortify(region = "name_long")
+  
+# Randomly generate a set of coordinates
+latitude <- runif(1, -90, 90)
+longitude <- runif(1, -180, 180)
+coordinates <- sf::st_point(c(longitude, latitude)) 
+
+coordinates = sf::st_point(c(48.85074276916007, 2.3374964820830697))
+  
+# Use the st_contains function to check if the coordinates are within any of the countries' polygons
+result <- sf::st_contains(world$geom, coordinates) 
+  
+``` 
+
+## Part II: How to Bayes 
+
+## Where next
+
