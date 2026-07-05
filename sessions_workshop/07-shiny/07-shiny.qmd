@@ -57,8 +57,6 @@ The first app is simple, a bit boring. The **User Interface (UI)** for a shiny d
 
 ::: column-margin
 ![](bored.gif)
-<br>
-Open the app in a full screen [clicking here](https://nelsonamayad.shinyapps.io/r4dev-affairs1969-sidebar/)
 :::
 
 The body of the app is defined directly with a [`card()`](https://rstudio.github.io/bslib/articles/cards.html) object, that boxes any element you include inside, and where we add our expected output: a `plotOutput()` object where our filtered graph will be displayed.
@@ -169,7 +167,7 @@ shinyApp(ui=ui_affair, server = server_affair)  # <12>
 12. We combine the UI and server objects we created in the `shinyApp()` function and watch the magic unfold
 
 ::: column-screen-inset-right
-<iframe src="https://nelsonamayad.shinyapps.io/r4dev-affairs1969-sidebar/" style="border: none; width: 100%; height: 650px" frameborder="0">
+<iframe src="https://nelsonamayad-r4dev-fair-s-affairs-sidebar.share.connect.posit.cloud/" style="border: none; width: 100%; height: 650px" frameborder="0">
 
 </iframe>
 :::
@@ -188,8 +186,6 @@ The server function **server_affair_alt**, defines the logic and calculations fo
 
 ::: column-margin
 ![](wow.gif)
-<br>
-Open the app in a full screen [clicking here](https://nelsonamayad.shinyapps.io/r4dev-affairs1969-navbar/)
 :::
 
 In the second tab we include 2 `renderPlot` that react to the user's button selection. There is a better way of approaching the problem of multiple inputs outputs that interact with one another called **reactivity**, which we will see in the next example.
@@ -469,7 +465,7 @@ shinyApp(ui_affair_alt, server_affair_alt)
 ```
 
 ::: column-screen-inset-right
-<iframe src="https://nelsonamayad.shinyapps.io/r4dev-affairs1969-navbar/" style="border: none; width: 100%; height: 750px" frameborder="0">
+<iframe src="https://nelsonamayad-r4dev-fair-s-affairs-navbar.share.connect.posit.cloud/" style="border: none; width: 100%; height: 750px" frameborder="0">
 
 </iframe>
 :::
@@ -480,11 +476,11 @@ Look at the two deployed apps side by side:
 
 ::: {#infidelity .column-screen-inset layout-ncol="2"}
 ```{=html}
-<iframe src="https://nelsonamayad.shinyapps.io/r4dev-affairs1969-sidebar/" style="border: none; width: 100%; height: 700px" frameborder="0">
+<iframe src="https://nelsonamayad-r4dev-fair-s-affairs-sidebar.share.connect.posit.cloud/" style="border: none; width: 100%; height: 700px" frameborder="0">
 </iframe>
 ```
 ```{=html}
-<iframe src="https://nelsonamayad.shinyapps.io/r4dev-affairs1969-navbar/" style="border: none; width: 100%; height: 700px" frameborder="0">
+<iframe src="https://nelsonamayad-r4dev-fair-s-affairs-navbar.share.connect.posit.cloud/" style="border: none; width: 100%; height: 700px" frameborder="0">
 </iframe>
 ```
 :::
@@ -774,23 +770,13 @@ server_covid <- function(input,output) {
 
 ### The Full ShinyApp ✨
 
-<br> <br> Below you can see the app running from the server.
+::: callout-note
+## This example is being retired
 
-The app is not even close to being ready for publishing: it has many questionable aesthetic choices, the `value_box` takes too much space, etc. There is more work to be done.
+The COVID-19 map app that used to live here has been retired — it leaned on `rworldmap`/`sp`, both long unmaintained, and its geospatial dependency chain (`sf` → `terra`) broke on every modern hosting platform. A fresher, easier-to-reproduce geospatial example is on the way.
+:::
 
 Making an app quickly is easy, making a good app is not and requires a lot more tinkering to make sure the computations are efficient, and the UI is user-friendly, clear and useful. Otherwise it will be another app in a website nobody has any use for.
-
-::: column-margin
-Open the app in a full screen [clicking here](https://nelsonamayad.shinyapps.io/r4dev-covid19/). Click below to get the raw code for the app and replicate it: <br> <br> {{< downloadthis covid-app.R dname = r4dev-covid-app label="Download COVID App code" icon=download type=info >}}
-:::
-
-Interact with the app. Better if you open it in a new window in your browser. You can also download the code to reproduce the app from your own computer.
-
-::: column-screen-inset
-<iframe id="covid" src="https://nelsonamayad.shinyapps.io/r4dev-covid19/" style="border: none; width: 100%; height: 600px" frameborder="0">
-
-</iframe>
-:::
 
 ::: callout-tip
 ## Go nuts with Shiny extensions and improve the User Interface

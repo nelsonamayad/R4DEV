@@ -1,5 +1,5 @@
 webROjs = {
-  const { WebR } = window._exercise_ojs_runtime.WebR;
+  const { WebR, ChannelType } = window._exercise_ojs_runtime.WebR;
   const {
     WebREvaluator,
     WebREnvironmentManager,
@@ -79,11 +79,12 @@ webROjs = {
       let path = '';
       while (parts.length > 0) {
         path += parts.shift() + '/';
-        try {
-          await webR.FS.mkdir(path);
-        } catch (e) {
-          if (!e.message.includes("FS error")) {
-            throw e;
+        const analysis = await webR.FS.analyzePath(path);
+        if (!analysis.exists) {
+          try {
+            await webR.FS.mkdir(path);
+          } catch (e) {
+            throw new Error(`Filesystem Error: "${e.message}".`);
           }
         }
       }

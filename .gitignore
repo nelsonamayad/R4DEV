@@ -5,6 +5,10 @@
 .Rdata
 .httr-oauth
 
+# Secrets — API keys live in .Renviron, never in code or git
+.Renviron
+**/.Renviron
+
 # OS
 .DS_Store
 

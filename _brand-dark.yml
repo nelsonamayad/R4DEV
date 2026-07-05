@@ -1,0 +1,50 @@
+# R4DEV brand — dark mode (light mode: _brand.yml)
+# Same identity, inverted values: brighter teal/orange for contrast on dark.
+
+meta:
+  name:
+    short: R4DEV
+    full: "R4DEV — R for Development"
+  description: >-
+    Data workshop on reproducible analysis and visualisation with R,
+    created by Nelson Amaya D.
+  link:
+    home: https://r4dev.netlify.app
+
+logo:
+  images:
+    main:
+      path: logo/r4dev_logo.png
+      alt: "R4DEV logo"
+  small: main
+  medium: main
+
+color:
+  palette:
+    teal: "#4FB3C9"     # primary accent, lifted for dark backgrounds
+    orange: "#FF7A55"   # links, lifted for dark backgrounds
+    slate: "#8FA3A8"    # muted secondary text/elements
+    charcoal: "#1B262D" # subtle panel/table-stripe surfaces
+    abyss: "#10191F"    # page background
+    mist: "#D9E6EC"     # body text
+  background: abyss
+  foreground: mist
+  primary: teal
+  secondary: slate
+  tertiary: charcoal
+
+typography:
+  fonts:
+    - family: Roboto Condensed
+      source: google
+      weight: [300, 400, 700]
+    - family: Fira Code
+      source: google
+      weight: [400, 500]
+  base: Roboto Condensed
+  headings:
+    family: Roboto Condensed
+    weight: 700
+  monospace: Fira Code
+  link:
+    color: orange

@@ -1,0 +1,11 @@
+name: r4dev-ask
+title: Ask R4DEV - RAG Chatbot
+username: nelsonamayad
+account: nelsonamayad
+server: connect.posit.cloud
+envVars: ANTHROPIC_API_KEY
+hostUrl: https://api.connect.posit.cloud/v1
+appId: 019f2e51-b7db-cda5-c7db-48a0ecc8595e
+bundleId:
+url: https://connect.posit.cloud/nelsonamayad/content/019f2e51-b7db-cda5-c7db-48a0ecc8595e
+version: 1

@@ -1,8 +1,12 @@
+# R4DEV brand — light mode (dark mode: _brand-dark.yml)
+
 meta:
   name:
     short: R4DEV
     full: "R4DEV — R for Development"
-  description: "Data workshop on reproducible analysis and visualisation with R, created by Nelson Amaya D."
+  description: >-
+    Data workshop on reproducible analysis and visualisation with R,
+    created by Nelson Amaya D.
   link:
     home: https://r4dev.netlify.app
 
@@ -16,32 +20,30 @@ logo:
 
 color:
   palette:
-    teal: "#226F7F"        # navbar / primary accent
-    orange: "#F75431"      # links and highlights
-    ice: "#ddeaf1"         # page background
-    sky: "skyblue"         # footer band
-    dark-grey: "#222222"
-    black: "#000000"
-    white: "#ffffff"
-  background: ice
-  foreground: dark-grey
+    teal: "#226F7F"    # primary accent, navbar
+    orange: "#F75431"  # links and highlights
+    slate: "#5C6B70"   # muted secondary text/elements
+    cloud: "#EEF2F3"   # subtle panel/table-stripe surfaces
+    paper: "#FFFFFF"   # page background — clean, no tint
+    ink: "#20242A"     # body text
+  background: paper
+  foreground: ink
   primary: teal
-  link: orange
+  secondary: slate
+  tertiary: cloud
 
 typography:
   fonts:
-    - family: News Cycle
+    - family: Roboto Condensed
       source: google
-      weight: [400, 700]
+      weight: [300, 400, 700]
     - family: Fira Code
       source: google
       weight: [400, 500]
-  base: News Cycle
+  base: Roboto Condensed
   headings:
-    family: News Cycle
+    family: Roboto Condensed
     weight: 700
   monospace: Fira Code
-  monospace-block:
-    background-color: black
   link:
     color: orange

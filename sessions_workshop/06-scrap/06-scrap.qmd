@@ -49,7 +49,9 @@ Imagine you want to extract text from the Home page of R4DEV, but you only want 
 
 [IMDb](https://www.imdb.com/chart/top/) has a list of the best ranked movies. We'll pull it straight from the website using `rvest`. Using the Selector Gadget, we click on the objects of the webpage we want and bring them to the code that will pull that information and transform it into text.
 
-We will extract the title of the movie, the year, ranking and country from the [Wikipedia](https://fr.wikipedia.org/wiki/Top_250_de_l%27Internet_Movie_Database) entry.
+We will extract the ranking, title, year and country of every movie from the [Wikipedia](https://fr.wikipedia.org/wiki/Top_250_de_l%27Internet_Movie_Database) entry.
+
+For **tables**, `rvest` has a shortcut that spares you the click-hunting: `html_table()` grabs an HTML table and returns it as a tibble directly. Whenever what you want *looks like a table on the page*, reach for it first --hand-picked selectors like the ones above are brittle, and break whenever the page structure changes (this very session broke that way once; ask the instructor).
 
 ```{r 5.rvest}
 
@@ -59,21 +61,19 @@ library(rvest)
 imdb_top_url <- "https://fr.wikipedia.org/wiki/Top_250_de_l%27Internet_Movie_Database" # <1>
 
 # Scrape ! ####
-imdb_top_250_raw <- imdb_top_url %>% # <2>
-  rvest::read_html() %>% # <3>
-  rvest::html_elements("center:nth-child(25) td:nth-child(1), 
-                       center:nth-child(25) td:nth-child(2), 
-                       center:nth-child(25) td:nth-child(4),
-                       center:nth-child(25) .flagicon+ a") %>% # <4>
-  rvest::html_text() %>% # <5>
-  tibble::as_tibble() # <5>
+imdb_top_250_raw <- imdb_top_url |> # <2>
+  rvest::read_html() |> # <3>
+  rvest::html_element("table.wikitable") |> # <4>
+  rvest::html_table() # <5>
+
+imdb_top_250_raw
 
 ```
 1. Save the URL of the page we want
-2. Read the page as HTML with `read_html()`
-3. Pull the 4 chosen objects by separating them with a comma, inside of the quotations
-4. Make the result into text
-5. Turn into a tibble
+2. Start the pipe with the URL
+3. Read the page as HTML with `read_html()`
+4. Select the first element with class `wikitable` --Wikipedia uses that class for its data tables. Selector Gadget confirms it in one click
+5. `html_table()` parses the rows and columns straight into a tibble --no text-wrangling gymnastics needed
 
 ::: callout-tip
 ## A little HTML is enough
@@ -81,7 +81,7 @@ imdb_top_250_raw <- imdb_top_url %>% # <2>
 Learn a little HTML, it will help you identify quickly the information you want to retrieve from a website. Read the [**Get Started**](https://rvest.tidyverse.org/articles/rvest.html) section in **`rvest`**.
 :::
 
-Now we do a few tricks to turn this information into a database we can use and create a searchable table using [**`reactable`**](https://glin.github.io/reactable/index.html), which should be your go-to package for interactive tables.
+Now a little cleaning --scraped column names arrive messy and accented-- and we create a searchable table using [**`reactable`**](https://glin.github.io/reactable/index.html), which should be your go-to package for interactive tables.
 
 ```{r 5.imdb}
 
@@ -90,26 +90,24 @@ library(RColorBrewer)
 library(reactable)
 library(reactablefmtr)
 
-imdb_top_250_raw %>% # <6>
-  dplyr::mutate(category = rep(c("rank","title","year","country"),times=n()/4)) %>% # <7>
-  tidyr::pivot_wider(names_from = category, values_from = value, values_fn = list) %>% # <8>
-  tidyr::unnest(cols = everything()) %>% # <9>
-  dplyr::mutate(across("rank",as.numeric)) %>% # <10>
+imdb_top_250_raw |> # <6>
+  janitor::clean_names() |> # <7>
+  dplyr::select(rank = rang, title = titre_original, year = annee, country = starts_with("pays")) |> # <8>
+  dplyr::mutate(across(c(rank, year), as.numeric)) |> # <9>
   # Table
   reactable(
-    filterable = TRUE, 
-    searchable = TRUE, 
-    highlight = TRUE, 
-    striped = TRUE, 
+    filterable = TRUE,
+    searchable = TRUE,
+    highlight = TRUE,
+    striped = TRUE,
     resizable = TRUE,
     theme = journal(font_size=12)
     )
 ```
-6. Start with the scraped data
-7. Create a new variable that identifies each type of row, by repeating a vector for all observations
-8. Now `pivot_wider()` to make the rows into columns. Given that we have lots of variables with the same values (years, for instance), we have to do another trick by unnesting the lists that are created by default. Notice that the `values_fn=list` will turn the result into a list
-9. As if you were pulling down a curtain, `unnest()` makes the first row into a database with all the results we want
-10. We change the score to a numeric value using `across()`, which is used to modify multiple columns
+6. Start with the scraped table
+7. `clean_names()` from **`janitor`** turns *Titre français* and friends into safe lowercase names without accents
+8. We keep and rename the columns we care about --`starts_with("pays")` catches the country column even though Wikipedia decorates its name with a footnote marker
+9. We change rank and year to numeric values using `across()`, which is used to modify multiple columns
 
 ### Rejoinder: Feeling U2
 
@@ -122,6 +120,8 @@ First, we get all lyrics from U2, which are collected in their [website](https:/
 :::
 
 ```{r u2-scrap}
+#| eval: false
+
 library(tidyverse)
 library(rvest)
 library(tidytext)
@@ -151,6 +151,20 @@ for(i in u2_urls$url) {
     
 }
 
+```
+
+::: callout-tip
+## Scrape once, save, reuse
+
+The loop above knocks on u2.com about 240 times and takes several minutes --running it on every render would be slow *and* rude to the band's web server. So we practice what session 2 preached: we ran it once, saved the result, and load the snapshot from now on. `split()` rebuilds the exact same named list the loop produced.
+:::
+
+```{r u2-load}
+library(tidyverse)
+
+u2_lyrics_df <- readr::read_csv(paste0(getwd(), "/u2_lyrics.csv"))
+
+u2_lyrics <- split(dplyr::select(u2_lyrics_df, value), u2_lyrics_df$url)
 ```
 
 Second, we do a little wrangling to transform the list to a tibble, our favorite layout and format for rectangular datasets. We use `imap()` to name each element in the list, and then `map_df()` to bind them all together. This leaves us with a dataset where each row includes the lyrics of a song.
@@ -312,7 +326,7 @@ while (tally(eunoia_df) <= 690) {
 #| include: false
 #| eval: false
 
-write_csv(eunoia_df, paste0(getwd(),"/sessions_workshop/06-scrap/","eunoia.csv"))
+write_csv(eunoia_df, paste0(getwd(),"/eunoia.csv"))
 ``` 
 
 Now let's check all the downloaded untranslatable words is a **`reactable`** table, using a bootswatch theme and aggregating all words by language groups using `groupBy()` and a bit of column styling. 
@@ -365,20 +379,45 @@ eunoia_scraped |>
 
 ## PART II: Beyond static websites
 
-🛠️ *Future section* 🛠
+Everything so far assumed the data is *already in the page*: `read_html()` downloads the HTML the server sends, and we harvest it. But many modern websites arrive almost empty and build their content afterwards, by running **JavaScript** in your browser. `read_html()` never runs JavaScript, so it sees only the hollow shell.
 
-```{r rselenium}
-#| eval: false
-#| include: false
+See it for yourself. [quotes.toscrape.com](https://quotes.toscrape.com/) is a sandbox built for practicing scraping, and it serves the *same* quotes twice: once as normal HTML, and once rendered by JavaScript at [`/js/`](https://quotes.toscrape.com/js/). Watch what happens when we scrape the JavaScript version the old way:
 
-library(RSelenium)
+```{r 6.js-fail}
 library(tidyverse)
 library(rvest)
 
-# Server ####
-RSelenium::rsDriver(browser = "chrome")$open
-
+rvest::read_html("https://quotes.toscrape.com/js/") |> # <11>
+  rvest::html_elements(".quote .text") |>
+  rvest::html_text2() # <11>
 ```
+
+11. The same selectors that work on the static version return... nothing. The quotes aren't in the HTML the server sent --they are built by JavaScript after the page loads.
+
+The fix is one function swap: `read_html_live()` opens a real (but invisible) Chrome window using the **`chromote`** package, lets the JavaScript run, and then hands the *rendered* page to the exact same selector functions you already know.
+
+```{r 6.js-live}
+quotes_live <- rvest::read_html_live("https://quotes.toscrape.com/js/") # <12>
+
+quotes_live |>
+  rvest::html_elements(".quote") |> # <13>
+  purrr::map_df(\(q) tibble( # <14>
+    quote  = q |> html_element(".text") |> html_text2(),
+    author = q |> html_element(".author") |> html_text2()
+  ))
+```
+
+12. `read_html_live()` needs the `chromote` package and a Chrome-based browser installed --that's it. No Java, no Docker, no drivers.
+13. From here on, everything is the `rvest` you already know: same selectors, same functions.
+14. A little `map_df()` pattern to turn each quote `<div>` into a row --one anonymous function, one tidy tibble.
+
+::: callout-tip
+## Need to click, type or scroll?
+
+`read_html_live()` covers the most common case: pages that *render* with JavaScript. When you also need to **interact** --click "load more", fill a search box, log in-- use [**`selenider`**](https://ashbythorpe.github.io/selenider/): it drives the same headless Chrome with a friendly syntax (`open_url()`, `s(".button") |> elem_click()`).
+
+You may find old tutorials using **`RSelenium`** for this. It works, but it is a heavyweight from another era --it needs Java and browser drivers, and its maintenance has wound down. `chromote` and `selenider` are its modern replacements.
+:::
 
 ## 🏗 Practice 6: Scrape {.unnumbered}
 
@@ -388,6 +427,7 @@ RSelenium::rsDriver(browser = "chrome")$open
 -   Find a website with info you want to bring to R
 -   Visualise the data (plot, map, etc.)
 -   Scrape any Wikipedia table and plot the result in R
+-   Scrape all ten quotes from the JavaScript sandbox with `read_html_live()`, including the tags of each quote
 :::
 
 ::: {.callout-important icon="false" collapse="true"}

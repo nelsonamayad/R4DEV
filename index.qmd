@@ -1,11 +1,6 @@
 ---
 title: "📉 R4DEV 📈"
-subtitle: "More fiction is written in Excel than in Word"
-author: 
-  - name: Nelson Amaya D.
-    date-modified: last-modified
-    email: nelson.amaya.d@gmail.com
-    orcid: 0009-0000-8216-8656
+subtitle: "More fiction is written in Excel than in Word. Learn how to do better."
 listing:
   - id: "workshop"
     sort: "date"
@@ -13,19 +8,19 @@ listing:
     type: grid
     image-align: left
     image-height: 150px
-    fields: [image, date, title, description, reading-time]  
+    fields: [image, date, title, description, reading-time]
     sort-ui: true
     filter-ui: true
     categories: cloud
     feed: true
-  
+
   - id: "tools"
     sort: "date"
     contents: "sessions_tools"
     type: grid
     image-align: left
     image-height: 150px
-    fields: [image, date, title, description, reading-time]  
+    fields: [image, date, title, description, reading-time]
     sort-ui: false
     filter-ui: false
     categories: false
@@ -34,39 +29,64 @@ toc: false
 page-layout: full
 title-block-banner-color: "#FFFFFF"
 title-block-style: default
-title-block-banner: cover/universe.jpg 
+title-block-banner: cover/universe.jpg
 ---
 
-<div>
-
-::: {style="float: right; position: relative; top: 0px; padding: 20px; height:260px; width:180px"}
-[![](logo/xkcd_documents.png){width="167"}](https://xkcd.com/1459/)
-:::
-
-</div>
-
-Welcome!
-
-📉 R4DEV 📈 is designed to teach you how to do **reproducible data analysis and visualisation** using [**R**](https://www.r-project.org/) and [**RStudio**](https://posit.co/)[^1]. You will learn to handle and import online data, to make all sorts of plots, maps and animations, and even create apps and websites using free open-source tools. [Check out all the things you can expect to learn](https://r4dev.netlify.app/about).
+::: {.hero}
+::: {.hero-text}
+Learn **reproducible data analysis and visualisation** with [R](https://www.r-project.org/) --from your first [Quarto](https://quarto.org/) document to interactive maps, animations, web apps, and programming Large Language Models. Free, open-source, and tested on real humans[^1] at the OECD.
 
 [^1]: Thanks to Zélie, Rebecca, Rossana, Romane, Emma, Shivona, Maëlle and others who tested, often with their patience, earlier versions of this workshop.
 
-The workshop is committed to work with the [**tidyverse**](https://www.tidyverse.org/)[^2].
+::: {.hero-actions}
+[Start with session 1 →](sessions_workshop/01-quarto/01-quarto.qmd){.btn .btn-light .btn-lg}
+[New: the AI track 🤖](sessions_workshop/09-llm/09-llm.qmd){.btn .btn-outline-light .btn-lg}
+[Wait, what is this?](about.qmd){.btn .btn-outline-light .btn-lg}
+:::
+:::
+
+::: {.hero-figure}
+[![](logo/xkcd_documents.png){width="150" fig-alt="xkcd comic about file names"}](https://xkcd.com/1459/)
+:::
+:::
+
+::: {.feature-row}
+::: {.feature-card}
+### 🧹 Wrangle & plot
+
+Tidy messy data with the [tidyverse](https://www.tidyverse.org/)[^2] and turn it into plots people remember with `ggplot2`, `plotly` and `ggiraph`.
+:::
+
+::: {.feature-card}
+### 🗺️ Map, animate, ship
+
+Build maps with `sf` and `leaflet`, animate anything with `gganimate`, and publish apps and entire websites with `shiny` and Quarto.
+:::
+
+::: {.feature-card}
+### 🤖 Talk to machines
+
+Call LLMs from code with `ellmer`, turn prose into tidy data, and build apps that answer questions about your data in plain language.
+:::
+:::
 
 [^2]: The tidyverse is a collection of R packages designed for data science. All packages share an underlying design philosophy, grammar, and data structures. Install the complete tidyverse with: `install.packages("tidyverse")`. If you prefer base R code, suit yourself but *I do not recommend it*.
 
-All progress is piecemeal, so the workshop is in permanent state of improvement. Make sure you check the website regularly for updates, new material and corrections.
+All progress is piecemeal, so the workshop is in a permanent state of improvement --check back for updates, new material and corrections.
 
 :::: {.columns}
-::: {.column width="40%"}
+::: {.column width="49%"}
 ::: {.callout-tip}
 ## Cheat sheets for {{< fa brands r-project >}}
 
-Download the [RStudio cheat sheets](https://www.rstudio.com/resources/cheatsheets/)
+Download the [Posit cheat sheets](https://rstudio.github.io/cheatsheets/) --one page per package, all killer no filler
 :::
 :::
 
-::: {.column width="40%"}
+::: {.column width="2%"}
+:::
+
+::: {.column width="49%"}
 ::: {.callout-important}
 ## Tidyverse style guide
 
@@ -75,16 +95,12 @@ Download the [RStudio cheat sheets](https://www.rstudio.com/resources/cheatsheet
 :::
 ::::
 
-::: {.callout-danger appearance="simple" icon="false"}
-## Sessions 📊
+## Sessions 📊 {.section-header}
 
 ::: {#workshop}
 :::
-:::
 
-::: {.callout-danger appearance="simple" icon="false"}
-## Tools 🛠️
+## Tools 🛠️ {.section-header}
 
 ::: {#tools}
-:::
 :::

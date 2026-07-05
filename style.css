@@ -1,3 +1,4 @@
+/* ---------- legacy tweaks ---------- */
 p.caption {
   color: #777;
   margin-top: 10px;
@@ -11,4 +12,85 @@ pre {
 }
 pre code {
   white-space: inherit;
+}
+
+/* ---------- welcome page: hero ---------- */
+/* Uses Bootstrap CSS variables so light/dark brands both work. */
+.hero {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  background: linear-gradient(135deg, var(--bs-primary), color-mix(in srgb, var(--bs-primary) 55%, #000));
+  color: #fff;
+  border-radius: 1rem;
+  padding: 2rem 2.25rem;
+  margin: 1rem 0 2rem 0;
+  box-shadow: 0 10px 30px color-mix(in srgb, var(--bs-primary) 35%, transparent);
+}
+.hero a:not(.btn) {
+  color: #fff;
+  text-decoration-color: color-mix(in srgb, #fff 60%, transparent);
+}
+.hero .hero-text {
+  flex: 1 1 auto;
+  font-size: 1.15rem;
+}
+.hero .hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1.25rem;
+}
+.hero .hero-figure {
+  flex: 0 0 auto;
+  background: #fff;
+  border-radius: 0.75rem;
+  padding: 0.5rem;
+  line-height: 0;
+}
+@media (max-width: 768px) {
+  .hero { flex-direction: column; text-align: center; }
+  .hero .hero-actions { justify-content: center; }
+  .hero .hero-figure { display: none; }
+}
+
+/* ---------- welcome page: feature cards ---------- */
+.feature-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin: 0 0 2rem 0;
+}
+@media (max-width: 768px) {
+  .feature-row { grid-template-columns: 1fr; }
+}
+.feature-card {
+  /* --bs-tertiary-color (used by some bslib components for card text) can
+     resolve to a dark, low-contrast value in dark mode -- set color
+     explicitly rather than inheriting it, so text always matches the page's
+     own readable body color regardless of that derived variable. */
+  background: var(--bs-tertiary-bg, var(--bs-body-bg));
+  color: var(--bs-body-color);
+  border: 1px solid color-mix(in srgb, var(--bs-body-color) 12%, transparent);
+  border-radius: 0.75rem;
+  padding: 1.25rem 1.4rem;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px color-mix(in srgb, var(--bs-body-color) 12%, transparent);
+}
+.feature-card h3 {
+  margin-top: 0;
+  font-size: 1.2rem;
+  border-bottom: none;
+  color: var(--bs-body-color);
+}
+
+/* ---------- welcome page: section headers ---------- */
+.section-header {
+  border-bottom: 3px solid var(--bs-primary);
+  display: inline-block;
+  padding-bottom: 0.15rem;
+  margin-top: 2.5rem;
 }

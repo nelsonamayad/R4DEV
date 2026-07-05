@@ -149,7 +149,7 @@ library(magick)
 
 # cherry ####
 gganimate::anim_save(animation = sakura_anim, 
-                     filename = paste0(getwd(),"/sessions/04-animate","/cherry-blossoms.gif"),
+                     filename = paste0(getwd(),"/cherry-blossoms.gif"),
                      height = 400,
                      width = 800,
                      units = "px",
@@ -349,15 +349,13 @@ library(gganimate)
 gganimate::animate(co2_anim, duration = 15, fps = 15, nframes = 200)
 
 gganimate::anim_save(animation = last_animation(),
-                     filename = paste0(getwd(),"/sessions/04-animate","/co2_anim.gif"),
+                     filename = paste0(getwd(),"/co2_anim.gif"),
                      res = 150)
 ```
 
 ![C02 Emissions in the XX century](co2_anim.gif){#fig-c02}
 
 ## Bonus track: Correlation, causation --and why data never speaks for itself {-}
-
-🛠️ *Section under construction* 🛠
 
 *"While correlation does not imply causation, causation does imply correlation"* wrote Daniel Kahneman in his latest book [**Noise**](https://www.amazon.com/Noise-Flaw-Human-Judgment/dp/B08LNYM39M/ref=sr_1_1?keywords=daniel+kahneman+noise&qid=1668962412&sr=8-1). Mr Kahneman, I'm afraid you are wrong. By a mile. Let's see why.
 
@@ -402,7 +400,7 @@ Well, it turns out that this is a case of a ***collider***, and one of the many 
 
 ### Animate to understand: Causal inference
 
-🛠️ *Under construction* 🛠
+The tool for thinking about these traps is the **DAG** --a *directed acyclic graph* where arrows mean "causes". Our coin-toss example looks like this: two arrows pointing *into* Z make it a **collider**, and conditioning on a collider opens a spurious path between its parents. Drawing the graph takes four lines with **`ggdag`**:
 
 ```{r collider-dag}
 library(dagitty)
@@ -500,7 +498,7 @@ library(magick)
 
 # Collider ####
 gganimate::anim_save(animation = collider_anim, 
-                     filename = paste0(getwd(),"/sessions/04-animate","/collider.gif"),#
+                     filename = paste0(getwd(),"/collider.gif"),#
                      height = 1000,
                      width = 1000,
                      units = "px",
@@ -509,6 +507,136 @@ gganimate::anim_save(animation = collider_anim,
 ``` 
 
 ![Collider bias, or how a spurious correlations is born](collider.gif){#fig-collider width=75%}
+
+### The Mixtape example: beauty, talent, and the movies
+
+Scott Cunningham's [*Causal Inference: The Mixtape*](https://mixtape.scunning.com/) opens the collider chapter with a beautiful puzzle: among movie stars, beauty and talent seem *negatively* correlated --the gorgeous ones can't act, the brilliant ones look ordinary. Sinister? No: **selection**. Suppose beauty and talent are independent in the population, but you only become a star if the *sum* of the two is high enough. Looking only at stars *is* conditioning on a collider (stardom is caused by both), and it manufactures a negative correlation out of thin air.
+
+You don't have to take my word for it --run the selection yourself below.
+
+### Touch it: three graphs, one toggle {.unnumbered}
+
+Each tab simulates 300 observations from a different causal structure. Every tab has **one switch**. Before you flip it, look at the DAG and decide what *should* happen. Then flip.
+
+```{r causal-sim-data}
+#| code-fold: true
+#| code-summary: "The simulations behind the toggles (click to read)"
+
+library(tidyverse)
+set.seed(4)
+n <- 300
+
+# 1. Confounder: wealth causes both chocolate and Nobels. No arrow X -> Y.
+wealth    <- rbinom(n, 1, 0.5)
+chocolate <- rnorm(n) + 2.5 * wealth
+nobels    <- rnorm(n) + 2.5 * wealth
+conf <- tibble(
+  x = chocolate, y = nobels, group = ifelse(wealth == 1, "Rich", "Poor"),
+  x_adj = resid(lm(chocolate ~ wealth)),   # <1>
+  y_adj = resid(lm(nobels ~ wealth))       # <1>
+)
+
+# 2. Mediator: education raises skill, skill raises wages. Effect is REAL.
+education <- rnorm(n)
+skill     <- education + rnorm(n) / 2
+wages     <- 1.5 * skill + rnorm(n) / 2
+med <- tibble(
+  x = education, y = wages, group = ifelse(skill > median(skill), "High skill", "Low skill"),
+  x_adj = resid(lm(education ~ skill)),
+  y_adj = resid(lm(wages ~ skill))
+)
+
+# 3. Collider: beauty and talent are independent; stardom needs their sum.
+beauty <- rnorm(n)
+talent <- rnorm(n)
+star   <- (beauty + talent + rnorm(n) / 4) > 1.2
+coll <- tibble(x = beauty, y = talent, group = ifelse(star, "Movie star", "The rest of us"))
+
+ojs_define(conf_r = conf, med_r = med, coll_r = coll) # <2>
+```
+
+1. "Adjusting" here is done the honest way, by **residualizing**: we keep only the part of each variable that the third variable does *not* explain. This is exactly what the step-by-step demeaning animation above does, and exactly what multiple regression does for you silently.
+2. `ojs_define()` hands R objects to **Observable JS**, Quarto's built-in language for interactive graphics --this is what makes the toggles below react instantly, with no server behind this page.
+
+```{ojs}
+//| echo: false
+fitSlope = (data) => {
+  const mx = d3.mean(data, d => d.x), my = d3.mean(data, d => d.y);
+  return d3.sum(data, d => (d.x - mx) * (d.y - my)) / d3.sum(data, d => (d.x - mx) ** 2);
+}
+causalPlot = (data, xlab, ylab, colors) => Plot.plot({
+  height: 380,
+  color: {legend: true, range: colors},
+  x: {label: xlab},
+  y: {label: ylab},
+  marks: [
+    Plot.dot(data, {x: "x", y: "y", fill: "group", opacity: 0.65, r: 3.5}),
+    Plot.linearRegressionY(data, {x: "x", y: "y", stroke: "#F75431", strokeWidth: 3})
+  ]
+})
+```
+
+::: {.panel-tabset}
+
+## Confounder
+
+Wealthy countries eat more chocolate *and* win more Nobel prizes --there is **no arrow** between chocolate and Nobels. Adjusting for wealth is the *right* move here: it should make the slope vanish.
+
+```{ojs}
+//| echo: false
+viewof adj_conf = Inputs.toggle({label: "Adjust for wealth (Z)"})
+conf_data = transpose(conf_r).map(d => ({x: adj_conf ? d.x_adj : d.x, y: adj_conf ? d.y_adj : d.y, group: d.group}))
+md`DAG: **Chocolate ← Wealth → Nobels**. Slope of the orange line: **${fitSlope(conf_data).toFixed(2)}** ${adj_conf ? "— adjusted: the illusion is gone." : "— unadjusted: chocolate 'causes' Nobel prizes?"}`
+causalPlot(conf_data, "Chocolate consumption", "Nobel prizes", ["#8c6bb1", "#226F7F"])
+```
+
+## Mediator
+
+Education raises skill, and skill raises wages --the effect of education is **real**, and it flows *through* skill. Adjusting for the mediator is the *wrong* move if you want the total effect: it destroys the very thing you are measuring.
+
+```{ojs}
+//| echo: false
+viewof adj_med = Inputs.toggle({label: "Adjust for skill (M)"})
+med_data = transpose(med_r).map(d => ({x: adj_med ? d.x_adj : d.x, y: adj_med ? d.y_adj : d.y, group: d.group}))
+md`DAG: **Education → Skill → Wages**. Slope of the orange line: **${fitSlope(med_data).toFixed(2)}** ${adj_med ? "— adjusted: you just erased a real effect." : "— unadjusted: the true total effect."}`
+causalPlot(med_data, "Education", "Wages", ["#41ab5d", "#226F7F"])
+```
+
+## Collider
+
+Beauty and talent are **independent** --but only people with plenty of at least one become movie stars. Restricting to stars *is* adjusting for a collider: it should invent a negative slope that exists nowhere in the population.
+
+```{ojs}
+//| echo: false
+viewof only_stars = Inputs.toggle({label: "Look only at movie stars (condition on C)"})
+coll_data = transpose(coll_r).filter(d => only_stars ? d.group === "Movie star" : true)
+md`DAG: **Beauty → Stardom ← Talent**. Slope of the orange line: **${fitSlope(coll_data).toFixed(2)}** ${only_stars ? "— among stars only: a correlation born from selection." : "— everyone: no relationship, as designed."}`
+causalPlot(coll_data, "Beauty", "Talent", ["#F75431", "#999999"])
+```
+
+:::
+
+The moral fits in one sentence, and it is the most important sentence in this workshop: **whether you should adjust for a variable depends on the causal structure, not on the data** --the data looked identical across two of those tabs until you flipped the switch, and the right answer was "adjust" in one and "don't you dare" in the other.
+
+::: callout-tip
+## Go deeper
+
+-   [**The DAG Almanac**](https://dags.andrewheiss.com/) by Andrew Heiss --interactive confounders, mediators and colliders, with the do-calculus behind them (and it's built with Quarto, like this site).
+-   [**Understanding adjustment**](https://rpsychologist.com/descriptive-adjustment/) by Kristoffer Magnusson --the most beautiful interactive explanation of what "controlling for" really does.
+-   *The Mixtape* [chapter on DAGs](https://mixtape.scunning.com/03-directed_acyclical_graphs), free online.
+-   Play more: this repo ships two little Shiny simulators, live below --or run them yourself with `shiny::runApp("shiny/collider")` / `shiny::runApp("shiny/r4dev-ovb")`.
+:::
+
+::: {#collider-ovb .column-screen-inset layout-ncol="2"}
+```{=html}
+<iframe src="https://nelsonamayad-r4dev-collider.share.connect.posit.cloud/" style="border: none; width: 100%; height: 900px" frameborder="0">
+</iframe>
+```
+```{=html}
+<iframe src="https://nelsonamayad-r4dev-ovb.share.connect.posit.cloud/" style="border: none; width: 100%; height: 900px" frameborder="0">
+</iframe>
+```
+:::
 
 ## 🏗 Practice 4: Make it move {-}
 
@@ -522,5 +650,6 @@ gganimate::anim_save(animation = collider_anim,
 # Intermediate
 - Choose one [causal graph from Nick Huntington Klein's GitHub page](https://github.com/NickCH-K/causalgraphs) and replicate it.
 - Describe it
+- In the three-toggle explainer above, the mediator tab erases a *real* effect when you adjust. Simulate a fourth structure --a chain with a confounder on top (**Z → X, Z → Y, X → M → Y**)-- and decide: which variables do you adjust for to recover the true effect of X on Y? Verify with `lm()`
 :::
 

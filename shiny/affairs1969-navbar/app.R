@@ -26,7 +26,10 @@ affairs_1969 <- readr::read_csv("https://raw.githubusercontent.com/vincentarelbu
 # Define User Interface ####
 {ui_affair_alt <- page_navbar(
     # Page options ####
-    title = "Fair's Affairs 1969",
+    title = tags$span(
+      tags$img(src = "r4dev_logo.png", height = "26px", style = "margin-right:8px; vertical-align:middle;"),
+      "Fair's Affairs 1969"
+    ),
     footer = "R4DEV",
     theme = bslib::bs_theme(
       bootswatch = "united",

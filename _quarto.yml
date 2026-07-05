@@ -1,6 +1,11 @@
 project:
   type: website
   output-dir: _blog
+  render:
+    - "**/*.qmd"
+    - "!MyBlog/"
+    - "!param_reports/"
+    - "!shiny/"
 
 execute:
   freeze: auto      # only re-execute R code in files that changed
@@ -8,10 +13,14 @@ execute:
 
 lang: en
 
+brand:
+  light: _brand.yml
+  dark: _brand-dark.yml
+
 website:
   title: "R4DEV"
-  description: "Data workshop on reproducible analysis and visualisation with R, created by Nelson Amaya D."
-  favicon: logo/r4dev_logo.png
+  description: "Data workshop on reproducible analysis and visualisation using R, created by Nelson Amaya D."
+  favicon: logo/r4dev_dalle_1.png
   site-url: https://r4dev.netlify.app/
 
   google-analytics:
@@ -19,14 +28,14 @@ website:
   cookie-consent: true
 
   twitter-card:
-    image: logo/r4dev_logo.png
+    image: logo/r4dev_dalle_1.png
     title: "R4DEV"
     description: "Data workshop created by Nelson Amaya D."
     card-style: summary
     creator: "@nelsonamayad"
 
   open-graph:
-    image: logo/r4dev_logo.png
+    image: logo/r4dev_dalle_1.png
     title: "R4DEV"
     description: "Data workshop created by Nelson Amaya D."
 
@@ -38,46 +47,76 @@ website:
   back-to-top-navigation: true
 
   navbar:
-    logo: logo/r4dev_logo.png
+    logo: logo/r4dev_dalle_1.png
     title: false
     background: primary
     foreground: white
     style: floating
 
     left:
-      - text: "1. Quarto"
+      - text: "Sessions"
         icon: "book-half"
-        href: sessions_workshop/01-quarto/01-quarto.qmd
-      - text: "2. Plot"
-        icon: "music-note-list"
-        href: sessions_workshop/02-plots/02-plots.qmd
-      - text: "3. Text"
-        icon: "textarea-t"
-        href: sessions_workshop/03-text/03-text.qmd
-      - text: "4. Animate"
-        icon: "film"
-        href: sessions_workshop/04-animate/04-animate.qmd
-      - text: "5. Map"
-        icon: "globe"
-        href: sessions_workshop/05-maps/05-maps.qmd
-      - text: "6. Scrap"
-        icon: "wifi"
-        href: sessions_workshop/06-scrap/06-scrap.qmd
-      - text: "7. Apps"
-        icon: "stars"
-        href: sessions_workshop/07-shiny/07-shiny.qmd
-      - text: "8. Report"
-        icon: "android2"
-        href: sessions_workshop/08-reports/08-reports.qmd
-      - text: "Practice"
+        menu:
+          - text: "1. Quarto"
+            icon: "book-half"
+            href: sessions_workshop/01-quarto/01-quarto.qmd
+          - text: "2. Plot"
+            icon: "music-note-list"
+            href: sessions_workshop/02-plots/02-plots.qmd
+          - text: "3. Text"
+            icon: "textarea-t"
+            href: sessions_workshop/03-text/03-text.qmd
+          - text: "4. Animate"
+            icon: "film"
+            href: sessions_workshop/04-animate/04-animate.qmd
+          - text: "5. Map"
+            icon: "globe"
+            href: sessions_workshop/05-maps/05-maps.qmd
+          - text: "6. Scrap"
+            icon: "wifi"
+            href: sessions_workshop/06-scrap/06-scrap.qmd
+          - text: "7. Apps"
+            icon: "stars"
+            href: sessions_workshop/07-shiny/07-shiny.qmd
+          - text: "8. Report"
+            icon: "android2"
+            href: sessions_workshop/08-reports/08-reports.qmd
+          - text: "12. Scale up"
+            icon: "speedometer2"
+            href: sessions_workshop/12-parallel/12-parallel.qmd
+      - text: "AI · LLMs"
+        icon: "robot"
+        menu:
+          - text: "9. Talking to machines"
+            icon: "robot"
+            href: sessions_workshop/09-llm/09-llm.qmd
+          - text: "10. Chat with your data"
+            icon: "chat-dots"
+            href: sessions_workshop/10-llm-apps/10-llm-apps.qmd
+          - text: "11. Grounded in truth (ragnar)"
+            icon: "compass"
+            href: sessions_workshop/11-ragnar/11-ragnar.qmd
+          - text: "Ask R4DEV 🤖 (live capstone)"
+            icon: "stars"
+            href: sessions_workshop/11-ragnar/11-ragnar.qmd#capstone-ask-r4dev
+      - text: "Extras"
+        icon: "infinity"
+        menu:
+          - text: "Think Bayes"
+            icon: "infinity"
+            href: sessions_workshop/13-bayes/bayes.qmd
+      - text: "Tools"
         icon: "trophy"
-        href: sessions_tools/09-practice/09-practice.qmd
-      - text: "R-sources"
-        icon: "eye-fill"
-        href: sessions_tools/10-resources/10-resources.qmd
-      - text: "Feedback"
-        icon: "activity"
-        href: sessions_tools/11-feedback/11-feedback.qmd
+        menu:
+          - text: "Practice"
+            icon: "trophy"
+            href: sessions_tools/09-practice/09-practice.qmd
+          - text: "R-sources"
+            icon: "eye-fill"
+            href: sessions_tools/10-resources/10-resources.qmd
+          - text: "Feedback"
+            icon: "activity"
+            href: sessions_tools/11-feedback/11-feedback.qmd
 
     right:
       - text: "Wait, what did I get myself into?"
@@ -93,11 +132,14 @@ website:
     right: |
       <span class="faux-block">Created with {{< fa brands r-project >}} and [Quarto](https://quarto.org/)</span>
 
-    background: skyblue
+    background: primary
 
 format:
   html:
-    theme: [journal, brand]
+    theme:
+      light: [journal, brand]
+      dark: [journal, brand]
+    respect-user-color-scheme: true
     toc: true
     toc-location: left
     code-fold: show
@@ -108,8 +150,7 @@ format:
     code-link: true
     code-copy: true
     code-annotations: hover
-    code-block-bg: "#000000"
-    highlight-style: arrow-dark
+    highlight-style: arrow
     footnotes-hover: true
     link-external-newwindow: true
     smooth-scroll: true

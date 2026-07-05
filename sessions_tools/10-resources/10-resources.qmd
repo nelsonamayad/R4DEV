@@ -96,11 +96,31 @@ Below a list of my favorite online resources on R, click below to see the links 
 :::
 
 ::: {.callout-note collapse="true" icon="false"}
+## LLMs & AI
+
+-   [ellmer](https://ellmer.tidyverse.org/) --call any LLM from R
+
+-   [shinychat](https://posit-dev.github.io/shinychat/r/) and [querychat](https://posit-dev.github.io/querychat/r/) --chat UIs and natural-language data querying for Shiny
+
+-   [ggsql](https://r.ggsql.org/) --grammar of graphics for SQL (alpha)
+
+-   [Large Language Model tools for R](https://luisdva.github.io/llmsr-book/) --a free book cataloguing the whole ecosystem
+
+-   [Posit's AI tools overview](https://opensource.posit.co/ai/)
+:::
+
+::: {.callout-note collapse="true" icon="false"}
 ## Causal inference
 
 -   [*Causal Inference: The Mixtape*](https://mixtape.scunning.com/) by Scott Cunningham
 
 -   [*The Effect: An Introduction to Research Design and Causality*](https://theeffectbook.net/) by Nick Huntington-Klein
+
+-   [The DAG Almanac](https://dags.andrewheiss.com/) by Andrew Heiss --interactive DAGs and do-calculus
+
+-   [Understanding adjustment](https://rpsychologist.com/descriptive-adjustment/) by Kristoffer Magnusson
+
+-   Slides on R objects used in this workshop: {{< downloadthis ../../r4dev_objects.pptx dname = r4dev_objects label="Download r4dev_objects.pptx" icon=file-earmark-slides type=success >}}
 :::
 
 ::: {.callout-note collapse="true" icon="false"}

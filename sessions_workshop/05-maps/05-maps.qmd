@@ -35,7 +35,6 @@ library(tidyverse)
 tibble(
   package_name = c(
     "sf",
-    "RSocrata",
     "geodata",
     "ggthemes",
     "leaflet",
@@ -46,7 +45,6 @@ tibble(
     "tidyterra"),
   package_description = c(
     "Simple features objects for mapping",
-    "Socrata API",
     "Get coordinates in many formats",
     "Simple themes for maps",
     "To build interactive maps",
@@ -58,7 +56,6 @@ tibble(
     ),
   package_vignette = c(
     "https://r-spatial.github.io/sf/",
-    "https://github.com/Chicago/RSocrata",
     "https://github.com/rspatial/geodata",
     "https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/",
     "https://rstudio.github.io/leaflet/",
@@ -191,7 +188,7 @@ library(gganimate)
 library(magick)
 
 gganimate::anim_save(animation = world_pop_anim, 
-                     filename = paste0(getwd(),"/sessions/04-mapping","/world_pop_anim.gif"),
+                     filename = paste0(getwd(),"/world_pop_anim.gif"),
                      height = 400,
                      width = 800,
                      units = "px",
@@ -280,7 +277,9 @@ Let us look at this crisis through a geospatial lens.
 
 The [Center for Disease Control (CDC)](https://www.cdc.gov/) has data on opioid-related deaths, called VSRR Provisional Drug Overdose Death Counts, and can be found in the US [Data.gov](https://www.data.gov/) portal. The data we are looking for is [here](https://data.cdc.gov/NCHS/VSRR-Provisional-Drug-Overdose-Death-Counts/xkb8-kh2a) and by clicking on the **API** button on the upper-right corner, choosing our format, in this case CSV, and can copy the location of the data for easy import to R.
 
-That way we can easily download it to R with **`RSocrata`** package, using the function `read.socrata()`, and then we keep only the data we want. Better yet, we can quickly plot the data using **`ggplot2`**.
+That way we can download it straight into R with `read_csv()` --Socrata portals serve plain CSV, no special package needed[^socrata]. The only trick is the `$limit` parameter: without it, the portal politely hands you just the first 1 000 rows. Then we keep only the data we want and quickly plot it using **`ggplot2`**.
+
+[^socrata]: Old tutorials use the `RSocrata` package for this. It was **archived from CRAN in April 2025** --package rot is real, which is one more reason to prefer plain `readr` + query parameters (the same API skills from session 2) over one-job wrapper packages.
 
 ::: column-margin
 Having trouble downloading the data from the CDC?
@@ -290,13 +289,12 @@ Having trouble downloading the data from the CDC?
 :::
 
 ```{r 5.cdc-socrata}
-library(RSocrata)      # Socrata API
-library(tidyverse)     # Our other old friend  
+library(tidyverse)     # Our old friend
 
 # Get data from CDC portal
-cdc <- "https://data.cdc.gov/resource/xkb8-kh2a.csv" # <16>
+cdc <- "https://data.cdc.gov/resource/xkb8-kh2a.csv?$limit=500000" # <16>
 
-opioid <- RSocrata::read.socrata(cdc) |> # <17>
+opioid <- readr::read_csv(cdc) |> # <17>
   dplyr::filter(str_detect(indicator,"Drug Overdose Deaths"))  # <18>
 
 # Plot aggregate data
@@ -321,10 +319,10 @@ opioid |>
 ```{r}
 #| include: false
 #| eval: false
-write_csv(opioid, paste0(getwd(),"/sessions_workshop/05-maps/", "cdc_opioid.csv"))
+write_csv(opioid, paste0(getwd(),"/cdc_opioid.csv"))
 ``` 
-16. We identify the CSV version of the data we want from the CDC page
-17. We use the `read.socrata()` function to access the API and download it. We filter only the variable we want to keep
+16. We identify the CSV version of the data we want from the CDC page, and add `$limit=500000` so the portal sends everything instead of its default 1 000-row page
+17. Plain `read_csv()` on the API URL --downloading from an API and reading a local file are the same gesture. We filter only the variable we want to keep
 18. `select` only the variables we want
 19. **Warning**: There is a data point with aggregates for all the US. We need to exclude it.
 
@@ -592,11 +590,11 @@ us_mapview@map |>
 
 The number of overdose deaths in California is very high, but is masked by the large population of the state. Let's have a closer look at the opioid crisis in California by creating an interactive graph to look at deaths by county using **`ggiraph`**, as we did before.
 
-First, we visit again the CDC database and find the information we need by county, noting the API name so we can download it with RSocrata. [The data we need is here](https://data.cdc.gov/NCHS/VSRR-Provisional-County-Level-Drug-Overdose-Death-/gb4e-yj24) and we import it into R as we did before.
+First, we visit again the CDC database and find the information we need by county, noting the API endpoint so we can download it with `read_csv()`. [The data we need is here](https://data.cdc.gov/NCHS/VSRR-Provisional-County-Level-Drug-Overdose-Death-/gb4e-yj24) and we import it into R as we did before.
 
 Second, we download a map of the US using the aptly named **`usmap`** package and **`tidycensus`**[^1] to get population from the 2010 census by county for California.
 
-[^1]: To access the US Census database you need an API Key. [Request your API key here](https://api.census.gov/data/key_signup.html), and then use it to access the data, as you did before with the Spotify.
+[^1]: To access the US Census database you need an API Key. [Request your API key here](https://api.census.gov/data/key_signup.html), and then use it to access the data --some APIs, unlike Open-Meteo from session 2, do ask you to identify yourself.
 
 With all the data ready, we do a little wrangling to join the opioid data and geographical data for California into a single object using the FIPS codes, which are shared by both sources of data.
 
@@ -610,8 +608,8 @@ Having trouble downloading the data for California?
 ```{r 5.us-census-api}
 #| include: false
 
-# Tidycensus ####
-us_census_api_key <- "REDACTED_CENSUS_API_KEY"
+# Tidycensus: the key lives in .Renviron (CENSUS_API_KEY=...), never in code ####
+us_census_api_key <- Sys.getenv("CENSUS_API_KEY")
 
 ```
 
@@ -621,9 +619,9 @@ library(tidycensus)
 library(tidyverse)
 
 # CDC data by county ####
-cdc_county <- "https://data.cdc.gov/resource/gb4e-yj24.csv"
+cdc_county <- "https://data.cdc.gov/resource/gb4e-yj24.csv?$limit=500000"
 
-opioid_california <- RSocrata::read.socrata(cdc_county) |>
+opioid_california <- readr::read_csv(cdc_county) |>
   dplyr::filter(st_abbrev=="CA", year==2021, month==12)
 
 # Tidycensus ####
@@ -652,7 +650,7 @@ california <- usmapdata::us_map(regions = "counties") |>
 ```{r}
 #| include: false
 #| eval: false
-write_csv(opioid_california, paste0(getwd(),"/sessions_workshop/05-maps/", "california_opioid.csv"))
+write_csv(opioid_california, paste0(getwd(),"/california_opioid.csv"))
 ``` 
 
 We will create two visualisations that will be connected to one another: a scatter plot and a map. We create each graph independently using the extended geoms from **`ggiraph`** package. The key make the two interact is the data_id, which will show the name of the state when you hover the mouse over each point or county. We reuse a trick from the last session to control the image that is displayed in the visual mark using `ggimage`.
@@ -785,8 +783,8 @@ rayshader::plot_gg(california_gg,
                    phi = 50)
 
 # Video ####
-rayshader::render_movie(filename = paste0(getwd(),"/sessions_workshop/05-maps","/california_rayshader.mp4"),
-                        audio = paste0(getwd(),"/sessions_workshop/05-maps","/myth.mp3")
+rayshader::render_movie(filename = paste0(getwd(),"/california_rayshader.mp4"),
+                        audio = paste0(getwd(),"/myth.mp3")
                         )
 
 # GIF ####

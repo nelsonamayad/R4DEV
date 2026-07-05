@@ -18,7 +18,10 @@ affairs_1969 <- readr::read_csv("https://raw.githubusercontent.com/vincentarelbu
 # Define simple  User Interface ####
 ui_affair <- page_sidebar(
   # We start with the header with a title
-  title = "Fair's Affairs 1969",
+  title = tags$span(
+    tags$img(src = "r4dev_logo.png", height = "26px", style = "margin-right:8px; vertical-align:middle;"),
+    "Fair's Affairs 1969"
+  ),
   # Color theme for the dashboard
   theme = bslib::bs_theme(
     bootswatch = "litera"

@@ -1,4 +1,15 @@
-local tinyyaml = require "resources/tinyyaml"
+-- Patched for Quarto 1.10 on Windows: resolve the module relative to this
+-- script instead of the process working directory (bare `require` fails when
+-- filters don't run from the extension directory). Re-apply if
+-- `quarto update r-wasm/quarto-live` overwrites this file.
+local tinyyaml
+do
+  local script_dir = debug.getinfo(1, "S").source:match("@?(.*[\\/])") or "./"
+  local prev_path = package.path
+  package.path = script_dir .. "?.lua;" .. prev_path
+  tinyyaml = require "resources/tinyyaml"
+  package.path = prev_path
+end
 
 local cell_options = {
   webr = { eval = true },
@@ -528,7 +539,10 @@ function setupPyodide(doc)
 
   -- Initial Pyodide startup options
   local pyodide_options = {
-    indexURL = "https://cdn.jsdelivr.net/pyodide/v0.26.1/full/",
+    indexURL = "https://cdn.jsdelivr.net/pyodide/v0.28.1/full/",
+    env = {
+      PLOTLY_RENDERER = 'plotly_mimetype',
+    }
   }
   if (pyodide["engine-url"]) then
     pyodide_options["indexURL"] = pandoc.utils.stringify(pyodide["engine-url"])
@@ -593,7 +607,7 @@ function setupWebR(doc)
 
   -- Initial webR startup options
   local webr_options = {
-    baseUrl = "https://webr.r-wasm.org/v0.4.1/"
+    baseUrl = "https://webr.r-wasm.org/v0.6.0/",
   }
   if (webr["engine-url"]) then
     webr_options["baseUrl"] = pandoc.utils.stringify(webr["engine-url"])

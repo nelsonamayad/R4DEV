@@ -2,14 +2,14 @@
 title: Everything in its right place 🎼
 subtitle: Learn how to retrieve information from APIs and create interactive visualisations
 author: "Nelson Amaya"
-description: "Learn how get information from APIs, and create interactive visualisations of historical GDP and Spotify songs using ggplot2, plotly and ggiraph."
+description: "Learn how to get information from APIs with httr2, and create interactive visualisations of historical GDP, Kyoto weather and archived Spotify songs using ggplot2, plotly and ggiraph."
 categories:
   - API
+  - httr2
   - interactive
   - ggplot2
   - plotly
   - girafe
-  - spotify
 date: "2022-07-31" 
 date-modified: last-modified
 image: thom-dance.gif
@@ -39,7 +39,13 @@ To get us started, we'll tell a story of how to visualise cross-country comparis
 
 ### Import the [Maddison Project](https://www.rug.nl/ggdc/historicaldevelopment/maddison/) data from [OWID GitHub](https://github.com/owid)
 
-To begin, we look for the data we need. The Maddison Project has data in Excel and Stata to download (see [here](https://www.rug.nl/ggdc/historicaldevelopment/maddison/releases/maddison-project-database-2020)), but there is a better way to get it. Accessing OWID's repository is two clicks away from Google, and when we find the data we want, we copy the URL that leads us directly to the raw data. Using the `read_csv()` function, we can easily import the data into R.
+To begin, we look for the data we need. The Maddison Project has data in Excel and Stata to download (see [here](https://www.rug.nl/ggdc/historicaldevelopment/maddison/releases/maddison-project-database-2020)), but there is a better way to get it. We copy the URL that leads directly to the raw data in OWID's GitHub catalog, and with the `read_csv()` function we can import it straight into R --no downloading, no unzipping, no clicking.
+
+::: callout-tip
+## Where OWID data lives now
+
+The GitHub catalog we read from below was **archived in 2022** --it still works, and it will always return the same numbers (which is why this workshop keeps using it: reproducibility). For *current* data, Our World in Data now serves every chart on its site as a clean CSV: take any chart URL and append `.csv` to its grapher address, like `https://ourworldindata.org/grapher/gdp-per-capita-maddison-project-database.csv`. [The documentation is here](https://docs.owid.io/projects/etl/api/).
+:::
 
 One thing you'll notice about the data is that it only has country names. No regions, continents, of other geographical aggregates.
 
@@ -382,71 +388,88 @@ animation::saveGIF(
     plot(maddison_proj_6)
     plot(maddison_proj_7)
     },
-  movie.name = paste0(getwd(),"/sessions/02-plots","/maddison_proj.gif")
+  movie.name = paste0(getwd(),"/maddison_proj.gif")
 )
 
 ```
 
-## PART II: Feel the music: {{< fa brands spotify >}} Spotify {.unnumbered}
+## PART II: Knock on the front door: APIs {.unnumbered}
 
-Thanks to Spotify API, we can access a wealth of data on artists, songs, etc. APIs are front doors to access databases online, and they are a wonderful resource. To access Spotify's API, we need to have an account and ask permission. You can go to the [developer login](https://developer.spotify.com/dashboard/login) and request one. You will receive a **client ID** and a **client secret** code that will connect your computer to the API to make requests for data.
+APIs (*Application Programming Interfaces*) are front doors to access databases online, and they are a wonderful resource. Instead of downloading a file by hand, you send a **request** describing exactly what you want, and the server sends back the data --usually as **JSON**, a nested text format that R can easily turn into a tibble.
 
-We will use the [`spotifyr`](https://github.com/charlie86/spotifyr) package to download the info. The data usually needs an artist ID to retrieve information, so we build a quick function to extract the name of the artist we need so we can download the data we want. We then get the data for **Radiohead**. Why? I love Radiohead.
+We will use the [**`httr2`**](https://httr2.r-lib.org/) package, the tidyverse-adjacent tool for talking to APIs, and knock on the door of [**Open-Meteo**](https://open-meteo.com/), a free weather API that requires no account, no token, no key. We'll request 75 years of daily temperatures for **Kyoto**. Why Kyoto? Remember the cherry blossoms: in session 4 you'll animate 1,200 years of sakura bloom dates, and this data tells the other half of that story.
 
-Let's start with the music, downloading all the discography.
-
-::: callout-note
-## Get your own Spotify tokens!
-
-Create and use your own Spotifyr token and secret code in the [developer page](https://developer.spotify.com/dashboard/login)
-:::
-
-```{r 2.spotifyr-ids}
-#| include: false
-my_spotify_id <- "REDACTED_SPOTIFY_CLIENT_ID"
-my_spotify_secret <- "REDACTED_SPOTIFY_CLIENT_SECRET"
-```
-
-```{r 2.spotifyr}
+```{r 2.openmeteo}
+#| fig-cap: "Spring is arriving earlier in Kyoto"
 
 library(tidyverse)
-library(spotifyr)
+library(httr2)
 
-# Set Client ID and Client Secret - Use your own ! ####
-Sys.setenv(SPOTIFY_CLIENT_ID = my_spotify_id)   # <32>
-Sys.setenv(SPOTIFY_CLIENT_SECRET = my_spotify_secret) # <32>
-
-# Save access token ####
-spotify_access_token <- get_spotify_access_token() # <33>
-
-# Get artist ID based on name ####
-spotify_id <- function(artist_name) {   # <34>
-  
-spotifyr::search_spotify(print(artist_name), type = "artist") |>  # <34>
-  dplyr::arrange(desc(popularity)) |> # <34>  
-  dplyr::select(id) |>  # <34>
-  dplyr::slice(1) |>   # <34>
-  as.character()   # <34>
-   
-} # <34>
-
-# using the function we can identify the ID for Radiohead 
-spotify_id("Radiohead")  # <35>
-
-# Download all discography for Radiohead ####
-radiohead_spotify <- spotifyr::get_artist_audio_features(  # <36>
-  artist = "4Z8W4fKeB5YxbusRsdQVPb",  # <36>
-  include_groups = "album", # <36>
-  authorization = spotify_access_token # <36>
+# Build the request ####
+kyoto_req <- httr2::request("https://archive-api.open-meteo.com/v1/archive") |> # <32>
+  httr2::req_url_query(              # <33>
+    latitude   = 35.01,              # <33>
+    longitude  = 135.77,             # <33>
+    start_date = "1950-01-01",       # <33>
+    end_date   = "2024-12-31",       # <33>
+    daily      = "temperature_2m_mean", # <33>
+    timezone   = "Asia/Tokyo"        # <33>
   )
 
+# Knock on the door and parse the JSON answer ####
+kyoto_resp <- kyoto_req |>
+  httr2::req_perform() |>            # <34>
+  httr2::resp_body_json(simplifyVector = TRUE) # <34>
+
+# Rectangle the nested answer into a tibble ####
+kyoto_temp <- tibble(                # <35>
+  date = lubridate::as_date(kyoto_resp$daily$time), # <35>
+  temp = kyoto_resp$daily$temperature_2m_mean       # <35>
+  )
+
+# Mean March temperature, year by year ####
+kyoto_temp |>
+  dplyr::filter(lubridate::month(date) == 3) |>
+  dplyr::group_by(year = lubridate::year(date)) |>
+  dplyr::summarise(march_temp = mean(temp, na.rm = TRUE)) |>
+  ggplot(aes(x = year, y = march_temp)) +
+  geom_line(color = "grey80") +
+  geom_point(aes(color = march_temp), show.legend = FALSE) +
+  geom_smooth(se = FALSE, color = "#F75431") +  # <36>
+  scale_color_gradient(low = "royalblue3", high = "orangered2") +
+  labs(title = "Kyoto is warming",
+       subtitle = "Mean March temperature (°C) — Open-Meteo archive API",
+       x = NULL, y = "°C") +
+  theme_classic()
 ```
 
-32. You need to replace `my_spotify_id` and `my_spotify_secret` with your own tokens
-33. Save your token to your environment so you can use it later
-34. Learn to create your own functions. Functions take user-defined inputs and produce outputs. In this case, our function takes the name of an artists and returns the Spotify artist ID for the closest match.
-35. We use our function to look for the ID of Radiohead
-36. We use the `get_artist_audio_features()` function to download all data related to Radiohead's songs. First, we use the artist_id. Then we use an option to download all albums and, finally, we provide our API key ---the token we need to use to access the data.
+32. `request()` starts from the API's base URL --copy it from the API documentation.
+33. `req_url_query()` adds our questions to the request: where (coordinates), when (dates), and what (daily mean temperature). Every API documents which parameters it understands.
+34. `req_perform()` actually sends the request over the internet; `resp_body_json()` parses the JSON answer. `simplifyVector = TRUE` turns JSON lists into ordinary R vectors.
+35. The answer is nested: the daily values live inside `$daily`. We rectangle them into a tidy tibble with one row per day.
+36. `geom_smooth()` adds a trend line --Kyoto's March has warmed by roughly 2°C since 1950, which is why the sakura bloom keeps breaking "earliest ever" records.
+
+### Feel the music: the Spotify story {.unnumbered}
+
+This section used to teach APIs with **Spotify**: using the [`spotifyr`](https://github.com/charlie86/spotifyr) package, you could download *audio features* --danceability, energy, valence-- for every song of every artist. It was glorious.
+
+Then, on **27 November 2024, Spotify shut those endpoints down** for new applications. No deprecation period, no replacement. Thousands of analyses, blog posts, theses and workshop sessions --including this one-- broke overnight.
+
+::: callout-important
+## APIs giveth, and APIs taketh away
+
+An API is a door someone else owns; it can close without notice. This is the other lesson of this session: **when your analysis depends on external data, save a raw copy the day you download it.** Your future self will thank you. This workshop practices what it preaches --everything below runs on the snapshot we saved while the door was still open.
+:::
+
+Luckily, we kept a snapshot: 1,178 songs by 8 artists, downloaded from the API before it closed. We can load it with `read_csv()` --and everything we care about teaching here (pivoting, ridgelines, interactivity) works exactly the same.
+
+```{r 2.spotify-archive}
+library(tidyverse)
+
+spotify_archive <- readr::read_csv(paste0(getwd(), "/spotify_favorites_archive.csv"))
+
+dplyr::glimpse(spotify_archive)
+```
 
 ### Dance Thom, dance!
 
@@ -466,12 +489,15 @@ Now let's compare some musical features of Radiohead's studio albums. We will pl
 
 Looking at the density of each variable for every album, we can see that *A Moon Shaped Pool*, their latest album and most mellow-sounding one, has the least energy, while *The King of Limbs*, which include the awesome track *Lotus Flower*, is the most energetic one.
 
+The code below is kept as a **museum piece** --it ran while the API was alive, and the figure it produced is preserved beneath it. Read the code anyway: the `pivot_longer()` + `geom_density_ridges()` + `facet_wrap()` pattern is one you will reuse constantly, and Practice 2 asks you to reproduce it on the archive snapshot.
+
 ```{r 2.radiohead}
+#| eval: false
 #| out-width: "100%"
 #| fig-cap: "Dance Thom, dance!"
- 
+
 library(ggridges) # Overlaying density plots, perfect for probabilistic inference
-library(RColorBrewer) 
+library(RColorBrewer)
 
 radiohead_spotify |>  # <37>
   dplyr::filter(album_name %in% c("Pablo Honey","The Bends","OK Computer","Kid A","Amnesiac","Hail To the Thief","In Rainbows","The King Of Limbs","A Moon Shaped Pool")) %>% # <38>
@@ -487,6 +513,8 @@ radiohead_spotify |>  # <37>
     scale_fill_manual(values = c("gold2","orangered2","royalblue2","forestgreen")) # <44>
 
 ```
+
+![Rendered in November 2024, days before the API closed. Dance Thom, dance!](radiohead_archive.png){width="100%"}
 
 37. We start with the data
 38. We filter the studio albums using the *x `%in%` y* operator, which stands for `x is a subset of y`.
@@ -513,9 +541,9 @@ The `pivot_wider()` function allows you to spread values across new columns base
 
 ### Comparing musical tastes {.unnumbered}
 
-Let's have some fun with the Spotify data.
+Let's have some fun with the Spotify snapshot.
 
-Below we'll compare a metric for some artists, our favorites. It takes a while for the code to run, so be patient.
+The archive holds the full discographies of 8 artists --the favorites of the workshop's first cohort. Below we attach each favorite artist to the person who chose them, using `tribble()` to build the lookup table by hand and `left_join()` to merge it in.
 
 ```{r 2.tastes}
 
@@ -523,35 +551,27 @@ library(tidyverse)
 
 favorites <- tribble( # <45>
   ~name,~artist, # <45>
-  "zelie","The Strokes",
+  "zelie","Arctic Monkeys",
   "romane","Ben Howard", # <45>
   "nelson","Foals", # <45>
   "rossana","Imagine Dragons", # <45>
-  "emma","Paolo Nutini", # <45>
+  "emma","Oasis", # <45>
   "shivona","Milky Chance", # <45>
   "valeria","Florence + The Machine", # <45>
   "maelle","Michael Kiwanuka" # <45>
-  ) |> # <45> 
-  dplyr::rowwise() |> # <45> 
-  dplyr::mutate(artist_id = spotify_id(artist)) # <45>
+  ) # <45>
 
-# Now we can save all discographies into a list by using a loop ####
-favorites_music <- list() # <46>
+# Merge the lookup table into the snapshot ####
+favorites_music <- spotify_archive |> # <46>
+  dplyr::left_join(favorites, by = "artist") # <46>
 
-# Now we loop, or boucle if you're French ####
-for(i in favorites$artist_id) { # <47>
-  
-  favorites_music[[i]] <- spotifyr::get_artist_audio_features(
-    artist = print(i), # <47>
-    include_groups = "album", # <47>
-    authorization =  spotify_access_token) # <47>
-
-} # <47>
+# One row per song ####
+favorites_music # <47>
 ```
 
-45. We create a list of favorites artists using `tribble`, a function we can use to manually create rectangular databases on the fly. First row uses the `~` operator to name variables and the rest are the values of each observation. We use `rowwise` to make an operation along each row, and create a new variable that holds the artist ID by using the function we created above.
-46. First we create an empty list where we will store the data
-47. Now we run a for loop over our favorite artist `tribble()` that will save each discography as an element of our list.
+45. We create a list of favorites artists using `tribble`, a function we can use to manually create rectangular databases on the fly. First row uses the `~` operator to name variables and the rest are the values of each observation.
+46. `left_join()` keeps every song in the snapshot and adds the `name` column wherever the artist matches --joins are the glue of the tidyverse, and you will use them constantly.
+47. When the API was alive, this step was a `for` loop of API calls, one per artist (you already met loops in Part I). The snapshot spares us the wait --and the rate limits.
 
 ::: column-margin
 ::: callout-tip
@@ -571,34 +591,31 @@ library(tidyverse)
 library(MetBrewer) # MET color palettes
 
 favorites_music |> # <48>
-  purrr::map_df(bind_rows) |> # <49>
-  dplyr::left_join(favorites, by="artist_id") |> # <49>
-  ggplot(aes(y=energy,x=valence,color=artist_name))+ # <50>
-  geom_point(aes(shape=artist_name))+ # <51>
-  geom_hline(yintercept = 0.5)+ # <52>
-  geom_vline(xintercept = 0.5)+ # <52>
-  annotate("text", x = 0.1, y = 1, label = "Turbulent/Angry")+ # <53>
-  annotate("text", x = 0.8, y = 1, label = "Happy/Joyful")+ # <53>
-  annotate("text", x = 0.1, y = 0.1, label = "Sad/Depressing")+ # <53>
-  annotate("text", x = 0.8, y = 0.11, label = "Chill/Peaceful")+ # <53>
-  MetBrewer::scale_color_met_d(name = "Ingres")+ # <54>
-  scale_shape_manual(values = c(1:8))+  # <55>
-  theme_classic()+  # <56>
-  theme(legend.position = "top", # <57>
-        legend.title = element_blank()) # <58>
+  ggplot(aes(y=energy,x=valence,color=artist))+ # <49>
+  geom_point(aes(shape=artist))+ # <50>
+  geom_hline(yintercept = 0.5)+ # <51>
+  geom_vline(xintercept = 0.5)+ # <51>
+  annotate("text", x = 0.1, y = 1, label = "Turbulent/Angry")+ # <52>
+  annotate("text", x = 0.8, y = 1, label = "Happy/Joyful")+ # <52>
+  annotate("text", x = 0.1, y = 0.1, label = "Sad/Depressing")+ # <52>
+  annotate("text", x = 0.8, y = 0.11, label = "Chill/Peaceful")+ # <52>
+  MetBrewer::scale_color_met_d(name = "Ingres")+ # <53>
+  scale_shape_manual(values = c(1:8))+  # <54>
+  theme_classic()+  # <55>
+  theme(legend.position = "top", # <56>
+        legend.title = element_blank()) # <57>
 ```
 
-48. Now we run a for loop over our favorite artist tribble that will save each discography as an element of our list.
-49. Now we put all discographies together using `map` function, which binds all rows from each discography together in a dataframe. We then merge/join the data using `left_join()`.
-50. Pipe in the data into `ggplot`
-51. Create a first geometry and vary the point by artist using `shape`
-52. Add some lines to create 4 quadrants
-53. Include the name of each quadrant using `annotate`
-54. Use a color palette from the `MetBrewer` package. We pick Ingres.
-55. Specify the shapes of points manually
-56. Use a theme that cleans the plot from noisy background
-57. Position the legend at the top of the figure
-58. Eliminate the title of the legend.
+48. We start from the joined snapshot --one row per song, with artist and fan attached.
+49. Pipe in the data into `ggplot`
+50. Create a first geometry and vary the point by artist using `shape`
+51. Add some lines to create 4 quadrants
+52. Include the name of each quadrant using `annotate`
+53. Use a color palette from the `MetBrewer` package. We pick Ingres.
+54. Specify the shapes of points manually
+55. Use a theme that cleans the plot from noisy background
+56. Position the legend at the top of the figure
+57. Eliminate the title of the legend.
 
 ### We're missing out, let's make this interactive with [Plotly](https://plotly.com/r/) {.unnumbered}
 
@@ -614,15 +631,12 @@ library(plotly)
 library(tidyverse)
 library(MetBrewer)
 
-favorites_plot <- favorites_music %>%
-  purrr::map_df(bind_rows) %>%
-  dplyr::left_join(favorites, by="artist_id") |> # <49>
-  ggplot(aes(y=energy,x=valence,color=artist_name))+
-  geom_point(aes(shape=artist_name,
-    text = paste('Artist: ', artist_name, # <59> 
-                 '<br>Song:', track_name, # <59> 
-                 '<br>Album:',album_name)),  # <59> 
-             position = "jitter")+
+favorites_plot <- favorites_music |>
+  ggplot(aes(y=energy,x=valence,color=artist))+
+  geom_point(aes(shape=artist,
+    text = paste('Artist: ', artist, # <59>
+                 '<br>Song:', track_name, # <59>
+                 '<br>Album:',album_name)))+  # <59>
   geom_hline(yintercept = 0.5)+
   geom_vline(xintercept = 0.5)+
   MetBrewer::scale_color_met_d(name = "Ingres")+
@@ -674,12 +688,13 @@ library(patchwork)     # To add plots together
 maddison_time <- owid_maddison_proj_df2 |>
   dplyr::filter(year>=1950,!is.na(continent)) |>
   dplyr::group_by(year, continent) |> # <61>
-  dplyr::summarise(m_gdppc = median(gdppc, na.rm=TRUE)) |> # <62>
+  dplyr::summarise(m_gdppc = median(gdppc, na.rm=TRUE), .groups = "drop") |> # <62>
+  dplyr::arrange(continent, year) |>
   ggplot(aes(x=year,y=m_gdppc, color=continent))+
   geom_path_interactive(aes(data_id=continent, tooltip=continent))+  # <63>
   scale_x_log10()+
   scale_color_brewer(palette="Set1")+
-  labs(x = NULL, y = "GDP per capita") + 
+  labs(x = NULL, y = "GDP per capita") +
   theme_classic()+
   theme(legend.position = "none")
 
@@ -713,7 +728,7 @@ options = list(
 ```
 
 61. To create a summary statistic by year and continent, we first group the data
-62. We use `summarise()` that will return only the computed tabulated result
+62. We use `summarise()` that will return only the computed tabulated result. **Gotcha**: `summarise()` on two grouping variables returns rows ordered by the *first* one (`year`), so consecutive rows alternate between continents. `geom_path()` connects points strictly in row order --with continents interleaved, every "line" would be a single disconnected point. `arrange(continent, year)` puts each continent's years back-to-back so the path actually draws a continuous line per continent.
 63. We use the `ggiraph` geom --notice the `_interactive` and the extra content in the aesthetics: **data_id** and **tooltip**.
 64. We add points and a violin geometries
 65. We add the interactive boxplot using the **data_id** and **tooltip**
@@ -727,7 +742,7 @@ options = list(
 
 Using girafe we can also improve the Spotify music profile and add the cover image of each album to each point using **`htmltools`** and CSS to place the elements where we want.
 
-The most difficult step is creating a variable that extracts the album cover we want from the data, as it is hidden inside of a list column. `map()` handles that pretty well, and then we create a tooltip using the URL for each album cover by pasting HTML tags. 
+The snapshot already carries the URL of each album cover in the `cover_url` column (when the API was alive, it hid inside a list-column and had to be `pluck()`-ed out --the archive saved you that step). We create a tooltip using the URL for each album cover by pasting HTML tags.
 
 ```{r 2.spotify-girafe}
 
@@ -735,24 +750,20 @@ library(htmltools)
 library(ggiraph)
 library(tidyverse)
 
-spotify_covers_gg <- favorites_music %>%
-  purrr::map_df(bind_rows) %>%
-  dplyr::left_join(favorites, by="artist_id") |> 
-  dplyr::mutate(cover = purrr::map(album_images, ~purrr::pluck(.x,1,2))) |> # <71>
-  ggplot(aes(y=energy,x=valence,color=artist_name))+
+spotify_covers_gg <- favorites_music |>
+  ggplot(aes(y=energy,x=valence,color=artist))+
   geom_point_interactive(
-    aes(shape = artist_name,
+    aes(shape = artist,
         tooltip =  paste0( # <72>
           "<div style='display: flex; align-items: center;'>",  # <72>
-          "<img src='", cover, "' style='width:100px; height:auto; margin-right: 10px;'>", # <72>
+          "<img src='", cover_url, "' style='width:100px; height:auto; margin-right: 10px;'>", # <72>
           "<div>",
-          "<b>Artist:</b> ", artist_name, "<br>", # <72>
+          "<b>Artist:</b> ", artist, "<br>", # <72>
           "<b>Song:</b> ", track_name, "<br>", # <72>
           "<b>Album:</b> ", album_name, # <72>
           "</div>",
           "</div>"
-    )),  
-             position = "jitter")+
+    )))+
   geom_hline(yintercept = 0.5)+
   geom_vline(xintercept = 0.5)+
   MetBrewer::scale_color_met_d(name = "Ingres")+
@@ -764,7 +775,6 @@ spotify_covers_gg <- favorites_music %>%
 girafe(ggobj = spotify_covers_gg)
 ```
 
-71. This line is tricky but very cool! First we use a `map()` function to go over the album images variable in every observation, and we ask it to pluck out the second element in the second column using the aptly named `pluck()` function.
 72. We create a tooltip with HTML tags for the album cover, using CSS flexbox to place elements together.
 
 ## 🏗 Practice 2: Music {.unnumbered}
@@ -772,9 +782,9 @@ girafe(ggobj = spotify_covers_gg)
 ::: {.callout-note icon="false" collapse="true"}
 # Easy
 
--   Create your own Spotify API tokens (client ID and client secret)
--   Compare the song valence for the entire discography of your 4 favorite artists. Describe the result
--   Import an indicator from the OWID GitHub repositories and plot it
+-   Use the Open-Meteo archive API to download daily temperatures for **your** home town and plot the trend for your birth month
+-   Using `spotify_favorites_archive.csv`, compare the song valence across the 8 artists with boxplots. Describe the result
+-   Import an indicator from OWID and plot it
 :::
 
 ::: {.callout-important icon="false" collapse="true"}

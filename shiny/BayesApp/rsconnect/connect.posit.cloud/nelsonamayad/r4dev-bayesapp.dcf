@@ -1,0 +1,10 @@
+name: r4dev-bayesapp
+title: R4DEV - BayesApp
+username: nelsonamayad
+account: nelsonamayad
+server: connect.posit.cloud
+hostUrl: https://api.connect.posit.cloud/v1
+appId: 019f2e15-0b81-b01b-edab-0a198d13a7e2
+bundleId:
+url: https://connect.posit.cloud/nelsonamayad/content/019f2e15-0b81-b01b-edab-0a198d13a7e2
+version: 1

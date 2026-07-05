@@ -1,0 +1,10 @@
+name: r4dev-ovb
+title: R4DEV - OVB Simulator
+username: nelsonamayad
+account: nelsonamayad
+server: connect.posit.cloud
+hostUrl: https://api.connect.posit.cloud/v1
+appId: 019f2e14-44e5-d2dc-2d92-878a6be25fa0
+bundleId:
+url: https://connect.posit.cloud/nelsonamayad/content/019f2e14-44e5-d2dc-2d92-878a6be25fa0
+version: 1
