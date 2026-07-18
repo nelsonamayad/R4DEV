@@ -56,6 +56,7 @@ title-block-style: none
 ```
 
 ::: {.masthead}
+::: {.masthead-content}
 [A hands-on workshop on reproducible data analysis · running since 2022]{.kicker}
 
 [More fiction is written in Excel than in Word.]{.masthead-title}
@@ -70,6 +71,11 @@ Learn to turn messy information into reproducible analysis, compelling visualisa
 :::
 
 [All progress is piecemeal, so the workshop improves permanently. Keep the [Posit cheat sheets](https://rstudio.github.io/cheatsheets/) and the [tidyverse style guide](https://style.tidyverse.org/) close. Thanks to Zélie, Rebecca, Rossana, Romane, Emma, Shivona, Maria, Valeria, Laura, Sofia, Maëlle and many others who tested, often with their patience, earlier versions of this workshop.]{.masthead-fineprint}
+:::
+
+::: {.masthead-visual}
+![The R4DEV logo mark](logo/r4dev_dalle_1.png)
+:::
 :::
 
 ## Learning tracks {#tracks .section-header}

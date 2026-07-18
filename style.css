@@ -14,14 +14,27 @@ pre code {
   white-space: inherit;
 }
 
-/* ---------- welcome page: masthead ---------- */
-/* Quiet, typographic landing. Bootstrap CSS variables keep both brands working. */
+/* ---------- welcome page: masthead (hero banner) ---------- */
+/* Two-column hero: text left, logo mark right, on a soft brand-colour
+   backdrop. Bootstrap CSS variables keep both light/dark brands working
+   without any separate dark-mode overrides here. */
 .masthead {
-  max-width: 46rem;
-  margin: 3rem auto 2.5rem;
-  padding-bottom: 2.5rem;
-  border-bottom: 1px solid color-mix(in srgb, var(--bs-body-color) 14%, transparent);
-  text-align: center;
+  position: relative;
+  max-width: 74rem;
+  margin: 2rem auto 3rem;
+  padding: clamp(2rem, 5vw, 3.5rem) clamp(1.5rem, 5vw, 3.75rem);
+  border-radius: 1.5rem;
+  border: 1px solid color-mix(in srgb, var(--bs-body-color) 12%, transparent);
+  background:
+    radial-gradient(ellipse 60% 80% at 100% 0%, color-mix(in srgb, var(--bs-link-color) 18%, transparent), transparent 70%),
+    radial-gradient(ellipse 70% 70% at 0% 100%, color-mix(in srgb, var(--bs-primary) 20%, transparent), transparent 70%),
+    color-mix(in srgb, var(--bs-body-color) 3%, transparent);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 2rem 3rem;
+  text-align: left;
+  overflow: hidden;
 }
 .masthead .kicker {
   display: block;
@@ -34,8 +47,8 @@ pre code {
 .masthead .masthead-title {
   display: block;
   font-weight: 700;
-  font-size: clamp(2.1rem, 5.5vw, 3.4rem);
-  line-height: 1.08;
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  line-height: 1.05;
   color: var(--bs-body-color);
 }
 .masthead p:has(> .masthead-title) {
@@ -46,17 +59,29 @@ pre code {
 }
 .masthead .lede {
   max-width: 38rem;
-  margin: 1.4rem auto 0;
-  font-size: 1.12rem;
+  margin: 1.4rem 0 0;
+  font-size: 1.18rem;
   color: color-mix(in srgb, var(--bs-body-color) 80%, transparent);
 }
 .masthead .masthead-actions {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   gap: 0.75rem 1.5rem;
-  margin-top: 1.9rem;
+  margin-top: 2.1rem;
+}
+.masthead .masthead-actions .btn {
+  padding: 0.85rem 1.75rem;
+  font-weight: 700;
+  border-radius: 0.6rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.masthead .masthead-actions .btn-primary {
+  box-shadow: 0 12px 26px color-mix(in srgb, var(--bs-primary) 45%, transparent);
+}
+.masthead .masthead-actions .btn:hover {
+  transform: translateY(-2px);
 }
 .masthead .masthead-link {
   font-weight: 600;
@@ -65,9 +90,49 @@ pre code {
 }
 .masthead .masthead-fineprint {
   display: block;
-  margin-top: 1.9rem;
+  margin-top: 2rem;
   font-size: 0.85rem;
   color: color-mix(in srgb, var(--bs-body-color) 55%, transparent);
+}
+.masthead-visual {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.masthead-visual img {
+  width: clamp(8.5rem, 13vw, 12.5rem);
+  border-radius: 1.1rem;
+  filter: drop-shadow(0 18px 32px color-mix(in srgb, var(--bs-primary) 45%, transparent));
+  transform: rotate(-4deg);
+  transition: transform 0.35s ease;
+}
+.masthead:hover .masthead-visual img {
+  transform: rotate(-1deg) scale(1.03);
+}
+@media (max-width: 48rem) {
+  .masthead {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .masthead .masthead-actions {
+    justify-content: center;
+  }
+  .masthead-visual {
+    order: -1;
+  }
+  .masthead-visual img {
+    width: 6rem;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .masthead .masthead-actions .btn,
+  .masthead-visual img {
+    transition: none;
+  }
+  .masthead .masthead-actions .btn:hover {
+    transform: none;
+  }
 }
 
 /* ---------- welcome page: section headers ---------- */
