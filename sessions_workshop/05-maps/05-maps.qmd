@@ -9,17 +9,33 @@ categories:
   - interactive
   - leaflet
   - sf
-  - girafe
+  - ggiraph
   - rayshader
 date: "2022-07-31" 
 date-modified: last-modified
 order: 5
+level: Intermediate
+duration: 90 min
+track: Build with R
+prerequisites: "Everything in its right place"
 image: map-fractal.gif
 citation:
   url: https://r4dev.netlify.app/sessions_workshop/05-maps/05-maps
 ---
 
 > *Drug abuse has become rampant in America and may be the worst the country has ever experienced.*<br>--Angus Deaton & Anne Case
+
+::: {.lesson-info}
+**Level:** Intermediate &nbsp;·&nbsp; **Time:** ~90 min &nbsp;·&nbsp; **Prerequisites:** Everything in its right place &nbsp;·&nbsp; **Tools:** sf, ggiraph, leaflet, rayshader
+:::
+
+## You will learn to
+
+- Find, download and join spatial data with the numbers you want to map.
+- Build a static choropleth map with ggplot2 and sf.
+- Add interactivity with ggiraph and build a fully interactive map with leaflet.
+- Understand what a coordinate reference system (CRS) is and why it matters.
+- Render a 3D map with rayshader.
 
 ## PART I: Walk before you run
 
@@ -818,4 +834,20 @@ Even though this particular application of rayshader is not too useful, for topo
 -   Create a **`rayshader`** elevation map of your country, using data retrieved from the `elevation_30s()` function in the **`geodata`**, and then `geom_spatraster()` from **`tidyterra`** to plot in `ggplot()`. (Tip: Use the `scale_fill_hypso_c()` layer)
 -   Build an interactive world map for any variable available at a country level using an **`sf`** map and **`ggiraph`**
 - Check this [blog post](https://justjensen.co/making-population-density-maps-with-rayrender-in-r/) and create a high-resolution population density map for a country.
+:::
+
+## Key takeaways
+
+- Mapping in R is mostly about picking the right packages and joining spatial data to the numbers you want to show.
+- sf objects carry a coordinate reference system (CRS) with them -- get it wrong and distances and shapes distort.
+- A static map (ggplot2 + sf) and an interactive one (leaflet) reuse the same underlying spatial data, just rendered differently.
+- ggiraph brings the same hover/tooltip interactivity from earlier sessions to maps.
+- 3D isn't always more informative than 2D, but rayshader is a good tool to have when it is.
+
+::: {.continue-learning}
+[← Previous: Making data move](/sessions_workshop/04-animate/04-animate.qmd)
+
+[Track overview: Build with R →](/learn/build-with-r.qmd)
+
+[Next: Just take it →](/sessions_workshop/06-scrap/06-scrap.qmd)
 :::

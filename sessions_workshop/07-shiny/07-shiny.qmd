@@ -16,6 +16,10 @@ categories:
 date: "2022-07-31" 
 date-modified: last-modified
 order: 7
+level: Advanced
+duration: 90 min
+track: Build with R
+prerequisites: "Everything in its right place"
 bibliography: references.bib
 image: shining.gif
 citation:
@@ -27,6 +31,18 @@ citation:
 One of the best things about working with R is publishing your work online. The possibilities are endless: blogs, books, articles, games, dashboards can all be published from R. You already know [Quarto](https://quarto.org/) is a great builder of HTML and interactive content.
 
 In these final sessions you will learn how to build apps. Let's get started.
+
+::: {.lesson-info}
+**Level:** Advanced &nbsp;·&nbsp; **Time:** ~90 min &nbsp;·&nbsp; **Prerequisites:** Everything in its right place &nbsp;·&nbsp; **Tools:** shiny, bslib, shinyWidgets
+:::
+
+## You will learn to
+
+- Structure a Shiny app around its two halves: the UI and the server.
+- Build reactive inputs and outputs so the app updates itself as the user interacts with it.
+- Theme an app with bslib and Bootswatch.
+- Publish a Shiny app online and embed it in a Quarto page.
+- Build a RevealJS presentation as a bonus output format.
 
 ## PART I: The real beauty of R
 
@@ -825,7 +841,23 @@ Check out [this page](https://quarto.org/docs/presentations/revealjs/)
 -   Create a Shiny app for your project
 :::
 
-# References
+## Key takeaways
+
+- Every Shiny app has two halves: a UI that describes the layout, and a server that reacts to input and computes output.
+- Reactivity means you describe *what* depends on *what* -- Shiny handles *when* to recompute it.
+- bslib/Bootswatch theming works the same way in a Shiny app as it does in a Quarto site.
+- A deployed app is embedded elsewhere with a plain `<iframe>`, the same way this lesson embeds its own examples.
+- RevealJS presentations are a Quarto output format, not a Shiny feature -- useful any time you need slides from the same source as a report.
+
+::: {.continue-learning}
+[← Previous: Just take it](/sessions_workshop/06-scrap/06-scrap.qmd)
+
+[Track overview: Build with R →](/learn/build-with-r.qmd)
+
+[Next: Smart reports →](/sessions_workshop/08-reports/08-reports.qmd)
+:::
+
+## References
 
 ::: {#refs}
 :::

@@ -11,6 +11,10 @@ categories:
 date: "2026-07-01"
 date-modified: last-modified
 order: 1
+level: Beginner
+duration: 45 min
+track: Think with data
+prerequisites: "Everything in its right place (Build with R)"
 image: uncertainty.png
 editor_options:
   chunk_output_type: console
@@ -19,6 +23,17 @@ citation:
 ---
 
 > *"It is remarkable that a science which began with the consideration of games of chance should have become the most important object of human knowledge."*<br>--Pierre-Simon Laplace
+
+::: {.lesson-info}
+**Level:** Beginner &nbsp;·&nbsp; **Time:** ~45 min &nbsp;·&nbsp; **Prerequisites:** Everything in its right place &nbsp;·&nbsp; **Tools:** dplyr, ggplot2, R's `r*` random generators
+:::
+
+## You will learn to
+
+- See a computed number as one draw from a distribution of numbers you could have computed.
+- Simulate a random process in R instead of relying on a theorem to describe it.
+- Demonstrate the law of large numbers and the central limit theorem by simulation.
+- Judge whether a pattern in data is surprising by simulating a world where nothing is going on.
 
 ## PART I: Your data is one draw from a machine
 
@@ -167,7 +182,7 @@ This is why the normal distribution is everywhere: not because nature loves bell
 
 The habit this session installs: **never report a number you wouldn't show the distribution of.** A mean without its spread is a coin with one face. Three self-defense rules:
 
-1.  **Plot the raw data before summarizing it** --session 2 of the workshop gave you every tool; distributions with the same mean can tell opposite stories.
+1.  **Plot the raw data before summarising it** --session 2 of the workshop gave you every tool; distributions with the same mean can tell opposite stories.
 2.  **Ask "compared to what?"** Every "sales rose 4%" hides a sampling distribution --is 4% a signal, or is it inside the range that pure noise produces? (Next session answers this precisely.)
 3.  **Simulate the boring explanation first.** Before celebrating a pattern, write ten lines of R in which *nothing is going on* and see how often the pattern shows up anyway. You will be humbled more often than you expect.
 
@@ -180,4 +195,15 @@ The habit this session installs: **never report a number you wouldn't show the d
 4.  Simulate rule 3 in action: generate two *completely independent* variables of n = 20 with `rnorm()`, compute their correlation, repeat 1,000 times. How often does pure noise produce |correlation| > 0.3?
 :::
 
-Next in the track: [There is only one test](/sessions_thinking/02-inference/02-inference.qmd) turns today's sampling distributions into the machinery of inference --permutation tests, bootstrap intervals, and the honest meaning of a p-value.
+## Key takeaways
+
+- Every computed number is one draw from a distribution of numbers you could have computed instead.
+- Simulation answers "how different could this have been?" without needing a theorem.
+- The law of large numbers and the central limit theorem are demonstrable, not just provable.
+- Before trusting a pattern, simulate the boring world where nothing is going on and see how often it appears anyway.
+
+::: {.continue-learning}
+[Track overview: Think with data →](/learn/thinking.qmd)
+
+[Next: There is only one test →](/sessions_thinking/02-inference/02-inference.qmd)
+:::

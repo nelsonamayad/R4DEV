@@ -13,6 +13,10 @@ categories:
 date: "2026-07-04"
 date-modified: last-modified
 order: 3
+level: Advanced
+duration: 60 min
+track: Work with AI
+prerequisites: "Talking to machines"
 image: ragnar.png
 editor_options:
   chunk_output_type: console
@@ -31,6 +35,18 @@ citation:
 **Retrieval-augmented generation (RAG)** is the fix for a related but distinct problem: instead of asking a model to answer from what it memorized during training (which might be outdated, wrong, or simply not about *your* content), you first **retrieve** the actual relevant text from a real source, then hand the model that text and ask it to answer *from it*. The model stops guessing and starts reading.
 
 [**`ragnar`**](https://ragnar.tidyverse.org/) is a tidyverse-style toolkit that does the unglamorous half of RAG well: turning real documents into a searchable store. It has one function for each stage of the pipeline, and --true to form for this workshop-- we'll train it on **R4DEV's own published site**, the same trick ragnar's own homepage example plays on the *R for Data Science* book.
+
+::: {.lesson-info}
+**Level:** Advanced &nbsp;·&nbsp; **Time:** ~60 min &nbsp;·&nbsp; **Prerequisites:** Talking to machines &nbsp;·&nbsp; **Tools:** ragnar, ellmer, DuckDB
+:::
+
+## You will learn to
+
+- Explain why retrieval beats relying on a model's memorised training data.
+- Turn a website into a searchable store: read, chunk, embed and store real content in DuckDB.
+- Retrieve relevant chunks two ways -- keyword (BM25) and semantic (vector similarity).
+- Register a retrieval store as a tool an LLM can call on its own.
+- See the whole pipeline running live in the "Ask R4DEV" capstone at the end of this lesson.
 
 ::: callout-tip
 ## The whole pipeline in one sentence
@@ -259,4 +275,20 @@ The store behind this app was built locally with `embed_ollama()` --free, and ge
 # Advanced
 
 -   Register **two** tools on one chat: the retrieval tool from this session and the `weather_now()` tool from [Talking to machines](/sessions_ai/01-llm/01-llm.qmd). Ask a question that needs both, and watch the model choose which to call and when.
+:::
+
+## Key takeaways
+
+- Retrieval fixes a different problem than a bigger model: it gives the model real text to answer from instead of relying on what it memorised.
+- The RAG pipeline is one verb per stage -- read, chunk, embed, store, retrieve -- and ragnar has one function per verb.
+- Keyword search (BM25) and semantic search (VSS) find different things; a production app should know which one it needs.
+- A tool-calling model decides *for itself* when to search, without special-cased retrieval code in the prompt.
+- Local, free embeddings (`embed_ollama()`) are a legitimate production answer when no paid API key is available -- not just a workshop workaround.
+
+::: {.continue-learning}
+[← Previous: Chat with your data](/sessions_ai/02-llm-apps/02-llm-apps.qmd)
+
+[Track overview: Work with AI →](/learn/ai.qmd)
+
+[Next: Agentic coding →](/sessions_ai/04-agentic/04-agentic.qmd)
 :::

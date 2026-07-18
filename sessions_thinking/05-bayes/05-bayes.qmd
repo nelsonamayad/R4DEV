@@ -10,6 +10,10 @@ categories:
 date: "2026-07-05"
 date-modified: last-modified
 order: 5
+level: Advanced
+duration: 60 min
+track: Think with data
+prerequisites: "Draw your assumptions before drawing your conclusions"
 image: bayes_globe.png
 format: live-html
 engine: knitr
@@ -25,6 +29,17 @@ citation:
 {{< include /_extensions/r-wasm/live/_knitr.qmd >}}
 
 > *"It appears to be a quite general principle that, whenever there is a randomized way of doing something, then there is a nonrandomized way that delivers better performance but requires more thought."* <br>--E.T. Jaynes
+
+::: {.lesson-info}
+**Level:** Advanced &nbsp;·&nbsp; **Time:** ~60 min &nbsp;·&nbsp; **Prerequisites:** Draw your assumptions before drawing your conclusions &nbsp;·&nbsp; **Tools:** R running live in your browser (webR) -- no installation needed
+:::
+
+## You will learn to
+
+- Update a prior belief into a posterior, one observation at a time.
+- Distinguish a Bayesian posterior from a frequentist confidence interval.
+- Watch a probability distribution learn, animated, as data arrives.
+- Run and modify live R code directly in the browser via webR.
 
 ## Part I: Why Bayes?
 
@@ -155,4 +170,17 @@ This was the whole idea of Bayes in one session; the rest is craft. When you are
 
 -   Animate the 100-toss updating. At what point does the animation get boring? That boredom has a name: *convergence*
 -   The globe example has one parameter. Write down --just on paper-- what the grid would look like for **two** parameters. Now you know why MCMC exists
+:::
+
+## Key takeaways
+
+- Bayesian updating turns a prior belief into a posterior by multiplying in the likelihood of each new observation.
+- Grid approximation makes the whole process visible: the posterior is just a distribution getting reshaped, one data point at a time.
+- More data narrows the posterior and gradually overwhelms even a strong prior.
+- A Bayesian posterior and a frequentist confidence interval answer different questions, even when the numbers look similar.
+
+::: {.continue-learning}
+[← Previous: Draw your assumptions before drawing your conclusions](/sessions_thinking/04-causal/04-causal.qmd)
+
+[Track overview: Think with data →](/learn/thinking.qmd)
 :::

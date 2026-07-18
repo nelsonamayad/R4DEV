@@ -13,6 +13,10 @@ categories:
 date: "2022-07-30"
 date-modified: last-modified
 order: 1
+level: Beginner
+duration: 45 min
+track: Build with R
+prerequisites: None
 image: swordfish.gif
 citation:
   url: https://r4dev.netlify.app/sessions_workshop/01-quarto/01-quarto
@@ -21,6 +25,18 @@ citation:
 > "*[...] there is growing evidence documenting the prevalence of publication bias in economics and other scientific fields, as well as specification searching, and widespread inability to replicate empirical findings*."<br>-- [Christensen & Miguel (2018)](https://www.aeaweb.org/articles?id=10.1257/jel.20171350)
 
 In this first lesson you will build and publish a blog online for free using [Quarto](https://quarto.org/docs/reference/projects/websites.html) and [Netlify](https://www.netlify.com/).
+
+::: {.lesson-info}
+**Level:** Beginner &nbsp;·&nbsp; **Time:** ~45 min &nbsp;·&nbsp; **Prerequisites:** None &nbsp;·&nbsp; **Tools:** Quarto, RStudio, Netlify
+:::
+
+## You will learn to
+
+- Tell a Quarto website apart from a Quarto blog, and pick the right one for a given project.
+- Create a Quarto blog project in RStudio and preview it locally.
+- Control site-wide configuration through `_quarto.yml`.
+- Publish the rendered site online for free with Netlify.
+- Annotate and discuss the published site with Hypothesis.
 
 ## Your blog online for free in 5 minutes
 
@@ -131,4 +147,18 @@ Your YML file should look like this, in this case, using a Bootswatch theme call
 ![](practice-yml.png)
 
 - Customise the About page of your Quarto blog (Tip: [Check the About page in Quarto](https://quarto.org/docs/websites/website-about.html))
+:::
+
+## Key takeaways
+
+- A Quarto **website** and a Quarto **blog** are the same engine with a different project template -- a blog just adds a listing page and post-dated entries by convention.
+- `_quarto.yml` is where the whole site is configured: navigation, theme, output directory, and more.
+- Whether a page shows up in a listing depends on the listing's own configuration, not on the page simply existing.
+- Manual drag-and-drop to Netlify is the simplest way to publish, but it isn't the only one -- a Git-connected deploy updates automatically on every push.
+- Hypothesis annotation turns any published page into a place for feedback and discussion.
+
+::: {.continue-learning}
+[Track overview: Build with R →](/learn/build-with-r.qmd)
+
+[Next: Everything in its right place →](/sessions_workshop/02-plots/02-plots.qmd)
 :::

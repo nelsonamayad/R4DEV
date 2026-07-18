@@ -13,11 +13,28 @@ categories:
 date: "2022-07-31" 
 date-modified: last-modified
 order: 8
+level: Intermediate
+duration: 45 min
+track: Build with R
+prerequisites: "Blogging with Quarto"
 image: smart.gif
 bibliography: RetractionWatch.bib
 citation:
   url: https://r4dev.netlify.app/sessions_workshop/08-reports/08-reports
 ---
+
+In this lesson you will generate a batch of reports from a single template and manage citations properly with Zotero.
+
+::: {.lesson-info}
+**Level:** Intermediate &nbsp;·&nbsp; **Time:** ~45 min &nbsp;·&nbsp; **Prerequisites:** Blogging with Quarto &nbsp;·&nbsp; **Tools:** Quarto, Zotero
+:::
+
+## You will learn to
+
+- Manage bibliographic references with Zotero and cite them in a Quarto document.
+- Write a parameterised Quarto report that changes its content based on an input value.
+- Batch-render the same report template once per parameter value.
+- Export a report to PDF, HTML or Word from the same source.
 
 ## [Zotero](https://www.zotero.org/), why oh why didn't I meet you before? 🤩
 
@@ -217,7 +234,22 @@ The content will be hidden when you render HTML output
 
 ![That's all (for now)](mic-drop.gif){width="150%"}
 
-# References
+## Key takeaways
+
+- Zotero plus a Quarto `bibliography:` field turns citation management from copy-paste into a one-click insert.
+- A parameterised report is one template plus a `params:` list -- the content changes, the code doesn't.
+- Batch-rendering many reports is just `purrr::map()` over a list of parameter values.
+- The same parameterised template can output PDF, Word or HTML by changing the render target, not the report itself.
+
+::: {.continue-learning}
+[← Previous: Make it shine](/sessions_workshop/07-shiny/07-shiny.qmd)
+
+[Track overview: Build with R →](/learn/build-with-r.qmd)
+
+[Next: Do it well, do it fast →](/sessions_workshop/09-parallel/09-parallel.qmd)
+:::
+
+## References
 
 ::: {#refs}
 :::

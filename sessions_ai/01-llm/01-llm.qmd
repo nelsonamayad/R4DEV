@@ -12,6 +12,10 @@ categories:
 date: "2026-07-04"
 date-modified: last-modified
 order: 1
+level: Intermediate
+duration: 45 min
+track: Work with AI
+prerequisites: "Everything in its right place (Build with R)"
 image: robot.gif
 editor_options:
   chunk_output_type: console
@@ -22,6 +26,18 @@ citation:
 ---
 
 > *"The question of whether a computer can think is no more interesting than the question of whether a submarine can swim."*<br>--Edsger W. Dijkstra
+
+::: {.lesson-info}
+**Level:** Intermediate &nbsp;·&nbsp; **Time:** ~45 min &nbsp;·&nbsp; **Prerequisites:** Everything in its right place &nbsp;·&nbsp; **Tools:** ellmer
+:::
+
+## You will learn to
+
+- Call an LLM from R as a function, not a chat window.
+- Design a prompt and hold a multi-turn conversation with ellmer.
+- Force a model's answer into a typed structure with structured extraction.
+- Give a model tools it can decide to call on its own.
+- Recognise when a model is confidently answering a question its input can't actually answer.
 
 ## PART I: An LLM is a function
 
@@ -270,4 +286,18 @@ Providers charge per **token** (~¾ of a word). Everything executed while writin
 # Advanced
 
 -   Register two tools --`weather_now()` and a function that geocodes a city name using the [Open-Meteo geocoding API](https://open-meteo.com/en/docs/geocoding-api)-- and ask for the temperature in five cities without ever typing a coordinate
+:::
+
+## Key takeaways
+
+- ellmer turns an LLM into a callable R function, with the same interface across providers.
+- Structured extraction (`type_object()`) forces free text into a shape you can actually use downstream.
+- Tool calling lets the model decide *when* it needs outside information, not just answer from what it already has.
+- A model will answer fluently even when its input can't support the answer -- fluency is not evidence of correctness.
+- Small models are usually enough, and cheap enough that cost isn't the reason to avoid experimenting.
+
+::: {.continue-learning}
+[Track overview: Work with AI →](/learn/ai.qmd)
+
+[Next: Chat with your data →](/sessions_ai/02-llm-apps/02-llm-apps.qmd)
 :::

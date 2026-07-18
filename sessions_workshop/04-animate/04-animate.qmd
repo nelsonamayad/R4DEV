@@ -13,6 +13,10 @@ categories:
 date: "2022-07-31"
 date-modified: last-modified
 order: 4
+level: Intermediate
+duration: 75 min
+track: Build with R
+prerequisites: "Everything in its right place"
 image: homer.gif
 editor_options: 
   chunk_output_type: console
@@ -21,6 +25,17 @@ citation:
 ---
 
 > *"The greatest value of a picture is when it forces us to notice what we never expected to see"* <br>--John Tukey
+
+::: {.lesson-info}
+**Level:** Intermediate &nbsp;·&nbsp; **Time:** ~75 min &nbsp;·&nbsp; **Prerequisites:** Everything in its right place &nbsp;·&nbsp; **Tools:** gganimate, ggplot2, ggimage, ggpp
+:::
+
+## You will learn to
+
+- Turn a static ggplot2 chart into an animation with gganimate.
+- Use `geom_plot()` to nest a focus plot inside a larger one.
+- Animate a time series (Kyoto cherry blossoms, COVID-19 deaths) to show change over time.
+- Recognise why an animated correlation is not evidence of causation.
 
 ## PART I: Cherry tree blossoms {-}
 
@@ -652,5 +667,20 @@ The moral fits in one sentence, and it is the most important sentence in this wo
 - Choose one [causal graph from Nick Huntington Klein's GitHub page](https://github.com/NickCH-K/causalgraphs) and replicate it.
 - Describe it
 - In the three-toggle explainer above, the mediator tab erases a *real* effect when you adjust. Simulate a fourth structure --a chain with a confounder on top (**Z → X, Z → Y, X → M → Y**)-- and decide: which variables do you adjust for to recover the true effect of X on Y? Verify with `lm()`
+:::
+
+## Key takeaways
+
+- gganimate adds motion to a ggplot2 chart through the same grammar-of-graphics layers you already know, plus a `transition_*()` call.
+- Animating a time series makes long-run change visible in a way a single static plot can't.
+- Adjusting for the wrong variable in a causal graph can erase a real effect or fabricate a fake one -- animation makes that concrete, not just algebraic.
+- What a chart shows moving together is not, by itself, evidence that one causes the other.
+
+::: {.continue-learning}
+[← Previous: Data from words](/sessions_workshop/03-text/03-text.qmd)
+
+[Track overview: Build with R →](/learn/build-with-r.qmd)
+
+[Next: Mapping despair in the USA →](/sessions_workshop/05-maps/05-maps.qmd)
 :::
 

@@ -13,6 +13,10 @@ categories:
 date: "2026-07-04"
 date-modified: last-modified
 order: 4
+level: Advanced
+duration: 90 min
+track: Think with data
+prerequisites: "All models are wrong"
 image: causal.png
 editor_options:
   chunk_output_type: console
@@ -21,6 +25,18 @@ citation:
 ---
 
 > *"No causes in; no causes out."*<br>--Nancy Cartwright
+
+::: {.lesson-info}
+**Level:** Advanced &nbsp;·&nbsp; **Time:** ~90 min &nbsp;·&nbsp; **Prerequisites:** All models are wrong &nbsp;·&nbsp; **Tools:** ggdag, dplyr, interactive OJS explainers (no installation needed)
+:::
+
+## You will learn to
+
+- Draw a causal diagram (DAG) and identify its three basic atoms: fork, chain, collider.
+- Simulate a confounder and see adjusting for it fix a biased estimate.
+- Simulate a collider and see adjusting for it *create* bias that wasn't there.
+- Recognise post-treatment bias: adjusting for something measured after the treatment.
+- Explore six natural-experiment research designs (DiD, RDD, IV, matching, fixed effects, synthetic control) and see each one's identifying assumption break in an interactive gallery.
 
 ## PART I: The question regression can't answer alone
 
@@ -1183,7 +1199,7 @@ Six designs, one lesson --the same lesson as the fork and the collider, at highe
 1.  Simulate the third atom, the chain: `x` causes `m` (`m = 2*x + noise`), `m` causes `y` (`y = 3*m + noise`). Regress `y ~ x`, then `y ~ x + m`. The total effect of `x` is 6 --which regression finds it, and what does the other one estimate instead?
 2.  Draw last week's news. Take one "X linked to Y" headline, draw a DAG with at least one plausible fork, and use `ggdag_adjustment_set()` to state what the study would need to have adjusted for.
 3.  Break the fork fix: in the ice-cream world, adjust for a *noisy* version of summer (`summer_reported = ifelse(runif(2000) < 0.8, summer, 1 - summer)`). How much of the confounding comes back? (Measurement error makes "we controlled for it" a matter of degree.)
-4.  Randomize: rebuild the ice-cream world but assign `ice_cream` with `rnorm(2000)` --independent of summer, as an experiment would. Show the naive regression is now unbiased, no adjustment needed.
+4.  Randomise: rebuild the ice-cream world but assign `ice_cream` with `rnorm(2000)` --independent of summer, as an experiment would. Show the naive regression is now unbiased, no adjustment needed.
 5.  Dose the post-treatment poison: in the `rct` world, make the certificate depend *only* on training (drop `motivation` from line 3). Is adjusting for it still biased --and in which direction? Then make it depend only on motivation. Which atom is each variant, and which regression is safe in each world?
 6.  Reverse-engineer the DiD machine: with the differential trend at $d$, the bias settles at almost exactly $5d$. Why 5? (Hint: treatment starts at $t=6$ of 10 periods --compare the average pre-period to the average post-period.) Then rebuild the whole machine in R with `tibble()` + `lm(y ~ group * post)` and confirm.
 7.  In the RDD machine, set curvature to $-1$ and find the bandwidth where you'd stop trusting the estimate. Now simulate the same world in R and fit `lm(y ~ x * above)` inside your chosen window --does your jump match the machine's?
@@ -1193,4 +1209,17 @@ Six designs, one lesson --the same lesson as the fork and the collider, at highe
 11. The synthetic-control machine's pre-fit RMSE is a placebo test you can run *before* believing anything. Crank the uniqueness slider slowly: at what RMSE would you personally refuse to report the estimate? Defend your threshold, then read how the real method picks donors and predictors in the [Mixtape chapter](https://mixtape.scunning.com/10-synthetic_control).
 :::
 
-Next --and last-- in the track: [Think Bayes](/sessions_thinking/05-bayes/05-bayes.qmd), where beliefs become distributions and data updates them.
+## Key takeaways
+
+- Every causal structure is built from three atoms: fork (confounder), chain (mediator), collider.
+- Adjusting for a confounder removes bias; adjusting for a collider *creates* it -- the same action, opposite effect, depending on the atom.
+- Post-treatment variables (measured after the treatment) are dangerous to adjust for, whichever atom they turn out to be.
+- Every natural-experiment design (DiD, RDD, IV, matching, fixed effects, synthetic control) rests on one identifying assumption -- know what would have to be true for the estimate to be believed.
+
+::: {.continue-learning}
+[← Previous: All models are wrong](/sessions_thinking/03-regression/03-regression.qmd)
+
+[Track overview: Think with data →](/learn/thinking.qmd)
+
+[Next: Think Bayes →](/sessions_thinking/05-bayes/05-bayes.qmd)
+:::

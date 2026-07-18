@@ -12,6 +12,10 @@ categories:
 date: "2026-07-03"
 date-modified: last-modified
 order: 3
+level: Intermediate
+duration: 45 min
+track: Think with data
+prerequisites: "There is only one test"
 image: regression.png
 editor_options:
   chunk_output_type: console
@@ -26,6 +30,18 @@ citation:
 Regression fits a line through a cloud of points. That sentence hides the statistical thinking: the line you get is **computed from one sample**, and the [first session of this track](/sessions_thinking/01-uncertainty/01-uncertainty.qmd) taught you what that means --a different sample gives a different line. A regression coefficient without uncertainty is a single number pretending to be knowledge.
 
 Back to our web-imported penguins. Does body mass predict flipper length?
+
+::: {.lesson-info}
+**Level:** Intermediate &nbsp;·&nbsp; **Time:** ~45 min &nbsp;·&nbsp; **Prerequisites:** There is only one test &nbsp;·&nbsp; **Tools:** broom, dplyr, ggplot2
+:::
+
+## You will learn to
+
+- Fit a linear model with `lm()` and tidy its output with broom.
+- Attach honest uncertainty to a regression line with the bootstrap.
+- Recognise Anscombe's quartet: identical regression output, very different data.
+- Avoid extrapolating a line beyond the range of the data that produced it.
+- Explain regression to the mean without mistaking it for a real intervention effect.
 
 ```{r 3.fit}
 library(tidyverse)
@@ -186,4 +202,17 @@ Confusing them is how "people who take vitamin X live longer" becomes a headline
 4.  Regression to the mean, in the wild: in the `students` simulation, "treat" the bottom 10% of test 1 with a worthless intervention (add exactly 0) and compute their test-2 improvement. Write the press release, then debunk it.
 :::
 
-Next in the track: [Draw your assumptions](/sessions_thinking/04-causal/04-causal.qmd) --when a regression coefficient does, and mostly does not, mean *cause*.
+## Key takeaways
+
+- A regression coefficient is computed from one sample -- a different sample gives a different line, so it needs uncertainty attached, not just reported bare.
+- Anscombe's quartet: identical `lm()` output can hide wildly different underlying data. Always plot it.
+- A model built to predict and a model built to explain answer different questions -- a coefficient can be predictive and causally meaningless at the same time.
+- Regression to the mean produces apparent "effects" from pure noise whenever you select on an extreme value.
+
+::: {.continue-learning}
+[← Previous: There is only one test](/sessions_thinking/02-inference/02-inference.qmd)
+
+[Track overview: Think with data →](/learn/thinking.qmd)
+
+[Next: Draw your assumptions before drawing your conclusions →](/sessions_thinking/04-causal/04-causal.qmd)
+:::

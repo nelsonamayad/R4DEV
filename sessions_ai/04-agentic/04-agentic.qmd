@@ -12,6 +12,10 @@ categories:
 date: "2026-07-05"
 date-modified: last-modified
 order: 4
+level: Beginner
+duration: 45 min
+track: Work with AI
+prerequisites: "Grounded in truth"
 image: cat-computer.gif
 editor_options:
   chunk_output_type: console
@@ -21,11 +25,22 @@ citation:
 
 > *"Civilization advances by extending the number of important operations which we can perform without thinking of them."*<br>--Alfred North Whitehead
 
+::: {.lesson-info}
+**Level:** Beginner &nbsp;·&nbsp; **Time:** ~45 min &nbsp;·&nbsp; **Prerequisites:** Grounded in truth &nbsp;·&nbsp; **Tools:** conceptual -- no code executes in this lesson
+:::
+
+## You will learn to
+
+- Define what an agent is: an LLM calling tools in a loop, working towards a goal.
+- Recognise the vocabulary -- harness, skill, MCP, memory file, subagent, permission -- used across agentic coding tools.
+- Compare the main agentic coding tools: Claude Code, Codex, OpenClaw, Antigravity.
+- Reason about what a coding agent should and shouldn't be allowed to do unsupervised.
+
 ## PART I: What is an agent, really?
 
 The three previous sessions of this track built a staircase. In [Talking to machines](/sessions_ai/01-llm/01-llm.qmd) you called an LLM from code and --crucially-- you registered a **tool**: a plain R function the model could decide to call on its own. In [Chat with your data](/sessions_ai/02-llm-apps/02-llm-apps.qmd) you put that model inside an app. In [Grounded in truth](/sessions_ai/03-ragnar/03-ragnar.qmd) you gave it retrieval, and watched it *choose* when to search before answering.
 
-This session climbs the last step. Take the tool-calling loop you already know and hand the model a much more dangerous toolbox: **read files, edit files, run commands in a terminal, search the web**. Then let it loop --propose an action, observe the result, decide the next action-- until the job is done. That is the whole trick. There is no new mathematics in this session, only a definition worth memorizing:
+This session climbs the last step. Take the tool-calling loop you already know and hand the model a much more dangerous toolbox: **read files, edit files, run commands in a terminal, search the web**. Then let it loop --propose an action, observe the result, decide the next action-- until the job is done. That is the whole trick. There is no new mathematics in this session, only a definition worth memorising:
 
 > **An agent is an LLM calling tools in a loop, working towards a goal.**
 
@@ -213,3 +228,18 @@ How does this actually change a week of R work? Some patterns that hold up in pr
 ## Where this leaves you
 
 You now hold both ends of the leash. From [Talking to machines](/sessions_ai/01-llm/01-llm.qmd), you know how to *build* with models --chat, structured extraction, tools. From this session, you know how to *work* with them --agents, skills, memory, permissions. The common thread of the whole track is the same one that opened this workshop: plain text, version control, reproducibility. Those habits made your work legible to other humans. It turns out they make it legible to machines too, and the machines are now very good colleagues --fast, tireless, occasionally overconfident, and entirely dependent on your judgment for everything that matters.
+
+## Key takeaways
+
+- An agent is an LLM calling tools in a loop, working towards a goal -- nothing more mysterious than that.
+- Agents do best on verifiable, mechanical tasks; judgment calls stay yours.
+- Review an agent's diff like a colleague's pull request -- code you accept unread is code you now maintain without understanding.
+- Reproducibility still means the pipeline runs without the agent babysitting it.
+
+::: {.continue-learning}
+[← Previous: Grounded in truth](/sessions_ai/03-ragnar/03-ragnar.qmd)
+
+[Track overview: Work with AI →](/learn/ai.qmd)
+
+[Explore another track: Think with data →](/learn/thinking.qmd)
+:::

@@ -13,6 +13,10 @@ categories:
 date: "2026-07-04"
 date-modified: last-modified
 order: 2
+level: Intermediate
+duration: 45 min
+track: Work with AI
+prerequisites: "Talking to machines"
 image: her.gif
 editor_options:
   chunk_output_type: console
@@ -27,6 +31,17 @@ citation:
 In session 7 you built Shiny apps where users interact through sliders and dropdowns. In the previous session, [Talking to machines](/sessions_ai/01-llm/01-llm.qmd), you learned to call an LLM from code. This session welds the two: apps where the interface is **a conversation**, and where the model translates human questions into the filters, queries and charts you used to build by hand.
 
 Everything runs on the same [`ellmer`](https://ellmer.tidyverse.org/) chat objects from the previous session, so your API key setup carries over unchanged.
+
+::: {.lesson-info}
+**Level:** Intermediate &nbsp;·&nbsp; **Time:** ~45 min &nbsp;·&nbsp; **Prerequisites:** Talking to machines &nbsp;·&nbsp; **Tools:** shinychat, querychat, ggsql
+:::
+
+## You will learn to
+
+- Embed a streaming chat UI inside a Shiny app with shinychat.
+- Let a user filter data with natural language using querychat.
+- Write SQL that draws its own chart with ggsql.
+- Understand why `querychat_app()`'s convenience wrapper isn't meant for production deployment, and what to use instead.
 
 ## PART I: A chat UI in one line
 
@@ -203,4 +218,19 @@ Everything here answers from what the model already knows. The next session, [**
 # Advanced
 
 -   Combine sessions 9 and 10: build a Shiny app with a `chat_ui()` where the model has a *tool* that runs `ggsql_execute()` on the songs table and returns the chart. You will have built a tiny data analyst
+:::
+
+## Key takeaways
+
+- shinychat, querychat and ggsql all wrap the same idea: let the model translate a human question into code that already works.
+- A convenience wrapper built for interactive/local use (like `querychat_app()`) is not automatically safe to deploy -- check what it actually runs underneath.
+- Natural-language filtering is only as good as the SQL it generates -- always be able to read what the model wrote.
+- Everything here answers from the model's general knowledge; the next lesson changes that.
+
+::: {.continue-learning}
+[← Previous: Talking to machines](/sessions_ai/01-llm/01-llm.qmd)
+
+[Track overview: Work with AI →](/learn/ai.qmd)
+
+[Next: Grounded in truth →](/sessions_ai/03-ragnar/03-ragnar.qmd)
 :::

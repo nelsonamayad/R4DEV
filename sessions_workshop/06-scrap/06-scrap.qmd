@@ -12,6 +12,10 @@ categories:
 date: "2022-07-31" 
 date-modified: last-modified
 order: 6
+level: Intermediate
+duration: 60 min
+track: Build with R
+prerequisites: "Everything in its right place"
 image: bono-wink.gif
 editor_options: 
   chunk_output_type: console
@@ -20,6 +24,17 @@ citation:
 ---
 
 > *If it doesn't exist on the internet, it doesn't exist.*<br>--Kenneth Goldsmith
+
+::: {.lesson-info}
+**Level:** Intermediate &nbsp;·&nbsp; **Time:** ~60 min &nbsp;·&nbsp; **Prerequisites:** Everything in its right place &nbsp;·&nbsp; **Tools:** rvest, chromote, purrr
+:::
+
+## You will learn to
+
+- Scrape a static webpage's HTML with rvest when no API is available.
+- Scrape a JavaScript-rendered page with `read_html_live()`/chromote.
+- Turn a scraped list into a tidy tibble with purrr's `imap()`/`map_df()`.
+- Recognise when scraping is the wrong tool -- and save a scrape once instead of hitting a live site on every render.
 
 ## PART I: Pick it, grab it
 
@@ -436,4 +451,19 @@ You may find old tutorials using **`RSelenium`** for this. It works, but it is a
 
 -   Scrape the lyrics for [Bob Dylan](https://www.bobdylan.com/songs/), [Pearl Jam](https://pearljam.com/music/songs) or another artist you can find online. Re-create the sentiment analysis workflow for their lyrics.
 -   The U2 page with lyrics also shows every time each song has been played during a tour since the late 80s. Scrap the tour dates and visualise song popularity through time.
+:::
+
+## Key takeaways
+
+- rvest reads static HTML; chromote's `read_html_live()` waits for JavaScript to render first -- know which page you're facing before picking a tool.
+- Selectors (CSS/XPath) are how you tell rvest which piece of the page you want.
+- A scraped list usually needs `imap()`/`map_df()` to become a proper tibble.
+- Scraping a live site on every render is slow and rude -- save the result once and reuse the snapshot, as this lesson's own U2 lyrics data does.
+
+::: {.continue-learning}
+[← Previous: Mapping despair in the USA](/sessions_workshop/05-maps/05-maps.qmd)
+
+[Track overview: Build with R →](/learn/build-with-r.qmd)
+
+[Next: Make it shine →](/sessions_workshop/07-shiny/07-shiny.qmd)
 :::

@@ -15,6 +15,10 @@ categories:
 date: "2022-07-31" 
 date-modified: last-modified
 order: 3
+level: Intermediate
+duration: 90 min
+track: Build with R
+prerequisites: "Everything in its right place"
 image: darwin.gif
 editor_options: 
   chunk_output_type: console
@@ -28,6 +32,18 @@ citation:
 Text analysis is how you convert prose into a numerical analysis. Examples of applications of text analysis are [Google NGrams](https://books.google.com/ngrams) and translators like [DeepL](https://www.deepl.com/en/translator). It is also a building block for AI applications, like the recently released [ChatGPT](https://openai.com/blog/chatgpt/).
 
 In this session we will focus on retrieving, cleaning and visualising text data.
+
+::: {.lesson-info}
+**Level:** Intermediate &nbsp;·&nbsp; **Time:** ~90 min &nbsp;·&nbsp; **Prerequisites:** Everything in its right place &nbsp;·&nbsp; **Tools:** tidytext, stringr, dplyr, ggwordcloud, topicmodels
+:::
+
+## You will learn to
+
+- Import text from a PDF and clean it into tidy, one-word-per-row data.
+- Use regular expressions to find and remove patterns in text.
+- Reduce words to stems and lemmas, and count what's left.
+- Score sentiment and build a wordcloud from word frequencies.
+- Discover latent topics in a collection of documents with topic modelling.
 
 ## PART I: Text to data
 
@@ -980,6 +996,22 @@ book_sentiments <- function(author_name,book_name) {
 
 # Plot a book based on the author name and title ####
 book_sentiments("Hume, David","A Treatise of Human Nature")
- 
+
 ```
+
+## Key takeaways
+
+- Text becomes data the moment you tokenise it into one row per unit (word, ngram, sentence).
+- Stopword removal, stemming and lemmatising all reduce noise before you count anything.
+- Sentiment lexicons disagree with each other -- always check more than one before trusting a result.
+- Topic modelling finds latent structure in a corpus without you labelling anything by hand.
+- Wrapping a repeated analysis in a function (like `book_sentiments()`) is what makes it reusable across books.
+
+::: {.continue-learning}
+[← Previous: Everything in its right place](/sessions_workshop/02-plots/02-plots.qmd)
+
+[Track overview: Build with R →](/learn/build-with-r.qmd)
+
+[Next: Making data move →](/sessions_workshop/04-animate/04-animate.qmd)
+:::
 :::

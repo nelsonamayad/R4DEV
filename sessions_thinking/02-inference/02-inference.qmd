@@ -2,7 +2,7 @@
 title: There is only one test 🃏
 subtitle: Permutation, the bootstrap, and what a p-value actually says
 author: "Nelson Amaya"
-description: "All of hypothesis testing is one idea: build a world where nothing is going on, simulate it, and ask if your data would be surprising there. Learn it by shuffling with the tidyverse, then industrialize it with infer."
+description: "All of hypothesis testing is one idea: build a world where nothing is going on, simulate it, and ask if your data would be surprising there. Learn it by shuffling with the tidyverse, then industrialise it with infer."
 categories:
   - statistics
   - inference
@@ -12,6 +12,10 @@ categories:
 date: "2026-07-02"
 date-modified: last-modified
 order: 2
+level: Intermediate
+duration: 45 min
+track: Think with data
+prerequisites: "Embrace the noise"
 image: inference.png
 editor_options:
   chunk_output_type: console
@@ -26,6 +30,17 @@ citation:
 Open any statistics textbook and you find a zoo: t-tests, chi-squared tests, ANOVA, Mann-Whitney, each with its own formula, table and existence conditions. Here is the secret the zoo hides[^1]: **they are all the same test**, and you already have the tools to run it, because [the previous session](/sessions_thinking/01-uncertainty/01-uncertainty.qmd) taught you to simulate sampling distributions.
 
 [^1]: The framing is Allen Downey's, from his classic post ["There is still only one test"](https://allendowney.blogspot.com/2016/06/there-is-still-only-one-test.html). The zoo of named tests exists because before computers, each special case needed its own hand-derivable algebra. You have a computer.
+
+::: {.lesson-info}
+**Level:** Intermediate &nbsp;·&nbsp; **Time:** ~45 min &nbsp;·&nbsp; **Prerequisites:** Embrace the noise &nbsp;·&nbsp; **Tools:** infer, dplyr, ggplot2
+:::
+
+## You will learn to
+
+- See permutation testing, the bootstrap and named tests (t-test, chi-squared, …) as one idea wearing different names.
+- Build a null world by shuffling data, and ask whether your observed data would be surprising there.
+- Run a permutation test and a bootstrap interval by hand with dplyr, then industrialise both with infer.
+- State honestly what a p-value does and does not mean.
 
 The one test:
 
@@ -187,7 +202,7 @@ tibble(experiment = 1:20) |>
 ::: callout-warning
 ## The garden of forking paths
 
-The jelly-bean trap doesn't require running twenty literal tests. Choosing which outcome to measure, which subgroups to inspect, which observations count as outliers --each choice is a fork, and enough forks guarantee a "finding". The defense is the discipline this workshop has preached from session 1: decide your analysis *before* looking, write it as code, version it. A committed script is a pre-registration you gave yourself.
+The jelly-bean trap doesn't require running twenty literal tests. Choosing which outcome to measure, which subgroups to inspect, which observations count as outliers --each choice is a fork, and enough forks guarantee a "finding". The defence is the discipline this workshop has preached from session 1: decide your analysis *before* looking, write it as code, version it. A committed script is a pre-registration you gave yourself.
 :::
 
 ::: callout-tip
@@ -199,4 +214,17 @@ The jelly-bean trap doesn't require running twenty literal tests. Choosing which
 4.  Simulate the forking-paths trap: generate one fake dataset with a null effect and 10 outcome variables; test all ten; report "the significant one". Then explain, in one sentence, to your former self why this felt like science.
 :::
 
-Next in the track: [All models are wrong](/sessions_thinking/03-regression/03-regression.qmd) puts uncertainty inside the most-used model in the world --the regression line.
+## Key takeaways
+
+- Every named hypothesis test is the same idea: simulate a null world, then check if your data would be surprising there.
+- Permutation tests and bootstrap intervals answer different questions -- is there an effect, and how big is it -- and infer runs both with the same grammar.
+- Testing many things and reporting the ones that worked is not evidence, it's arithmetic (the garden of forking paths).
+- Deciding your analysis before looking, and writing it as versioned code, is the practical defence against forking paths.
+
+::: {.continue-learning}
+[← Previous: Embrace the noise](/sessions_thinking/01-uncertainty/01-uncertainty.qmd)
+
+[Track overview: Think with data →](/learn/thinking.qmd)
+
+[Next: All models are wrong →](/sessions_thinking/03-regression/03-regression.qmd)
+:::

@@ -11,6 +11,10 @@ categories:
 date: "2026-07-05"
 date-modified: last-modified
 order: 9
+level: Advanced
+duration: 45 min
+track: Build with R
+prerequisites: "Everything in its right place"
 image: xmen.gif
 editor_options:
   chunk_output_type: console
@@ -21,6 +25,17 @@ citation:
 ---
 
 > *"We build our computer (systems) the way we build our cities: over time, without a plan, on top of ruins."* <br>--Ellen Ullman
+
+::: {.lesson-info}
+**Level:** Advanced &nbsp;·&nbsp; **Time:** ~45 min &nbsp;·&nbsp; **Prerequisites:** Everything in its right place &nbsp;·&nbsp; **Tools:** purrr, mirai
+:::
+
+## You will learn to
+
+- Replace a for-loop with purrr's `map()` family, functionally.
+- Iterate over two or more lists in parallel with `map2()`/`pmap()`.
+- Understand why a self-contained function is what makes parallelisation possible at all.
+- Parallelise existing purrr code across cores with mirai's `in_parallel()`, without rewriting it.
 
 ## PART I: The for-loop has to go
 
@@ -232,4 +247,19 @@ The AI track's `ellmer::parallel_chat_structured()` (from [Talking to machines](
 # Advanced
 
 - Read `mirai`'s docs on remote daemons (SSH, or an HPC scheduler like Slurm) --the `purrr` code you write doesn't change at all; only the `daemons()` call does. What does that separation buy you?
+:::
+
+## Key takeaways
+
+- `map()` and its variants replace a for-loop with a function applied to every element -- same result, more composable.
+- A function has to be self-contained (no reaching into the global environment) before it can be safely parallelised.
+- mirai parallelises existing purrr code by wrapping it in `in_parallel()` -- the loop logic itself doesn't change.
+- I/O-bound work (network calls, scraping) often benefits from parallelism more than CPU-bound work does.
+
+::: {.continue-learning}
+[← Previous: Smart reports](/sessions_workshop/08-reports/08-reports.qmd)
+
+[Track overview: Build with R →](/learn/build-with-r.qmd)
+
+[Explore another track: Work with AI →](/learn/ai.qmd)
 :::

@@ -13,6 +13,10 @@ categories:
 date: "2022-07-31" 
 date-modified: last-modified
 order: 2
+level: Beginner
+duration: 90 min
+track: Build with R
+prerequisites: "Blogging with Quarto"
 image: thom-dance.gif
 editor_options: 
   chunk_output_type: console
@@ -21,6 +25,18 @@ citation:
 ---
 
 > "*Truth is much too complicated to allow anything but approximations.”*<br>--John von Neumann
+
+::: {.lesson-info}
+**Level:** Beginner &nbsp;·&nbsp; **Time:** ~90 min &nbsp;·&nbsp; **Prerequisites:** Blogging with Quarto &nbsp;·&nbsp; **Tools:** httr2, ggplot2, plotly, ggiraph, tidyr
+:::
+
+## You will learn to
+
+- Turn a rough first plot into a polished one, one deliberate change at a time.
+- Retrieve live data from a web API with httr2.
+- Reshape and tidy data with tidyr so it's ready to plot.
+- Build interactive visualisations with plotly and ggiraph.
+- Choose a colour palette and labelling that don't fight the data.
 
 ## PART I: The story of a plot[^1]
 
@@ -792,4 +808,20 @@ girafe(ggobj = spotify_covers_gg)
 # Intermediate
 
 -   Look for a dataset from the [**RDataset collection**](https://vincentarelbundock.github.io/Rdatasets/articles/data.html) and create two side-by-side visualisations using **`ggiraph`**
+:::
+
+## Key takeaways
+
+- A good plot is iterated into existence -- start basic, then polish one decision at a time.
+- httr2 turns a web API into a tidy data frame you can pipe straight into ggplot2.
+- Interactivity (plotly, ggiraph) is a layer added on top of a static plot, not a different way of building one.
+- Tidy data -- one row per observation -- is what makes every downstream plotting step easier.
+- The right colour palette and clean labels do more for readability than any single geom choice.
+
+::: {.continue-learning}
+[← Previous: Blogging with Quarto](/sessions_workshop/01-quarto/01-quarto.qmd)
+
+[Track overview: Build with R →](/learn/build-with-r.qmd)
+
+[Next: Data from words →](/sessions_workshop/03-text/03-text.qmd)
 :::
