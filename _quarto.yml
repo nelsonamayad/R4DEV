@@ -60,18 +60,81 @@ website:
       - text: "Start here"
         icon: "signpost-2"
         href: start.qmd
-      - text: "Learn"
-        icon: "mortarboard"
+      - text: "Build with R"
+        icon: "code-slash"
         menu:
-          - text: "Build with R"
-            icon: "code-slash"
+          - text: "Track overview"
+            icon: "mortarboard"
             href: learn/build-with-r.qmd
-          - text: "Work with AI"
-            icon: "robot"
+          - text: "1. Blogging with Quarto"
+            icon: "book-half"
+            href: sessions_workshop/01-quarto/01-quarto.qmd
+          - text: "2. Everything in its right place"
+            icon: "music-note-list"
+            href: sessions_workshop/02-plots/02-plots.qmd
+          - text: "3. Data from words"
+            icon: "textarea-t"
+            href: sessions_workshop/03-text/03-text.qmd
+          - text: "4. Making data move"
+            icon: "film"
+            href: sessions_workshop/04-animate/04-animate.qmd
+          - text: "5. Mapping despair in the USA"
+            icon: "globe"
+            href: sessions_workshop/05-maps/05-maps.qmd
+          - text: "6. Just take it"
+            icon: "wifi"
+            href: sessions_workshop/06-scrap/06-scrap.qmd
+          - text: "7. Make it shine"
+            icon: "stars"
+            href: sessions_workshop/07-shiny/07-shiny.qmd
+          - text: "8. Smart reports"
+            icon: "android2"
+            href: sessions_workshop/08-reports/08-reports.qmd
+          - text: "9. Do it well, do it fast"
+            icon: "speedometer2"
+            href: sessions_workshop/09-parallel/09-parallel.qmd
+      - text: "Work with AI"
+        icon: "robot"
+        menu:
+          - text: "Track overview"
+            icon: "mortarboard"
             href: learn/ai.qmd
-          - text: "Think with data"
-            icon: "dice-5"
+          - text: "1. Talking to machines"
+            icon: "robot"
+            href: sessions_ai/01-llm/01-llm.qmd
+          - text: "2. Chat with your data"
+            icon: "chat-dots"
+            href: sessions_ai/02-llm-apps/02-llm-apps.qmd
+          - text: "3. Grounded in truth"
+            icon: "compass"
+            href: sessions_ai/03-ragnar/03-ragnar.qmd
+          - text: "4. Agentic coding"
+            icon: "terminal"
+            href: sessions_ai/04-agentic/04-agentic.qmd
+          - text: "Ask R4DEV 🤖 (live capstone)"
+            icon: "stars"
+            href: sessions_ai/03-ragnar/03-ragnar.qmd#capstone-ask-r4dev
+      - text: "Think with data"
+        icon: "dice-5"
+        menu:
+          - text: "Track overview"
+            icon: "mortarboard"
             href: learn/thinking.qmd
+          - text: "1. Embrace the noise"
+            icon: "dice-5"
+            href: sessions_thinking/01-uncertainty/01-uncertainty.qmd
+          - text: "2. There is only one test"
+            icon: "shuffle"
+            href: sessions_thinking/02-inference/02-inference.qmd
+          - text: "3. All models are wrong"
+            icon: "graph-up"
+            href: sessions_thinking/03-regression/03-regression.qmd
+          - text: "4. Draw your assumptions"
+            icon: "diagram-3"
+            href: sessions_thinking/04-causal/04-causal.qmd
+          - text: "5. Think Bayes"
+            icon: "infinity"
+            href: sessions_thinking/05-bayes/05-bayes.qmd
       - text: "Practice"
         icon: "trophy"
         href: sessions_tools/01-practice/01-practice.qmd
@@ -111,7 +174,9 @@ format:
     code-link: true
     code-copy: true
     code-annotations: hover
-    highlight-style: arrow
+    highlight-style:
+      light: github
+      dark: github-dark
     footnotes-hover: true
     link-external-newwindow: true
     smooth-scroll: true
