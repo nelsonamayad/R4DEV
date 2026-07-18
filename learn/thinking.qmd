@@ -1,0 +1,63 @@
+---
+title: "Think with data"
+subtitle: "Reason clearly about uncertainty, inference, models, causality, and Bayesian evidence"
+description: "The statistical thinking track: five lessons on simulating your way to intuition, from sampling variation to Bayesian updating."
+date: "2026-07-01"
+date-modified: last-modified
+toc: true
+---
+
+## Track description
+
+This track teaches statistical reasoning by **simulation first, formula second**: you'll see sampling variation, hypothesis testing, regression uncertainty, causal bias, and Bayesian updating happen in front of you before -- or instead of -- proving them algebraically. Several lessons run live, interactive R in your browser via WebAssembly, so there's nothing to install to follow along.
+
+## Who this is for
+
+Analysts and researchers who use statistics regularly but want firmer intuition for *why* the methods work, not just how to call them.
+
+## Prerequisites
+
+- **Minimum**: comfort with R and the tidyverse pipe (`|>`), as taught in the [Build with R](build-with-r.qmd) track's first two lessons.
+- **Helpful**: having fit a linear model before (even in another tool) makes lesson 3 land faster.
+- No prior statistics coursework assumed -- concepts are built from simulation, not formulas, though formulas are shown alongside.
+
+## Lessons
+
+```{=html}
+<div class="lesson-list">
+<a class="lesson-row" href="/sessions_thinking/01-uncertainty/01-uncertainty.qmd">
+  <span class="lesson-num">1</span>
+  <span class="lesson-title">Embrace the noise</span>
+  <span class="lesson-outcome">Simulate sampling variation to see the law of large numbers and the central limit theorem in action.</span>
+  <span class="lesson-meta">Beginner · 45 min</span>
+</a>
+<a class="lesson-row" href="/sessions_thinking/02-inference/02-inference.qmd">
+  <span class="lesson-num">2</span>
+  <span class="lesson-title">There is only one test</span>
+  <span class="lesson-outcome">Run a hypothesis test by simulating a null world, first by hand, then with infer.</span>
+  <span class="lesson-meta">Intermediate · 45 min</span>
+</a>
+<a class="lesson-row" href="/sessions_thinking/03-regression/03-regression.qmd">
+  <span class="lesson-num">3</span>
+  <span class="lesson-title">All models are wrong</span>
+  <span class="lesson-outcome">Fit, tidy and bootstrap a regression line, and learn where it breaks.</span>
+  <span class="lesson-meta">Intermediate · 45 min</span>
+</a>
+<a class="lesson-row" href="/sessions_thinking/04-causal/04-causal.qmd">
+  <span class="lesson-num">4</span>
+  <span class="lesson-title">Draw your assumptions before drawing your conclusions</span>
+  <span class="lesson-outcome">Diagram causal assumptions with DAGs and see confounders and colliders bias an estimate.</span>
+  <span class="lesson-meta">Advanced · 90 min</span>
+</a>
+<a class="lesson-row" href="/sessions_thinking/05-bayes/05-bayes.qmd">
+  <span class="lesson-num">5</span>
+  <span class="lesson-title">Think Bayes</span>
+  <span class="lesson-outcome">Update a probability distribution one observation at a time, live in the browser.</span>
+  <span class="lesson-meta">Advanced · 60 min</span>
+</a>
+</div>
+```
+
+**Estimated total time:** ~4.75 hours across 5 lessons (durations are rounded active-work estimates, not automated reading time).
+
+[Start with lesson 1: Embrace the noise →](/sessions_thinking/01-uncertainty/01-uncertainty.qmd){.btn .btn-primary .btn-lg}

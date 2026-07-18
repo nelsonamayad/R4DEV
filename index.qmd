@@ -1,106 +1,73 @@
 ---
-title: "📉 R4DEV 📈"
-subtitle: "More fiction is written in Excel than in Word. Learn how to do better."
-listing:
-  - id: "workshop"
-    sort: "date"
-    contents: "sessions_workshop"
-    type: grid
-    image-align: left
-    image-height: 150px
-    fields: [image, date, title, description, reading-time]
-    sort-ui: true
-    filter-ui: true
-    categories: cloud
-    feed: true
-
-  - id: "tools"
-    sort: "date"
-    contents: "sessions_tools"
-    type: grid
-    image-align: left
-    image-height: 150px
-    fields: [image, date, title, description, reading-time]
-    sort-ui: false
-    filter-ui: false
-    categories: false
-    feed: true
+title: "R4DEV"
 toc: false
 page-layout: full
-title-block-banner-color: "#FFFFFF"
-title-block-style: default
-title-block-banner: cover/universe.jpg
+title-block-style: none
 ---
 
-::: {.hero}
-::: {.hero-text}
-Learn **reproducible data analysis and visualisation** with [R](https://www.r-project.org/) --from your first [Quarto](https://quarto.org/) document to interactive maps, animations, web apps, and programming Large Language Models. Free, open-source, and tested on real humans[^1] at the OECD.
+```{=html}
+<style>
+/* The masthead is the title of this page -- hide the auto-generated title header. */
+#title-block-header { display: none; }
+</style>
+```
 
-[^1]: Thanks to Zélie, Rebecca, Rossana, Romane, Emma, Shivona, Maëlle and others who tested, often with their patience, earlier versions of this workshop.
+::: {.masthead}
+[A hands-on workshop on reproducible data analysis · running since 2022]{.kicker}
 
-::: {.hero-actions}
-[Start with session 1 →](sessions_workshop/01-quarto/01-quarto.qmd){.btn .btn-light .btn-lg}
-[New: the AI track 🤖](sessions_workshop/09-llm/09-llm.qmd){.btn .btn-outline-light .btn-lg}
-[Wait, what is this?](about.qmd){.btn .btn-outline-light .btn-lg}
-:::
-:::
+[More fiction is written in Excel than in Word.]{.masthead-title}
 
-::: {.hero-figure}
-[![](logo/xkcd_documents.png){width="150" fig-alt="xkcd comic about file names"}](https://xkcd.com/1459/)
-:::
+::: {.lede}
+Learn to turn messy information into reproducible analysis, compelling visualisations, interactive applications, and AI-assisted workflows -- all in R.
 :::
 
-::: {.feature-row}
-::: {.feature-card}
-### 🧹 Wrangle & plot
-
-Tidy messy data with the [tidyverse](https://www.tidyverse.org/)[^2] and turn it into plots people remember with `ggplot2`, `plotly` and `ggiraph`.
+::: {.masthead-actions}
+[Start learning →](start.qmd){.btn .btn-primary .btn-lg}
+[Explore the curriculum →](#tracks){.btn .btn-outline-primary .btn-lg}
 :::
 
-::: {.feature-card}
-### 🗺️ Map, animate, ship
-
-Build maps with `sf` and `leaflet`, animate anything with `gganimate`, and publish apps and entire websites with `shiny` and Quarto.
+[All progress is piecemeal, so the workshop improves permanently. Keep the [Posit cheat sheets](https://rstudio.github.io/cheatsheets/) and the [tidyverse style guide](https://style.tidyverse.org/) close. Thanks to Zélie, Rebecca, Rossana, Romane, Emma, Shivona, Maria, Valeria, Laura, Sofia, Maëlle and many others who tested, often with their patience, earlier versions of this workshop.]{.masthead-fineprint}
 :::
 
-::: {.feature-card}
-### 🤖 Talk to machines
+## Learning tracks {#tracks .section-header}
 
-Call LLMs from code with `ellmer`, turn prose into tidy data, and build apps that answer questions about your data in plain language.
-:::
-:::
+Three tracks, nineteen lessons. Each is self-contained enough to enter on its own, but reads best in order.
 
-[^2]: The tidyverse is a collection of R packages designed for data science. All packages share an underlying design philosophy, grammar, and data structures. Install the complete tidyverse with: `install.packages("tidyverse")`. If you prefer base R code, suit yourself but *I do not recommend it*.
+```{=html}
+<div class="track-grid">
 
-All progress is piecemeal, so the workshop is in a permanent state of improvement --check back for updates, new material and corrections.
+<div class="track-card" data-track="build">
+  <p class="track-card-title">Build with R</p>
+  <p class="track-card-desc">Retrieve, transform, visualise, communicate, and scale data workflows with R.</p>
+  <p class="track-card-meta"><span>9 lessons</span><span>Beginner → Advanced</span></p>
+  <a class="btn btn-primary" href="learn/build-with-r.qmd">View track →</a>
+</div>
 
-:::: {.columns}
-::: {.column width="49%"}
-::: {.callout-tip}
-## Cheat sheets for {{< fa brands r-project >}}
+<div class="track-card" data-track="ai">
+  <p class="track-card-title">Work with AI</p>
+  <p class="track-card-desc">Use large language models as programmable tools for extraction, analysis, retrieval, and application development.</p>
+  <p class="track-card-meta"><span>5 lessons</span><span>Intermediate</span></p>
+  <a class="btn btn-primary" href="learn/ai.qmd">View track →</a>
+</div>
 
-Download the [Posit cheat sheets](https://rstudio.github.io/cheatsheets/) --one page per package, all killer no filler
-:::
-:::
+<div class="track-card" data-track="thinking">
+  <p class="track-card-title">Think with data</p>
+  <p class="track-card-desc">Reason clearly about uncertainty, inference, models, causality, and Bayesian evidence.</p>
+  <p class="track-card-meta"><span>5 lessons</span><span>Intermediate → Advanced</span></p>
+  <a class="btn btn-primary" href="learn/thinking.qmd">View track →</a>
+</div>
 
-::: {.column width="2%"}
-:::
+</div>
+```
 
-::: {.column width="49%"}
-::: {.callout-important}
-## Tidyverse style guide
+New to R4DEV? [Start here](start.qmd) for prerequisites, install steps, and a recommended route through the material.
 
-[This is an amazing guide on how to code well](https://style.tidyverse.org/)
-:::
-:::
-::::
+## Resources {.section-header}
 
-## Sessions 📊 {.section-header}
-
-::: {#workshop}
-:::
-
-## Tools 🛠️ {.section-header}
-
-::: {#tools}
+::: {.resources-strip}
+[Practice exercises](sessions_tools/01-practice/01-practice.qmd)
+[R resources](sessions_tools/02-resources/02-resources.qmd)
+[Give feedback](sessions_tools/03-feedback/03-feedback.qmd)
+[Posit cheat sheets](https://rstudio.github.io/cheatsheets/)
+[Tidyverse style guide](https://style.tidyverse.org/)
 :::

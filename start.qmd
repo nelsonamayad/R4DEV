@@ -1,0 +1,58 @@
+---
+title: "Start here"
+description: "What R4DEV is, who it's for, what to install, and which lessons to open first."
+toc: true
+---
+
+## What is R4DEV?
+
+R4DEV is a practical, open workshop for reproducible data analysis, visualisation, publishing, interactive applications, AI-assisted workflows, and statistical reasoning -- all using R. It grew out of training a constantly rotating team at the OECD, and every lesson is built the same way: download real data from the web, then build something you can look at -- a plot, a map, an animation, an app, a chatbot.
+
+There is no lecture track separate from the code. Each lesson is a single page you read top to bottom, running the code as you go, with practice exercises at the end to check what stuck.
+
+## Who is it for?
+
+Analysts, researchers, economists, policy professionals, development practitioners, and students who already have *some* reason to work with data in R -- a thesis, a report, a dashboard -- and want a practical, project-based way in, rather than a syntax reference.
+
+## What should I know already?
+
+R4DEV does not assume you are a complete beginner to programming, and it does not teach R's core syntax (variables, functions, control flow) from scratch.
+
+- **Minimum prerequisites**: you can open a `.R` or `.qmd` file in RStudio and run a line of code. That's it to start lesson 1.
+- **Helpful prior knowledge**: basic data-frame operations (reading a CSV, filtering rows, computing a summary) make lessons 2 onward noticeably faster, though [Everything in its right place](sessions_workshop/02-plots/02-plots.qmd) introduces the tidyverse pipe as it goes.
+- **Taught from scratch, no prior exposure assumed**: Quarto publishing, ggplot2, animation, mapping, web scraping, Shiny, LLM tool calling, retrieval-augmented generation, causal diagrams, and Bayesian updating.
+- **Assumes basic R familiarity, not re-taught**: variable assignment, calling a function, installing a package, and reading an error message. If none of that is familiar yet, work through [RStudio's own primers](https://posit.cloud/learn/primers) or the free [R for Data Science](https://r4ds.hadley.nz/) book first -- R4DEV picks up from there.
+
+Complete beginners to R can absolutely take this workshop, but should expect lesson 1 to take longer than the estimate while the RStudio interface and basic syntax become familiar.
+
+## What should I install?
+
+- [ ] **R**, current release -- [cran.r-project.org](https://cran.r-project.org/)
+- [ ] **Posit/RStudio IDE**, current release -- [posit.co/download/rstudio-desktop](https://posit.co/download/rstudio-desktop/) (or [Positron](https://positron.posit.co/), Posit's newer editor)
+- [ ] **Quarto**, current release -- [quarto.org/docs/get-started](https://quarto.org/docs/get-started/) (bundled with recent RStudio, but worth checking the version matches)
+- [ ] **Git**, recommended but not mandatory -- [git-scm.com/downloads](https://git-scm.com/downloads/) (needed only for the Git-based Netlify deploy option in [Blogging with Quarto](sessions_workshop/01-quarto/01-quarto.qmd))
+- [ ] **R packages**, installed lesson by lesson -- each lesson names the packages it uses at the top; there is no single "install everything" step, so you only install what that lesson needs.
+
+## How does the workshop work?
+
+- Three tracks -- [Build with R](learn/build-with-r.qmd), [Work with AI](learn/ai.qmd), [Think with data](learn/thinking.qmd) -- each a self-contained sequence of lessons.
+- Every lesson is a **guided, worked example** on real data, not an abstract exercise -- you run the same code the page shows.
+- Code chunks carry **numbered annotations** (hover over the numbers next to the code) that explain what each line does in context.
+- Each lesson ends with **practice exercises** at three difficulty levels (Basic, Intermediate, Advanced) so you can stop at the depth that suits you.
+- Some sections are marked **optional/advanced** -- callouts flag them, and skipping them never blocks a later lesson.
+- If you want, start your own project (a thesis, a blog, a report) alongside the workshop and apply each lesson to it directly -- see the note at the end of [About R4DEV](about.qmd).
+
+## Recommended routes
+
+::: {.panel-tabset}
+## New to R4DEV
+Start here → [Blogging with Quarto](sessions_workshop/01-quarto/01-quarto.qmd) → [Everything in its right place](sessions_workshop/02-plots/02-plots.qmd) → [Data from words](sessions_workshop/03-text/03-text.qmd) → [Chat with your data](sessions_ai/02-llm-apps/02-llm-apps.qmd)
+
+## Experienced R analyst
+[Do it well, do it fast](sessions_workshop/09-parallel/09-parallel.qmd) (scaling) → [Work with AI track](learn/ai.qmd) → [Think with data track](learn/thinking.qmd)
+
+## Interested in AI
+[Talking to machines](sessions_ai/01-llm/01-llm.qmd) → [Chat with your data](sessions_ai/02-llm-apps/02-llm-apps.qmd) → [Grounded in truth](sessions_ai/03-ragnar/03-ragnar.qmd) → [Agentic coding](sessions_ai/04-agentic/04-agentic.qmd) → [Ask R4DEV capstone](sessions_ai/03-ragnar/03-ragnar.qmd#capstone-ask-r4dev)
+:::
+
+[Begin lesson 1: Blogging with Quarto →](sessions_workshop/01-quarto/01-quarto.qmd){.btn .btn-primary .btn-lg}

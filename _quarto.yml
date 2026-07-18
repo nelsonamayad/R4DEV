@@ -54,72 +54,33 @@ website:
     style: floating
 
     left:
-      - text: "Sessions"
-        icon: "book-half"
+      - text: "Home"
+        icon: "house-door"
+        href: index.qmd
+      - text: "Start here"
+        icon: "signpost-2"
+        href: start.qmd
+      - text: "Learn"
+        icon: "mortarboard"
         menu:
-          - text: "1. Quarto"
-            icon: "book-half"
-            href: sessions_workshop/01-quarto/01-quarto.qmd
-          - text: "2. Plot"
-            icon: "music-note-list"
-            href: sessions_workshop/02-plots/02-plots.qmd
-          - text: "3. Text"
-            icon: "textarea-t"
-            href: sessions_workshop/03-text/03-text.qmd
-          - text: "4. Animate"
-            icon: "film"
-            href: sessions_workshop/04-animate/04-animate.qmd
-          - text: "5. Map"
-            icon: "globe"
-            href: sessions_workshop/05-maps/05-maps.qmd
-          - text: "6. Scrap"
-            icon: "wifi"
-            href: sessions_workshop/06-scrap/06-scrap.qmd
-          - text: "7. Apps"
-            icon: "stars"
-            href: sessions_workshop/07-shiny/07-shiny.qmd
-          - text: "8. Report"
-            icon: "android2"
-            href: sessions_workshop/08-reports/08-reports.qmd
-          - text: "12. Scale up"
-            icon: "speedometer2"
-            href: sessions_workshop/12-parallel/12-parallel.qmd
-      - text: "AI · LLMs"
-        icon: "robot"
-        menu:
-          - text: "9. Talking to machines"
+          - text: "Build with R"
+            icon: "code-slash"
+            href: learn/build-with-r.qmd
+          - text: "Work with AI"
             icon: "robot"
-            href: sessions_workshop/09-llm/09-llm.qmd
-          - text: "10. Chat with your data"
-            icon: "chat-dots"
-            href: sessions_workshop/10-llm-apps/10-llm-apps.qmd
-          - text: "11. Grounded in truth (ragnar)"
-            icon: "compass"
-            href: sessions_workshop/11-ragnar/11-ragnar.qmd
-          - text: "Ask R4DEV 🤖 (live capstone)"
-            icon: "stars"
-            href: sessions_workshop/11-ragnar/11-ragnar.qmd#capstone-ask-r4dev
-      - text: "Extras"
-        icon: "infinity"
-        menu:
-          - text: "Think Bayes"
-            icon: "infinity"
-            href: sessions_workshop/13-bayes/bayes.qmd
-      - text: "Tools"
+            href: learn/ai.qmd
+          - text: "Think with data"
+            icon: "dice-5"
+            href: learn/thinking.qmd
+      - text: "Practice"
         icon: "trophy"
-        menu:
-          - text: "Practice"
-            icon: "trophy"
-            href: sessions_tools/09-practice/09-practice.qmd
-          - text: "R-sources"
-            icon: "eye-fill"
-            href: sessions_tools/10-resources/10-resources.qmd
-          - text: "Feedback"
-            icon: "activity"
-            href: sessions_tools/11-feedback/11-feedback.qmd
+        href: sessions_tools/01-practice/01-practice.qmd
+      - text: "Resources"
+        icon: "eye-fill"
+        href: sessions_tools/02-resources/02-resources.qmd
 
     right:
-      - text: "Wait, what did I get myself into?"
+      - text: "About R4DEV"
         icon: "question-circle-fill"
         href: about.qmd
 

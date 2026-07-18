@@ -1,8 +1,9 @@
 ---
-title: "Wait, what did I get myself into?"
-subtitle: "Data workshop" 
+title: "About R4DEV"
+subtitle: "Wait, what did I get myself into?"
 author: 
   - name: Nelson Amaya D.
+    affiliation: DNP | WBG | OECD | IOM | Jacobs Foundation
     orcid: 0009-0000-8216-8656
     email: nelson.amaya.d@gmail.com
 date: "2022-07-31"
@@ -68,7 +69,7 @@ If time allows, these are additional topics that we'll cover with overly enthusi
 
 -   {{< fa robot >}} `Models`: Learn how to build reproducible and tractable models with [tidymodels](https://www.tidymodels.org/)
 
--   {{< fa chart-area >}} `Bayesian analysis`: You need to unlearn a lot of what you were taught on statistics, but the [Think Bayes session](sessions_workshop/13-bayes/bayes.qmd) will start you off, and so will [rethinking](https://github.com/rmcelreath/rethinking), [bayesplot](http://mc-stan.org/bayesplot/index.html), [brms](https://paul-buerkner.github.io/brms/) and [bayesrules](https://www.bayesrulesbook.com/)
+-   {{< fa chart-area >}} `Bayesian analysis`: You need to unlearn a lot of what you were taught on statistics, but the [Think Bayes session](sessions_thinking/05-bayes/05-bayes.qmd) will start you off, and so will [rethinking](https://github.com/rmcelreath/rethinking), [bayesplot](http://mc-stan.org/bayesplot/index.html), [brms](https://paul-buerkner.github.io/brms/) and [bayesrules](https://www.bayesrulesbook.com/)
 
 -   {{< fa diagram-project >}} `Causal inference`: Why you must draw your assumptions before you compute --colliders, confounders and mediators, animated and interactive in the [bonus track of session 4](sessions_workshop/04-animate/04-animate.qmd)
 :::

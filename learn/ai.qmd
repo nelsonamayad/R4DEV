@@ -1,0 +1,70 @@
+---
+title: "Work with AI"
+subtitle: "Use large language models as programmable tools for extraction, analysis, retrieval, and application development"
+description: "The AI · LLMs track: four lessons plus a live capstone, from calling an LLM as a function to a deployed retrieval-augmented chatbot."
+date: "2026-07-04"
+date-modified: last-modified
+toc: true
+---
+
+## Track description
+
+This track treats large language models as **programmable tools**, not just chat windows. You'll call an LLM from R, force its output into a typed shape, give it tools it can decide to call, put it inside a Shiny app, and finally build a real retrieval-augmented generation (RAG) pipeline so it answers from actual retrieved text instead of memory -- ending with a live, deployed capstone built the same way.
+
+## Who this is for
+
+Anyone who wants to use LLMs as part of an actual R workflow -- extraction, retrieval, tool calling, or an app -- rather than as a standalone chatbot.
+
+## Prerequisites
+
+- **Minimum**: comfort with R and the tidyverse pipe (`|>`), as taught in the [Build with R](build-with-r.qmd) track's first two lessons. This track assumes that, and does not re-teach it.
+- **Helpful**: having built a Shiny app before ([Make it shine](/sessions_workshop/07-shiny/07-shiny.qmd)) makes lesson 2 land faster, but is not required.
+- No prior AI/ML background needed -- every concept (embeddings, tool calling, retrieval) is introduced from scratch.
+- No API key is required to read any lesson: LLM code chunks are shown with real captured output rather than executed live.
+
+## Lessons
+
+```{=html}
+<div class="lesson-list">
+<a class="lesson-row" href="/sessions_ai/01-llm/01-llm.qmd">
+  <span class="lesson-num">1</span>
+  <span class="lesson-title">Talking to machines</span>
+  <span class="lesson-outcome">Call an LLM from R, extract structured data from text, and give the model callable tools.</span>
+  <span class="lesson-meta">Intermediate · 45 min</span>
+</a>
+<a class="lesson-row" href="/sessions_ai/02-llm-apps/02-llm-apps.qmd">
+  <span class="lesson-num">2</span>
+  <span class="lesson-title">Chat with your data</span>
+  <span class="lesson-outcome">Embed a streaming chat UI and natural-language data filtering inside a Shiny app.</span>
+  <span class="lesson-meta">Intermediate · 45 min</span>
+</a>
+<a class="lesson-row" href="/sessions_ai/03-ragnar/03-ragnar.qmd">
+  <span class="lesson-num">3</span>
+  <span class="lesson-title">Grounded in truth</span>
+  <span class="lesson-outcome">Build a full RAG pipeline: crawl, chunk, embed, store and retrieve real text for an LLM to answer from.</span>
+  <span class="lesson-meta">Advanced · 60 min</span>
+</a>
+<a class="lesson-row" href="/sessions_ai/04-agentic/04-agentic.qmd">
+  <span class="lesson-num">4</span>
+  <span class="lesson-title">Agentic coding</span>
+  <span class="lesson-outcome">Understand what an agentic coding tool actually does under the hood, and the vocabulary around it.</span>
+  <span class="lesson-meta">Beginner · 45 min</span>
+</a>
+<a class="lesson-row" href="/sessions_ai/03-ragnar/03-ragnar.qmd#capstone-ask-r4dev">
+  <span class="lesson-num">★</span>
+  <span class="lesson-title">Ask R4DEV — capstone</span>
+  <span class="lesson-outcome">See the RAG pipeline running live, answering questions about R4DEV from its own retrieved content.</span>
+  <span class="lesson-meta">Intermediate · 15 min</span>
+</a>
+</div>
+```
+
+**Estimated total time:** ~3.5 hours across 4 lessons plus the capstone (durations are rounded active-work estimates, not automated reading time).
+
+::: callout-note
+## About the capstone
+
+"Ask R4DEV" is a real, deployed chatbot embedded at the end of [Grounded in truth](/sessions_ai/03-ragnar/03-ragnar.qmd#capstone-ask-r4dev) -- it is not a separate lesson to work through, but a live demonstration of the pipeline that lesson teaches, built with the same functions. Open it after finishing lesson 3.
+:::
+
+[Start with lesson 1: Talking to machines →](/sessions_ai/01-llm/01-llm.qmd){.btn .btn-primary .btn-lg}

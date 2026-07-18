@@ -1,0 +1,87 @@
+---
+title: "Build with R"
+subtitle: "Retrieve, transform, visualise, communicate, and scale data workflows with R"
+description: "The core R4DEV workshop track: nine lessons from your first Quarto document to parallel computing."
+date: "2022-07-30"
+date-modified: last-modified
+toc: true
+---
+
+## Track description
+
+This is the original R4DEV workshop: nine hands-on lessons that take you from writing your first reproducible document to scraping the web, mapping real spatial data, building a Shiny app, and parallelising your own code. Every lesson downloads real data from the web and builds something you can look at -- a plot, a map, an animation, an app.
+
+## Who this is for
+
+Analysts, researchers and students who want a practical, project-based introduction to doing data work in R rather than a syntax reference. No prior Shiny, mapping or web-scraping experience assumed.
+
+## Prerequisites
+
+- **Minimum**: R and RStudio (or Positron) installed, and enough command-line/R comfort to run a script. See [Start here](/start.qmd) for the install checklist.
+- **Helpful**: basic familiarity with data frames (reading a CSV, filtering rows) speeds up lessons 2 onward.
+- Lessons build on each other loosely (later lessons assume you can write a `dplyr` pipe), but each is designed to also work as a standalone reference.
+
+## Lessons
+
+```{=html}
+<div class="lesson-list">
+<a class="lesson-row" href="/sessions_workshop/01-quarto/01-quarto.qmd">
+  <span class="lesson-num">1</span>
+  <span class="lesson-title">Blogging with Quarto</span>
+  <span class="lesson-outcome">Write reproducible reports in Quarto and publish a live blog to Netlify.</span>
+  <span class="lesson-meta">Beginner · 45 min</span>
+</a>
+<a class="lesson-row" href="/sessions_workshop/02-plots/02-plots.qmd">
+  <span class="lesson-num">2</span>
+  <span class="lesson-title">Everything in its right place</span>
+  <span class="lesson-outcome">Pull real data from an API and build interactive charts with ggplot2, plotly and ggiraph.</span>
+  <span class="lesson-meta">Beginner · 90 min</span>
+</a>
+<a class="lesson-row" href="/sessions_workshop/03-text/03-text.qmd">
+  <span class="lesson-num">3</span>
+  <span class="lesson-title">Data from words</span>
+  <span class="lesson-outcome">Turn raw text into tidy data and run sentiment and topic analysis.</span>
+  <span class="lesson-meta">Intermediate · 90 min</span>
+</a>
+<a class="lesson-row" href="/sessions_workshop/04-animate/04-animate.qmd">
+  <span class="lesson-num">4</span>
+  <span class="lesson-title">Making data move</span>
+  <span class="lesson-outcome">Turn a static plot into an animation that shows change over time.</span>
+  <span class="lesson-meta">Intermediate · 75 min</span>
+</a>
+<a class="lesson-row" href="/sessions_workshop/05-maps/05-maps.qmd">
+  <span class="lesson-num">5</span>
+  <span class="lesson-title">Mapping despair in the USA</span>
+  <span class="lesson-outcome">Build static and interactive maps of real spatial data with ggplot2 and leaflet.</span>
+  <span class="lesson-meta">Intermediate · 90 min</span>
+</a>
+<a class="lesson-row" href="/sessions_workshop/06-scrap/06-scrap.qmd">
+  <span class="lesson-num">6</span>
+  <span class="lesson-title">Just take it</span>
+  <span class="lesson-outcome">Scrape data directly from web pages when no API exists.</span>
+  <span class="lesson-meta">Intermediate · 60 min</span>
+</a>
+<a class="lesson-row" href="/sessions_workshop/07-shiny/07-shiny.qmd">
+  <span class="lesson-num">7</span>
+  <span class="lesson-title">Make it shine</span>
+  <span class="lesson-outcome">Build an interactive Shiny app and deploy it to the web.</span>
+  <span class="lesson-meta">Advanced · 90 min</span>
+</a>
+<a class="lesson-row" href="/sessions_workshop/08-reports/08-reports.qmd">
+  <span class="lesson-num">8</span>
+  <span class="lesson-title">Smart reports</span>
+  <span class="lesson-outcome">Generate a batch of parameterised reports from one template.</span>
+  <span class="lesson-meta">Intermediate · 45 min</span>
+</a>
+<a class="lesson-row" href="/sessions_workshop/09-parallel/09-parallel.qmd">
+  <span class="lesson-num">9</span>
+  <span class="lesson-title">Do it well, do it fast</span>
+  <span class="lesson-outcome">Replace for-loops with purrr, then parallelise the same code with mirai.</span>
+  <span class="lesson-meta">Advanced · 45 min</span>
+</a>
+</div>
+```
+
+**Estimated total time:** ~10.5 hours across 9 lessons (durations are rounded active-work estimates, not automated reading time).
+
+[Start with lesson 1: Blogging with Quarto →](/sessions_workshop/01-quarto/01-quarto.qmd){.btn .btn-primary .btn-lg}
