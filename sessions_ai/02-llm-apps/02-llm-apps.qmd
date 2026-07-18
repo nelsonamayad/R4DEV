@@ -12,6 +12,7 @@ categories:
   - SQL
 date: "2026-07-04"
 date-modified: last-modified
+order: 2
 image: her.gif
 editor_options:
   chunk_output_type: console
@@ -185,7 +186,7 @@ Everything here answers from what the model already knows. The next session, [**
 ## 🏗 Practice 10: Ship it {.unnumbered}
 
 ::: {.callout-note icon="false" collapse="true"}
-# Easy
+# Basic
 
 -   Change the chat app's system prompt so it refuses to answer anything not related to R, politely
 -   Run the querychat app and find the five *angriest* songs (low valence, high energy). Read the SQL it generated --would you have written it differently?

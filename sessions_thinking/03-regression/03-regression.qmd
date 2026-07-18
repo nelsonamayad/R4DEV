@@ -8,9 +8,10 @@ categories:
   - regression
   - broom
   - uncertainty
-  - modeling
+  - modelling
 date: "2026-07-03"
 date-modified: last-modified
+order: 3
 image: regression.png
 editor_options:
   chunk_output_type: console

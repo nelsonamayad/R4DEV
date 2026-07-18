@@ -14,6 +14,7 @@ categories:
   - wordcloud
 date: "2022-07-31" 
 date-modified: last-modified
+order: 3
 image: darwin.gif
 editor_options: 
   chunk_output_type: console
@@ -87,7 +88,7 @@ regex gives headaches, and the 2nd page of the [stringr cheatsheet](https://posi
 
 ### Stop! Removing words we don't care much about
 
-We will then extract words from the remaining data that we won't need. These are called **stopwords**, and include a list a articles, propositions and other words that we are not super interested in analyzing. We will remove the words using the `anti_join()` function, which removes any common elements from two databases.
+We will then extract words from the remaining data that we won't need. These are called **stopwords**, and include a list of articles, prepositions and other words that we are not super interested in analysing. We will remove the words using the `anti_join()` function, which removes any common elements from two databases.
 
 ### Looking for the root and a bit of linguistics
 
@@ -243,7 +244,7 @@ toos_df |>
 
 Wordclouds are mostly decorative, they are not very informative. They are the pie charts of text data: There will always be a better way to convey the information, but people like them anyway.
 
-To create a wordcloud, we only need to use one new geometry: `geom_text_wordcloud()`. As arguments we give the label for each word and the weight of the word based on the frequency. we can also change the area un which the wordcloud is created, using the `scale_size_area()` option and a 3-color diverging palette.
+To create a wordcloud, we only need to use one new geometry: `geom_text_wordcloud()`. As arguments we give the label for each word and the weight of the word based on the frequency. we can also change the area in which the wordcloud is created, using the `scale_size_area()` option and a 3-color diverging palette.
 
 ```{r 3.ggwordcloud}
 library(tidyverse)
@@ -598,7 +599,7 @@ chapter_word <- break_chapters |>
 
 ### What chapter belongs to which book? *LDA* all-at-once approach[^3]
 
-[^3]: Confused about LDA and topic modelling? Confusion is the first step to understanding, so [read this to go further](https://m-clark.github.io/docs/topic_models/topic-model-demo.html#introduction)
+[^3]: Confused about LDA and topic modelling? Confusion is the first step to understanding, so [explore this topic-modelling walkthrough](https://m-clark.github.io/docs/topic_models/topic-model-demo.html#introduction)
 
 To see which chapters belong to which books, we will use a technique called *Latent Dirichlet Allocation*, LDA. This is a statistical model that estimates the probability of a particular word from a chapter to belong to a topic, and then we can use that probability across chapters to reassemble each book.
 
@@ -606,7 +607,7 @@ LDA works by assuming that, when writing a text, the author draws a mixture of t
 
 LDA estimates two key probabilities: **Word-Topic** ($\beta$) and **Document-Topic** ($\gamma$). That is, it finds the mixture of words that is associated with each topic, and the mixture of topics that describes each document.
 
-What is a topic? In LDA, topics are **latent variables**, variables we can't observe, that capture the underlying theme or meaning of a set of words in a text. In LDA, a document is modeled as a mixture of latent topics, where each topic is a probability distribution over the words in the vocabulary. Topics are probability distributions of terms.
+What is a topic? In LDA, topics are **latent variables**, variables we can't observe, that capture the underlying theme or meaning of a set of words in a text. In LDA, a document is modelled as a mixture of latent topics, where each topic is a probability distribution over the words in the vocabulary. Topics are probability distributions of terms.
 
 For instance, in news articles, a topic might represent the probability distribution over words such as *politics*, *government*, *sports* or *election*. In a scientific publication, topics might represent the probability distribution over words such as *science*, *research* and *technology*.
 
@@ -679,7 +680,7 @@ $\beta$ controls the distribution of words *within* a topic. It is a Dirichlet p
 
 $\gamma$ controls the distribution of topics *within* a document. It is a Dirichlet prior on the per-document topic distributions. It governs the probability of a specific topic being present in a document. A higher gamma value will result in a more diverse set of topics within a document, while a lower gamma value will lead to a more focused set of topics.
 
-We extract model results in tidy format using the **`broom`** package `tidy()` function, which extracts model results in our favorite format. Let's look in detail at model results for both key parameters.
+We extract model results in tidy format using the **`broom`** package `tidy()` function, which extracts model results in our favourite format. Let's look in detail at model results for both key parameters.
 
 ```{r 3.shuffle-beta-gamma}
 library(tidytext)
@@ -881,7 +882,7 @@ gutenbergr::gutenberg_download(gutenberg_id = 9662, mirror = "http://mirrors.xmi
 ## 🏗️ Practice 3: Project Gutenberg {.unnumbered}
 
 ::: {.callout-note icon="false" collapse="true"}
-# Easy
+# Basic
 
 -   Install the [`gutenbergr`](https://cran.r-project.org/web/packages/gutenbergr/vignettes/intro.html) package `install.packages("gutenbergr")`
 -   Pick a book from the library and download it to R

@@ -12,9 +12,10 @@ categories:
   - map
   - reactive
   - presentation
-  - revealsj
+  - revealjs
 date: "2022-07-31" 
 date-modified: last-modified
+order: 7
 bibliography: references.bib
 image: shining.gif
 citation:
@@ -29,7 +30,7 @@ In these final sessions you will learn how to build apps. Let's get started.
 
 ## PART I: The real beauty of R
 
-My favorite tool is Shiny for a simple reason --immediacy. Shiny allows full and immediate interactivity between inputs and outputs. It is very simple to build and quite flexible in [structure](https://rstudio.github.io/shinydashboard/structure.html), but in general every Shiny app has two parts: The **User Interface**, the face, and the **Server**, the brain. The user makes choices in the user interface over *inputs*, which are sent to the server to be calculated or reflected into *outputs*, which are then displayed in the user interface.
+My favourite tool is Shiny for a simple reason --immediacy. Shiny allows full and immediate interactivity between inputs and outputs. It is very simple to build and quite flexible in [structure](https://rstudio.github.io/shinydashboard/structure.html), but in general every Shiny app has two parts: The **User Interface**, the face, and the **Server**, the brain. The user makes choices in the user interface over *inputs*, which are sent to the server to be calculated or reflected into *outputs*, which are then displayed in the user interface.
 
 ![Shiny: A face and a brain](shiny-face-brain.png){width="800px" fig-align="center"}
 
@@ -178,7 +179,7 @@ The second app is fancier, has more elements, more interactivity, and better des
 
 First we start with a webpage layout --a navigation bar defined by `page_navbar` from the **`bslib`** package. We theme the app just as we did the blog using Bootswatch. We can define more element, like foreground and background colors of the colors of buttons.
 
-The UI **ui_affair_alt** has a navigation bar at the top with two tabs: *"Happy cheaters?"* and *"Who cheated?"*. Each tab is defined using the `tabPanel()` function, and has a title, an icon from the **`font-awesome`** library, and [`card()`](https://rstudio.github.io/bslib/articles/cards.html) elements that holds the content of the tab. It also includes a `uiOutput` [`value_box()`](https://rstudio.github.io/bslib/articles/value-boxes.html) that can be clicked to see in full-screen mode. The content of the `value_box()` will be defined in the server. In the tabs, there are different input elements such as `selectInput` and `switchInput` from the [**`shinyWidgets`**](https://shinyapps.dreamrs.fr/shinyWidgets/) package, allowing the user to make selections and toggle switches to customize the displayed data.
+The UI **ui_affair_alt** has a navigation bar at the top with two tabs: *"Happy cheaters?"* and *"Who cheated?"*. Each tab is defined using the `tabPanel()` function, and has a title, an icon from the **`font-awesome`** library, and [`card()`](https://rstudio.github.io/bslib/articles/cards.html) elements that holds the content of the tab. It also includes a `uiOutput` [`value_box()`](https://rstudio.github.io/bslib/articles/value-boxes.html) that can be clicked to see in full-screen mode. The content of the `value_box()` will be defined in the server. In the tabs, there are different input elements such as `selectInput` and `switchInput` from the [**`shinyWidgets`**](https://shinyapps.dreamrs.fr/shinyWidgets/) package, allowing the user to make selections and toggle switches to customise the displayed data.
 
 Output elements include `girafeOutput`, for interactive plots, a `dataTableOutput` that produces interactive tables, and a simple pair of `plotOutput`.
 
@@ -541,7 +542,7 @@ world_sp <- rworldmap::getMap(resolution = "low")
 
 ### The UI 🙂
 
-Let's first look at the UI. We first start by using the `page_navbar` layout which will put a horizontal bar at the top of the page. Inside we start by providing a title to the app, and defining a theme using `bslib`. I've chosen a very psychedelic theme --just because I can, not because I like it but to show how many things change in the dashboard look by picking a particular template (in this case, quartz). Color, fonts, buttons --all are parameters that you can customize with `bslib`.
+Let's first look at the UI. We first start by using the `page_navbar` layout which will put a horizontal bar at the top of the page. Inside we start by providing a title to the app, and defining a theme using `bslib`. I've chosen a very psychedelic theme --just because I can, not because I like it but to show how many things change in the dashboard look by picking a particular template (in this case, quartz). Colour, fonts, buttons --all are parameters that you can customise with `bslib`.
 
 Then comes the `sidebar` where we will organise our **inputs**. We'll have three types inputs: **button**, **date selector** and **countries selector**, which will together define the time span for COVID-19 and the geographical scope we want to map. We use `card` to box-in the inputs and a short description of the app, and an `accordion` layout to collapse the selectors.
 
@@ -810,7 +811,7 @@ Check out [this page](https://quarto.org/docs/presentations/revealjs/)
 ## 🏗 Practice 7: Shine {.unnumbered}
 
 ::: {.callout-note icon="false" collapse="true"}
-# Easy
+# Basic
 
 -   Replicate all apps here and deploy them into your own Shinyapps.io free account. Embed them into a new blog post and publish it
 -   Use the UI and Server design for the COVID-19 app and deploy it to your account. Share resulting URL

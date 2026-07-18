@@ -27,7 +27,7 @@ Here's what the workshop is all about:
 ## 🦾 What you can expect to learn {.unnumbered}
 
 ::: {.callout-tip appearance="simple" collapse = true icon=false}
-# Click here
+# Show the full skills list
 
 -   {{< fa person-digging >}} `Wrangling:` Clean, transform and prepare data for analysis with [dplyr](https://dplyr.tidyverse.org/index.html), [tidyr](https://tidyr.tidyverse.org/), [stringr](https://stringr.tidyverse.org/), [lubridate](https://lubridate.tidyverse.org/), [forcats](https://forcats.tidyverse.org/), [tibble](https://tibble.tidyverse.org/)
 
@@ -37,11 +37,11 @@ Here's what the workshop is all about:
 
 -   {{< fa file-shield >}} `Reporting:` Write reports with prose and data at the same time [Quarto](https://quarto.org/docs/computations/r.html) and learn how to manage references with [Zotero](https://www.zotero.org/)
 
--   {{< fa earth-americas >}}️ `Mapping:` visualize geospatial data with [sf](https://r-spatial.github.io/sf/), and go interactive with [leaflet](https://rstudio.github.io/leaflet/) and spectacular with [rayshader](https://www.rayshader.com/)
+-   {{< fa earth-americas >}}️ `Mapping:` visualise geospatial data with [sf](https://r-spatial.github.io/sf/), and go interactive with [leaflet](https://rstudio.github.io/leaflet/) and spectacular with [rayshader](https://www.rayshader.com/)
 
 -   {{< fa user-secret >}} `Data recovery:` Import data from APIs and webpages with [httr2](https://httr2.r-lib.org/), [rvest](https://rvest.tidyverse.org/), [chromote](https://rstudio.github.io/chromote/), [pdftools](https://ropensci.org/blog/2016/03/01/pdftools-and-jeroen/), [readr](https://readr.tidyverse.org/)
 
--   {{< fa upload >}} `Publishing:` Create apps and dashboard with [shiny](https://shiny.rstudio.com/). Build entire websites with [quarto](https://quarto.org/docs/computations/r.html)
+-   {{< fa upload >}} `Publishing:` Create apps and dashboards with [shiny](https://shiny.rstudio.com/). Build entire websites with [quarto](https://quarto.org/docs/computations/r.html)
 
 -   {{< fa robot >}} `AI, programmatically:` Call Large Language Models from R with [ellmer](https://ellmer.tidyverse.org/), turn prose into tidy data with structured extraction, and build apps that chat with your data using [shinychat](https://posit-dev.github.io/shinychat/r/), [querychat](https://posit-dev.github.io/querychat/r/) and [ggsql](https://r.ggsql.org/)
 
@@ -51,7 +51,7 @@ Here's what the workshop is all about:
 ## 💫 Apply it to your own project!
 
 ::: {.callout-tip appearance="simple" collapse = true icon=false}
-# Click here
+# Show why this is worth doing
 
 If you want, you can start your own project (a thesis, a blog, a paper, etc.) during the workshop.
 
@@ -61,7 +61,7 @@ The idea of this project is not to burden you with extra work, but to avoid that
 ## 🔥 Extra content {.unnumbered}
 
 ::: {.callout-tip appearance="simple" collapse = true icon=false}
-# Click here
+# Show the extra topics
 
 If time allows, these are additional topics that we'll cover with overly enthusiastic and committed students:
 

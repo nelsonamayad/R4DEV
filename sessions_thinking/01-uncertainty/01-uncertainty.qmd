@@ -10,6 +10,7 @@ categories:
   - inference
 date: "2026-07-01"
 date-modified: last-modified
+order: 1
 image: uncertainty.png
 editor_options:
   chunk_output_type: console

@@ -11,6 +11,7 @@ categories:
   - scrap
 date: "2022-07-31" 
 date-modified: last-modified
+order: 6
 image: bono-wink.gif
 editor_options: 
   chunk_output_type: console
@@ -167,7 +168,7 @@ u2_lyrics_df <- readr::read_csv(paste0(getwd(), "/u2_lyrics.csv"))
 u2_lyrics <- split(dplyr::select(u2_lyrics_df, value), u2_lyrics_df$url)
 ```
 
-Second, we do a little wrangling to transform the list to a tibble, our favorite layout and format for rectangular datasets. We use `imap()` to name each element in the list, and then `map_df()` to bind them all together. This leaves us with a dataset where each row includes the lyrics of a song.
+Second, we do a little wrangling to transform the list to a tibble, our favourite layout and format for rectangular datasets. We use `imap()` to name each element in the list, and then `map_df()` to bind them all together. This leaves us with a dataset where each row includes the lyrics of a song.
 
 Third, we tokenise by words, remove stopwords and join the sentiment lexicon. Just as we did with books before. With a twist: we'll use both words and n-grams as tokens. For words, we calculate the frequency for each value of the sentiment lexicon, and feed into **`ggplot`**. For flair, we add the most frequent word for each sentiment value at the top of the graph and plot the frequency of all words lyrics. For ngrams, we just count the expressions that are more frequent in the entire lyrics space.
 
@@ -258,7 +259,7 @@ u2_lyrics |>
 
 You now know how to work with **`ggplot2`** and some extensions like **`ggridges`** or **`ggiraph`**. But there are many more you might want to check out. [The gallery of over a hundred extensions is here](https://exts.ggplot2.tidyverse.org/gallery/), and some of my favorites are listed below:
 
-- [**`ggdist`**](https://mjskay.github.io/ggdist) provides stats and geoms for visualizing distributions and uncertainty.
+- [**`ggdist`**](https://mjskay.github.io/ggdist) provides stats and geoms for visualising distributions and uncertainty.
 - [**`ggExtra`**](https://github.com/daattali/ggExtra) lets you add marginal density plots or histograms to ggplot2 scatterplots.
 - [**`ggpattern`**](https://github.com/coolbutuseless/ggpattern) includes pattern fills for geoms.
 - [**`ggcorrplot`**](https://rpkgs.datanovia.com/ggcorrplot/) enables correlation matrix plots
@@ -422,7 +423,7 @@ You may find old tutorials using **`RSelenium`** for this. It works, but it is a
 ## 🏗 Practice 6: Scrape {.unnumbered}
 
 ::: {.callout-note icon="false" collapse="true"}
-# Easy
+# Basic
 
 -   Find a website with info you want to bring to R
 -   Visualise the data (plot, map, etc.)

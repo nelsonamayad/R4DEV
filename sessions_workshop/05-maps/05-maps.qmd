@@ -13,6 +13,7 @@ categories:
   - rayshader
 date: "2022-07-31" 
 date-modified: last-modified
+order: 5
 image: map-fractal.gif
 citation:
   url: https://r4dev.netlify.app/sessions_workshop/05-maps/05-maps
@@ -334,7 +335,7 @@ The **`geodata`** package helps us easily bring coordinates data to R. We can do
 
 Check out the result. This is a complicated object with an intimidating name: `Formal class SpatVector`.
 
-But we don't need to worry, as we don't need to handle this object directly to build maps: we can transform it to our now favorite **sf** object using `st_as_sf()` function, which will give us a nice geometry column we already know how to handle.
+But we don't need to worry, as we don't need to handle this object directly to build maps: we can transform it to our now favourite **sf** object using `st_as_sf()` function, which will give us a nice geometry column we already know how to handle.
 
 ```{r 5.usmap}
 library(geodata)
@@ -347,7 +348,7 @@ us_state <- sf::st_as_sf(us) # <21>
 ```
 
 20. We can retrieve coordinates for any country using `gadm()` function. We include the country code for the US and the level we want. 1 for state, 2 for county. We also include the path where the map file will be downloaded. For convenience, we save it in the folder of the project.
-21. The raw object is hard to work with directly. We transform the SpatVector object to our favorite *sf* using `st_as_sf()`.
+21. The raw object is hard to work with directly. We transform the SpatVector object to our favourite *sf* using `st_as_sf()`.
 
 ### Joining data to coordinates {.unnumbered}
 
@@ -387,7 +388,7 @@ First, let's use the `gdtools` package to make sure all girafe graphs use the fo
 ```{r 5-gdtools}
 library(gdtools)
 
-# Add out favorite font to girafe ####
+# Add our favourite font to girafe ####
 gdtools::register_gfont("News Cycle")
 gdtools::addGFontHtmlDependency(family = "News Cycle")
 ``` 
@@ -802,7 +803,7 @@ Even though this particular application of rayshader is not too useful, for topo
 ## 🏗 Practice 5: Map it {.unnumbered}
 
 ::: {.callout-note icon="false" collapse="true"}
-# Easy
+# Basic
 
 -   Download the geographical data for your country of origin
 -   Look up any geographical variable for your country

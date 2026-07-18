@@ -10,6 +10,7 @@ categories:
   - parallel computing
 date: "2026-07-05"
 date-modified: last-modified
+order: 9
 image: xmen.gif
 editor_options:
   chunk_output_type: console
@@ -214,7 +215,7 @@ The AI track's `ellmer::parallel_chat_structured()` (from [Talking to machines](
 ## Practice
 
 ::: {.callout-note icon="false" collapse="true"}
-# Easy
+# Basic
 
 - Rewrite one `for` loop from an earlier session (session 2's API calls, or session 6's scraping) as a `map()` call.
 - Time the sequential PART I example again, but with 6 groups instead of 3 (hint: you'll need a bigger dataset, or repeat the same groups) --does the gap between sequential and parallel grow?

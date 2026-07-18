@@ -9,9 +9,10 @@ categories:
   - interactive
   - ggplot2
   - plotly
-  - girafe
+  - ggiraph
 date: "2022-07-31" 
 date-modified: last-modified
+order: 2
 image: thom-dance.gif
 editor_options: 
   chunk_output_type: console
@@ -297,7 +298,7 @@ maddison_proj_5
 
 The final graph is going to take advantage of the fact that we have data for all countries for multiple years, and we can compare two moments in time instead of sticking with one cross section. So let's compare 1990 to 2015 using faceting.
 
-Faceting is a way to create multiple plots that share the same structure and axes but show different parts of data. You can use the `facet_wrap()` or `facet_grid()` to create faceted plots and break down your data into smaller, more manageable groups, and visualize them separately.
+Faceting is a way to create multiple plots that share the same structure and axes but show different parts of data. You can use the `facet_wrap()` or `facet_grid()` to create faceted plots and break down your data into smaller, more manageable groups, and visualise them separately.
 
 `facet_wrap()` is used when you want to create a single row or column of plots, where each plot represents a different part of your data. You specify the variable to facet on using the `~` symbol, and the number of columns or rows you want using the `ncol` or `nrow` arguments. We use `nrow=2` so the two graphs, for 1990 and 2015, appear one on top of the other.
 
@@ -543,7 +544,7 @@ The `pivot_wider()` function allows you to spread values across new columns base
 
 Let's have some fun with the Spotify snapshot.
 
-The archive holds the full discographies of 8 artists --the favorites of the workshop's first cohort. Below we attach each favorite artist to the person who chose them, using `tribble()` to build the lookup table by hand and `left_join()` to merge it in.
+The archive holds the full discographies of 8 artists --the favourites of the workshop's first cohort. Below we attach each favorite artist to the person who chose them, using `tribble()` to build the lookup table by hand and `left_join()` to merge it in.
 
 ```{r 2.tastes}
 
@@ -780,7 +781,7 @@ girafe(ggobj = spotify_covers_gg)
 ## 🏗 Practice 2: Music {.unnumbered}
 
 ::: {.callout-note icon="false" collapse="true"}
-# Easy
+# Basic
 
 -   Use the Open-Meteo archive API to download daily temperatures for **your** home town and plot the trend for your birth month
 -   Using `spotify_favorites_archive.csv`, compare the song valence across the 8 artists with boxplots. Describe the result

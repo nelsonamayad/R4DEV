@@ -11,6 +11,7 @@ categories:
   - API
 date: "2026-07-04"
 date-modified: last-modified
+order: 1
 image: robot.gif
 editor_options:
   chunk_output_type: console
@@ -252,7 +253,7 @@ Providers charge per **token** (~¾ of a word). Everything executed while writin
 ## 🏗 Practice 9: Talk back {.unnumbered}
 
 ::: {.callout-note icon="false" collapse="true"}
-# Easy
+# Basic
 
 -   Create a chat object with a system prompt that makes the model answer like a pirate, and ask it about the tidyverse
 -   Change the system prompt to "Answer only with valid R code, no prose" and ask it to plot `diamonds`. Run what it returns. Would you have written it the same way?

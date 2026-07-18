@@ -2,7 +2,7 @@
 title: R-sources 📙
 subtitle: Where to go from here
 author: "Nelson Amaya"
-description: "This is just the begining. Here you will find a repository of resources to learn more by topic: statistics, geocomputation, text analysis, building apps, etc."
+description: "This is just the beginning. Here you will find a repository of resources to learn more by topic: statistics, geocomputation, text analysis, building apps, etc."
 categories:
   - book
   - statistics
@@ -20,7 +20,7 @@ aliases:
 
 The joy of learning R is that you can learn anything as long as you put the time. R is free, so is RStudio. Most books on R are also free, and have wonderful online versions you can consult.
 
-Below a list of my favorite online resources on R, click below to see the links for each one:
+Below a list of my favourite online resources on R, organised by topic:
 
 ::: columns
 ::: {.column width="50%"}

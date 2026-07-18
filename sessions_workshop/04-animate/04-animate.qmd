@@ -2,7 +2,7 @@
 title: Making data move 🚶
 subtitle: Learn to build animations from static graphs
 author: "Nelson Amaya"
-description: "Transform static plots into animations using gganimate. Examples include millenia of chery tree blossoms, COVID-19 aftermath and why causation does not imply correlation."
+description: "Transform static plots into animations using gganimate. Examples include millennia of cherry tree blossoms, COVID-19 aftermath and why causation does not imply correlation."
 categories:
   - gganimate
   - causal inference
@@ -12,6 +12,7 @@ categories:
   - treemap
 date: "2022-07-31"
 date-modified: last-modified
+order: 4
 image: homer.gif
 editor_options: 
   chunk_output_type: console
@@ -29,7 +30,7 @@ People in Kyoto have been keeping track of the day the cherry trees blossom sinc
 
 Let's first plot it and add a smoothing LOESS curve. We'll use **`ggimages`** to change the point to an image of a cherry blossom and **`ggpp`** to add a plot inside of another plot that focuses attention on one part, with the `geom_plot()` function. This way we can focus attention on a particular part of the graph.
 
-Notice that during the XX century the cherries started to blossom way earlier than they did for over a millenia.
+Notice that during the XX century the cherries started to blossom way earlier than they did for over a millennium.
 
 ::: column-margin
 {{< downloadthis sakura.jpg dname = sakura label="Download sakura.jpg" icon=flower3 type=success >}}
@@ -641,7 +642,7 @@ The moral fits in one sentence, and it is the most important sentence in this wo
 ## 🏗 Practice 4: Make it move {-}
 
 ::: {.callout-note icon="false" collapse="true"}
-# Easy
+# Basic
 - Make an animation of any data we've used so far
 - Save it as a .gif and share it with the group
 :::

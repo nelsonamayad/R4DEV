@@ -12,6 +12,7 @@ categories:
   - ollama
 date: "2026-07-04"
 date-modified: last-modified
+order: 3
 image: ragnar.png
 editor_options:
   chunk_output_type: console
@@ -241,7 +242,7 @@ The store behind this app was built locally with `embed_ollama()` --free, and ge
 ## 🏗 Practice 11: Retrieve something real {.unnumbered}
 
 ::: {.callout-note icon="false" collapse="true"}
-# Easy
+# Basic
 
 -   Crawl a small documentation site you use often (a package's `pkgdown` site is a good target) and build a store from its first 5-10 pages.
 -   Retrieve with `ragnar_retrieve_bm25()` for a question you already know the answer to. Does it find the right page?

@@ -1,5 +1,48 @@
 ---
 title: "R4DEV"
+listing:
+  - id: "build-with-r"
+    contents: "sessions_workshop"
+    type: grid
+    image-align: left
+    image-height: 150px
+    fields: [image, title, description]
+    sort: "order"
+    sort-ui: false
+    filter-ui: false
+    categories: false
+
+  - id: "work-with-ai"
+    contents: "sessions_ai"
+    type: grid
+    image-align: left
+    image-height: 150px
+    fields: [image, title, description]
+    sort: "order"
+    sort-ui: false
+    filter-ui: false
+    categories: false
+
+  - id: "think-with-data"
+    contents: "sessions_thinking"
+    type: grid
+    image-align: left
+    image-height: 150px
+    fields: [image, title, description]
+    sort: "order"
+    sort-ui: false
+    filter-ui: false
+    categories: false
+
+  - id: "tools"
+    contents: "sessions_tools"
+    type: grid
+    image-align: left
+    image-height: 150px
+    fields: [image, title, description]
+    sort-ui: false
+    filter-ui: false
+    categories: false
 toc: false
 page-layout: full
 title-block-style: none
@@ -62,12 +105,27 @@ Three tracks, nineteen lessons. Each is self-contained enough to enter on its ow
 
 New to R4DEV? [Start here](start.qmd) for prerequisites, install steps, and a recommended route through the material.
 
+### Build with R {.unnumbered}
+
+::: {#build-with-r}
+:::
+
+### Work with AI {.unnumbered}
+
+::: {#work-with-ai}
+:::
+
+### Think with data {.unnumbered}
+
+::: {#think-with-data}
+:::
+
 ## Resources {.section-header}
 
+::: {#tools}
+:::
+
 ::: {.resources-strip}
-[Practice exercises](sessions_tools/01-practice/01-practice.qmd)
-[R resources](sessions_tools/02-resources/02-resources.qmd)
-[Give feedback](sessions_tools/03-feedback/03-feedback.qmd)
 [Posit cheat sheets](https://rstudio.github.io/cheatsheets/)
 [Tidyverse style guide](https://style.tidyverse.org/)
 :::

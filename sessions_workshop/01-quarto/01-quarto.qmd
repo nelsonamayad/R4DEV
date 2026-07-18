@@ -2,7 +2,7 @@
 title: Blogging with Quarto 📓
 subtitle: Learn how to work with Quarto, and create and publish a blog created in RStudio
 author: "Nelson Amaya"
-description: "Learn to work with Quarto, to write prose and analise data at the same time. Create and update a blog using Quarto and then publish it online using Netlify"
+description: "Learn to work with Quarto, to write prose and analyse data at the same time. Create and update a blog using Quarto and then publish it online using Netlify"
 categories:
   - netlify
   - quarto
@@ -12,6 +12,7 @@ categories:
   - bootswatch
 date: "2022-07-30"
 date-modified: last-modified
+order: 1
 image: swordfish.gif
 citation:
   url: https://r4dev.netlify.app/sessions_workshop/01-quarto/01-quarto
@@ -39,7 +40,7 @@ Quarto creates static sites, and you can deploy them online using [Netlify](http
 
 ### Step 1: Download and install Quarto, and create a Quarto Website Project from RStudio
 
-[Click here](https://quarto.org/docs/get-started/) to download Quarto and install it in your computer. Then open Rstudio and create **New Project**. You see a few new options. Select **Quarto Blog**:
+[Open the Quarto get-started guide](https://quarto.org/docs/get-started/) to download Quarto and install it in your computer. Then open RStudio and create **New Project**. You see a few new options. Select **Quarto Blog**:
 
 ::: {#website-1 layout-ncol=2}
 ![New Project ➡️ Quarto Blog](website-project-1.png)
@@ -92,7 +93,7 @@ I've created two posts for each practice assignment from this workshop, added so
 ![MyBlog after rendering](website-main.png){#website-5}
 
 ::: callout-tip
-## Feeback: Annotate and Highlight R4DEV with Hypothesis
+## Feedback: Annotate and Highlight R4DEV with Hypothesis
 
 Commenting for the workshop is enabled using [**Hypothesis**](https://web.hypothes.is/start/). 
 
@@ -105,7 +106,7 @@ Now that you built the blog, go to your new Netlify account and **"Add a new sit
 
 Change the website name in **"Site settings"** to something like [myblog-r4dev-practice.netlify.app](https://myblog-r4dev-practice.netlify.app) and voila.
 
-Do you want to know how to publish and update the blog directly from RStudio? [Read this](https://quarto.org/docs/publishing/netlify.html)
+Do you want to know how to publish and update the blog directly from RStudio? [Open the Quarto Netlify publishing guide](https://quarto.org/docs/publishing/netlify.html)
 
 ::: callout-tip
 ## Quarto customisation
@@ -118,7 +119,7 @@ Bookmark the [Quarto Guide](https://quarto.org/docs/guide/) and [Quarto Referenc
 This is the first Practice. You'll have to publish all practice exercises for each session in your new blog.
 
 ::: {.callout-note icon="false" collapse="false"}
-# Easy
+# Basic
 - Create a free **[Netlify](https://www.netlify.com/)** account
 - Create and publish your Quarto blog. The URL should be **http://r4dev-yourname.netlify.app**. In this blog you will publish all practice exercises
 - Choose and apply the base [Bootswatch theme](https://bootswatch.com/) for your blog

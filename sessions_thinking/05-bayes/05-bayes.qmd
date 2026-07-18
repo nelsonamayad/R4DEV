@@ -9,6 +9,7 @@ categories:
   - bayes
 date: "2026-07-05"
 date-modified: last-modified
+order: 5
 image: bayes_globe.png
 format: live-html
 engine: knitr
@@ -143,7 +144,7 @@ This was the whole idea of Bayes in one session; the rest is craft. When you are
 ## 🏗 Practice 13: Update yourself {.unnumbered}
 
 ::: {.callout-note icon="false" collapse="true"}
-# Easy
+# Basic
 
 -   Re-run the grid approximation with 100 tosses (72 W). What happened to the width of the posterior? Why?
 -   In the browser window above, find a prior strong enough that 9 tosses barely move it. How much data does it take to overwhelm it?

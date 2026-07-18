@@ -104,7 +104,7 @@ format:
     toc: true
     toc-location: left
     code-fold: show
-    code-summary: "Click me!"
+    code-summary: "Show the code"
     code-tools:
       toggle: true
       source: false

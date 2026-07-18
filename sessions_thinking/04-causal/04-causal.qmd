@@ -12,6 +12,7 @@ categories:
   - natural experiments
 date: "2026-07-04"
 date-modified: last-modified
+order: 4
 image: causal.png
 editor_options:
   chunk_output_type: console
@@ -290,7 +291,7 @@ rct |>
 
 1. Among the certified, the control group is the more motivated one --so "comparing like with like" actually compares trained-and-ordinary against untrained-and-driven, and hands part of the training effect to motivation. The same logic biases the certificate-free stratum in the same direction.
 
-You have seen both halves of this before: the certificate is partly a **mediator** (blocking a path the effect travels through) and partly a **collider with the unseen** (opening a path that was shut). Either half alone is enough; real post-treatment variables are usually both. And it is everywhere: the gender wage gap "controlling for occupation" (occupation is post-treatment to discrimination), drug trials that condition on a side effect or analyze "only those who complied", school-effect studies that control for end-of-year test scores. The defense is a question so simple it fits in a code review: **when was this variable measured?** If the answer is "after treatment", it does not go on the right-hand side --randomization bought you a clean estimate of the *total* effect, and adjusting downstream sells it back.
+You have seen both halves of this before: the certificate is partly a **mediator** (blocking a path the effect travels through) and partly a **collider with the unseen** (opening a path that was shut). Either half alone is enough; real post-treatment variables are usually both. And it is everywhere: the gender wage gap "controlling for occupation" (occupation is post-treatment to discrimination), drug trials that condition on a side effect or analyse "only those who complied", school-effect studies that control for end-of-year test scores. The defense is a question so simple it fits in a code review: **when was this variable measured?** If the answer is "after treatment", it does not go on the right-hand side --randomization bought you a clean estimate of the *total* effect, and adjusting downstream sells it back.
 
 What you may never do is run `lm(y ~ x + everything)` and read causality off the stars. Now you know the three reasons why --the fork you must adjust for, the collider you must not, and the post-treatment trap that smuggles a collider into your own experiment-- and you can simulate all of them from scratch.
 
