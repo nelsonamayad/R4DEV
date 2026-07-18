@@ -38,15 +38,15 @@ In this first lesson you will build and publish a blog online for free using [Qu
 - Publish the rendered site online for free with Netlify.
 - Annotate and discuss the published site with Hypothesis.
 
-## Your blog online for free in 5 minutes
+## Your blog online for free
 
 You are lucky.
 
-In 2022, RMarkdown was given a big upgrade: [Quarto](https://quarto.org/). This page you're looking at right now was built with Quarto, and now you'll learn how to create one for yourself and publish it online for free.
+[Quarto](https://quarto.org/) is the publishing system this whole site is built with, and now you'll learn how to build one for yourself and publish it online for free. It goes beyond R -- it also handles [Python](https://www.python.org/), [Julia](https://juliacomputing.com/) and other languages -- and it keeps gaining new ways to publish content online.
 
-Quarto is the new publication software that helps you build all the reproducible workflow. It goes beyond R, and can handle [Python](https://www.python.org/), [Julia](https://juliacomputing.com/) and other languages, and has lots of new features to publish content online. It will continue to improve.
+A **Quarto website** and a **Quarto blog** are the same underlying project type, `type: website`, with one difference: a blog adds a `listing` on its home page that automatically shows your posts newest-first, with dates and images. If you don't need that -- say, a documentation site or a personal site with a handful of static pages -- a plain Quarto website skips the listing machinery entirely. This lesson builds a blog, since you'll be publishing dated practice posts throughout the workshop.
 
-Let's build a blog-type website from scratch and publish it. It will take like 5 minutes total.
+Let's build a blog-type website from scratch and publish it. Following every step below, including creating your Netlify and Hypothesis accounts, realistically takes 30-45 minutes the first time -- budget for that rather than the "five minutes" a bare render-and-deploy would take once everything is already set up.
 
 ::: callout-tip
 ## [**Netlify**](https://www.netlify.com/)
@@ -68,9 +68,9 @@ Build the website as an RStudio Project
 
 ### Step 2: YML the details and the face of the blog
 
-By creating the website as a Quarto Blog project, a few files will be created automatically in the folder you chose. The most important files are the **`quarto.yml`** file, which is the configuration file for all the website, and the **`index.qmd`**, which organises the default page of the blog.
+By creating the website as a Quarto Blog project, a few files will be created automatically in the folder you chose. The most important files are the **`_quarto.yml`** file, which is the configuration file for the whole website (note the leading underscore -- a plain `quarto.yml` without it is not read by Quarto), and the **`index.qmd`**, which organises the default page of the blog.
 
-In the **`quarto.yml`** YML file you can include myriad options --from the title, logo, search box, header, footer, side bars, navigation bars, everything. In this file you will also format the output, which in this case is an HTML and you can include, just like in Shiny apps, Bootswatch themes, change fonts, colors, anything you want. Quarto is very versatile.
+In the **`_quarto.yml`** YML file you can include myriad options --from the title, logo, search box, header, footer, side bars, navigation bars, everything. In this file you will also format the output, which in this case is an HTML and you can include, just like in Shiny apps, Bootswatch themes, change fonts, colors, anything you want. This is also where the site's **`output-dir`** lives: it names the folder your render actually writes to (Quarto's own default is `_site`; this very R4DEV site sets it to `_blog`) -- check yours before deploying, since it's whatever folder you deploy, not a fixed name. Quarto is very versatile.
 
 In the **`index.qmd`** file you basically design how the opening page of the blog will look like, what goes where and information on the author. The key option here is the [Listings](https://quarto.org/docs/websites/website-listings.html) so you can define how each blog post appears in the blog, and define the folder name where you will store all blog posts --conveniently called **posts**. You can add buttons to sort the posts or filter them.
 
@@ -98,7 +98,7 @@ Notice that in the index Quarto document the listings include the folder **posts
 One of the best customisation features for Quarto. With a few parameters you can completely change the look of a website, including colors, fonts and more. You can also use preexisting [bootswatch themes](https://bootswatch.com/)
 :::
 
-Every Quarto document in **posts** will be included in the blog. In this case we'll create a post for every practice you'll do in this workshop.
+A Quarto document only shows up in the blog listing if it's covered by the listing's `contents` setting in `index.qmd` -- by default that's every subfolder of **posts**, which is why simply adding a new post folder there is enough, but nothing is included automatically just for existing somewhere in the project. In this case we'll create a post for every practice you'll do in this workshop.
 
 ### Step 4: Render to HTML
 
@@ -116,13 +116,19 @@ Commenting for the workshop is enabled using [**Hypothesis**](https://web.hypoth
 In the upper-right corner of each page there is a small menu you can click, and once you have registered with username-password, you can *Annotate*, *Highlight* or comment different parts of the site.<br><br>If you find errors, or things that need to be clarified, please signal them.
 :::
 
-### Step 5: Drag and drop to Netlify
+### Step 5: Deploy to Netlify
 
-Now that you built the blog, go to your new Netlify account and **"Add a new site"** and choose the option **"Deploy manually"**. You will then be asked to drag and drop all the files to the browser, so drag the **`_blog`** folder with all the HTML files for the website where indicated. In a minute or so the blog should be live.
+There is more than one way to get a rendered site onto Netlify -- here is the simplest one, plus a better one for the long run.
+
+**Option A -- manual drag-and-drop (simplest, good for a one-off).** Go to your new Netlify account, **"Add a new site"**, choose **"Deploy manually"**, and drag and drop the rendered output folder -- the one named by your project's `output-dir` (Step 2), `_site` by default -- where indicated. In a minute or so the blog should be live.
 
 Change the website name in **"Site settings"** to something like [myblog-r4dev-practice.netlify.app](https://myblog-r4dev-practice.netlify.app) and voila.
 
-Do you want to know how to publish and update the blog directly from RStudio? [Open the Quarto Netlify publishing guide](https://quarto.org/docs/publishing/netlify.html)
+::: callout-note
+## Optional: Git-based automatic deployment
+
+Manual drag-and-drop means re-uploading by hand every time you change the blog. If your project is on GitHub (or GitLab/Bitbucket), Netlify can instead watch that repository and rebuild the site automatically on every push: connect the repo from **"Add a new site" → "Import an existing project"**, and point the build settings at your `output-dir`. From then on, `git push` is your entire publishing workflow. The full walkthrough, including the `quarto publish netlify` command that does this from the command line, is in the [Quarto Netlify publishing guide](https://quarto.org/docs/publishing/netlify.html).
+:::
 
 ::: callout-tip
 ## Quarto customisation
@@ -144,7 +150,7 @@ This is the first Practice. You'll have to publish all practice exercises for ea
 
 Your YML file should look like this, in this case, using a Bootswatch theme called [journal](https://bootswatch.com/journal/):
 
-![](practice-yml.png)
+![Example `_quarto.yml` with the journal Bootswatch theme, Hypothesis comments enabled, and code-tools turned on](practice-yml.png)
 
 - Customise the About page of your Quarto blog (Tip: [Check the About page in Quarto](https://quarto.org/docs/websites/website-about.html))
 :::

@@ -39,6 +39,8 @@ The 2026 modernization (Phases 0–3) shipped and is live at https://r4dev.netli
 quarto preview                        # live-reload dev server for the site
 quarto render                         # full site build → _blog/
 quarto render sessions_workshop/02-plots/02-plots.qmd   # render one session
+python checks/site_checks.py          # link/image/alt-text/nav-duplicate checks (after render)
+python checks/generate_sitemap.py     # writes _blog/sitemap.xml (after render, before publish)
 quarto publish netlify                # deploy (uses _publish.yml)
 ```
 

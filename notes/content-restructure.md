@@ -1,232 +1,243 @@
 # Content restructure & site-quality backlog
 
-Status: **backlog, not yet actioned**. This document records what was deferred
-from the July 2026 homepage/navigation redesign (structural phase, shipped)
-so it can be picked up in follow-up passes without re-deriving the analysis.
-Nothing described here has been split, moved, or rewritten yet — per the
-brief, oversized lessons are *recommended* for splitting, not split, until
-reviewed.
+Status: most of the 17-item redesign brief has now shipped across three
+work sessions. This document tracks what's done, what's still open, and
+the one item (lesson splitting) that stays a recommendation-only
+deliverable by the brief's own explicit instruction.
 
-## What shipped in the structural phase
+## What shipped
 
-- Homepage (`index.qmd`) rebuilt around three track cards + a hero with two
-  CTAs, category wall removed.
-- New `start.qmd` (Start Here), three new track overview pages
+**Structural (homepage/nav):**
+- Homepage (`index.qmd`) rebuilt: hero with the required description and
+  two CTAs; three track-summary cards; the classic per-session
+  image+title+description grid (one per track, plus Tools) restored using
+  Quarto listings with `fields: [image, title, description]` only — no
+  dates, no reading-time, no category tag cloud; a compact Resources strip.
+- New `start.qmd` (Start Here), three track overview pages
   (`learn/build-with-r.qmd`, `learn/ai.qmd`, `learn/thinking.qmd`).
 - Navbar simplified to Home / Start here / Learn (▸ 3 tracks) / Practice /
-  Resources / About R4DEV (renamed from "Wait, what did I get myself into?").
-- AI capstone nav-duplication resolved: "Ask R4DEV" is now a clearly
-  distinct, separately-labelled entry on the Work with AI track page (with a
-  callout explaining it's a live demo embedded at the end of *Grounded in
-  truth*, not a standalone lesson) rather than a sibling dropdown item
-  pointing at the same file as "Grounded in truth (ragnar)".
-- Full-site render confirmed: no new warnings vs. the pre-change baseline;
-  internal-link check found zero broken links introduced by the new pages
-  (see below for pre-existing findings unrelated to this phase).
+  Resources / About R4DEV (renamed from "Wait, what did I get myself
+  into?", kept as the About page's subtitle).
+- AI capstone nav-duplication resolved: "Ask R4DEV" is a distinctly
+  labelled entry on the Work with AI track page with a callout explaining
+  it's a live demo embedded in *Grounded in truth*, not a separate lesson.
 
-Everything below is **not yet done**.
+**Per-lesson (items 5–7, all 18 lessons across all three tracks):**
+- YAML metadata standardised: `order`, `level`, `duration`, `track`,
+  `prerequisites` added to every lesson's frontmatter.
+- Every lesson has a `.lesson-info` block (level/time/prerequisites/tools)
+  and a "You will learn to" section (3–5 objectives) near the top.
+- Every lesson has a "Key takeaways" section (3–5 points) and a
+  `.continue-learning` footer (previous/track overview/next) near the
+  bottom, before any References block. Track-final lessons point sideways
+  at another track instead of a nonexistent "next" lesson.
+- Practice-exercise difficulty labels standardised to Basic/Intermediate/
+  Advanced (was "Easy"/Intermediate/Advanced) across all 12 lessons that
+  had them.
+- Two stray `# References` H1 headings (07-shiny, 08-reports) demoted to
+  `## References`.
+
+**Copyedit & labels (items 9–10):**
+- All of the brief's specifically-named typos fixed (analise, begining,
+  millenia/chery, a list a articles/propositions, area un which, Rstudio,
+  revealsj, Feeback, apps and dashboard), plus the `girafe` category tag
+  on 02-plots *and* 05-maps corrected to `ggiraph` (the actual package).
+- A representative British-English pass across lesson prose (analyse,
+  visualise, favourite, modelled, customise, colour, defence, summarising,
+  memorising, industrialise, Randomise) — this was a thorough grep-driven
+  sweep of common American-spelling words, not a mechanical global
+  find/replace, and deliberately left `color`/`colour` untouched wherever
+  the prose is describing a same-named `color=` code parameter sitting
+  right next to it (changing the prose there would desync it from the
+  code being described). A handful of live-executing chunk output strings
+  were left alone — see "Not done" below.
+- Vague labels replaced: site-wide `code-summary` ("Click me!" → "Show the
+  code"), About page's three collapsed callout titles, two links in
+  Blogging with Quarto, one footnote link in Data from words.
+
+**Item 13 — Blogging with Quarto modernised:**
+- No longer framed as a 2022 development; explains website vs. blog;
+  `quarto.yml` → `_quarto.yml` throughout; corrected the "every document
+  in posts is included" claim to explain the listing's `contents` option;
+  manual Netlify drag-and-drop relabelled as one option among others, with
+  a new optional Git-based automatic deployment section; explains reading
+  `output-dir` before deciding what to deploy; the "5 minutes" claim
+  updated to a realistic 30–45 minutes first-time-through estimate.
+  External Quarto/Netlify links spot-verified live.
+
+**Item 11 — accessibility (concrete fixes, not a full audit):**
+- Footer's Font Awesome R icon now has a `title` plus adjacent visible "R"
+  text, so the sentence reads correctly even if the icon renders as
+  nothing to assistive tech.
+- `practice-yml.png` (the one screenshot with empty alt text) given a
+  real descriptive alt string; grepped the whole site for generic
+  (`alt="image"` etc.) or missing alt text — none found beyond that one.
+  Decorative reaction gifs (bored.gif, wow.gif, mic-drop.gif) intentionally
+  left with empty alt, which is the *correct* choice for decorative images.
+- Heading hierarchy: grepped for stray top-level `# ` headings outside code
+  chunks/callouts; found and fixed the two stray H1s noted above
+  (07-shiny, 08-reports "References"). No other page-level h1 violations
+  found — everything else matching that pattern was either a Quarto
+  callout title (`# Basic` etc., which is not a real page heading) or an
+  R code comment inside a fenced chunk.
+- Verified: no `outline: none`/`outline: 0` in `style.css` (focus
+  indicators are not being suppressed); buttons have `min-height: 44px`
+  for mobile tap targets; `prefers-reduced-motion` respected for
+  scroll-behavior.
+- **Not done**: a full WCAG contrast-ratio audit, live keyboard-navigation
+  walkthrough, or mobile-viewport visual check — this session has no
+  browser/screenshot tooling, so these are verified structurally
+  (semantic HTML, real `<a>` elements throughout the new components,
+  Bootstrap's own contrast-managed CSS variables) but not visually.
+
+**Item 12 — secrets scan done, path migration deferred:**
+- Grepped all `.qmd` and `.R` files for API keys/tokens/passwords/secrets:
+  none found embedded in source (they correctly live in `.Renviron`).
+- `paste0(getwd(), "/file")` usage catalogued (~30 call sites across
+  02-plots, 03-text, 04-animate, 05-maps, 06-scrap, 08-reports,
+  07-shiny/revealjs.qmd) but **not migrated** to `here::here()` — see "Not
+  done" below for why.
+
+**Item 15 — site-quality automation added:**
+- `checks/site_checks.py`: dependency-free (stdlib only) script that
+  checks internal links, missing local images, generic/empty alt text,
+  and duplicate navbar targets against the rendered `_blog/` output.
+- `checks/generate_sitemap.py`: writes `_blog/sitemap.xml` (Quarto doesn't
+  generate one on its own).
+- `checks/dictionary.txt`: project word list (packages, authors, datasets,
+  R/stats terminology) for use with an external spellchecker.
+- `checks/README.md` documents how to run all of the above locally; the
+  root `CLAUDE.md` commands section links to them.
+
+**Item 16 — SEO:**
+- Added `robots.txt` at the project root (Quarto copies it to output
+  automatically) pointing at the new sitemap.
+- Site-wide description/favicon/OG-image/twitter-card/site-url were
+  already present; verified every lesson and new page has its own
+  distinct `title`/`description`.
+
+**Verification, every session:** full `quarto render` (zero errors, same
+three pre-existing warnings each time, zero new ones) and a full internal
+internal-link check (zero broken links introduced) after every batch of
+changes — see `checks/site_checks.py` for the now-repeatable version of
+that check.
 
 ---
 
-## 1. Oversized-lesson split recommendations (spec item 14)
+## Not done, and why
 
-Estimated active-work time (rounded, based on line count / chunk count / H2
-count, not automated reading time) for every lesson is now on file in
-`learn/*.qmd`. Five lessons clock in at or above ~90 minutes, well past the
-45–60 minute target. Recommendations below are **proposals only**.
+### 1. Oversized-lesson splits (item 14) — recommendation only, by design
 
-### `sessions_workshop/03-text/03-text.qmd` — Data from words (~90 min)
+The brief is explicit: *"Do not split or move these lessons until the
+recommendation has been reviewed."* That review hasn't happened, so the
+five lessons flagged below are analysed but untouched. Durations are
+rounded active-work estimates (line count / chunk count / heading count),
+not automated reading time.
 
+#### `sessions_workshop/03-text/03-text.qmd` — Data from words (~90 min)
 - **Current topics**: PART I regex/tokenising/stemming/lemmatising, dplyr
   helpers, joins; PART II topic modelling ("book shuffle"); Bonus n-gram
   networks with ggraph.
-- **Proposed modules**:
-  1. *Data from words* (keep title) — PART I only: text → tidy data, regex,
-     stems/lemmas, dplyr helpers, joins.
-  2. *What books are about* (new) — PART II topic modelling + the ggraph
-     n-gram bonus, folded in as its natural continuation.
-- **Dependencies**: module 2 reuses module 1's corpus and tokenisation; must
-  stay lesson 3→3b in sequence, not reordered elsewhere.
-- **Content that should become optional**: the ggraph n-gram network section
-  is already marked "Bonus track" — natural candidate to stay clearly
-  optional inside module 2 rather than promoted to core.
-- **Links needing updates if split**: `_quarto.yml` Learn menu is already
-  track-page-based (no direct edit needed there), but `learn/build-with-r.qmd`
-  lesson list, `index.qmd` lesson count ("9 lessons"), any `aliases:` entries,
-  and the `r4dev-ask` ragnar store (which was ingested from the current
-  single-page URL) would all need updating.
+- **Proposed modules**: 1) *Data from words* (keep title) — PART I only.
+  2) *What books are about* (new) — PART II topic modelling + the ggraph
+  bonus as its natural continuation.
+- **Dependencies**: module 2 reuses module 1's corpus/tokenisation; keep
+  adjacent in sequence.
+- **Optional content**: the ggraph n-gram bonus stays clearly optional.
+- **Links to update if split**: `learn/build-with-r.qmd` lesson list,
+  `index.qmd` lesson count ("9 lessons"), `aliases:` entries, and the
+  `r4dev-ask` ragnar store (ingested from the current single-page URL).
 
-### `sessions_thinking/04-causal/04-causal.qmd` — Draw your assumptions before drawing your conclusions (~90 min, 1195 lines — largest file on the site)
+#### `sessions_thinking/04-causal/04-causal.qmd` — Draw your assumptions before drawing your conclusions (~90 min, 1212 lines — largest file on the site)
+- **Current topics**: PART I–III (question/fork/collider), "seen before
+  animated", PART IV identification ("earning the arrow"), PART V
+  interactive OJS gallery, exercises.
+- **Proposed modules**: 1) *Confounders and colliders* (PART I–III). 2)
+  *Earning the arrow* (new) — PART IV + PART V gallery + exercises.
+- **Dependencies**: module 2 assumes module 1's fork/collider vocabulary.
+- **Optional content**: PART V's interactive gallery stays optional.
+- **Links to update**: `learn/thinking.qmd` lesson list, `index.qmd`
+  lesson count; check `{ojs}`/`ojs_define()` cross-references between
+  parts before moving anything — PART V's cells may read data defined
+  earlier in the same file.
 
-- **Current topics**: PART I what regression can't answer; PART II
-  confounding (the fork); PART III colliders; "seen before, animated"; PART
-  IV identification ("earning the arrow"); PART V interactive OJS gallery;
-  exercises.
-- **Proposed modules**:
-  1. *Confounders and colliders* — PART I–III, the core DAG vocabulary.
-  2. *Earning the arrow* (new) — PART IV identification strategy + PART V
-     interactive gallery + exercises.
-- **Dependencies**: module 2 assumes module 1's DAG vocabulary (fork/collider
-  terms used without redefinition).
-- **Content that should become optional**: PART V's interactive gallery is
-  already exploratory/self-directed — good candidate to stay explicitly
-  optional in module 2 rather than required reading.
-- **Links needing updates**: `learn/thinking.qmd` lesson list, `index.qmd`
-  track lesson count, any `{ojs}`/`ojs_define()` cross-references between
-  parts (check before moving — PART V's OJS cells may read data defined
-  earlier in the same file).
+#### `sessions_workshop/07-shiny/07-shiny.qmd` — Make it shine (~90 min)
+- **Current topics**: PART I (Shiny basics + publishing + embedding) +
+  PART II (UI/reactivity) + a "this example is being retired" section +
+  Shiny extensions + Bonus RevealJS presentations.
+- **Proposed modules**: 1) *Make it shine* (keep title) — PART I + II. 2)
+  *Presentations with Quarto* (new) — the RevealJS bonus, which arguably
+  belongs next to **Blogging with Quarto** instead, since RevealJS is a
+  Quarto output format, not a Shiny feature.
+- **Dependencies**: module 2 has no real dependency on module 1 — flag for
+  a scope decision (new lesson vs. appendix on 01-quarto), not a
+  mechanical split.
+- **Optional/removable**: "this example is being retired" — review for
+  outright removal rather than carrying it into either module.
+- **Links to update**: `sessions_workshop/07-shiny/revealjs.qmd` is
+  already a separate file linked from the bonus section — check it
+  survives wherever that section ends up.
 
-### `sessions_workshop/07-shiny/07-shiny.qmd` — Make it shine (~90 min)
+#### `sessions_workshop/02-plots/02-plots.qmd` — Everything in its right place (~90 min, secondary candidate)
+- **Proposed modules**: 1) *Tidy plotting fundamentals* (PART I). 2) *APIs
+  and interactive plots* (PART II + ggiraph bonus).
+- **Dependencies**: module 2 reuses module 1's tidied datasets.
 
-- **Current topics**: PART I "the real beauty of R" + publishing apps free +
-  embedding Shiny in a website; PART II UI design + reactivity; a
-  "this example is being retired" section (already flagged stale in its own
-  heading — worth a content review, not just a split); Shiny extensions;
-  Bonus track RevealJS presentations; "learn more about RevealJS".
-- **Proposed modules**:
-  1. *Make it shine* (keep title) — PART I + PART II: build and publish a
-     Shiny app.
-  2. *Presentations with Quarto* (new, and arguably belongs next to
-     **Blogging with Quarto** rather than staying under this lesson) —
-     the RevealJS bonus track, since RevealJS is a Quarto output format, not
-     a Shiny feature, and its current placement here is a legacy artifact.
-- **Dependencies**: module 2 has no real dependency on module 1 — it could
-  move to become an optional appendix on `01-quarto` instead of a new
-  standalone lesson. Flag for a scope decision, not just a mechanical split.
-- **Content that should become optional**: "This example is being retired" —
-  review whether to remove outright rather than carry into either module.
-- **Links needing updates**: `sessions_workshop/07-shiny/revealjs.qmd` is a
-  separate file already (linked from the bonus section) — check that link
-  survives wherever the bonus section ends up.
-
-### `sessions_workshop/02-plots/02-plots.qmd` — Everything in its right place (~90 min, secondary candidate)
-
-- **Current topics**: PART I tidy data/OWID/pipe/scales; PART II APIs
-  (httr2), pivoting, tibble vs. tribble, esquisse, bonus girafe
-  interactivity.
-- **Proposed modules**: 1) *Tidy plotting fundamentals* (PART I), 2) *APIs
-  and interactive plots* (PART II + girafe bonus).
-- **Dependencies**: module 2's plots reuse module 1's tidied datasets.
-- **Note**: this lesson's `girafe` category tag is also flagged in the
-  copyedit backlog (§3) as possibly mislabelled — check together.
-
-### `sessions_workshop/05-maps/05-maps.qmd` — Mapping despair in the USA (~90 min, secondary candidate)
-
-- **Current topics**: PART I "walk before you run"; PART II despair in the
-  US + CRS; PART III interactive leaflet maps (with an existing render-time
-  caution callout); Bonus 3D maps with rayshader.
-- **Proposed modules**: 1) *Static maps* (PART I–II), 2) *Interactive & 3D
-  maps* (PART III + rayshader bonus).
+#### `sessions_workshop/05-maps/05-maps.qmd` — Mapping despair in the USA (~90 min, secondary candidate)
+- **Proposed modules**: 1) *Static maps* (PART I–II). 2) *Interactive & 3D
+  maps* (PART III leaflet + rayshader bonus).
 - **Dependencies**: module 2 reuses module 1's prepared spatial data.
-- **Note**: this is a lesson *page*, unaffected by the `leaflet`/`terra`/GDAL
-  build failure documented in `CLAUDE.md` — that issue only blocks *deployed
-  Shiny apps* using leaflet, not this static/interactive-HTML lesson render.
+- **Note**: unaffected by the `leaflet`/`terra`/GDAL build failure in
+  `CLAUDE.md` — that only blocks *deployed Shiny apps* using leaflet, not
+  this static/interactive-HTML lesson page.
 
----
+### 2. `getwd()` → `here::here()` migration (item 12)
 
-## 2. Lesson YAML metadata standardisation (spec item 5)
+Catalogued (~30 call sites, listed above) but not migrated. Reasons:
+`paste0(getwd(), "/file")` resolves correctly today because Quarto sets
+the working directory to the `.qmd`'s own folder during render (documented
+behaviour, and how every one of these chunks currently works without
+error). `here::here()` resolves from the *project root*, not the current
+file's directory, so this isn't a 1:1 textual substitution — each call
+site needs the correct project-relative path (e.g.
+`here::here("sessions_workshop/04-animate/sakura.jpg")`), plus adding
+`library(here)` to that lesson's setup. The brief's own item 12 caution
+applies directly here: *"Do not mechanically rewrite every existing code
+block without testing it."* Several of the affected files (05-maps
+especially) have expensive, credential- or network-dependent chunks
+(Census API, CDC Socrata, rayshader video rendering) where a bad edit is
+costly to catch. Recommend doing this as its own dedicated pass, one file
+at a time, each with a full re-render to verify before moving to the next.
 
-Not started. Needs, per lesson: `level` (Beginner|Intermediate|Advanced),
-`duration` (rounded active-work estimate), `track`, `order`, `prerequisites`.
-The three new `learn/*.qmd` pages currently hand-author lesson number,
-outcome, level and duration in raw HTML (see their `lesson-list` blocks)
-*because* this metadata doesn't exist in lesson frontmatter yet. Once item 5
-lands, prefer swapping those hand-authored blocks for a Quarto `listing` that
-reads the new YAML fields directly, per the spec's own guidance not to
-duplicate metadata manually — the level/duration/outcome values already
-drafted in this phase (visible in the three `learn/*.qmd` files) are a
-reasonable starting point for the YAML values themselves.
+### 3. One live-code typo, deferred for the same reason
 
-## 3. Sitewide copyedit pass (spec item 9)
+`sessions_workshop/03-text/03-text.qmd`'s `book_sentiments()` function has
+an axis-label typo, `x="Sentimen AFINN"` (should be "Sentiment AFINN") —
+inside a live ggplot `labs()` call. Low-risk to fix, but every edit to
+that file's *code* (as opposed to prose) forces a re-execution of the
+whole file under `freeze: auto`, including a PDF download and topic-model
+fit. Flagged rather than fixed in this pass, to keep code-chunk edits
+batched and deliberate rather than incidental.
 
-Not started systematically. Confirmed still present at time of writing:
-- `sessions_workshop/01-quarto/01-quarto.qmd` description: "analise" →
-  "analyse".
-- `sessions_tools/02-resources/02-resources.qmd` description: "This is just
-  the begining." → "beginning."
-- `sessions_workshop/04-animate/04-animate.qmd` description: "millenia of
-  chery tree blossoms" → "millennia of cherry tree blossoms".
-- The rest of the specific strings named in the brief (`a list a articles`,
-  `propositions`→`prepositions`, `area un which`, `apps and dashboard`,
-  `Rstudio`, `revealsj`, `girafe` metadata, `Feeback`) were not yet located —
-  need a full grep pass across every `.qmd`, not just frontmatter.
-- British-English pass (analyse/visualise/modelling/behaviour/customisation)
-  not yet run across lesson bodies.
+### 4. Pre-existing issues found, not fixed (predate this work, out of scope)
 
-## 4. Per-lesson intro/outro blocks (spec items 6–7)
-
-Not started. Every lesson needs a `.lesson-info` block (CSS already added in
-this phase, unused so far — see `style.css`'s "lesson pages: info block"
-section) with level/time/prerequisites/tools, a "You will learn to" list, and
-a matching `.continue-learning` footer (CSS also already added) with
-previous/track/next links. Mechanical once item 5's metadata exists to draw
-from, but touches all ~19 lesson files — do as its own pass, not folded into
-a content split.
-
-## 5. Vague interactive labels (spec item 10)
-
-Not started. At minimum, `_quarto.yml`'s site-wide `code-summary: "Click me!"`
-and `about.qmd`'s three `# Click here` callout headers need renaming to
-descriptive text (e.g. "Show the code", "What you'll learn"). A grep for
-"Click here"/"Click me" across all `.qmd` files will find the rest.
-
-## 6. Accessibility audit (spec item 11)
-
-Not started as a systematic audit. One concrete finding from this phase:
-the footer's "Created with {{< fa brands r-project >}} and Quarto" icon
-(`_quarto.yml`'s `page-footer.right`) should be checked for an accessible
-label on the Font Awesome icon — flagged, not fixed, in this pass.
-
-## 7. Fragile file paths / secrets scan (spec item 12)
-
-Not started. `paste0(getwd(), "/file")` patterns are known to exist per
-`CLAUDE.md`'s own file-layout notes; a `here::here()` migration needs
-per-chunk execution verification, not a mechanical find/replace.
-
-## 8. Blogging with Quarto modernisation (spec item 13)
-
-Not started.
-
-## 9. Site-quality automation (spec item 15)
-
-Not started. No CI exists yet (per `CLAUDE.md`, deploys are manual). A
-lightweight local script (render + internal-link check, following the same
-approach used ad hoc for this phase — see the link-check method note below)
-is the natural first step; a project dictionary for spell-checking would need
-package/dataset/author names collected from across all lesson frontmatter.
-
-## 10. SEO / sharing metadata (spec item 16)
-
-Partially satisfiable already: `_quarto.yml` has site-wide `description`,
-`favicon`, `open-graph`/`twitter-card` images, and `site-url`. Not yet
-verified: per-page descriptions on the three new `learn/*.qmd` pages (they do
-have `description:` frontmatter, added in this phase) vs. every lesson;
-sitemap/robots generation not yet confirmed enabled in Quarto's site output.
-
----
-
-## Pre-existing issues found (not introduced by this phase, not yet fixed)
-
-Found via the render + internal-link check run during the structural phase:
-
-- `sessions_workshop/07-shiny/07-shiny.qmd`: an example code block contains
-  the literal placeholder `src="YOUR SHINYAPP URL"` — intentional as a
-  student fill-in-the-blank, but worth a comment confirming that's the
-  intent rather than a stale real URL.
+- `sessions_workshop/07-shiny/07-shiny.qmd`: an example code block
+  contains the literal placeholder `src="YOUR SHINYAPP URL"` — almost
+  certainly an intentional student fill-in-the-blank, not a stale link,
+  but worth a comment confirming that.
 - `sessions_workshop/07-shiny/revealjs.qmd`: `<img src="../../r4dev_logo.png">`
-  does not resolve — the file lives at `logo/r4dev_dalle_1.png` at the
-  project root, not `r4dev_logo.png` two levels up from this file. Predates
-  this phase; not fixed here since `revealjs.qmd` is outside phase-1 scope.
-- Two pre-existing Lua filter warnings survive unchanged: "List item 1 has no
-  corresponding annotation in the code cell" in `03-text.qmd` and
-  `04-animate.qmd`, and an unclosed-div warning in
-  `sessions_tools/02-resources/02-resources.qmd` (Div at line 7 unclosed,
-  closes implicitly). None are new; all were present in the baseline render
-  taken before this phase's changes.
+  does not resolve — the real file is `logo/r4dev_dalle_1.png` at the
+  project root. `revealjs.qmd` was out of scope for every phase so far.
+- Two pre-existing Lua filter warnings survive unchanged across every
+  render in this work: "List item 1 has no corresponding annotation in the
+  code cell" (03-text.qmd, 04-animate.qmd) and an unclosed-div warning in
+  `sessions_tools/02-resources/02-resources.qmd`. Present before this work
+  started; not touched.
 
-### Link-check method
+### 5. Full accessibility audit (item 11)
 
-A one-off Python script scanned every rendered file under `_blog/` for local
-`href`/`src` targets and checked each resolves to a real file (including
-Quarto's `.qmd`→`.html` rewriting and `/index.html` directory fallback). It
-is not yet wired into a repeatable command — see backlog item 9 above.
+What shipped above are concrete, verifiable fixes, not a systematic
+WCAG-level audit. Not done: measured contrast ratios in both themes, a
+live keyboard-only navigation walkthrough, or checking real mobile
+viewports — none of which are possible without browser/screenshot tooling
+in this environment.
