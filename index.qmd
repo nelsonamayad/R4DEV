@@ -57,7 +57,7 @@ title-block-style: none
 
 ::: {.masthead}
 ::: {.masthead-content}
-[A hands-on workshop on reproducible data analysis · running since 2022]{.kicker}
+[A hands-on workshop · running since 2022]{.kicker}
 
 [More fiction is written in Excel than in Word.]{.masthead-title}
 
@@ -74,7 +74,9 @@ Learn to turn messy information into reproducible analysis, compelling visualisa
 :::
 
 ::: {.masthead-visual}
-![The R4DEV logo mark](logo/r4dev_dalle_1.png)
+```{=html}
+<img src="logo/r4dev_dalle_1.png" alt="Yes, I have a DALL-E logo">
+```
 :::
 :::
 
