@@ -1,0 +1,188 @@
+---
+title: All models are wrong 📏
+subtitle: Regression as estimation under uncertainty, with lm and broom
+author: "Nelson Amaya"
+description: "The regression line is the most used --and most over-trusted-- model on Earth. Learn to fit it, tidy it with broom, dress it in honest uncertainty with the bootstrap, and dodge its classic traps: Anscombe's quartet, extrapolation, and regression to the mean."
+categories:
+  - statistics
+  - regression
+  - broom
+  - uncertainty
+  - modeling
+date: "2026-07-03"
+date-modified: last-modified
+image: regression.png
+editor_options:
+  chunk_output_type: console
+citation:
+  url: https://r4dev.netlify.app/sessions_thinking/03-regression/03-regression
+---
+
+> *"All models are wrong, but some are useful."*<br>--George E. P. Box
+
+## PART I: A line is an estimate, not a fact
+
+Regression fits a line through a cloud of points. That sentence hides the statistical thinking: the line you get is **computed from one sample**, and the [first session of this track](/sessions_thinking/01-uncertainty/01-uncertainty.qmd) taught you what that means --a different sample gives a different line. A regression coefficient without uncertainty is a single number pretending to be knowledge.
+
+Back to our web-imported penguins. Does body mass predict flipper length?
+
+```{r 3.fit}
+library(tidyverse)
+library(broom)
+
+penguins <- readr::read_csv(
+  "https://raw.githubusercontent.com/allisonhorst/palmerpenguins/main/inst/extdata/penguins.csv"
+  ) |>
+  dplyr::filter(!is.na(body_mass_g), !is.na(flipper_length_mm)) |>
+  dplyr::mutate(body_mass_kg = body_mass_g / 1000)
+
+fit <- lm(flipper_length_mm ~ body_mass_kg, data = penguins)   # <1>
+
+broom::tidy(fit, conf.int = TRUE)                              # <2>
+```
+
+1. `lm()` --linear model-- is base R's regression engine, older than most people reading this, and still the workhorse under half the dashboards on Earth.
+2. `broom::tidy()` turns the model into what this workshop loves: **a tibble**. One row per coefficient, with a confidence interval when you ask. No more squinting at `summary()` printouts --model results become data you can filter, join and plot.
+
+Read the `body_mass_kg` row like a statistician: each extra kilo of penguin comes with about 15 more millimeters of flipper, *plus or minus* --the interval, not the point, is the finding. `broom` has two siblings worth knowing: `glance(fit)` (one row of model-level stats, like R²) and `augment(fit)` (your data with fitted values and residuals attached --the raw material of diagnostics).
+
+## PART II: Always plot. Always. --Anscombe's warning
+
+Before trusting any regression, meet the most famous four datasets in statistics, shipped with R since forever. Frank Anscombe built them in 1973 to have **identical** means, variances, correlations and regression lines:
+
+```{r 3.anscombe}
+#| fig-height: 5
+anscombe_long <- datasets::anscombe |>
+  tidyr::pivot_longer(
+    dplyr::everything(),
+    names_to = c(".value", "quartet"),
+    names_pattern = "(.)(.)"
+    )
+
+anscombe_long |>
+  dplyr::summarise(
+    correlation = round(cor(x, y), 3),
+    slope       = round(coef(lm(y ~ x))[2], 3),
+    .by = quartet
+    )
+
+anscombe_long |>
+  ggplot(aes(x, y)) +
+  geom_point(color = "#226F7F", size = 2.5) +
+  geom_smooth(method = "lm", se = FALSE, color = "#F75431", linewidth = 0.8) +
+  facet_wrap(~quartet, labeller = labeller(quartet = \(q) paste("Dataset", q))) +
+  labs(
+    title = "Anscombe's quartet: four identical regressions",
+    subtitle = "Same correlation, same line, same R² --one honest linear trend, one curve,\none outlier-hijacked line, and one dataset with a single influential point."
+    ) +
+  theme_minimal()
+```
+
+The numbers cannot tell these datasets apart; your eyes do it instantly. Only dataset 1 is what the regression claims. Dataset 2 is a curve wearing a line costume; in 3 and 4, a *single point* is writing the summary[^1]. The lesson survives fifty years unchanged: **the model summary describes the model, not the data**. Plot the data.
+
+[^1]: The modern descendant is the [datasauRus dozen](https://jumpingrivers.github.io/datasauRus/): thirteen datasets with identical summary statistics, one of which is a T-Rex. Same moral, more teeth.
+
+## PART III: Uncertainty you can see --the bootstrap spaghetti
+
+Confidence intervals on coefficients are honest but abstract. The [previous session](/sessions_thinking/02-inference/02-inference.qmd)'s bootstrap makes uncertainty *visible*: resample the data 200 times, fit 200 lines, draw them all.
+
+```{r 3.spaghetti}
+set.seed(3)
+
+boot_lines <- tibble(replicate = 1:200) |>
+  dplyr::mutate(
+    coefs = purrr::map(replicate, \(i) {
+      penguins |>
+        dplyr::slice_sample(prop = 1, replace = TRUE) |>       # <1>
+        lm(flipper_length_mm ~ body_mass_kg, data = _) |>
+        broom::tidy() |>
+        dplyr::select(term, estimate)
+      })
+    ) |>
+  tidyr::unnest(coefs) |>
+  tidyr::pivot_wider(names_from = term, values_from = estimate) |>
+  dplyr::rename(intercept = `(Intercept)`, slope = body_mass_kg)
+
+penguins |>
+  ggplot(aes(body_mass_kg, flipper_length_mm)) +
+  geom_abline(
+    data = boot_lines,
+    aes(intercept = intercept, slope = slope),
+    color = "#226F7F", alpha = 0.08                            # <2>
+    ) +
+  geom_point(color = "#F75431", alpha = 0.4, size = 1.5) +
+  labs(
+    x = "Body mass (kg)", y = "Flipper length (mm)",
+    title = "200 regressions from 200 bootstrap resamples",
+    subtitle = "The line is not a line: it is a bundle. Narrow in the middle, splayed at the edges."
+    ) +
+  theme_minimal()
+```
+
+1. One bootstrap resample: same number of rows, drawn with replacement --some penguins appear twice, some not at all.
+2. Transparency does the statistics: where lines overlap the bundle is dark and certain; where they fan out, your model is guessing.
+
+Notice **where** the bundle fans out: at the extremes of body mass, exactly where data is thin. Which brings us to the two classic ways this line will betray you.
+
+### Trap 1: Extrapolation
+
+The bundle above is estimated on penguins between roughly 2.7 and 6.3 kg. Ask it about a 10 kg penguin and `predict()` will answer --cheerfully, precisely, and with no basis whatsoever:
+
+```{r 3.extrapolate}
+predict(fit, newdata = tibble(body_mass_kg = 10)) |> round(1)
+```
+
+A 291mm flipper on a penguin that doesn't exist. The model doesn't know where its data ended; *you* have to. Rule: a regression is a map of the territory it was fit on --outside it, you are not predicting, you are doodling[^2].
+
+[^2]: The canonical cautionary tale: a 2004 *Nature* paper extrapolated 100m sprint times to conclude women would outsprint men by 2156 --and, further out, that sprints would eventually finish in negative time.
+
+### Trap 2: Regression to the mean
+
+The name "regression" comes from a trap. Francis Galton noticed tall parents have tall-but-less-tall children and called it "regression towards mediocrity". It is not biology --it is arithmetic that stalks any repeated measurement:
+
+```{r 3.rtm}
+set.seed(1877)
+
+students <- tibble(
+  skill  = rnorm(500, mean = 70, sd = 8),        # <1>
+  test_1 = skill + rnorm(500, sd = 6),           # <2>
+  test_2 = skill + rnorm(500, sd = 6)
+  )
+
+students |>
+  dplyr::mutate(group = dplyr::if_else(test_1 >= quantile(test_1, 0.9),
+                                       "Top 10% on test 1", "Everyone else")) |>
+  dplyr::summarise(
+    mean_test_1 = round(mean(test_1), 1),
+    mean_test_2 = round(mean(test_2), 1),        # <3>
+    .by = group
+    )
+```
+
+1. Each student has one true, stable skill.
+2. Each test = skill + luck. Nothing changes between tests --no teaching, no fatigue, *nothing*.
+3. Yet the test-1 stars score worse on test 2, and (run it) the stragglers improve. Being in the top 10% partly means *being skilled* and partly means *having been lucky* --and luck doesn't repeat.
+
+This arithmetic ghost produces endless false stories: the "sophomore slump", the cursed magazine cover, the punished employee who improved and the praised one who slipped[^3], every "treatment" applied to the worst cases that then "works". Whenever a group was *selected for being extreme*, expect it to drift back --before you credit any intervention.
+
+[^3]: Kahneman's flight-instructor story: instructors "learned" that praise makes cadets fly worse and screaming makes them fly better. Both observations were regression to the mean; neither had anything to do with the feedback.
+
+## PART IV: Prediction or explanation? Decide before you fit
+
+One last piece of thinking the formula won't do for you. The same `lm()` serves two different masters:
+
+-   **Prediction**: you only care that outputs are close to reality. Feature meaning is irrelevant; held-out accuracy is the judge. This road leads to [tidymodels](https://www.tidymodels.org/) and machine learning.
+-   **Explanation**: you care *why* --what happens to flipper length **if** a penguin gains a kilo. This is a causal question, and no amount of R² answers it: a coefficient can be predictive and causally meaningless at once.
+
+Confusing them is how "people who take vitamin X live longer" becomes a headline. Which is precisely the [next session](/sessions_thinking/04-causal/04-causal.qmd).
+
+::: callout-tip
+## Exercises 🏋️
+
+1.  Add `species` to the model: `lm(flipper_length_mm ~ body_mass_kg + species, data = penguins)`. Tidy it. How does the mass coefficient change, and what does each species coefficient mean?
+2.  Run `broom::augment(fit)` and plot residuals (`.resid`) against fitted values (`.fitted`). Which Anscombe dataset does the pattern resemble?
+3.  Rebuild the spaghetti plot with only 30 randomly sampled penguins. How much wider is the bundle?
+4.  Regression to the mean, in the wild: in the `students` simulation, "treat" the bottom 10% of test 1 with a worthless intervention (add exactly 0) and compute their test-2 improvement. Write the press release, then debunk it.
+:::
+
+Next in the track: [Draw your assumptions](/sessions_thinking/04-causal/04-causal.qmd) --when a regression coefficient does, and mostly does not, mean *cause*.

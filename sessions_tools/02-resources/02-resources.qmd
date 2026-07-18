@@ -1,0 +1,145 @@
+---
+title: R-sources 📙
+subtitle: Where to go from here
+author: "Nelson Amaya"
+description: "This is just the begining. Here you will find a repository of resources to learn more by topic: statistics, geocomputation, text analysis, building apps, etc."
+categories:
+  - book
+  - statistics
+  - probability
+  - blog
+  - spatial
+  - shiny
+  - causality
+date: "2022-07-31"
+date-modified: last-modified
+image: mind-blow.gif
+aliases:
+  - /sessions_tools/10-resources/10-resources.html
+---
+
+The joy of learning R is that you can learn anything as long as you put the time. R is free, so is RStudio. Most books on R are also free, and have wonderful online versions you can consult.
+
+Below a list of my favorite online resources on R, click below to see the links for each one:
+
+::: columns
+::: {.column width="50%"}
+::: {.callout-note collapse="true" icon="false"}
+## Bookmark this!
+
+-   [Statistical Modeling, Causal Inference, and Social Science Blog](https://statmodeling.stat.columbia.edu/)
+
+-   [Andrew Heiss' Blog](https://www.andrewheiss.com/blog/) 
+
+-   [Telling stories with data](https://tellingstorieswithdata.com/)
+
+-   [R for Data Science 1st edition](https://r4ds.had.co.nz/) and [2nd edition](https://r4ds.hadley.nz/)
+
+-   [Introduction to Data Science](https://rafalab.github.io/dsbook/)
+
+-   [R Programming for Data Science](https://bookdown.org/rdpeng/rprogdatascience/)
+
+-   [Hands-On Programming with R](https://rstudio-education.github.io/hopr/)
+
+-   [Big Book of R](https://www.bigbookofr.com/)
+
+-   [Solomon Kurz's Blog](https://solomonkurz.netlify.app/blog/)
+:::
+
+::: {.callout-note collapse="true" icon="false"}
+## Mapping
+
+-   [Geocomputation with R](https://geocompr.robinlovelace.net/)
+
+-   [Spatial Data Science](https://rspatial.org/raster/#)
+
+-   [Leaflet for R](https://rstudio.github.io/leaflet/)
+:::
+
+::: {.callout-note collapse="true" icon="false"}
+## Visualisation
+
+-   [R Graphics Cookbook](https://r-graphics.org/)
+
+-   [Fundamentals of Data Visualization](https://clauswilke.com/dataviz/)
+
+-   [Interactive web-based data visualization with R, plotly, and shiny](https://plotly-r.com/)
+
+-   [ggiraph book](https://www.ardata.fr/ggiraph-book/)
+:::
+
+::: {.callout-note collapse="true" icon="false"}
+## Text analysis
+
+-   [Text mining with R](https://www.tidytextmining.com/)
+
+-   [Supervised Machine Learning for text analysis in R](https://smltar.com/)
+:::
+:::
+
+::: {.column width="50%"}
+::: {.callout-note collapse="true" icon="false"}
+## Publishing
+
+-   [Quarto](https://quarto.org/docs/reference/)
+
+-   [R Markdown Cookbook](https://bookdown.org/yihui/rmarkdown-cookbook/)
+
+-   [R Markdown: The Definitive Guide](https://bookdown.org/yihui/rmarkdown/)
+
+:::
+
+::: {.callout-note collapse="true" icon="false"}
+## Shiny
+
+-   [Mastering Shiny](https://mastering-shiny.org/)
+
+-   [Outstanding User Interfaces with Shiny](https://unleash-shiny.rinterface.com/)
+:::
+
+::: {.callout-note collapse="true" icon="false"}
+## LLMs & AI
+
+-   [ellmer](https://ellmer.tidyverse.org/) --call any LLM from R
+
+-   [shinychat](https://posit-dev.github.io/shinychat/r/) and [querychat](https://posit-dev.github.io/querychat/r/) --chat UIs and natural-language data querying for Shiny
+
+-   [ggsql](https://r.ggsql.org/) --grammar of graphics for SQL (alpha)
+
+-   [Large Language Model tools for R](https://luisdva.github.io/llmsr-book/) --a free book cataloguing the whole ecosystem
+
+-   [Posit's AI tools overview](https://opensource.posit.co/ai/)
+:::
+
+::: {.callout-note collapse="true" icon="false"}
+## Causal inference
+
+-   [*Causal Inference: The Mixtape*](https://mixtape.scunning.com/) by Scott Cunningham
+
+-   [*The Effect: An Introduction to Research Design and Causality*](https://theeffectbook.net/) by Nick Huntington-Klein
+
+-   [The DAG Almanac](https://dags.andrewheiss.com/) by Andrew Heiss --interactive DAGs and do-calculus
+
+-   [Understanding adjustment](https://rpsychologist.com/descriptive-adjustment/) by Kristoffer Magnusson
+
+::: {.callout-note collapse="true" icon="false"}
+## Statistics
+
+-   [Statistical rethinking with brms, ggplot2, and the tidyverse: Second edition](https://bookdown.org/content/4857/) by Solomon Kurz
+
+-   [Regression modelling strategies](https://hbiostat.org/rmsc/)
+
+-   [Stan User's Guide](https://mc-stan.org/docs/stan-users-guide/index.html)
+
+-   [Bayes Rules! An introduction to applied bayesian modelling](https://www.bayesrulesbook.com/)
+
+-   [Tidymodels](https://www.tidymodels.org/)
+
+-   [Beyond Multiple Linear Regression](https://bookdown.org/roback/bookdown-BeyondMLR/)
+
+-   [Statistical Inference via Data Science](https://moderndive.com/)
+
+-   [Improving Your Statistical Inferences](https://lakens.github.io/statistical_inferences/) by Daniel Lakens
+:::
+:::
+:::

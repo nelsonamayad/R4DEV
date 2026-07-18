@@ -1,0 +1,261 @@
+---
+title: Grounded in truth 🧭
+subtitle: A deep dive into retrieval-augmented generation with ragnar
+author: "Nelson Amaya"
+description: "Build a real RAG pipeline end to end with ragnar: crawl a site, chunk it, embed it for free with a local model, store it in DuckDB, retrieve two different ways, and hand retrieval to the LLM as a tool."
+categories:
+  - RAG
+  - ragnar
+  - ellmer
+  - embeddings
+  - vector search
+  - ollama
+date: "2026-07-04"
+date-modified: last-modified
+image: ragnar.png
+editor_options:
+  chunk_output_type: console
+aliases:
+  - /sessions_workshop/11-ragnar/11-ragnar.html
+citation:
+  url: https://r4dev.netlify.app/sessions_ai/03-ragnar/03-ragnar
+---
+
+> *"It is a capital mistake to theorize before one has data."* <br>--Arthur Conan Doyle, *A Scandal in Bohemia*
+
+## PART I: Why retrieval, not memory
+
+[Talking to machines](/sessions_ai/01-llm/01-llm.qmd) ended on an uncomfortable result: asked to judge song mood from titles alone, the model answered fluently and confidently -- and its answers had *zero* correlation with the songs' actual audio valence. The model wasn't malfunctioning. It was doing exactly what you asked, articulately, from a question the input couldn't actually answer.
+
+**Retrieval-augmented generation (RAG)** is the fix for a related but distinct problem: instead of asking a model to answer from what it memorized during training (which might be outdated, wrong, or simply not about *your* content), you first **retrieve** the actual relevant text from a real source, then hand the model that text and ask it to answer *from it*. The model stops guessing and starts reading.
+
+[**`ragnar`**](https://ragnar.tidyverse.org/) is a tidyverse-style toolkit that does the unglamorous half of RAG well: turning real documents into a searchable store. It has one function for each stage of the pipeline, and --true to form for this workshop-- we'll train it on **R4DEV's own published site**, the same trick ragnar's own homepage example plays on the *R for Data Science* book.
+
+::: callout-tip
+## The whole pipeline in one sentence
+
+**Read** a page into clean markdown → **chunk** it into retrievable pieces → **embed** each chunk as a vector → **store** everything in DuckDB → **retrieve** the pieces relevant to a question → hand them to an LLM. Every section below is one verb.
+:::
+
+## PART II: Read -- turning a page into markdown
+
+The web is HTML: navigation bars, footers, cookie banners, ads. None of that belongs in a knowledge base. `read_as_markdown()` fetches a URL and extracts just the article content (by default it keeps `<main>` and discards `<nav>`), returning clean markdown.
+
+```{r 11.read}
+library(ragnar)
+
+page <- "https://r4dev.netlify.app/sessions_workshop/02-plots/02-plots.html"
+md <- read_as_markdown(page) # <1>
+
+cat(substr(md, 1, 400)) # <2>
+```
+
+1. One URL in, one markdown string out. Works on local files too, not just URLs.
+2. The first 400 characters --notice the navbar and cookie banner are already gone.
+
+To index more than one page, `ragnar_find_links()` crawls a page for its own internal links --the same instinct as session 6's scraping, aimed at an entire site instead of one page:
+
+```{r 11.links}
+links <- ragnar_find_links(page) # <3>
+
+length(links) # <4>
+head(links, 6)
+```
+
+3. Starting from the plots session, find every link it points to.
+4. Dozens of links --external package docs, other sessions, footnotes. We'll filter this down before indexing anything.
+
+## PART III: Chunk -- splitting for retrieval
+
+An LLM's context window is finite, and stuffing an entire session into one prompt wastes it on irrelevant paragraphs. `markdown_chunk()` splits a document into overlapping, retrievable pieces, trying to respect paragraph and heading boundaries rather than cutting mid-sentence.
+
+```{r 11.chunk}
+chunks <- markdown_chunk(md) # <5>
+
+class(chunks) # <6>
+nrow(chunks)
+chunks[10, c("context", "text")] # <7>
+```
+
+5. `target_size` (default 1600 characters) and `target_overlap` (default 50%) control chunk granularity --smaller chunks retrieve more precisely but lose surrounding context.
+6. A `MarkdownDocumentChunks` tibble --just a data frame with extra structure, so anything you know from `dplyr` still applies.
+7. `context` carries the heading breadcrumb for that chunk (which section it came from); `text` is the chunk content itself. This is what eventually gets embedded and retrieved.
+
+## PART IV: Embed -- turning text into vectors for free
+
+An **embedding** turns text into a vector of numbers positioned so that similar meanings land near each other in space -- "leaflet" and "interactive map" end up close together even though they don't share a single letter. This is what makes *semantic* search possible, as opposed to matching exact keywords.
+
+`ragnar` speaks to embedding providers the same way `ellmer` speaks to chat providers: `embed_openai()`, `embed_google_gemini()`, `embed_azure_openai()`, `embed_bedrock()`... one function per provider, same interface. We will use **`embed_ollama()`**, which runs a model entirely on your own machine via [Ollama](https://ollama.com/) --no API key, no quota, no cost, ever. Install Ollama, pull an embedding model once (`ollama pull embeddinggemma`), and you have a private, free embedding service running on `localhost`.
+
+```{r 11.embed}
+embed_fn <- ragnar::embed_ollama(model = "embeddinggemma") # <8>
+
+vec <- embed_fn("How do I make an interactive map?") # <9>
+dim(vec) # <10>
+round(vec[1, 1:8], 3)
+```
+
+8. `embed_ollama()` talks to Ollama's local API at `http://localhost:11434` by default.
+9. Any character vector goes in; embeddings often batch multiple texts in one call for speed.
+10. One row per input text, one column per embedding dimension --768 here. The actual numbers are meaningless in isolation; what matters is *distance* between vectors, which is what retrieval computes next.
+
+::: callout-important
+## This workshop nearly didn't have this section
+
+Building the "Ask R4DEV" capstone (end of this session) first tried a paid embedding API and hit a wall: no Gemini key was ever provisioned, and the OpenAI key on file had `insufficient_quota`. **Local embeddings solved it completely, for free.** If you only remember one thing from this section, remember that `ollama pull embeddinggemma` is a legitimate, production-grade answer to "I don't have an embedding API key" --not just a workaround for a workshop.
+:::
+
+## PART V: Store -- a DuckDB-backed knowledge base
+
+Reading, chunking and embedding one page by hand is instructive; indexing a whole site by hand is tedious. `ragnar_store_create()` opens a DuckDB file (or `:memory:`) configured to hold chunks and their vectors, and `ragnar_store_ingest()` does read + chunk + embed + insert + index in one call, for as many pages as you give it.
+
+```{r 11.store}
+#| eval: false
+
+# Keep the site to its own session pages, skip everything external
+session_links <- links[grepl("sessions_(workshop|tools)/.*\\.html$", links)] # <11>
+
+store <- ragnar_store_create( # <12>
+  "r4dev_ragnar.duckdb",
+  embed = ragnar::embed_ollama(model = "embeddinggemma"),
+  title = "R4DEV workshop content"
+)
+
+ragnar_store_ingest(store, session_links, build_index = TRUE) # <13>
+```
+
+```
+#> Launching 2 parallel workers.
+#> ℹ ingested: https://r4dev.netlify.app/index.html
+#> ℹ ingested: https://r4dev.netlify.app/sessions_workshop/02-plots/02-plots.html
+#> ℹ ingested: https://r4dev.netlify.app/sessions_workshop/03-text/03-text.html
+#> ℹ ingested: https://r4dev.netlify.app/sessions_workshop/04-animate/04-animate.html
+#> ℹ ingested: https://r4dev.netlify.app/sessions_workshop/05-maps/05-maps.html
+#> ℹ ingested: https://r4dev.netlify.app/sessions_workshop/06-scrap/06-scrap.html
+#> ℹ ingested: https://r4dev.netlify.app/sessions_workshop/09-llm/09-llm.html
+#> ℹ ingested: https://r4dev.netlify.app/sessions_workshop/10-llm-apps/10-llm-apps.html
+#> Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  100% | ETA:  0s
+```
+
+11. Filter the crawl down to R4DEV's own session pages --no point indexing CRAN or GitHub in *our* knowledge base.
+12. A named file instead of `:memory:` means the store survives after R exits --exactly what a deployed app needs.
+13. One call: every page gets read, chunked, embedded, and inserted, and both search indexes (below) get built at the end. Ingestion runs in parallel workers automatically.
+
+## PART VI: Retrieve -- two ways to search
+
+A store speaks two retrieval languages, and they disagree often enough to be worth knowing both:
+
+- **`ragnar_retrieve_vss()`** -- vector similarity search. Finds chunks whose *meaning* is close to the query, even with no shared words. Needs an embedding of the query itself, computed the same way the chunks were.
+- **`ragnar_retrieve_bm25()`** -- classic keyword ranking (the same algorithm the `ggsql`/DuckDB FTS work in [Chat with your data](/sessions_ai/02-llm-apps/02-llm-apps.qmd) used). Finds chunks that share the query's actual words. Needs no embedding step at all.
+
+```{r 11.retrieve}
+#| eval: false
+
+ragnar_retrieve_vss(store, "how do I show information on hover", top_k = 3) # <14>
+ragnar_retrieve_bm25(store, "girafe tooltip", top_k = 3) # <15>
+```
+
+```
+#> # VSS  -- "how do I show information on hover" (no shared words with the text below)
+#>   origin                                                context
+#>   06-scrap/06-scrap.html                                "Just take it"
+#>   02-plots/02-plots.html                                "Everything in its right place"
+#>   02-plots/02-plots.html                                "Everything in its right place"
+#>
+#> # BM25 -- "girafe tooltip" (exact term match)
+#>   origin                                                context
+#>   02-plots/02-plots.html                                "Everything in its right place"
+#>   05-maps/05-maps.html                                  ""
+#>   02-plots/02-plots.html                                ""
+```
+
+14. A semantic query with no exact keyword overlap ("hover", "information" --neither session actually uses those words) --VSS still lands on `02-plots`, which is genuinely where R4DEV's `ggiraph` tooltip content lives.
+15. The exact term "tooltip" pulls in `05-maps` too --it reuses the same `ggiraph` trick from session 2. Notice both methods can agree; the honest lesson isn't "VSS always wins," it's that they fail in *different* ways --VSS on vocabulary mismatch, BM25 on paraphrase.
+
+::: callout-tip
+## Which one should a deployed app use?
+
+BM25 needs nothing but the stored text --it runs anywhere, including a server with no route to an embedding provider. VSS needs to embed the *live user question* at query time, using whatever service embedded the original chunks. If that service is a local Ollama instance, a cloud-deployed app simply can't reach it. This is exactly why the "Ask R4DEV" capstone below runs on BM25 in production, even though this session demonstrates VSS with real local execution --theory and production constraints are allowed to disagree, and knowing why is the actual skill.
+:::
+
+## PART VII: Give the model the tool
+
+[Talking to machines](/sessions_ai/01-llm/01-llm.qmd) taught tool calling by hand: write a function, describe it, register it, let the model decide when to call it. `ragnar_register_tool_retrieve()` does exactly that for retrieval in one line --the model gets to decide *when* it needs to search, instead of your code always searching before every message.
+
+```{r 11.tool}
+#| eval: false
+
+library(ellmer)
+
+chat <- ellmer::chat_anthropic() # <16>
+ragnar_register_tool_retrieve( # <17>
+  chat, store,
+  store_description = "R4DEV workshop session content"
+)
+
+chat$chat("What R package does this workshop use for structured data extraction from LLMs?") # <18>
+```
+
+```
+#> ◯ [tool call] search_store_001(text = "R package structured data extraction LLMs")
+#> ● #> [{"origin": "sessions_workshop/09-llm/09-llm.html", "doc_id": 2, "chunk_id": [31, 32], ...}]
+#>
+#> Based on the workshop content, the R package used for structured data
+#> extraction from LLMs is **`ellmer`**.
+#>
+#> From the workshop materials, `ellmer` is described as the package from the
+#> tidyverse team that enables you to:
+#>
+#> 1. **Extract structured data from text** -- Using the `$chat_structured()`
+#> function, you define the shape of data you want (using `type_object()`,
+#> like a contract), and `ellmer` forces the model's answer into exactly
+#> that shape.
+#> 2. **Work with multiple LLM providers** -- It speaks to every major
+#> provider (Google Gemini, Anthropic, OpenAI, Mistral, and local models
+#> via Ollama) with the same functions.
+#> 3. **Scale extraction** -- The `parallel_chat_structured()` function
+#> allows you to send multiple prompts concurrently and get back tidy
+#> data frames.
+```
+
+16. Any ellmer chat works --Anthropic here, but `chat_google_gemini()` or `chat_openai()` are equally valid.
+17. One function call wires the whole store up as a callable tool, with a description telling the model what it's for.
+18. Watch the `◯ [tool call]` line: the model decided *on its own* that it needed to search before answering, called the tool, read the retrieved chunk from the *Talking to machines* session, and answered correctly --with details (`chat_structured()`, `type_object()`, `parallel_chat_structured()`) that only exist in the real retrieved text, not in the model's general training.
+18. The model reads the question, decides it needs to search, calls the tool, reads the retrieved chunks, and answers --grounded, with no separate retrieval code in your prompt-building logic.
+
+## Capstone: Ask R4DEV, rebuilt {#capstone-ask-r4dev}
+
+This is the deployed, always-on version of everything above: a chatbot that answers questions about R4DEV using only real, retrieved excerpts from the 13 other sessions. It's built with `ragnar`'s own ingestion pipeline (a real improvement over an earlier hand-rolled version of this app, which chunked by regex-splitting on markdown headings instead of `markdown_chunk()`'s semantic boundaries).
+
+```{=html}
+<iframe src="https://nelsonamayad-r4dev-ragnar.share.connect.posit.cloud/" style="border: none; width: 100%; height: 650px" frameborder="0">
+</iframe>
+```
+
+::: callout-note
+## Why this runs on BM25, not VSS
+
+The store behind this app was built locally with `embed_ollama()` --free, and genuinely used during development. But the *deployed* app runs on Posit Connect Cloud, which has no route back to a local Ollama instance, and this workshop has no cloud embedding provider with usable quota yet. So the live app retrieves with `ragnar_retrieve_bm25()` instead --a real production trade-off, not a shortcut. The moment a Gemini or OpenAI key with quota exists, swapping `embed_ollama()` for `embed_google_gemini()` in the ingestion script and redeploying is the entire fix.
+:::
+
+## 🏗 Practice 11: Retrieve something real {.unnumbered}
+
+::: {.callout-note icon="false" collapse="true"}
+# Easy
+
+-   Crawl a small documentation site you use often (a package's `pkgdown` site is a good target) and build a store from its first 5-10 pages.
+-   Retrieve with `ragnar_retrieve_bm25()` for a question you already know the answer to. Does it find the right page?
+:::
+
+::: {.callout-important icon="false" collapse="true"}
+# Intermediate
+
+-   Take three questions about R4DEV and compare `ragnar_retrieve_vss()` against `ragnar_retrieve_bm25()` for each. Which query type (conceptual vs. keyword-heavy) favors which method?
+-   Change `markdown_chunk()`'s `target_size` to something much smaller (e.g. 400) and re-inspect the store. What happens to retrieval quality on a broad question versus a specific one?
+:::
+
+::: {.callout-caution icon="false" collapse="true"}
+# Advanced
+
+-   Register **two** tools on one chat: the retrieval tool from this session and the `weather_now()` tool from [Talking to machines](/sessions_ai/01-llm/01-llm.qmd). Ask a question that needs both, and watch the model choose which to call and when.
+:::

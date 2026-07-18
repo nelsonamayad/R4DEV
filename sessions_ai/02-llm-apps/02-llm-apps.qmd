@@ -1,0 +1,205 @@
+---
+title: Chat with your data 💬
+subtitle: Build LLM-powered apps with shinychat, querychat and ggsql
+author: "Nelson Amaya"
+description: "Put a language model inside your Shiny apps: streaming chat UIs with shinychat, natural-language data filtering with querychat, and SQL that draws its own charts with ggsql."
+categories:
+  - LLM
+  - shiny
+  - shinychat
+  - querychat
+  - ggsql
+  - SQL
+date: "2026-07-04"
+date-modified: last-modified
+image: her.gif
+editor_options:
+  chunk_output_type: console
+aliases:
+  - /sessions_workshop/10-llm-apps/10-llm-apps.html
+citation:
+  url: https://r4dev.netlify.app/sessions_ai/02-llm-apps/02-llm-apps
+---
+
+> *"The most profound technologies are those that disappear."*<br>--Mark Weiser
+
+In session 7 you built Shiny apps where users interact through sliders and dropdowns. In the previous session, [Talking to machines](/sessions_ai/01-llm/01-llm.qmd), you learned to call an LLM from code. This session welds the two: apps where the interface is **a conversation**, and where the model translates human questions into the filters, queries and charts you used to build by hand.
+
+Everything runs on the same [`ellmer`](https://ellmer.tidyverse.org/) chat objects from the previous session, so your API key setup carries over unchanged.
+
+## PART I: A chat UI in one line
+
+The [**`shinychat`**](https://posit-dev.github.io/shinychat/r/) package provides the chat interface --the streaming text, the message bubbles, the input box-- so you never build them from scratch. The quickest possible start is genuinely one line:
+
+```{r 10.chat-app}
+#| eval: false
+
+library(shinychat)
+
+shinychat::chat_app(ellmer::chat_google_gemini()) # <1>
+```
+
+1. `chat_app()` takes any ellmer chat object and wraps it in a complete running Shiny app. Try it now --it is the fastest way to poke at a system prompt interactively.
+
+For a real app you compose the pieces yourself: `chat_ui()` in the interface, `chat_append()` in the server. Here is a complete teaching assistant --note how the system prompt does all the personality work, exactly as in the previous session:
+
+```{r 10.shinychat}
+#| eval: false
+
+library(shiny)
+library(bslib)
+library(shinychat)
+
+ui <- bslib::page_fillable(
+  theme = bslib::bs_theme(bootswatch = "journal"),
+  h4("R4DEV teaching assistant 🤖"),
+  shinychat::chat_ui("chat", fill = TRUE) # <2>
+)
+
+server <- function(input, output, session) {
+
+  chat <- ellmer::chat_google_gemini( # <3>
+    system_prompt = paste(
+      "You are the teaching assistant of R4DEV, a tidyverse-first R workshop.",
+      "Answer questions about R with short runnable examples.",
+      "Always use the native pipe |> and never suggest base R plotting."
+    )
+  )
+
+  observeEvent(input$chat_user_input, { # <4>
+    stream <- chat$stream_async(input$chat_user_input) # <5>
+    shinychat::chat_append("chat", stream) # <5>
+  })
+}
+
+shinyApp(ui, server)
+```
+
+2. `chat_ui()` drops the whole chat interface into your layout, like any other Shiny widget. It fills the page like the dashboards from session 7.
+3. The chat object is created **once per user session** --it carries the conversation memory, so follow-up questions work.
+4. Whatever the user types arrives as `input$chat_user_input` --a plain Shiny input, nothing exotic.
+5. `$stream_async()` returns the answer as it is generated, and `chat_append()` streams it into the UI word by word. Async matters: while one user waits for an answer, the app stays responsive for everyone else.
+
+Download it and run it yourself: <br><br> {{< downloadthis r4dev-chat-app.R dname = r4dev-chat-app label="Download the chat app" icon=download type=info >}}
+
+::: callout-tip
+## Where's the live demo?
+
+This minimal version is deliberately un-grounded --it answers from the model's general training, nothing more. Rather than deploy a second, redundant chat app, R4DEV ships **one** live chat demo: [**Ask R4DEV**](/sessions_ai/03-ragnar/03-ragnar.qmd#capstone-ask-r4dev) in the next session, which uses this exact `shinychat` interface but answers only from *retrieved* R4DEV content. Build this one locally first --then see why the next session grounds it.
+:::
+
+## PART II: querychat, or the end of the filter sidebar
+
+Now the genuinely new idea. In session 7's COVID app, filtering data meant building a sidebar of inputs --one widget per variable, wired to `filter()` calls. [**`querychat`**](https://posit-dev.github.io/querychat/r/) replaces that whole apparatus: the user *asks* for the subset they want, the LLM writes **SQL**, and your app reacts to the result.
+
+The safety design deserves attention before the code: **the model never sees your data and never executes anything.** It only reads the table's *schema* --column names and types-- and proposes a read-only `SELECT` statement, which querychat runs locally against a [DuckDB](https://duckdb.org/) copy of your data frame. Hallucinated SQL fails loudly; it cannot delete, modify or leak a single row.
+
+We'll point it at an old friend --the Spotify archive from session 2:
+
+```{r 10.querychat}
+#| eval: false
+
+library(querychat)
+
+songs <- readr::read_csv("spotify_favorites_archive.csv")
+
+querychat::querychat_app( # <6>
+  songs,
+  table_name = "songs",
+  client = ellmer::chat_google_gemini(), # <7>
+  greeting = "Ask me anything about these 1,178 songs — in plain language.",
+  data_description = paste( # <8>
+    "One row per song from the discographies of 8 artists,",
+    "with Spotify audio features saved before the API closed in 2024.",
+    "valence and energy run from 0 to 1.",
+    "cover_url holds the album cover image address."
+  )
+)
+```
+
+6. Like `chat_app()`, `querychat_app()` is the batteries-included version: data table, chat sidebar, live SQL display. For custom layouts there are modular pieces (`querychat_ui()`, `querychat_server()`) that plug into any Shiny app.
+7. Any ellmer chat works. Translating questions to SQL is easy work --a small, cheap model does it fine.
+8. The `data_description` is your prompt-craft moment: tell the model what a row *means* and what units the columns use. Good descriptions are the difference between "it just works" and confused SQL.
+
+Once it runs, try these --and **watch the SQL it writes** (querychat shows it; always read it, that's your audit trail):
+
+-   *"Only songs by Oasis, most energetic first"*
+-   *"Songs sadder than 0.2 valence but with energy above 0.8"* --angry music, in other words
+-   *"Which artist has the happiest average discography?"*
+
+Get the app: <br><br> {{< downloadthis r4dev-querychat-app.R dname = r4dev-querychat-app label="Download the querychat app" icon=download type=info >}}
+
+Or try it live below --this deployed instance runs on **Claude Sonnet 5** via `ellmer::chat_anthropic()`, with the API key set as a server-side environment variable on Posit Connect Cloud (never in the code, never exposed on this page). Everything else --the SQL-writing, the safety model, the UI-- is exactly what you just read.
+
+:::: column-screen-inset
+<iframe src="https://nelsonamayad-r4dev-chat-with-your-data.share.connect.posit.cloud/" style="border: none; width: 100%; height: 700px" frameborder="0">
+</iframe>
+::::
+
+## PART III: SQL that draws: ggsql
+
+You just watched an LLM write SQL for you --which makes this the right moment to meet [**`ggsql`**](https://r.ggsql.org/), a brand-new tool from Posit (alpha, April 2026) that extends SQL with a `VISUALISE` clause borrowed straight from the grammar of graphics you learned in session 2. One language selects the data *and* draws it.
+
+These chunks run **live in this page** through ggsql's knitr engine --the `r:` prefix lets SQL read data frames straight from the R session:
+
+```{r 10.ggsql-setup}
+library(ggsql)
+library(tidyverse)
+
+songs <- readr::read_csv(paste0(getwd(), "/spotify_favorites_archive.csv"))
+```
+
+```{ggsql}
+#| label: 10.ggsql-bar
+SELECT artist, AVG(valence) AS mean_valence
+FROM r:songs
+GROUP BY artist
+VISUALISE mean_valence AS x, artist AS y
+DRAW bar
+```
+
+Aggregation in SQL, mapping and geometry in the `VISUALISE` clause: `mean_valence AS x` is exactly `aes(x = mean_valence)` wearing a SQL costume. One more, with color as a third channel:
+
+```{ggsql}
+#| label: 10.ggsql-scatter
+SELECT valence, energy, artist
+FROM r:songs
+VISUALISE valence AS x, energy AS y, artist AS color
+DRAW point
+```
+
+::: callout-warning
+## Alpha software
+
+`ggsql` is an **alpha release** --the syntax may still change, and you will hit rough edges. That is not a reason to avoid it; it is a reason to pin the version in your projects and read the [release notes](https://r.ggsql.org/) when you update. Watching a tool this young is also watching how the R ecosystem evolves in real time.
+:::
+
+Why does ggsql belong in this session? Because of what you saw in Part II: **LLMs are remarkably good at writing SQL.** A model that can answer *"show me energy against valence, colored by artist"* with a complete ggsql query --data selection and chart in one statement-- is a very short step from the querychat app you just ran. The pieces on this page are the ingredients of the next generation of data tools; now you know how each one works alone.
+
+::: callout-tip
+## Next: teach the model to answer *only* from real sources
+
+Everything here answers from what the model already knows. The next session, [**Grounded in truth**](/sessions_ai/03-ragnar/03-ragnar.qmd), builds the other half: retrieval-augmented generation with **`ragnar`** --a chatbot that answers questions about R4DEV itself, grounded only in the workshop's actual content, including a live capstone app.
+:::
+
+## 🏗 Practice 10: Ship it {.unnumbered}
+
+::: {.callout-note icon="false" collapse="true"}
+# Easy
+
+-   Change the chat app's system prompt so it refuses to answer anything not related to R, politely
+-   Run the querychat app and find the five *angriest* songs (low valence, high energy). Read the SQL it generated --would you have written it differently?
+:::
+
+::: {.callout-important icon="false" collapse="true"}
+# Intermediate
+
+-   Point `querychat_app()` at the Maddison GDP data from session 2 and ask it three questions you answered with dplyr back then. Compare the SQL to your pipes
+-   Rewrite the ggsql scatter above to show only songs with valence below 0.5, faceted by artist --check the [ggsql docs](https://r.ggsql.org/) for the FACET syntax
+:::
+
+::: {.callout-caution icon="false" collapse="true"}
+# Advanced
+
+-   Combine sessions 9 and 10: build a Shiny app with a `chat_ui()` where the model has a *tool* that runs `ggsql_execute()` on the songs table and returns the chart. You will have built a tiny data analyst
+:::

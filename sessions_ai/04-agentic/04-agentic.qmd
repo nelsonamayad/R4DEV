@@ -1,0 +1,214 @@
+---
+title: Agentic coding 🦾
+subtitle: Let a model drive your editor --Claude Code, Codex, OpenClaw and Antigravity
+author: "Nelson Amaya"
+description: "An agent is an LLM in a loop with tools. Learn what that actually means, meet the main agentic coding tools --Claude Code, Codex, OpenClaw, Antigravity-- and the vocabulary around them: agents, harnesses, skills, MCP, memory files, subagents and permissions."
+categories:
+  - AI
+  - agents
+  - LLM
+  - Claude Code
+  - MCP
+date: "2026-07-05"
+date-modified: last-modified
+image: cat-computer.gif
+editor_options:
+  chunk_output_type: console
+citation:
+  url: https://r4dev.netlify.app/sessions_ai/04-agentic/04-agentic
+---
+
+> *"Civilization advances by extending the number of important operations which we can perform without thinking of them."*<br>--Alfred North Whitehead
+
+## PART I: What is an agent, really?
+
+The three previous sessions of this track built a staircase. In [Talking to machines](/sessions_ai/01-llm/01-llm.qmd) you called an LLM from code and --crucially-- you registered a **tool**: a plain R function the model could decide to call on its own. In [Chat with your data](/sessions_ai/02-llm-apps/02-llm-apps.qmd) you put that model inside an app. In [Grounded in truth](/sessions_ai/03-ragnar/03-ragnar.qmd) you gave it retrieval, and watched it *choose* when to search before answering.
+
+This session climbs the last step. Take the tool-calling loop you already know and hand the model a much more dangerous toolbox: **read files, edit files, run commands in a terminal, search the web**. Then let it loop --propose an action, observe the result, decide the next action-- until the job is done. That is the whole trick. There is no new mathematics in this session, only a definition worth memorizing:
+
+> **An agent is an LLM calling tools in a loop, working towards a goal.**
+
+Everything else --the products, the buzzwords, the venture capital-- is packaging around that loop. You already built a miniature agent in this workshop when the model called `weather_now()` by itself. The tools of this session run the same loop, just with your entire project as the workspace:
+
+```
+   ┌────────────────────────────────────────────────┐
+   │  You: "Fix the bug in my ggplot code"          │
+   └────────────────────┬───────────────────────────┘
+                        ▼
+   ┌────────────────────────────────────────────────┐
+   │  LLM decides: read the file          ──────────┼──▶ tool runs, result
+   │  LLM decides: run the script         ──────────┼──▶ comes back as text,
+   │  LLM decides: edit line 42           ──────────┼──▶ loop continues...
+   │  LLM decides: run it again → works   ──────────┤
+   └────────────────────┬───────────────────────────┘
+                        ▼
+   ┌────────────────────────────────────────────────┐
+   │  "Done. The `group` aesthetic was missing."    │
+   └────────────────────────────────────────────────┘
+```
+
+The program that runs this loop --that actually executes the file edits and shell commands the model asks for, decides what needs your approval, and feeds results back-- is called the **harness**[^1]. The model proposes; the harness disposes. When people compare "agentic coding tools", they are mostly comparing harnesses: the underlying models are often available in several of them.
+
+[^1]: You will also see *agent scaffold* or *agent runtime*. The distinction matters: when an agent does something silly, the fix is sometimes a better model, but at least as often a better harness --clearer instructions, better tools, tighter permissions.
+
+::: callout-important
+## Why this matters for data analysis
+
+Agentic tools were built by software engineers for software engineers, but *your work is code too*: `.qmd` documents, `ggplot2` pipelines, Shiny apps, data cleaning scripts. Everything this workshop taught you --projects, plain-text formats, reproducibility-- turns out to be exactly what agents need. A reproducible Quarto project is legible to an agent in a way a folder of Excel files never will be. Your good habits just became a superpower.
+:::
+
+## PART II: The tools
+
+Four tools, four philosophies. All of them run the same loop from Part I; they differ in *where* they live and *how much* they let the agent do unsupervised.
+
+### Claude Code (Anthropic)
+
+[Claude Code](https://claude.com/claude-code) is the tool this very workshop is maintained with[^2]. It began as a **terminal-first** CLI --you type `claude` inside a project folder and converse-- and grew IDE extensions (VS Code, Positron, JetBrains), a desktop app and a web version. Its defining traits:
+
+[^2]: Full disclosure, and also a demonstration: large parts of the 2026 modernization of R4DEV --including this session's file moves-- were done by asking an agent, then reviewing its diffs. The reviewing part is not optional. More on that in Part IV.
+
+-   **Terminal-native.** It works wherever a shell works, which includes servers and CI pipelines. For R users this means it happily runs `Rscript`, `quarto render` and `git` --the exact loop you use.
+-   **Project memory** via a `CLAUDE.md` file checked into your repo (more in Part III).
+-   **Skills, subagents, hooks and MCP** --the full vocabulary of Part III, most of which Anthropic either invented or popularized.
+-   **Permission modes**: by default it asks before editing files or running commands; you can loosen or tighten this per project.
+
+```bash
+cd my-quarto-project
+claude                                       # <1>
+> Render 02-plots.qmd and fix whatever breaks # <2>
+```
+
+1.  Start an interactive session in the project folder. The agent can see your files but touches nothing without asking (by default).
+2.  You talk to it in plain language. It will run `quarto render`, read the error, open the file, propose an edit, and re-render to verify --the loop from Part I.
+
+### Codex (OpenAI)
+
+[Codex](https://openai.com/codex/) is OpenAI's counterpart: an open-source CLI plus IDE extensions plus a **cloud mode**, where tasks run on OpenAI's servers in sandboxed containers --you assign work from a browser or even a phone, and come back to a proposed pull request. Its project-memory convention is a file called `AGENTS.md`, which has become an [open standard](https://agents.md/) many other tools also read. Conceptually near-identical to Claude Code; teams usually choose based on which model family they prefer.
+
+### Antigravity (Google)
+
+[Antigravity](https://antigravity.google/) takes the opposite bet: not a terminal, but an entire **agent-first IDE** (a fork of VS Code, launched alongside Gemini 3). Two ideas stand out:
+
+-   A **Manager view**: instead of one conversation, a mission-control panel where you supervise *several* agents working on different tasks in parallel, like a lead reviewing a team.
+-   **Artifacts**: agents don't just narrate what they did; they produce checkable evidence --task lists, implementation plans, screenshots, and recordings of the agent driving a browser to test the thing it built. Trust through verification rather than through prose.
+
+Antigravity's agents can use the editor, the terminal *and* a browser --so an agent building a Shiny app can also open it and click around.
+
+### OpenClaw (open source)
+
+[OpenClaw](https://openclaw.ai/) is the outlier on the list, and the most instructive one. It is not a coding IDE at all: it is an open-source **personal agent** that runs on *your own* machine and talks to you through the messaging apps you already use --WhatsApp, Telegram, Discord. It is model-agnostic (plug in Claude, GPT, Gemini or a local model) and designed for **continuous autonomy**: it can be given standing instructions, remember things across days, and act while you are away.
+
+Why include it in a coding session? Because it shows where the dial goes when you turn autonomy up. A terminal agent asks permission and stops when the task ends; OpenClaw-style assistants run unattended with access to your accounts and files. The security community's reaction was immediate and loud --misconfigured instances exposing credentials, prompt-injection risks through incoming messages[^3]. It is the clearest available lesson that **an agent's power and its attack surface are the same thing**.
+
+[^3]: *Prompt injection*: hiding instructions inside content the agent will read --an email, a web page, a data file-- so the *content* starts steering the agent instead of you. There is no complete fix yet; the mitigations are exactly the permission boundaries discussed in Part III.
+
+| | Claude Code | Codex | Antigravity | OpenClaw |
+|---|---|---|---|---|
+| Maker | Anthropic | OpenAI | Google | Open source community |
+| Lives in | Terminal, IDE, web | Terminal, IDE, cloud | Its own IDE | Your messaging apps |
+| Models | Claude | GPT / Codex models | Gemini, Claude, open models | Any (bring your own) |
+| Memory file | `CLAUDE.md` | `AGENTS.md` | `AGENTS.md` | Its own memory files |
+| Distinctive idea | Terminal-native, skills | Cloud task delegation | Manager view, artifacts | Personal, always-on |
+| Default autonomy | Ask first | Sandboxed | Supervised parallel agents | High --you set limits |
+
+: The 2026 agentic landscape, compressed. All four run the same loop from Part I. {.striped .hover tbl-colwidths="[16,21,21,21,21]"}
+
+::: callout-note
+## The list will rot; the loop will not
+
+Tools on this page will merge, rename and die --this workshop once taught a Spotify API that no longer exists. What will *not* change soon is the anatomy: model + tools + loop + harness. Learn the anatomy and every new tool is a re-skin.
+:::
+
+## PART III: The vocabulary
+
+Agentic tools come wrapped in jargon. Here is the working vocabulary, each term connected to something you already know from this workshop.
+
+### Context window
+
+The model's working memory: everything it can "see" right now --your instructions, the files it has read, the outputs of commands it ran. It is **finite** (hundreds of thousands of tokens, not infinite) and **empties between sessions**. Two consequences you will feel immediately: long sessions degrade as the window fills (harnesses *compact* old context by summarizing it, which loses detail), and a fresh session knows *nothing* about yesterday. Which is why every serious harness invented...
+
+### Memory files: `CLAUDE.md` and `AGENTS.md`
+
+A plain Markdown file at the root of your project, read automatically at the start of every session. It is where you write the things you are tired of repeating: what the project is, how to run it, the conventions to respect, the traps to avoid. Think of it as a `README` addressed to a machine colleague --and like a README, it lives in version control. For an R project, a useful one looks like this:
+
+```markdown
+# CLAUDE.md
+
+## What this is
+A Quarto website teaching data analysis in R. Published to Netlify.
+
+## Commands
+- `quarto preview`      -- live-reload dev server
+- `quarto render`       -- full site build
+- Render single files, not the whole site: `quarto render path/to/file.qmd`
+
+## Conventions
+- tidyverse style, native pipe |>, explicit namespacing: dplyr::mutate()
+- Never put API keys in code. Keys live in ~/.Renviron only.
+
+## Gotchas
+- `_freeze/` is committed on purpose; don't delete it.
+```
+
+Notice what this is: **reproducibility documentation**. The discipline session 1 taught you --projects, relative paths, documented setup-- is precisely what makes a project agent-legible. If a new human collaborator could get productive from your repo alone, so can an agent.
+
+### Skills
+
+Memory files load *always*; that doesn't scale to specialized knowledge. A **skill** is a folder containing a `SKILL.md` file of instructions (plus optional scripts and reference documents) that the agent loads **only when the task calls for it**. The harness keeps just each skill's one-line description in context; when your request matches, the agent reads the full folder. This pattern is called *progressive disclosure* --don't show everything, show a menu.
+
+```
+.claude/skills/
+└── ggplot-house-style/
+    ├── SKILL.md          # when to apply, rules, examples
+    └── palette.R         # the actual color definitions
+```
+
+A skill like this one could encode *your* plotting standards --fonts, palettes, theme, labeling rules-- so that "make a chart of X" comes back in house style every time, without you re-explaining it. Skills are how you turn a general-purpose agent into *your* specialist, and because they are just folders of text, they are shareable and versionable like everything else in this workshop.
+
+### Tools and MCP
+
+A **tool** is one action the agent can take --you defined one yourself with `ellmer::tool()` in [Talking to machines](/sessions_ai/01-llm/01-llm.qmd). Harnesses ship with a core set (read file, edit file, run command, search). The **Model Context Protocol (MCP)** is the open standard --introduced by Anthropic in 2024, since adopted across the industry-- for plugging in *more*: an MCP server exposes a bundle of tools (query this database, read this GitHub repo, control this browser) that any MCP-speaking agent can use. The standard analogy is USB-C: one connector, many devices, no bespoke adapter per pair[^4].
+
+[^4]: The R connection is direct: `ellmer` can consume MCP servers, and Posit publishes MCP servers that let agents inspect a running R session. The tools you build and the tools agents use are converging on the same plug.
+
+### Subagents
+
+A subagent is an agent launched *by* an agent: a worker with its own fresh context window, sent off to do a bounded piece of the job (search the codebase, review a diff, write the tests) and report back only its conclusion. Two reasons this matters: **parallelism** (several subagents at once --Antigravity's Manager view is this idea promoted to the main interface) and **context hygiene** (the worker reads two thousand lines so the orchestrator's window only receives three).
+
+### Permissions --the part you should care about most
+
+The harness decides which tool calls execute automatically and which stop and ask you. Reading files? Usually automatic. Editing a file, running a command, touching the network? That should be *your* call --at least until trust is earned. Every serious tool has a dial, from "confirm everything" to fully autonomous, and turning it up is a real risk decision, as OpenClaw's security stories demonstrated.
+
+::: callout-warning
+## Secrets, again
+
+An agent that can read your files can read your secrets. This workshop already made you put API keys in `~/.Renviron` instead of your scripts --that habit now protects you twice: keys stay out of the code the agent edits and commits, and out of the transcripts it generates. Two additional rules: never paste a key into a chat with an agent, and be deliberate about which folders an always-on agent may read. The Spotify-credentials leak of session 2 was made by a human. Agents type faster.
+:::
+
+## PART IV: Working with an agent on data analysis
+
+How does this actually change a week of R work? Some patterns that hold up in practice:
+
+**Give it a verifiable loop.** Agents are at their best when they can *check their own work*: run `quarto render` and read the error, run `testthat` tests, execute the script and inspect the output. "Fix this so `quarto render` succeeds" is a much better task than "fix this", because the finish line is machine-checkable. Structure requests around a command that says pass or fail.
+
+**Delegate the mechanical, keep the judgment.** Excellent agent tasks: converting base-R code to tidyverse style, adding `alt`-text to every chart in a site, upgrading a deprecated API call across twelve files, writing the regex you have rewritten four times. Bad agent tasks: deciding whether the effect you found is real, choosing what the chart should *say*, judging whether a data source is trustworthy. The model manipulates the code; the analysis remains yours.
+
+**Review diffs like you would a colleague's.** The output of an agent session is a set of changes --read them before they become part of your project, exactly as you would with a pull request. This is the answer to the "vibe coding"[^5] worry: code you accept without reading is code you now maintain without understanding. In analysis the stakes are higher than in apps, because wrong code that *runs* produces plausible wrong numbers --the workshop's founding villain.
+
+[^5]: Coined in 2025 for the practice of accepting AI-generated code on vibes --it seems to work-- without reading it. Fun for a throwaway prototype. For analysis whose numbers someone will act on: no.
+
+**Reproducibility is non-negotiable.** The agent may *write* your pipeline, but the pipeline must still run without the agent: `quarto render` from a fresh clone, data pulled from documented sources, seeds set. An analysis that only works because a model babysits it is not reproducible --it's a séance.
+
+::: callout-tip
+## Exercises 🏋️
+
+1.  Install one CLI agent --[Claude Code](https://claude.com/claude-code) or [Codex](https://openai.com/codex/)-- and run it inside your `MyBlog` project from session 1.
+2.  Before asking for anything, write a `CLAUDE.md` (or `AGENTS.md`) for the project: what it is, how to preview it, one convention, one gotcha. Keep it under 20 lines.
+3.  Ask the agent to add a new post that includes a `ggplot2` chart, then **read the diff line by line** before accepting. Count how many choices it made that you would have made differently.
+4.  Ask it to deliberately break the post (remove a closing `:::`), then to fix it using only `quarto render` errors. Watch the loop from Part I happen in front of you.
+5.  Harder: write a small skill --a folder with a `SKILL.md`-- encoding your personal ggplot style, and ask for a chart with and without it.
+:::
+
+## Where this leaves you
+
+You now hold both ends of the leash. From [Talking to machines](/sessions_ai/01-llm/01-llm.qmd), you know how to *build* with models --chat, structured extraction, tools. From this session, you know how to *work* with them --agents, skills, memory, permissions. The common thread of the whole track is the same one that opened this workshop: plain text, version control, reproducibility. Those habits made your work legible to other humans. It turns out they make it legible to machines too, and the machines are now very good colleagues --fast, tireless, occasionally overconfident, and entirely dependent on your judgment for everything that matters.

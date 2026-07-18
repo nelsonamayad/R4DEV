@@ -1,0 +1,22 @@
+---
+title: Feedback 🔁
+subtitle: Now it's my time for me to ask you some questions
+author: "Nelson Amaya"
+description: "Take a minute to tell me what you liked, what you didn't like, and how to improve the workshop. Anonymously, if you'd like."
+categories: [feedback]
+date: "2023-04-03"
+date-modified: last-modified
+image: patrick-bateman.gif
+aliases:
+  - /sessions_tools/11-feedback/11-feedback.html
+---
+
+> *"Failure is a favor to the future"* <br>-- Rita Dove
+
+What did you like? What did you hate? What was helpful? What was not? What can you do after R4DEV?
+
+<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfPUcQaTXDErWgwyVfYf44CDtp0BbdPJB0ESAJAPgGiHrS3iA/viewform?embedded=true" width="100%" height="2668" frameborder="0" marginheight="0" marginwidth="0">
+
+Loading...
+
+</iframe>
