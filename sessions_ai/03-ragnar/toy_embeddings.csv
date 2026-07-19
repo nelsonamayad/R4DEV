@@ -1,0 +1,11 @@
+chunk,d_plots,d_maps,d_text,d_scrape,d_shiny,d_llm,d_stats,d_parallel
+ggplot2 builds plots layer by layer from data aesthetics and geometries,0.9,0.1,0,0,0.1,0,0.2,0
+Choropleth maps color regions by a variable using sf and geom_sf,0.3,0.9,0,0,0,0,0.1,0
+unnest_tokens splits text into one word per row for counting,0,0,0.9,0.1,0,0.2,0.1,0
+rvest scrapes HTML pages with CSS selectors,0,0,0.2,0.9,0,0,0,0
+Shiny pairs a user interface with a reactive server function,0.2,0,0,0,0.9,0.1,0,0
+ellmer calls a large language model as an R function,0,0,0.1,0,0.1,0.9,0,0.1
+The bootstrap resamples data to estimate uncertainty,0.1,0,0,0,0,0,0.9,0.1
+purrr map applies a function to every element of a list,0.1,0,0,0.1,0,0,0.1,0.9
+gganimate turns a static ggplot into an animation with transitions,0.8,0.1,0,0,0,0,0,0.2
+RAG retrieves relevant chunks and hands them to the model as context,0,0,0.3,0.1,0,0.8,0.1,0

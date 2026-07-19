@@ -2,7 +2,7 @@
 title: Do it well, do it fast 🏎️
 subtitle: Functional programming with purrr, parallelized with mirai
 author: "Nelson Amaya"
-description: "map() replaces the for-loop; mirai replaces 'one core at a time'. Learn purrr's functional style, then parallelize it with a single wrapper function -- no rewrite required."
+description: "Functions instead of loops; do multiple things at the same time. Learn purrr's functional style, then parallelize it with a single wrapper function."
 categories:
   - purrr
   - functional programming
@@ -22,7 +22,14 @@ aliases:
   - /sessions_workshop/12-parallel/12-parallel.html
 citation:
   url: https://r4dev.netlify.app/sessions_workshop/09-parallel/09-parallel
+format: live-html
+engine: knitr
+webr:
+  packages:
+    - purrr
 ---
+
+{{< include /_extensions/r-wasm/live/_knitr.qmd >}}
 
 > *"We build our computer (systems) the way we build our cities: over time, without a plan, on top of ruins."* <br>--Ellen Ullman
 
@@ -227,27 +234,100 @@ The AI track's `ellmer::parallel_chat_structured()` (from [Talking to machines](
 `mirai` also ships event-driven promises and is the recommended async backend for Shiny's `ExtendedTask` --meaning a slow computation (a big model fit, a batch API call) can run in the background *without freezing the app* for every other user. That's a production-Shiny concern, not something we build out today, but it's the same `daemons()`/`mirai()` machinery from PART III underneath.
 :::
 
-## Practice
+## 🏗 Practice 9: Map first, parallelize second {.unnumbered}
 
-::: {.callout-note icon="false" collapse="true"}
+The purrr half of this session runs right here in your browser -- the mirai half needs real CPU cores, so it waits for your own R session in the Advanced tier.
+
+::::: {.callout-note icon="false" collapse="true"}
 # Basic
 
-- Rewrite one `for` loop from an earlier session (session 2's API calls, or session 6's scraping) as a `map()` call.
-- Time the sequential PART I example again, but with 6 groups instead of 3 (hint: you'll need a bigger dataset, or repeat the same groups) --does the gap between sequential and parallel grow?
-:::
+Rewrite this for-loop as a single typed `map` call. The loop is shown in comments -- fill in the two blanks so `results` is a plain numeric vector.
 
-::: {.callout-important icon="false" collapse="true"}
+```{webr}
+#| exercise: ex_w09_basic
+library(purrr)
+
+# The loop you'd write in another language:
+# results <- numeric(5)
+# for (i in 1:5) results[i] <- sqrt(i)
+
+results <- ______(1:5, \(x) ______)
+results
+```
+
+:::: {.hint exercise="ex_w09_basic"}
+::: {.callout-note collapse="false"}
+## Hint
+
+You promised a numeric vector, so you want the typed sibling of `map()` that always returns doubles.
+:::
+::::
+
+:::: {.solution exercise="ex_w09_basic"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```r
+library(purrr)
+
+results <- map_dbl(1:5, \(x) sqrt(x))
+results
+```
+:::
+::::
+:::::
+
+::::: {.callout-important icon="false" collapse="true"}
 # Intermediate
+
+Reproduce the split-then-map pattern from PART I, but split `mtcars` by **gear** instead of cylinders, and pull out each model's R². Two blanks: the splitting variable and the typed map that plucks `"r.squared"`.
+
+```{webr}
+#| exercise: ex_w09_inter
+library(purrr)
+
+models <- mtcars |>
+  split(mtcars$______) |>
+  map(\(df) lm(mpg ~ wt, data = df))
+
+models |> map(summary) |> ______("r.squared")
+```
+
+:::: {.hint exercise="ex_w09_inter"}
+::: {.callout-note collapse="false"}
+## Hint
+
+`split()` takes the grouping column; the session's own example ends by plucking a named element out of each summary with a typed map.
+:::
+::::
+
+:::: {.solution exercise="ex_w09_inter"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```r
+library(purrr)
+
+models <- mtcars |>
+  split(mtcars$gear) |>
+  map(\(df) lm(mpg ~ wt, data = df))
+
+models |> map(summary) |> map_dbl("r.squared")
+```
+:::
+::::
+:::::
+
+::::: {.callout-caution icon="false" collapse="true"}
+# Advanced
+
+Parallelism needs real cores -- these run in your own R session:
 
 - Take one of session 6's scraping functions (fetching one page per artist/URL) and parallelize the fetch with `daemons()` + `in_parallel()`. Time both versions --I/O-bound tasks like network requests often parallelize *better* than CPU-bound ones, since the wait, not the computation, is what overlaps.
 - Deliberately break the self-containment rule (reference a variable from your global environment without passing it to `in_parallel()`) and read the resulting error --this is the error you want to recognize instantly in the wild.
-:::
-
-::: {.callout-caution icon="false" collapse="true"}
-# Advanced
-
+- Time the sequential PART I example again with 6 groups instead of 3 --does the gap between sequential and parallel grow?
 - Read `mirai`'s docs on remote daemons (SSH, or an HPC scheduler like Slurm) --the `purrr` code you write doesn't change at all; only the `daemons()` call does. What does that separation buy you?
-:::
+:::::
 
 ## Key takeaways
 

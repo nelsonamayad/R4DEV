@@ -234,6 +234,31 @@ The content will be hidden when you render HTML output
 
 ![That's all (for now)](mic-drop.gif){width="150%"}
 
+## 🏗 Practice 8: Report yourself {.unnumbered}
+
+Parameterised reports only click once you've rendered a batch yourself -- everything here runs in your own R session with the RetractionWatch files from above.
+
+::: {.callout-note icon="false" collapse="true"}
+# Basic
+
+-   Download and unzip the RetractionWatch files (button above), open `retractionwatch_reports.qmd`, and render it as-is -- you just built the France report
+-   Change the `country` parameter in the YAML to another country and render again, without touching any code
+:::
+
+::: {.callout-important icon="false" collapse="true"}
+# Intermediate
+
+-   Add a second parameter, `year_from`, that drops all retractions before a chosen year, and use it in the filtering code -- render two versions of the same country with different cutoffs
+-   Set up a Zotero library with three papers you like, export the `.bib` file, and cite all three in a report of your own
+:::
+
+::: {.callout-caution icon="false" collapse="true"}
+# Advanced
+
+-   Wrap `quarto::quarto_render()` in a function of your own (as done above) and batch-render reports for **five** countries with `purrr::map()` or `purrr::walk()`
+-   Render the same report to a second format (Word or PDF), hiding the interactive elements with `{.content-hidden when-format="..."}` conditional blocks
+:::
+
 ## Key takeaways
 
 - Zotero plus a Quarto `bibliography:` field turns citation management from copy-paste into a one-click insert.

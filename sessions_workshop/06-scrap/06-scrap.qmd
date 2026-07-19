@@ -21,7 +21,15 @@ editor_options:
   chunk_output_type: console
 citation:
   url: https://r4dev.netlify.app/sessions_workshop/06-scrap/06-scrap
+format: live-html
+engine: knitr
+webr:
+  packages:
+    - rvest
+    - dplyr
 ---
+
+{{< include /_extensions/r-wasm/live/_knitr.qmd >}}
 
 > *If it doesn't exist on the internet, it doesn't exist.*<br>--Kenneth Goldsmith
 
@@ -437,21 +445,123 @@ You may find old tutorials using **`RSelenium`** for this. It works, but it is a
 
 ## 🏗 Practice 6: Scrape {.unnumbered}
 
-::: {.callout-note icon="false" collapse="true"}
+Browsers block cross-site scraping (the same rule that protects you online, called CORS), so the in-browser exercises parse HTML handed to you as a string -- the selector skills are identical. Real scraping waits in the Advanced tier.
+
+::::: {.callout-note icon="false" collapse="true"}
 # Basic
 
--   Find a website with info you want to bring to R
--   Visualise the data (plot, map, etc.)
--   Scrape any Wikipedia table and plot the result in R
--   Scrape all ten quotes from the JavaScript sandbox with `read_html_live()`, including the tags of each quote
-:::
+Extract the text of every quote from this mini page -- same structure as the quotes sandbox above. One blank: the CSS selector.
 
-::: {.callout-important icon="false" collapse="true"}
+```{webr}
+#| exercise: ex_w06_basic
+library(rvest)
+
+page <- '
+<html><body>
+  <div class="quote">
+    <p class="text">Data is the new oil.</p>
+    <span class="author">Clive Humby</span>
+  </div>
+  <div class="quote">
+    <p class="text">In God we trust. All others must bring data.</p>
+    <span class="author">W. Edwards Deming</span>
+  </div>
+  <div class="quote">
+    <p class="text">Without data you are just another person with an opinion.</p>
+    <span class="author">Unknown</span>
+  </div>
+</body></html>'
+
+read_html(page) |>
+  html_elements("______") |>
+  html_text2()
+```
+
+:::: {.hint exercise="ex_w06_basic"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Chain two class selectors: the container class, a space, then the class of the element holding the text -- exactly the selector the session used on the quotes sandbox.
+:::
+::::
+
+:::: {.solution exercise="ex_w06_basic"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```r
+read_html(page) |>
+  html_elements(".quote .text") |>
+  html_text2()
+```
+
+Try `".quote .author"` next to grab who said each one.
+:::
+::::
+:::::
+
+::::: {.callout-important icon="false" collapse="true"}
 # Intermediate
 
--   Scrape the lyrics for [Bob Dylan](https://www.bobdylan.com/songs/), [Pearl Jam](https://pearljam.com/music/songs) or another artist you can find online. Re-create the sentiment analysis workflow for their lyrics.
--   The U2 page with lyrics also shows every time each song has been played during a tour since the late 80s. Scrap the tour dates and visualise song popularity through time.
+Whenever what you want *looks like a table*, skip the selector hunt. Two blanks: the function that grabs the table node, and the shortcut that turns it into a tibble.
+
+```{webr}
+#| exercise: ex_w06_inter
+library(rvest)
+library(dplyr)
+
+page <- '
+<html><body>
+<h2>U2 at the top of the Billboard 200</h2>
+<table class="wikitable">
+  <tr><th>Album</th><th>Year</th><th>Weeks</th></tr>
+  <tr><td>The Joshua Tree</td><td>1987</td><td>9</td></tr>
+  <tr><td>Rattle and Hum</td><td>1988</td><td>6</td></tr>
+  <tr><td>Achtung Baby</td><td>1991</td><td>1</td></tr>
+  <tr><td>Zooropa</td><td>1993</td><td>2</td></tr>
+  <tr><td>Pop</td><td>1997</td><td>1</td></tr>
+</table>
+</body></html>'
+
+read_html(page) |>
+  ______("table.wikitable") |>
+  ______() |>
+  arrange(desc(Weeks))
+```
+
+:::: {.hint exercise="ex_w06_inter"}
+::: {.callout-note collapse="false"}
+## Hint
+
+The session used this exact pair on a real Wikipedia table: one function selects the `<table>` element, its companion parses rows and columns into a tibble.
 :::
+::::
+
+:::: {.solution exercise="ex_w06_inter"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```r
+read_html(page) |>
+  html_element("table.wikitable") |>
+  html_table() |>
+  arrange(desc(Weeks))
+```
+:::
+::::
+:::::
+
+::::: {.callout-caution icon="false" collapse="true"}
+# Advanced
+
+Real scraping needs a real network connection and your own R session:
+
+-   Find a website with info you want to bring to R, scrape it, and visualise the data (plot, map, etc.).
+-   Scrape any Wikipedia table and plot the result in R.
+-   Scrape all ten quotes from the JavaScript sandbox with `read_html_live()`, including the tags of each quote.
+-   Scrape the lyrics for [Bob Dylan](https://www.bobdylan.com/songs/), [Pearl Jam](https://pearljam.com/music/songs) or another artist you can find online. Re-create the sentiment analysis workflow for their lyrics.
+-   The U2 page with lyrics also shows every time each song has been played during a tour since the late 80s. Scrape the tour dates and visualise song popularity through time.
+:::::
 
 ## Key takeaways
 

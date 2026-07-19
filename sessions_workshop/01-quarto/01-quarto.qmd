@@ -138,21 +138,33 @@ Bookmark the [Quarto Guide](https://quarto.org/docs/guide/) and [Quarto Referenc
 
 ## 🏗 Practice 1: Create a Quarto blog {.unnumbered}
 
-This is the first Practice. You'll have to publish all practice exercises for each session in your new blog.
+This is the first Practice, and it builds the home for all the others: you'll publish every session's practice exercises in the blog you create here.
 
-::: {.callout-note icon="false" collapse="false"}
+::: {.callout-note icon="false" collapse="true"}
 # Basic
-- Create a free **[Netlify](https://www.netlify.com/)** account
-- Create and publish your Quarto blog. The URL should be **http://r4dev-yourname.netlify.app**. In this blog you will publish all practice exercises
-- Choose and apply the base [Bootswatch theme](https://bootswatch.com/) for your blog
+
+- Create your Quarto blog project in RStudio and preview it locally with `quarto preview`
+- Add a new post that includes at least one executed R code chunk
+- Customise the About page of your Quarto blog (Tip: [Check the About page in Quarto](https://quarto.org/docs/websites/website-about.html))
+:::
+
+::: {.callout-important icon="false" collapse="true"}
+# Intermediate
+
+- Choose and apply a base [Bootswatch theme](https://bootswatch.com/) for your blog
 - Enable [**Hypothesis**](https://web.hypothes.is/start/) commenting in your blog by adding `comments: hypothesis: true` in the YML (remember indentation!). Then create a group in Hypothesis with your name and share the link with me, so I can comment your site and provide suggestions.
 - In your YML under the `html` option, include `code-tools: true`
 
 Your YML file should look like this, in this case, using a Bootswatch theme called [journal](https://bootswatch.com/journal/):
 
 ![Example `_quarto.yml` with the journal Bootswatch theme, Hypothesis comments enabled, and code-tools turned on](practice-yml.png)
+:::
 
-- Customise the About page of your Quarto blog (Tip: [Check the About page in Quarto](https://quarto.org/docs/websites/website-about.html))
+::: {.callout-caution icon="false" collapse="true"}
+# Advanced
+
+- Create a free **[Netlify](https://www.netlify.com/)** account and publish your blog. The URL should be **http://r4dev-yourname.netlify.app** -- this is where you will publish all practice exercises
+- Rename one of your posts' folders, then add an `aliases:` entry to its YAML so the old URL still redirects ([docs](https://quarto.org/docs/websites/website-navigation.html#redirects)) -- published links should never break
 :::
 
 ## Key takeaways

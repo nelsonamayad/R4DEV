@@ -22,7 +22,18 @@ editor_options:
   chunk_output_type: console
 citation:
   url: https://r4dev.netlify.app/sessions_workshop/02-plots/02-plots
+format: live-html
+engine: knitr
+webr:
+  packages:
+    - dplyr
+    - ggplot2
+    - tidyr
+resources:
+  - spotify_favorites_archive.csv
 ---
+
+{{< include /_extensions/r-wasm/live/_knitr.qmd >}}
 
 > "*Truth is much too complicated to allow anything but approximations.”*<br>--John von Neumann
 
@@ -796,19 +807,105 @@ girafe(ggobj = spotify_covers_gg)
 
 ## 🏗 Practice 2: Music {.unnumbered}
 
-::: {.callout-note icon="false" collapse="true"}
+Time to make your own plots -- the Basic and Intermediate exercises run right here in your browser, on the same Spotify snapshot the session used.
+
+::::: {.callout-note icon="false" collapse="true"}
 # Basic
 
--   Use the Open-Meteo archive API to download daily temperatures for **your** home town and plot the trend for your birth month
--   Using `spotify_favorites_archive.csv`, compare the song valence across the 8 artists with boxplots. Describe the result
--   Import an indicator from OWID and plot it
-:::
+Compare song *valence* across the 8 artists with boxplots. Fill in the two blanks in `aes()`, then describe what you see: who records the happiest songs?
 
-::: {.callout-important icon="false" collapse="true"}
+```{webr}
+#| exercise: ex_w02_basic
+library(ggplot2)
+
+spotify <- read.csv("spotify_favorites_archive.csv")
+
+ggplot(spotify, aes(x = ______, y = ______)) +
+  geom_boxplot()
+```
+
+:::: {.hint exercise="ex_w02_basic"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Map the numeric feature you want to compare to one axis and `artist` to the other -- with 8 artist names, putting them on the `y` axis keeps the labels readable.
+:::
+::::
+
+:::: {.solution exercise="ex_w02_basic"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```r
+library(ggplot2)
+
+spotify <- read.csv("spotify_favorites_archive.csv")
+
+ggplot(spotify, aes(x = valence, y = artist)) +
+  geom_boxplot()
+```
+:::
+::::
+:::::
+
+::::: {.callout-important icon="false" collapse="true"}
 # Intermediate
 
--   Look for a dataset from the [**RDataset collection**](https://vincentarelbundock.github.io/Rdatasets/articles/data.html) and create two side-by-side visualisations using **`ggiraph`**
+Reproduce the Radiohead pattern from the session -- `pivot_longer()` + `facet_wrap()` -- on the snapshot: stack `valence` and `energy` into one column, then compare their distributions by artist in side-by-side facets.
+
+```{webr}
+#| exercise: ex_w02_inter
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+spotify <- read.csv("spotify_favorites_archive.csv")
+
+spotify |>
+  pivot_longer(cols = c(______, ______), names_to = "metric") |>
+  ggplot(aes(x = value, fill = artist)) +
+  geom_density(alpha = 0.5) +
+  facet_wrap(~______)
+```
+
+:::: {.hint exercise="ex_w02_inter"}
+::: {.callout-note collapse="false"}
+## Hint
+
+`pivot_longer()` needs the two numeric columns you want to stack, and `facet_wrap()` takes the new column that `names_to` created.
 :::
+::::
+
+:::: {.solution exercise="ex_w02_inter"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```r
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+spotify <- read.csv("spotify_favorites_archive.csv")
+
+spotify |>
+  pivot_longer(cols = c(valence, energy), names_to = "metric") |>
+  ggplot(aes(x = value, fill = artist)) +
+  geom_density(alpha = 0.5) +
+  facet_wrap(~metric)
+```
+:::
+::::
+:::::
+
+::::: {.callout-caution icon="false" collapse="true"}
+# Advanced
+
+These need live network access and your own R session:
+
+-   Use the Open-Meteo archive API to download daily temperatures for **your** home town and plot the trend for your birth month.
+-   Import an indicator from OWID (append `.csv` to any grapher URL) and plot it.
+-   Pick a dataset from the [**RDataset collection**](https://vincentarelbundock.github.io/Rdatasets/articles/data.html) and create two side-by-side interactive visualisations using **`ggiraph`**.
+:::::
 
 ## Key takeaways
 

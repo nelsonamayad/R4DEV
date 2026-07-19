@@ -21,7 +21,16 @@ prerequisites: "Everything in its right place"
 image: map-fractal.gif
 citation:
   url: https://r4dev.netlify.app/sessions_workshop/05-maps/05-maps
+format: live-html
+engine: knitr
+webr:
+  packages:
+    - sf
+    - dplyr
+    - ggplot2
 ---
+
+{{< include /_extensions/r-wasm/live/_knitr.qmd >}}
 
 > *Drug abuse has become rampant in America and may be the worst the country has ever experienced.*<br>--Angus Deaton & Anne Case
 
@@ -818,23 +827,110 @@ Even though this particular application of rayshader is not too useful, for topo
 
 ## 🏗 Practice 5: Map it {.unnumbered}
 
-::: {.callout-note icon="false" collapse="true"}
+Your first two maps draw themselves right here in the browser, on the North Carolina counties dataset that ships with **`sf`**. The heavier cartography waits for your own R session.
+
+::::: {.callout-note icon="false" collapse="true"}
 # Basic
 
--   Download the geographical data for your country of origin
--   Look up any geographical variable for your country
--   Make a static heat map out of it and describe it
-:::
+Draw a choropleth of births per county (1974) in two blanks: the geometry that knows how to draw sf objects, and the aesthetic that fills each county with its value.
 
-::: {.callout-important icon="false" collapse="true"}
+```{webr}
+#| exercise: ex_w05_basic
+library(sf)
+library(ggplot2)
+
+nc <- read_sf(system.file("shape/nc.shp", package = "sf"))
+
+ggplot(nc) +
+  ______(aes(______ = BIR74))
+```
+
+:::: {.hint exercise="ex_w05_basic"}
+::: {.callout-note collapse="false"}
+## Hint
+
+The sf-aware geometry is the one the session used for every static map, and a choropleth maps a variable to the *fill* of each polygon (color would only paint the borders).
+:::
+::::
+
+:::: {.solution exercise="ex_w05_basic"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```r
+library(sf)
+library(ggplot2)
+
+nc <- read_sf(system.file("shape/nc.shp", package = "sf"))
+
+ggplot(nc) +
+  geom_sf(aes(fill = BIR74))
+```
+:::
+::::
+:::::
+
+::::: {.callout-important icon="false" collapse="true"}
 # Intermediate
 
--   Make a choropleths **`leaflet`** map of the variable you chose in the previous exercise and use **`ggiraph`** to plot the data next to the map
--   Alaska and Hawaii are unfairly excluded from US maps because of their location. Manipulate the coordinates of each state to move them to a place where you can visualise them right next to the other states.
--   Create a **`rayshader`** elevation map of your country, using data retrieved from the `elevation_30s()` function in the **`geodata`**, and then `geom_spatraster()` from **`tidyterra`** to plot in `ggplot()`. (Tip: Use the `scale_fill_hypso_c()` layer)
--   Build an interactive world map for any variable available at a country level using an **`sf`** map and **`ggiraph`**
-- Check this [blog post](https://justjensen.co/making-population-density-maps-with-rayrender-in-r/) and create a high-resolution population density map for a country.
+Raw counts mislead -- big counties have more of everything. Map the *rate* of SIDS cases per 1,000 births instead, with a proper sequential palette and no distracting axes. Three blanks: the rate, the viridis fill scale, and the theme that removes the graticule.
+
+```{webr}
+#| exercise: ex_w05_inter
+library(sf)
+library(dplyr)
+library(ggplot2)
+
+nc <- read_sf(system.file("shape/nc.shp", package = "sf"))
+
+nc |>
+  mutate(sids_rate = 1000 * ______ / BIR74) |>
+  ggplot() +
+  geom_sf(aes(fill = sids_rate)) +
+  ______() +
+  ______() +
+  labs(fill = "SIDS per\n1,000 births")
+```
+
+:::: {.hint exercise="ex_w05_inter"}
+::: {.callout-note collapse="false"}
+## Hint
+
+The SIDS count column for the same period is `SID74`. The continuous viridis scale is `scale_fill_viridis_c`, and the theme that strips everything but the map itself is `theme_void`.
 :::
+::::
+
+:::: {.solution exercise="ex_w05_inter"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```r
+nc |>
+  mutate(sids_rate = 1000 * SID74 / BIR74) |>
+  ggplot() +
+  geom_sf(aes(fill = sids_rate)) +
+  scale_fill_viridis_c() +
+  theme_void() +
+  labs(fill = "SIDS per\n1,000 births")
+```
+
+Compare it to the raw `SID74` map -- the counties that light up are not the same ones.
+:::
+::::
+:::::
+
+::::: {.callout-caution icon="false" collapse="true"}
+# Advanced
+
+Real cartography needs downloads, browsers and GPUs -- your own R session:
+
+-   Download the geographical data for your country of origin, look up any geographical variable for it, and make a static heat map. Describe it.
+-   Make a choropleth **`leaflet`** map of the variable you chose and use **`ggiraph`** to plot the data next to the map.
+-   Alaska and Hawaii are unfairly excluded from US maps because of their location. Manipulate the coordinates of each state to move them to a place where you can visualise them right next to the other states.
+-   Create a **`rayshader`** elevation map of your country, using data retrieved from the `elevation_30s()` function in the **`geodata`** package, and then `geom_spatraster()` from **`tidyterra`** to plot in `ggplot()`. (Tip: Use the `scale_fill_hypso_c()` layer)
+-   Build an interactive world map for any variable available at a country level using an **`sf`** map and **`ggiraph`**.
+-   Check this [blog post](https://justjensen.co/making-population-density-maps-with-rayrender-in-r/) and create a high-resolution population density map for a country.
+:::::
 
 ## Key takeaways
 

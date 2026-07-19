@@ -25,7 +25,18 @@ editor_options:
 bibliography: references.bib
 citation:
   url: https://r4dev.netlify.app/sessions_workshop/03-text/03-text
+format: live-html
+engine: knitr
+webr:
+  packages:
+    - dplyr
+    - tidyr
+    - ggplot2
+    - tidytext
+    - janeaustenr
 ---
+
+{{< include /_extensions/r-wasm/live/_knitr.qmd >}}
 
 > "*For every complex problem there is an answer that is clear, simple, and wrong.*" <br> --H.L. Mencken
 
@@ -895,26 +906,129 @@ gutenbergr::gutenberg_download(gutenberg_id = 9662, mirror = "http://mirrors.xmi
 56. Graph the nodes and labels them
 57. Clean up with theme made for networks and put a color scale on the connections
 
-## 🏗️ Practice 3: Project Gutenberg {.unnumbered}
+## 🏗 Practice 3: Project Gutenberg {.unnumbered}
 
-::: {.callout-note icon="false" collapse="true"}
+The core tokenise-count-plot loop runs right here in your browser on Jane Austen's novels; the Gutenberg downloads wait for your own R session.
+
+::::: {.callout-note icon="false" collapse="true"}
 # Basic
 
--   Install the [`gutenbergr`](https://cran.r-project.org/web/packages/gutenbergr/vignettes/intro.html) package `install.packages("gutenbergr")`
--   Pick a book from the library and download it to R
--   Carry out whichever sentiment analysis you prefer for the book and plot it
-:::
+Find the ten most common meaningful words in *Pride & Prejudice*. Two blanks: the function that turns lines of text into one-word-per-row, and the stopword table to `anti_join()` away.
 
-::: {.callout-important icon="false" collapse="true"}
+```{webr}
+#| exercise: ex_w03_basic
+library(dplyr)
+library(tidytext)
+library(janeaustenr)
+library(ggplot2)
+
+austen_books() |>
+  filter(book == "Pride & Prejudice") |>
+  ______(word, text) |>
+  anti_join(______, by = "word") |>
+  count(word, sort = TRUE) |>
+  slice_head(n = 10) |>
+  ggplot(aes(x = n, y = reorder(word, n))) +
+  geom_col() +
+  labs(y = NULL)
+```
+
+:::: {.hint exercise="ex_w03_basic"}
+::: {.callout-note collapse="false"}
+## Hint
+
+The tokenizer is the very first tidytext function this session taught, and tidytext ships a built-in data frame of English stopwords called `stop_words`.
+:::
+::::
+
+:::: {.solution exercise="ex_w03_basic"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```r
+library(dplyr)
+library(tidytext)
+library(janeaustenr)
+library(ggplot2)
+
+austen_books() |>
+  filter(book == "Pride & Prejudice") |>
+  unnest_tokens(word, text) |>
+  anti_join(stop_words, by = "word") |>
+  count(word, sort = TRUE) |>
+  slice_head(n = 10) |>
+  ggplot(aes(x = n, y = reorder(word, n))) +
+  geom_col() +
+  labs(y = NULL)
+```
+:::
+::::
+:::::
+
+::::: {.callout-important icon="false" collapse="true"}
 # Intermediate
 
--   Carry our sentiment analysis for a book of your choice using all sentiment lexicons available in the `get_sentiments()` function: **AFINN**, **NRC**, **Bing** and **loughran**. Describe each result and the differences between them.
--   Write a function that downloads and cleans the text of any book in Project Gutenberg
--   Write a function that does sentiment analysis of any book in Project Gutenberg
-:::
+Words rarely travel alone. Tokenise *Emma* into **bigrams** (pairs of consecutive words), split each pair, drop the pairs where either half is a stopword, and count what remains. Two blanks in the tokenizer call.
 
-::: {.callout-caution icon="false" collapse="true"}
-# Solution:
+```{webr}
+#| exercise: ex_w03_inter
+library(dplyr)
+library(tidyr)
+library(tidytext)
+library(janeaustenr)
+
+austen_books() |>
+  filter(book == "Emma") |>
+  unnest_tokens(bigram, text, token = "______", n = ______) |>
+  separate(bigram, into = c("word1", "word2"), sep = " ") |>
+  filter(!word1 %in% stop_words$word,
+         !word2 %in% stop_words$word) |>
+  count(word1, word2, sort = TRUE) |>
+  slice_head(n = 10)
+```
+
+:::: {.hint exercise="ex_w03_inter"}
+::: {.callout-note collapse="false"}
+## Hint
+
+`unnest_tokens()` speaks more than words: its `token =` argument accepts `"ngrams"`, and `n =` says how many words per gram.
+:::
+::::
+
+:::: {.solution exercise="ex_w03_inter"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```r
+library(dplyr)
+library(tidyr)
+library(tidytext)
+library(janeaustenr)
+
+austen_books() |>
+  filter(book == "Emma") |>
+  unnest_tokens(bigram, text, token = "ngrams", n = 2) |>
+  separate(bigram, into = c("word1", "word2"), sep = " ") |>
+  filter(!word1 %in% stop_words$word,
+         !word2 %in% stop_words$word) |>
+  count(word1, word2, sort = TRUE) |>
+  slice_head(n = 10)
+```
+:::
+::::
+:::::
+
+::::: {.callout-caution icon="false" collapse="true"}
+# Advanced
+
+These need live downloads and your own R session:
+
+-   Install the [`gutenbergr`](https://cran.r-project.org/web/packages/gutenbergr/vignettes/intro.html) package `install.packages("gutenbergr")`, pick a book from the library and download it to R, then carry out whichever sentiment analysis you prefer and plot it.
+-   Carry out sentiment analysis for a book of your choice using all sentiment lexicons available in the `get_sentiments()` function: **AFINN**, **NRC**, **Bing** and **loughran**. Describe each result and the differences between them.
+-   Write a function that downloads and cleans the text of any book in Project Gutenberg, and another that does sentiment analysis of any book in Project Gutenberg.
+
+::: {.callout-tip collapse="true"}
+## Solution sketch
 
 ```{r 2.hw1_gutenbergr}
 #| eval: false
@@ -998,6 +1112,8 @@ book_sentiments <- function(author_name,book_name) {
 book_sentiments("Hume, David","A Treatise of Human Nature")
 
 ```
+:::
+:::::
 
 ## Key takeaways
 

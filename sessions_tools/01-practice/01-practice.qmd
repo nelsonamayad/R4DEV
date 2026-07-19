@@ -2,7 +2,7 @@
 title: Practice, test 💪
 subtitle: "If you don't practice, you won't learn anything"
 author: "Nelson Amaya"
-description: "Test your code directly in the R4DEV blog, enabled thanks to the quarto-live extension: R running in your browser, no installation needed."
+description: "Every session's practice section in one index, plus a taste of in-browser R: no installation needed, thanks to the quarto-live extension."
 categories:
   - webr
   - test
@@ -39,7 +39,7 @@ ggplot(data = diamonds, aes(x = carat, y = price, color = cut)) +
 Complete the code to count how many diamonds there are for each `cut`, from most to least common. If you get stuck, check the hint --and only then the solution.
 
 ```{webr}
-#| exercise: ex_count
+#| exercise: ex_sampler
 library(dplyr)
 
 diamonds |>
@@ -47,7 +47,7 @@ diamonds |>
   arrange(______)
 ```
 
-::: {.hint exercise="ex_count"}
+::: {.hint exercise="ex_sampler"}
 ::: {.callout-note collapse="false"}
 ## Hint
 
@@ -55,7 +55,7 @@ diamonds |>
 :::
 :::
 
-::: {.solution exercise="ex_count"}
+::: {.solution exercise="ex_sampler"}
 ::: {.callout-tip collapse="false"}
 ## Solution
 
@@ -68,3 +68,34 @@ diamonds |>
 ```
 :::
 :::
+
+# Every practice, in one place
+
+Exercises like the one above now live at the end of their own session, next to the material they test. Sessions marked **▶ in-browser** run their Basic and Intermediate exercises right on the page, just like this one.
+
+## Build with R
+
+- [Practice 1: Create a Quarto blog](/sessions_workshop/01-quarto/01-quarto.qmd#practice-1-create-a-quarto-blog)
+- [Practice 2: Music](/sessions_workshop/02-plots/02-plots.qmd#practice-2-music) ▶ in-browser
+- [Practice 3: Project Gutenberg](/sessions_workshop/03-text/03-text.qmd#practice-3-project-gutenberg) ▶ in-browser
+- [Practice 4: Make it move](/sessions_workshop/04-animate/04-animate.qmd#practice-4-make-it-move) ▶ in-browser
+- [Practice 5: Map it](/sessions_workshop/05-maps/05-maps.qmd#practice-5-map-it) ▶ in-browser
+- [Practice 6: Scrape](/sessions_workshop/06-scrap/06-scrap.qmd#practice-6-scrape) ▶ in-browser
+- [Practice 7: Shine](/sessions_workshop/07-shiny/07-shiny.qmd#practice-7-shine)
+- [Practice 8: Report yourself](/sessions_workshop/08-reports/08-reports.qmd#practice-8-report-yourself)
+- [Practice 9: Map first, parallelize second](/sessions_workshop/09-parallel/09-parallel.qmd#practice-9-map-first-parallelize-second) ▶ in-browser
+
+## Work with AI
+
+- [Practice 1: Talk back](/sessions_ai/01-llm/01-llm.qmd#practice-1-talk-back) ▶ in-browser
+- [Practice 2: Ship it](/sessions_ai/02-llm-apps/02-llm-apps.qmd#practice-2-ship-it)
+- [Practice 3: Retrieve something real](/sessions_ai/03-ragnar/03-ragnar.qmd#practice-3-retrieve-something-real) ▶ in-browser
+- [Practice 4: Hand over the keyboard](/sessions_ai/04-agentic/04-agentic.qmd#practice-4-hand-over-the-keyboard)
+
+## Think with data
+
+- [Embrace the noise -- exercises](/sessions_thinking/01-uncertainty/01-uncertainty.qmd)
+- [There is only one test -- exercises](/sessions_thinking/02-inference/02-inference.qmd)
+- [All models are wrong -- exercises](/sessions_thinking/03-regression/03-regression.qmd)
+- [Draw your assumptions -- exercises](/sessions_thinking/04-causal/04-causal.qmd)
+- [Think Bayes -- practice](/sessions_thinking/05-bayes/05-bayes.qmd#practice-13-update-yourself) ▶ in-browser

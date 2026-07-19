@@ -23,7 +23,17 @@ aliases:
   - /sessions_workshop/09-llm/09-llm.html
 citation:
   url: https://r4dev.netlify.app/sessions_ai/01-llm/01-llm
+format: live-html
+engine: knitr
+webr:
+  packages:
+    - dplyr
+    - ggplot2
+resources:
+  - llm_mood_scores.csv
 ---
+
+{{< include /_extensions/r-wasm/live/_knitr.qmd >}}
 
 > *"The question of whether a computer can think is no more interesting than the question of whether a submarine can swim."*<br>--Edsger W. Dijkstra
 
@@ -266,27 +276,126 @@ assistant$chat("Is it warmer right now in Kyoto or in Paris? Answer in one sente
 Providers charge per **token** (~¾ of a word). Everything executed while writing this session --every example, including scoring 48 songs-- cost **under two US cents** on a small model. The free Gemini tier covers the whole session comfortably. Big models for hard problems, small models for bulk work: choosing the right size is a real skill.
 :::
 
-## 🏗 Practice 9: Talk back {.unnumbered}
+## 🏗 Practice 1: Talk back {.unnumbered}
 
-::: {.callout-note icon="false" collapse="true"}
+The browser can't hold an API key, but it can hold data an LLM already produced -- the session's own 48 mood scores. Interrogate them here; talk to the model itself in the Advanced tier.
+
+::::: {.callout-note icon="false" collapse="true"}
 # Basic
 
--   Create a chat object with a system prompt that makes the model answer like a pirate, and ask it about the tidyverse
--   Change the system prompt to "Answer only with valid R code, no prose" and ask it to plot `diamonds`. Run what it returns. Would you have written it the same way?
-:::
+Which artist did the model misread the most? Group the mood scores and rank artists by the average gap between Spotify's valence and the LLM's guess. Two blanks: the grouping column and the LLM's score column.
 
-::: {.callout-important icon="false" collapse="true"}
+```{webr}
+#| exercise: ex_a01_basic
+library(dplyr)
+
+mood_scores <- read.csv("llm_mood_scores.csv")
+
+mood_scores |>
+  group_by(______) |>
+  summarise(
+    spotify = mean(valence),
+    llm     = mean(______),
+    gap     = mean(abs(valence - llm_mood))
+  ) |>
+  arrange(desc(gap))
+```
+
+:::: {.hint exercise="ex_a01_basic"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Look at the CSV's columns: `artist`, `track_name`, `valence`, `llm_mood`. You're grouping by who sings, and averaging what the machine guessed.
+:::
+::::
+
+:::: {.solution exercise="ex_a01_basic"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```r
+library(dplyr)
+
+mood_scores <- read.csv("llm_mood_scores.csv")
+
+mood_scores |>
+  group_by(artist) |>
+  summarise(
+    spotify = mean(valence),
+    llm     = mean(llm_mood),
+    gap     = mean(abs(valence - llm_mood))
+  ) |>
+  arrange(desc(gap))
+```
+:::
+::::
+:::::
+
+::::: {.callout-important icon="false" collapse="true"}
 # Intermediate
 
--   Take three paragraphs from any news article and design a `type_object()` that extracts *who did what, where, when*. Where does the model struggle?
--   Re-run the mood-scoring experiment, but give the model the **lyrics' first line** instead of the title (scrape them --session 6 taught you how). Does the correlation with valence improve?
-:::
+Rebuild the session's disagreement plot, labelling only the biggest misses with the `slice_max()`-inside-a-layer trick. Two blanks: the slicing function and how many outliers to label.
 
-::: {.callout-caution icon="false" collapse="true"}
+```{webr}
+#| exercise: ex_a01_inter
+library(dplyr)
+library(ggplot2)
+
+mood_scores <- read.csv("llm_mood_scores.csv")
+
+mood_scores |>
+  ggplot(aes(x = valence, y = llm_mood)) +
+  geom_abline(linetype = "dashed", color = "grey60") +
+  geom_point(aes(color = artist), size = 2, show.legend = FALSE) +
+  geom_text(
+    data = \(d) ______(d, abs(valence - llm_mood), n = ______),
+    aes(label = track_name), size = 3, vjust = -1
+  ) +
+  scale_x_continuous(limits = c(0, 1)) +
+  scale_y_continuous(limits = c(0, 1))
+```
+
+:::: {.hint exercise="ex_a01_inter"}
+::: {.callout-note collapse="false"}
+## Hint
+
+The session used a dplyr verb that keeps the rows with the largest values of an expression -- feed it the absolute valence/mood gap and a small `n`.
+:::
+::::
+
+:::: {.solution exercise="ex_a01_inter"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```r
+mood_scores |>
+  ggplot(aes(x = valence, y = llm_mood)) +
+  geom_abline(linetype = "dashed", color = "grey60") +
+  geom_point(aes(color = artist), size = 2, show.legend = FALSE) +
+  geom_text(
+    data = \(d) slice_max(d, abs(valence - llm_mood), n = 4),
+    aes(label = track_name), size = 3, vjust = -1
+  ) +
+  scale_x_continuous(limits = c(0, 1)) +
+  scale_y_continuous(limits = c(0, 1))
+```
+
+The dashed line is perfect agreement -- the labels are the songs whose titles most misled the model.
+:::
+::::
+:::::
+
+::::: {.callout-caution icon="false" collapse="true"}
 # Advanced
 
--   Register two tools --`weather_now()` and a function that geocodes a city name using the [Open-Meteo geocoding API](https://open-meteo.com/en/docs/geocoding-api)-- and ask for the temperature in five cities without ever typing a coordinate
-:::
+Everything below talks to a real model, so it needs your own R session and an API key (the Gemini free tier works):
+
+-   Create a chat object with a system prompt that makes the model answer like a pirate, and ask it about the tidyverse.
+-   Change the system prompt to "Answer only with valid R code, no prose" and ask it to plot `diamonds`. Run what it returns. Would you have written it the same way?
+-   Take three paragraphs from any news article and design a `type_object()` that extracts *who did what, where, when*. Where does the model struggle?
+-   Re-run the mood-scoring experiment, but give the model the **lyrics' first line** instead of the title (scrape them --session 6 taught you how). Does the correlation with valence improve?
+-   Register two tools --`weather_now()` and a function that geocodes a city name using the [Open-Meteo geocoding API](https://open-meteo.com/en/docs/geocoding-api)-- and ask for the temperature in five cities without ever typing a coordinate.
+:::::
 
 ## Key takeaways
 

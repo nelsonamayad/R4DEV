@@ -215,14 +215,28 @@ How does this actually change a week of R work? Some patterns that hold up in pr
 
 **Reproducibility is non-negotiable.** The agent may *write* your pipeline, but the pipeline must still run without the agent: `quarto render` from a fresh clone, data pulled from documented sources, seeds set. An analysis that only works because a model babysits it is not reproducible --it's a séance.
 
-::: callout-tip
-## Exercises 🏋️
+## 🏗 Practice 4: Hand over the keyboard {.unnumbered}
 
-1.  Install one CLI agent --[Claude Code](https://claude.com/claude-code) or [Codex](https://openai.com/codex/)-- and run it inside your `MyBlog` project from session 1.
-2.  Before asking for anything, write a `CLAUDE.md` (or `AGENTS.md`) for the project: what it is, how to preview it, one convention, one gotcha. Keep it under 20 lines.
-3.  Ask the agent to add a new post that includes a `ggplot2` chart, then **read the diff line by line** before accepting. Count how many choices it made that you would have made differently.
-4.  Ask it to deliberately break the post (remove a closing `:::`), then to fix it using only `quarto render` errors. Watch the loop from Part I happen in front of you.
-5.  Harder: write a small skill --a folder with a `SKILL.md`-- encoding your personal ggplot style, and ask for a chart with and without it.
+Agents are learned by working *with* one -- all of this happens on your own machine, inside the `MyBlog` project from session 1.
+
+::: {.callout-note icon="false" collapse="true"}
+# Basic
+
+-   Install one CLI agent --[Claude Code](https://claude.com/claude-code) or [Codex](https://openai.com/codex/)-- and run it inside your `MyBlog` project.
+-   Before asking for anything, write a `CLAUDE.md` (or `AGENTS.md`) for the project: what it is, how to preview it, one convention, one gotcha. Keep it under 20 lines.
+:::
+
+::: {.callout-important icon="false" collapse="true"}
+# Intermediate
+
+-   Ask the agent to add a new post that includes a `ggplot2` chart, then **read the diff line by line** before accepting. Count how many choices it made that you would have made differently.
+-   Ask it to deliberately break the post (remove a closing `:::`), then to fix it using only `quarto render` errors. Watch the loop from Part I happen in front of you.
+:::
+
+::: {.callout-caution icon="false" collapse="true"}
+# Advanced
+
+-   Write a small skill --a folder with a `SKILL.md`-- encoding your personal ggplot style, and ask for a chart with and without it.
 :::
 
 ## Where this leaves you

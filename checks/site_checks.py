@@ -61,6 +61,8 @@ def check_links_and_images():
                 continue
             if url.startswith(("http://", "https://", "mailto:", "javascript:", "data:")):
                 continue
+            if "${" in url:  # JS template literal inside an inline <script>, not a real link
+                continue
             path_part = unquote(urlsplit(url).path)
             if not path_part:
                 continue

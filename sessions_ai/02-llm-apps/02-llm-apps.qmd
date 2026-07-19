@@ -198,7 +198,9 @@ Why does ggsql belong in this session? Because of what you saw in Part II: **LLM
 Everything here answers from what the model already knows. The next session, [**Grounded in truth**](/sessions_ai/03-ragnar/03-ragnar.qmd), builds the other half: retrieval-augmented generation with **`ragnar`** --a chatbot that answers questions about R4DEV itself, grounded only in the workshop's actual content, including a live capstone app.
 :::
 
-## 🏗 Practice 10: Ship it {.unnumbered}
+## 🏗 Practice 2: Ship it {.unnumbered}
+
+Every exercise here talks to a live model or runs an app, so you'll need your own R session and an API key (the Gemini free tier works).
 
 ::: {.callout-note icon="false" collapse="true"}
 # Basic
@@ -217,7 +219,7 @@ Everything here answers from what the model already knows. The next session, [**
 ::: {.callout-caution icon="false" collapse="true"}
 # Advanced
 
--   Combine sessions 9 and 10: build a Shiny app with a `chat_ui()` where the model has a *tool* that runs `ggsql_execute()` on the songs table and returns the chart. You will have built a tiny data analyst
+-   Combine this lesson with [Talking to machines](/sessions_ai/01-llm/01-llm.qmd): build a Shiny app with a `chat_ui()` where the model has a *tool* that runs `ggsql_execute()` on the songs table and returns the chart. You will have built a tiny data analyst
 :::
 
 ## Key takeaways

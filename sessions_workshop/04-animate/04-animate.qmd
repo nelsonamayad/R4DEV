@@ -22,7 +22,16 @@ editor_options:
   chunk_output_type: console
 citation:
   url: https://r4dev.netlify.app/sessions_workshop/04-animate/04-animate
+format: live-html
+engine: knitr
+webr:
+  packages:
+    - dplyr
+    - ggplot2
+    - gapminder
 ---
+
+{{< include /_extensions/r-wasm/live/_knitr.qmd >}}
 
 > *"The greatest value of a picture is when it forces us to notice what we never expected to see"* <br>--John Tukey
 
@@ -654,20 +663,115 @@ The moral fits in one sentence, and it is the most important sentence in this wo
 ```
 :::
 
-## 🏗 Practice 4: Make it move {-}
+## 🏗 Practice 4: Make it move {.unnumbered}
 
-::: {.callout-note icon="false" collapse="true"}
+An animation is just many static plots played in order. The browser can't render gifs (gganimate's renderer needs your own machine), but it can build the *frames* -- which is where every animation starts.
+
+::::: {.callout-note icon="false" collapse="true"}
 # Basic
-- Make an animation of any data we've used so far
-- Save it as a .gif and share it with the group
-:::
 
-::: {.callout-important icon="false" collapse="true"}
-# Intermediate
-- Choose one [causal graph from Nick Huntington Klein's GitHub page](https://github.com/NickCH-K/causalgraphs) and replicate it.
-- Describe it
-- In the three-toggle explainer above, the mediator tab erases a *real* effect when you adjust. Simulate a fourth structure --a chain with a confounder on top (**Z → X, Z → Y, X → M → Y**)-- and decide: which variables do you adjust for to recover the true effect of X on Y? Verify with `lm()`
+The classic Rosling chart: life expectancy against GDP per capita, one panel per year. Fill in the faceting call that turns one crowded plot into animation frames.
+
+```{webr}
+#| exercise: ex_w04_basic
+library(ggplot2)
+library(gapminder)
+
+gapminder |>
+  ggplot(aes(x = gdpPercap, y = lifeExp, size = pop, color = continent)) +
+  geom_point(alpha = 0.6, show.legend = FALSE) +
+  scale_x_log10() +
+  ______(~______)
+```
+
+:::: {.hint exercise="ex_w04_basic"}
+::: {.callout-note collapse="false"}
+## Hint
+
+You met this function in the plots session -- it splits one plot into small multiples by a variable. Split by the variable an animation would move through: time.
 :::
+::::
+
+:::: {.solution exercise="ex_w04_basic"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```r
+library(ggplot2)
+library(gapminder)
+
+gapminder |>
+  ggplot(aes(x = gdpPercap, y = lifeExp, size = pop, color = continent)) +
+  geom_point(alpha = 0.6, show.legend = FALSE) +
+  scale_x_log10() +
+  facet_wrap(~year)
+```
+
+Each facet is one frame -- `transition_time(year)` in gganimate does exactly this, then plays the panels in sequence.
+:::
+::::
+:::::
+
+::::: {.callout-important icon="false" collapse="true"}
+# Intermediate
+
+Build **one frame** of a `transition_reveal()`-style animation by hand: Colombia's life expectancy line drawn only up to a chosen year, with a point marking the front. Fill in the two blanks, then change `frame_year` and re-run -- congratulations, you are the renderer.
+
+```{webr}
+#| exercise: ex_w04_inter
+library(dplyr)
+library(ggplot2)
+library(gapminder)
+
+frame_year <- 1987  # any gapminder year between 1952 and 2007
+
+gapminder |>
+  filter(country == "Colombia", year <= ______) |>
+  ggplot(aes(x = year, y = lifeExp)) +
+  geom_line() +
+  geom_point(data = \(d) filter(d, year == ______), size = 3) +
+  xlim(1952, 2007) +
+  ylim(45, 80)
+```
+
+:::: {.hint exercise="ex_w04_inter"}
+::: {.callout-note collapse="false"}
+## Hint
+
+Both blanks are the same thing: the frame you're rendering. The line shows everything *up to* it; the point sits exactly *at* it.
+:::
+::::
+
+:::: {.solution exercise="ex_w04_inter"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```r
+frame_year <- 1987
+
+gapminder |>
+  filter(country == "Colombia", year <= frame_year) |>
+  ggplot(aes(x = year, y = lifeExp)) +
+  geom_line() +
+  geom_point(data = \(d) filter(d, year == frame_year), size = 3) +
+  xlim(1952, 2007) +
+  ylim(45, 80)
+```
+
+Re-run with several values of `frame_year` -- the sequence of plots you just made is precisely what `transition_reveal(year)` automates.
+:::
+::::
+:::::
+
+::::: {.callout-caution icon="false" collapse="true"}
+# Advanced
+
+Rendering real animations needs gganimate and your own R session:
+
+- Make an animation of any data we've used so far, save it as a .gif and share it with the group.
+- Choose one [causal graph from Nick Huntington Klein's GitHub page](https://github.com/NickCH-K/causalgraphs), replicate it, and describe it.
+- In the three-toggle explainer above, the mediator tab erases a *real* effect when you adjust. Simulate a fourth structure --a chain with a confounder on top (**Z → X, Z → Y, X → M → Y**)-- and decide: which variables do you adjust for to recover the true effect of X on Y? Verify with `lm()`
+:::::
 
 ## Key takeaways
 

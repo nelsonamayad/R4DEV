@@ -108,7 +108,7 @@ Below a list of my favourite online resources on R, organised by topic:
 
 -   [Large Language Model tools for R](https://luisdva.github.io/llmsr-book/) --a free book cataloguing the whole ecosystem
 
--   [Posit's AI tools overview](https://opensource.posit.co/ai/)
+-   [Posit's AI tools overview](https://opensource.posit.co/about/ai/)
 :::
 
 ::: {.callout-note collapse="true" icon="false"}
@@ -121,11 +121,12 @@ Below a list of my favourite online resources on R, organised by topic:
 -   [The DAG Almanac](https://dags.andrewheiss.com/) by Andrew Heiss --interactive DAGs and do-calculus
 
 -   [Understanding adjustment](https://rpsychologist.com/descriptive-adjustment/) by Kristoffer Magnusson
+:::
 
 ::: {.callout-note collapse="true" icon="false"}
 ## Statistics
 
--   [Statistical rethinking with brms, ggplot2, and the tidyverse: Second edition](https://bookdown.org/content/4857/) by Solomon Kurz
+-   [Statistical rethinking with brms, ggplot2, and the tidyverse: Second edition](https://solomon.quarto.pub/sr2/) by Solomon Kurz
 
 -   [Regression modelling strategies](https://hbiostat.org/rmsc/)
 

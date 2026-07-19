@@ -826,19 +826,28 @@ Check out [this page](https://quarto.org/docs/presentations/revealjs/)
 
 ## 🏗 Practice 7: Shine {.unnumbered}
 
+A Shiny app needs a live R process, so all of this happens in your own R session -- start by running the session's apps, then build your own.
+
 ::: {.callout-note icon="false" collapse="true"}
 # Basic
 
--   Replicate all apps here and deploy them into your own Shinyapps.io free account. Embed them into a new blog post and publish it
--   Use the UI and Server design for the COVID-19 app and deploy it to your account. Share resulting URL
--   Create a RevealJS presentation with the best outputs in your blog
+-   Run one of this session's apps locally with `shiny::runApp()`, change one input's label and default value, and re-run it
+-   Add a new input (a slider or a selector) that filters the data behind one of the app's plots
 :::
 
 ::: {.callout-important icon="false" collapse="true"}
 # Intermediate
 
+-   Replicate the UI and Server design of the COVID-19 app built above and make it your own: different data, different inputs
 -   Create a Shiny app that shows the frequency of use of all Eunoia words you scraped, by country. Use **`gtrendsR`** package to look up the frequency of each word by country.
 -   Create a Shiny app for your project
+:::
+
+::: {.callout-caution icon="false" collapse="true"}
+# Advanced
+
+-   Deploy your apps to a free [shinyapps.io](https://www.shinyapps.io/) or [Posit Connect Cloud](https://connect.posit.cloud/) account, embed them into a new blog post with an `<iframe>`, and publish it
+-   Create a RevealJS presentation with the best outputs in your blog
 :::
 
 ## Key takeaways

@@ -24,7 +24,16 @@ aliases:
   - /sessions_workshop/11-ragnar/11-ragnar.html
 citation:
   url: https://r4dev.netlify.app/sessions_ai/03-ragnar/03-ragnar
+format: live-html
+engine: knitr
+webr:
+  packages:
+    - dplyr
+resources:
+  - toy_embeddings.csv
 ---
+
+{{< include /_extensions/r-wasm/live/_knitr.qmd >}}
 
 > *"It is a capital mistake to theorize before one has data."* <br>--Arthur Conan Doyle, *A Scandal in Bohemia*
 
@@ -255,27 +264,86 @@ This is the deployed, always-on version of everything above: a chatbot that answ
 The store behind this app was built locally with `embed_ollama()` --free, and genuinely used during development. But the *deployed* app runs on Posit Connect Cloud, which has no route back to a local Ollama instance, and this workshop has no cloud embedding provider with usable quota yet. So the live app retrieves with `ragnar_retrieve_bm25()` instead --a real production trade-off, not a shortcut. The moment a Gemini or OpenAI key with quota exists, swapping `embed_ollama()` for `embed_google_gemini()` in the ingestion script and redeploying is the entire fix.
 :::
 
-## 🏗 Practice 11: Retrieve something real {.unnumbered}
+## 🏗 Practice 3: Retrieve something real {.unnumbered}
 
-::: {.callout-note icon="false" collapse="true"}
+Semantic search sounds like magic until you compute one by hand. The Basic tier does exactly that, in your browser, on a toy store of 10 chunks with 8-dimensional embeddings -- the same arithmetic `ragnar_retrieve_vss()` runs over thousands of chunks with hundreds of dimensions.
+
+::::: {.callout-note icon="false" collapse="true"}
 # Basic
+
+Retrieve the best chunk for the question *"how do I color regions of a map by a value?"* -- already embedded as a vector below. Two blanks: the dot product at the heart of cosine similarity, and the verb that ranks the results.
+
+```{webr}
+#| exercise: ex_a03_basic
+library(dplyr)
+
+chunks <- read.csv("toy_embeddings.csv")
+
+# The question, embedded in the same 8 topic dimensions as the chunks
+question <- c(0.2, 0.9, 0, 0, 0, 0, 0.1, 0)
+
+cosine <- function(a, b) ______(a * b) / (sqrt(sum(a^2)) * sqrt(sum(b^2)))
+
+emb <- as.matrix(chunks[, -1])
+
+chunks |>
+  mutate(similarity = apply(emb, 1, \(v) cosine(v, question))) |>
+  select(chunk, similarity) |>
+  ______(desc(similarity)) |>
+  slice_head(n = 3)
+```
+
+:::: {.hint exercise="ex_a03_basic"}
+::: {.callout-note collapse="false"}
+## Hint
+
+A dot product multiplies two vectors element-wise and then adds everything up -- `a * b` is already done for you. Ranking descending is a dplyr verb you use every day.
+:::
+::::
+
+:::: {.solution exercise="ex_a03_basic"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```r
+library(dplyr)
+
+chunks <- read.csv("toy_embeddings.csv")
+
+question <- c(0.2, 0.9, 0, 0, 0, 0, 0.1, 0)
+
+cosine <- function(a, b) sum(a * b) / (sqrt(sum(a^2)) * sqrt(sum(b^2)))
+
+emb <- as.matrix(chunks[, -1])
+
+chunks |>
+  mutate(similarity = apply(emb, 1, \(v) cosine(v, question))) |>
+  select(chunk, similarity) |>
+  arrange(desc(similarity)) |>
+  slice_head(n = 3)
+```
+
+The choropleth chunk wins -- the question and the chunk share almost no words, but their *vectors* point the same way. That's the whole trick behind semantic search. Try re-embedding the question for a different topic (e.g. put the 0.9 in the LLM dimension) and re-run.
+:::
+::::
+:::::
+
+::::: {.callout-important icon="false" collapse="true"}
+# Intermediate
+
+Real stores, real embeddings -- your own R session with ragnar and Ollama installed:
 
 -   Crawl a small documentation site you use often (a package's `pkgdown` site is a good target) and build a store from its first 5-10 pages.
 -   Retrieve with `ragnar_retrieve_bm25()` for a question you already know the answer to. Does it find the right page?
-:::
-
-::: {.callout-important icon="false" collapse="true"}
-# Intermediate
-
 -   Take three questions about R4DEV and compare `ragnar_retrieve_vss()` against `ragnar_retrieve_bm25()` for each. Which query type (conceptual vs. keyword-heavy) favors which method?
 -   Change `markdown_chunk()`'s `target_size` to something much smaller (e.g. 400) and re-inspect the store. What happens to retrieval quality on a broad question versus a specific one?
-:::
+:::::
 
-::: {.callout-caution icon="false" collapse="true"}
+::::: {.callout-caution icon="false" collapse="true"}
 # Advanced
 
 -   Register **two** tools on one chat: the retrieval tool from this session and the `weather_now()` tool from [Talking to machines](/sessions_ai/01-llm/01-llm.qmd). Ask a question that needs both, and watch the model choose which to call and when.
-:::
+:::::
 
 ## Key takeaways
 
