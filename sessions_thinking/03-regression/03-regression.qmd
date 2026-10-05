@@ -20,7 +20,7 @@ image: regression.png
 editor_options:
   chunk_output_type: console
 citation:
-  url: https://r4dev.netlify.app/sessions_thinking/03-regression/03-regression
+  url: https://nelsonamayad.github.io/R4DEV/sessions_thinking/03-regression/03-regression
 ---
 
 > *"All models are wrong, but some are useful."*<br>--George E. P. Box

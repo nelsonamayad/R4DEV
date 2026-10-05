@@ -23,7 +23,7 @@ editor_options:
 aliases:
   - /sessions_workshop/10-llm-apps/10-llm-apps.html
 citation:
-  url: https://r4dev.netlify.app/sessions_ai/02-llm-apps/02-llm-apps
+  url: https://nelsonamayad.github.io/R4DEV/sessions_ai/02-llm-apps/02-llm-apps
 ---
 
 > *"The most profound technologies are those that disappear."*<br>--Mark Weiser

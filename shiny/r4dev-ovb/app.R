@@ -4,7 +4,7 @@
 # Z-gradient scatter that makes the confounding visible, the first-stage
 # regression, the classic sign-of-bias 2×2, and a DAG whose omitted node is
 # literally grayed out.
-# Companion to: https://r4dev.netlify.app/sessions_thinking/04-causal/04-causal
+# Companion to: https://nelsonamayad.github.io/R4DEV/sessions_thinking/04-causal/04-causal
 
 library(shiny)
 library(bslib)
@@ -155,7 +155,7 @@ ui <- bslib::page_fillable(
     tags$img(src = "r4dev_logo.png", height = "32px"),
     tags$strong("R4DEV · Omitted variable bias", style = paste0("color:", UI_TEAL, "; font-size:1.1rem;")),
     tags$a(
-      "session ↗", href = "https://r4dev.netlify.app/sessions_thinking/04-causal/04-causal.html",
+      "session ↗", href = "https://nelsonamayad.github.io/R4DEV/sessions_thinking/04-causal/04-causal.html",
       target = "_blank", style = "margin-left:auto; font-size:0.85rem;"
     )
   ),

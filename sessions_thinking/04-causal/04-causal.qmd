@@ -21,7 +21,7 @@ image: causal.png
 editor_options:
   chunk_output_type: console
 citation:
-  url: https://r4dev.netlify.app/sessions_thinking/04-causal/04-causal
+  url: https://nelsonamayad.github.io/R4DEV/sessions_thinking/04-causal/04-causal
 ---
 
 > *"No causes in; no causes out."*<br>--Nancy Cartwright

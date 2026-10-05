@@ -19,7 +19,7 @@ track: Build with R
 prerequisites: None
 image: swordfish.gif
 citation:
-  url: https://r4dev.netlify.app/sessions_workshop/01-quarto/01-quarto
+  url: https://nelsonamayad.github.io/R4DEV/sessions_workshop/01-quarto/01-quarto
 ---
 
 > "*[...] there is growing evidence documenting the prevalence of publication bias in economics and other scientific fields, as well as specification searching, and widespread inability to replicate empirical findings*."<br>-- [Christensen & Miguel (2018)](https://www.aeaweb.org/articles?id=10.1257/jel.20171350)

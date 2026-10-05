@@ -24,7 +24,7 @@ editor_options:
   chunk_output_type: console
 bibliography: references.bib
 citation:
-  url: https://r4dev.netlify.app/sessions_workshop/03-text/03-text
+  url: https://nelsonamayad.github.io/R4DEV/sessions_workshop/03-text/03-text
 format: live-html
 engine: knitr
 webr:

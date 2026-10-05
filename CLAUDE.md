@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-R4DEV is a Quarto website teaching reproducible data analysis in R (tidyverse-first), created by Nelson Amaya. It is published to Netlify at https://r4dev.netlify.app/ (site id in `_publish.yml`). Every lesson is a standalone `.qmd` that downloads real data from the web and builds plots, maps, animations, text analysis, simulations, LLM workflows, and Shiny apps.
+R4DEV is a Quarto website teaching reproducible data analysis in R (tidyverse-first), created by Nelson Amaya. Source lives at https://github.com/nelsonamayad/R4DEV and the site is published with GitHub Pages at https://nelsonamayad.github.io/R4DEV/ (served from the `gh-pages` branch). Netlify was dropped in October 2026; the old https://r4dev.netlify.app deploy was abandoned as-is, not redirected. Every lesson is a standalone `.qmd` that downloads real data from the web and builds plots, maps, animations, text analysis, simulations, LLM workflows, and Shiny apps.
 
 The site has **three learning tracks plus tools — 18 lessons in total**:
 
@@ -25,7 +25,7 @@ quarto render                         # full site build → _blog/
 quarto render sessions_workshop/02-plots/02-plots.qmd   # render one lesson
 python checks/site_checks.py          # link/image/alt-text/nav-duplicate checks (after render)
 python checks/generate_sitemap.py     # writes _blog/sitemap.xml (after render, before publish)
-quarto publish netlify                # deploy (uses _publish.yml)
+quarto publish gh-pages --no-render   # deploy _blog/ to the gh-pages branch (after render + checks)
 ```
 
 - `freeze: auto` is enabled: a render only re-executes R code in files whose source changed; results are cached in `_freeze/` (commit it). Executing a lesson still needs its R packages plus network access (lessons read data straight from URLs: OWID GitHub, Project Gutenberg, APIs, etc.), so prefer rendering the single file you changed. Note that **any** edit to a file, even prose-only, re-executes all of its chunks — batch code edits to expensive lessons (03-text, 05-maps) deliberately.
@@ -108,5 +108,8 @@ Rules and footguns:
 
 ## Git / publishing workflow
 
-- Work happens on `master` (local only — **no remote configured yet**, and no `main` branch exists despite tooling defaults). Render outputs (`_blog/`, `MyBlog/_blog/`, `param_reports/_reports/`) are gitignored; `_freeze/` is **committed** so renders elsewhere reuse cached results.
-- Deploys are manual: `quarto render`, then `python checks/site_checks.py` and `python checks/generate_sitemap.py`, then `quarto publish netlify`. There is no CI.
+- Work happens on `main`, pushed to `origin` = https://github.com/nelsonamayad/R4DEV (public). Local history was rewritten in October 2026 to drop an unused 120 MB `05-maps/kontur_population_FR_20231101.gpkg` (GitHub rejects files over 100 MB); it is now gitignored and kept on disk only. Never commit files over 100 MB. Render outputs (`_blog/`, `MyBlog/_blog/`, `param_reports/_reports/`) are gitignored; `_freeze/` is **committed** so renders elsewhere reuse cached results.
+- Deploys are manual: `quarto render`, then `python checks/site_checks.py` and `python checks/generate_sitemap.py`, then `quarto publish gh-pages --no-render`. There is no CI: the lessons need local R packages, network access, local Ollama (03-ragnar) and keys, so GitHub Actions rendering isn't practical.
+- The site lives under a **subpath** (`/R4DEV/`): links in markdown that start with `/` are rewritten by Quarto, but raw-HTML `href="/..."`/`src="/..."` are not and will 404. `robots.txt` at `/R4DEV/robots.txt` is ignored by crawlers (only domain-root robots count); submit the sitemap in Google Search Console instead.
+- `.gitattributes` forces `*.qmd` to LF. The freeze hash is the md5 of the raw `.qmd` bytes, so a CRLF checkout (`core.autocrlf=true` on this machine) would silently invalidate every freeze and re-execute everything.
+- Teaching content about Netlify (01-quarto: students publish *their own* blog there) is unrelated to where R4DEV is hosted; it stays.

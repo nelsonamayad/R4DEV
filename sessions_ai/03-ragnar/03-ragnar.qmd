@@ -23,7 +23,7 @@ editor_options:
 aliases:
   - /sessions_workshop/11-ragnar/11-ragnar.html
 citation:
-  url: https://r4dev.netlify.app/sessions_ai/03-ragnar/03-ragnar
+  url: https://nelsonamayad.github.io/R4DEV/sessions_ai/03-ragnar/03-ragnar
 format: live-html
 engine: knitr
 webr:
@@ -70,7 +70,7 @@ The web is HTML: navigation bars, footers, cookie banners, ads. None of that bel
 ```{r 11.read}
 library(ragnar)
 
-page <- "https://r4dev.netlify.app/sessions_workshop/02-plots/02-plots.html"
+page <- "https://nelsonamayad.github.io/R4DEV/sessions_workshop/02-plots/02-plots.html"
 md <- read_as_markdown(page) # <1>
 
 cat(substr(md, 1, 400)) # <2>

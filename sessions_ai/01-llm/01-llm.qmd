@@ -22,7 +22,7 @@ editor_options:
 aliases:
   - /sessions_workshop/09-llm/09-llm.html
 citation:
-  url: https://r4dev.netlify.app/sessions_ai/01-llm/01-llm
+  url: https://nelsonamayad.github.io/R4DEV/sessions_ai/01-llm/01-llm
 format: live-html
 engine: knitr
 webr:

@@ -148,7 +148,7 @@ Two smaller sessions rounding out the "you can ship this for real" arc:
 
 ### 4f — Reproducibility & CI (infrastructure, not a session)
 Unlocked once the GitHub remote exists:
-- GitHub Actions: render + `quarto publish netlify` on push to `master`, closing the "no CI" gap.
+- GitHub Actions: render + `quarto publish gh-pages` on push to `main`, closing the "no CI" gap.
 - A scheduled **link-rot checker** — a GH Action that greps every `.qmd` for `http(s)://` URLs and curls them weekly, opening an issue on 404s. Automates the failure-inventory work this modernization did by hand.
 - Revisit `renv::init()` now that the package surface is larger and LLM-dependent (previously deferred as premature).
 

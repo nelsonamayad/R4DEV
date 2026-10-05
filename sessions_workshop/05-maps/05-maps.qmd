@@ -20,7 +20,7 @@ track: Build with R
 prerequisites: "Everything in its right place"
 image: map-fractal.gif
 citation:
-  url: https://r4dev.netlify.app/sessions_workshop/05-maps/05-maps
+  url: https://nelsonamayad.github.io/R4DEV/sessions_workshop/05-maps/05-maps
 format: live-html
 engine: knitr
 webr:

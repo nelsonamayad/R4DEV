@@ -21,7 +21,7 @@ editor_options:
 aliases:
   - /sessions_workshop/12-parallel/12-parallel.html
 citation:
-  url: https://r4dev.netlify.app/sessions_workshop/09-parallel/09-parallel
+  url: https://nelsonamayad.github.io/R4DEV/sessions_workshop/09-parallel/09-parallel
 format: live-html
 engine: knitr
 webr:

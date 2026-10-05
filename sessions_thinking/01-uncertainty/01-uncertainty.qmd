@@ -19,7 +19,7 @@ image: uncertainty.png
 editor_options:
   chunk_output_type: console
 citation:
-  url: https://r4dev.netlify.app/sessions_thinking/01-uncertainty/01-uncertainty
+  url: https://nelsonamayad.github.io/R4DEV/sessions_thinking/01-uncertainty/01-uncertainty
 ---
 
 > *"It is remarkable that a science which began with the consideration of games of chance should have become the most important object of human knowledge."*<br>--Pierre-Simon Laplace

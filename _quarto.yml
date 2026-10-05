@@ -21,7 +21,7 @@ website:
   title: "R4DEV"
   description: "Data workshop on reproducible analysis and visualisation using R, created by Nelson Amaya D."
   favicon: logo/r4dev_dalle_1.png
-  site-url: https://r4dev.netlify.app/
+  site-url: https://nelsonamayad.github.io/R4DEV/
 
   google-analytics:
     tracking-id: "G-CE27LT98M2"

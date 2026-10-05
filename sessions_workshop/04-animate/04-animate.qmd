@@ -21,7 +21,7 @@ image: homer.gif
 editor_options: 
   chunk_output_type: console
 citation:
-  url: https://r4dev.netlify.app/sessions_workshop/04-animate/04-animate
+  url: https://nelsonamayad.github.io/R4DEV/sessions_workshop/04-animate/04-animate
 format: live-html
 engine: knitr
 webr:

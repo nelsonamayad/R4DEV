@@ -20,7 +20,7 @@ image: bono-wink.gif
 editor_options: 
   chunk_output_type: console
 citation:
-  url: https://r4dev.netlify.app/sessions_workshop/06-scrap/06-scrap
+  url: https://nelsonamayad.github.io/R4DEV/sessions_workshop/06-scrap/06-scrap
 format: live-html
 engine: knitr
 webr:

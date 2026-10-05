@@ -20,7 +20,7 @@ prerequisites: "Blogging with Quarto"
 image: smart.gif
 bibliography: RetractionWatch.bib
 citation:
-  url: https://r4dev.netlify.app/sessions_workshop/08-reports/08-reports
+  url: https://nelsonamayad.github.io/R4DEV/sessions_workshop/08-reports/08-reports
 ---
 
 In this lesson you will generate a batch of reports from a single template and manage citations properly with Zotero.

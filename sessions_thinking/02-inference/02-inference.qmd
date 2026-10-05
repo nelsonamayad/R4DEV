@@ -20,7 +20,7 @@ image: inference.png
 editor_options:
   chunk_output_type: console
 citation:
-  url: https://r4dev.netlify.app/sessions_thinking/02-inference/02-inference
+  url: https://nelsonamayad.github.io/R4DEV/sessions_thinking/02-inference/02-inference
 ---
 
 > *"To consult the statistician after an experiment is finished is often merely to ask him to conduct a post mortem examination. He can perhaps say what the experiment died of."*<br>--Ronald A. Fisher
