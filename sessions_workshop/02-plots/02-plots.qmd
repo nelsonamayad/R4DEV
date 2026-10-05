@@ -121,7 +121,7 @@ maddison_proj_1 # <8>
 1.  OWID repository for the Maddison Project data
 2.  Start with the raw data and save to a new data frame
 3.  We clean the variable names using the `clean_names()` function and shorten even further the GDP per capita variable name using `rename()`
-4.  Add country 3-digit ISO code and region using the `countrycodes()` function
+4.  Add country 3-digit ISO code and region using the `countrycode()` function
 5.  Filter for year 1990
 6.  Pipe data into ggplot and define X and Y axis
 7.  Show a boxplot
@@ -528,7 +528,7 @@ library(ggridges) # Overlaying density plots, perfect for probabilistic inferenc
 library(RColorBrewer)
 
 radiohead_spotify |>  # <37>
-  dplyr::filter(album_name %in% c("Pablo Honey","The Bends","OK Computer","Kid A","Amnesiac","Hail To the Thief","In Rainbows","The King Of Limbs","A Moon Shaped Pool")) %>% # <38>
+  dplyr::filter(album_name %in% c("Pablo Honey","The Bends","OK Computer","Kid A","Amnesiac","Hail To the Thief","In Rainbows","The King Of Limbs","A Moon Shaped Pool")) |> # <38>
   tidyr::pivot_longer(cols = c("valence","tempo","danceability","energy"), names_to = "metric") |> # <39>
   ggplot(aes(x = value, y = album_name, fill=factor(metric))) + # <40>
     geom_density_ridges(show.legend = FALSE) + # <41>
@@ -542,16 +542,16 @@ radiohead_spotify |>  # <37>
 
 ```
 
-![Rendered in November 2024, days before the API closed. Dance Thom, dance!](radiohead_archive.png){width="100%"}
+37. We start with the archived Spotify data.
+38. We keep only the studio albums with the `x %in% y` operator, which asks, for each element of `x`, "is it one of the values in `y`?".
+39. Do you remember endlessly Googling *`reshape`* in Stata? No more. `pivot_longer()` stacks the four chosen columns into two: a `metric` column with the variable name and a `value` column with its number --one row per song per metric.
+40. We pipe the data into `ggplot` and define the aesthetics: what goes where.
+41. With the `ggridges` package we use a better geometry for the data, overlapping density plots --one ridge per album. `show.legend=FALSE` drops the legend, redundant here because the facets are already labelled.
+42. We add some labels to the plot.
+43. Remember faceting? The long format pays off: `facet_wrap(~metric)` splits the plot into 4 panels in 2 rows, one per musical feature, each with its own x-scale.
+44. We apply a manual color scale, so that each metric gets its own color.
 
-37. We start with the data
-38. We filter the studio albums using the *x `%in%` y* operator, which stands for `x is a subset of y`.
-39. Do you remember endlessly Googling *`reshape`* in Stata? No more. We pivot the data such that each of the chose variables goes from a column to a row.
-40. We pipe in the data into `ggplot` and define the aesthetics: what goes where.
-41. With the `ggridges` package we use a better geometry for the data, overlaping density plots. We use the option `show.legend=FALSE`.
-42. We add some labels to the plot
-43. Remember faceting? Now we make use of the pivot longer form to make 4 facets of the plot in 2 rows
-44. We apply a manual color scale, such that each variable has a color
+![Rendered in November 2024, days before the API closed. Dance Thom, dance!](radiohead_archive.png){width="100%"}
 
 ::: callout-tip
 ## Pivoting with **`tidyr`**, or the joy of never having to Google reshape again

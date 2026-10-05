@@ -40,6 +40,7 @@ listing:
     image-align: left
     image-height: 150px
     fields: [image, title, description]
+    sort: "order"
     sort-ui: false
     filter-ui: false
     categories: false
@@ -59,7 +60,7 @@ title-block-style: none
 ::: {.masthead-content}
 [A hands-on workshop · running since 2022]{.kicker}
 
-[More fiction is written in Excel than in Word.]{.masthead-title}
+[More fiction is written in [Excel]{.accent-word} than in Word.]{.masthead-title}
 
 ::: {.lede}
 Learn to turn messy information into reproducible analysis, compelling visualisations, interactive applications, and AI-assisted workflows -- all in R.
@@ -82,7 +83,7 @@ Learn to turn messy information into reproducible analysis, compelling visualisa
 
 ## Learning tracks {#tracks .section-header}
 
-Three tracks, nineteen lessons. Each is self-contained enough to enter on its own, but reads best in order.
+Three tracks, eighteen lessons. Each is self-contained enough to enter on its own, but reads best in order.
 
 ```{=html}
 <div class="track-grid">
@@ -97,14 +98,14 @@ Three tracks, nineteen lessons. Each is self-contained enough to enter on its ow
 <div class="track-card" data-track="ai">
   <p class="track-card-title">Work with AI</p>
   <p class="track-card-desc">Use large language models as programmable tools for extraction, analysis, retrieval, and application development.</p>
-  <p class="track-card-meta"><span>5 lessons</span><span>Intermediate</span></p>
+  <p class="track-card-meta"><span>4 lessons</span><span>Beginner → Advanced</span></p>
   <a class="btn btn-primary" href="learn/ai.qmd">View track →</a>
 </div>
 
 <div class="track-card" data-track="thinking">
   <p class="track-card-title">Think with data</p>
   <p class="track-card-desc">Reason clearly about uncertainty, inference, models, causality, and Bayesian evidence.</p>
-  <p class="track-card-meta"><span>5 lessons</span><span>Intermediate → Advanced</span></p>
+  <p class="track-card-meta"><span>5 lessons</span><span>Beginner → Advanced</span></p>
   <a class="btn btn-primary" href="learn/thinking.qmd">View track →</a>
 </div>
 

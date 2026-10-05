@@ -331,14 +331,14 @@ library(RColorBrewer)
 library(tidyverse)
 library(tidytext)
 
-pdftools::pdf_text(paste0(getwd(),"/infinite_jest.pdf")) |> #"/sessions/03-text" <9>
+pdftools::pdf_text(paste0(getwd(),"/infinite_jest.pdf")) |> # <9>
   stringr::str_squish() |> # <10>
   tibble::as_tibble() |> # <11>
   tidytext::unnest_tokens(input = "value", output = "word", token = "words") |> # <12>
   dplyr::anti_join(stopwords::stopwords(language = "en") |> # <13>
                      as_tibble(), by=c("word"="value")) |> # <13>
   dplyr::left_join(get_sentiments("bing"), # <14>
-                   by=c("word")) |> # <15>
+                   by=c("word")) |> # <14>
   dplyr::filter(!is.na(sentiment)) |> # <15>
   dplyr::group_by(sentiment) |> # <16>
   dplyr::summarise(sentiment_count = n()) |> # <16>
@@ -353,15 +353,15 @@ pdftools::pdf_text(paste0(getwd(),"/infinite_jest.pdf")) |> #"/sessions/03-text"
  
 ```
 
-9. Import book into R using `pdf_text()` function
-10. Erase all blank spaces using the squish function
-11 Make into a nice tibble rectangular database
-12. Tokenize words
-13. Remove all stopwords using `anti_join()`
-14. Join all words with sentiments using `left_join()`
-15. Filter out all words without a sentiment joined to them
-16. Group and summarise the count of words by sentiment
-17. Pipe into ggplot
+9. Import the book into R with `pdf_text()`, which returns one character string per page.
+10. Collapse repeated whitespace and line breaks into single spaces with `str_squish()`.
+11. Turn the character vector into a tibble, the rectangular shape the rest of the pipeline expects.
+12. Tokenize: `unnest_tokens()` breaks each page into one row per word, lowercased.
+13. Remove stopwords ("the", "and", "of"...) with `anti_join()`: keep only the words that do *not* appear in the stopword list.
+14. Attach a sentiment to every word that has one, joining against the Bing lexicon with `left_join()`.
+15. Words absent from the lexicon came back as `NA` --filter them out.
+16. Group and summarise the count of words by sentiment.
+17. Pipe the summary straight into `ggplot` --no intermediate object needed.
 
 The positive/negative lexicon is not very interesting. There is another one called **NRC**[^1] which is more nuanced.
 
@@ -395,7 +395,7 @@ library(tidytext)
 nrc <- tidytext::get_sentiments("nrc") # <18>
 
 # Import book ####
-pdftools::pdf_text(paste0(getwd(),"/infinite_jest.pdf")) |> #"/sessions/03-text" # <19>
+pdftools::pdf_text(paste0(getwd(),"/infinite_jest.pdf")) |> # <19>
   stringr::str_squish() |> # <20>
   tibble::as_tibble() |> # <21>
   tidytext::unnest_tokens(input = "value", output = "text", token = "words") |> # <22>
@@ -404,8 +404,8 @@ pdftools::pdf_text(paste0(getwd(),"/infinite_jest.pdf")) |> #"/sessions/03-text"
   dplyr::left_join(nrc,  # <24>
                    by=c("text"="word"), multiple="all") |> # <24>
   dplyr::filter(!is.na(sentiment)) |> # <25>
-  dplyr::group_by(sentiment) |> # <25>
-  dplyr::summarize(sentiment_count = n()) |> # <25>
+  dplyr::group_by(sentiment) |> # <26>
+  dplyr::summarize(sentiment_count = n()) |> # <26>
   # Plot
   ggplot(aes(x=reorder(sentiment, sentiment_count), y=sentiment_count,fill=sentiment))+
   geom_col()+
@@ -414,8 +414,8 @@ pdftools::pdf_text(paste0(getwd(),"/infinite_jest.pdf")) |> #"/sessions/03-text"
        title = "Infinite Jest by David Foster Wallace", 
        subtitle = "Text analysis using NRC lexicon")+
   theme(legend.position = "none")+
-  scale_fill_manual(values=c( # <26>
-    "positive"="forestgreen", # <26>
+  scale_fill_manual(values=c( # <27>
+    "positive"="forestgreen", # <27>
     "negative"="orangered", # <27>
     "trust"="royalblue", # <27>
     "anticipation"="gold", # <27>
@@ -429,16 +429,16 @@ pdftools::pdf_text(paste0(getwd(),"/infinite_jest.pdf")) |> #"/sessions/03-text"
  
 ```
 
-18. Retrieve the sentiment lexicon NRC using the function `get_sentiments()`
-19. Import the text into R
-20. Erase all blank spaces
-21. Make into a tibble database
-22. Tokenize words
-23. Remove all stopwords using `anti_join()`
-24. Join all the sentiments using `left_join()`. There might be multiple matches, so add "multiple="all"" so that all matches are joined, not only one.
-25. Filter out all words without sentiment matched to them
-26. Summarise words by sentiment
-27. Notice how you can customise the colors using `scale_fill_manual()`. You can manually match a color to a value in the data using a simple vector where value="color".
+18. Retrieve the NRC sentiment lexicon with `get_sentiments()`. Unlike Bing's positive/negative pair, NRC maps words to ten sentiment categories.
+19. Import the text into R, as before.
+20. Collapse repeated whitespace into single spaces.
+21. Turn the character vector into a tibble.
+22. Tokenize into one row per word.
+23. Remove all stopwords using `anti_join()`.
+24. Join the sentiments using `left_join()`. A word can carry several NRC sentiments, so we add `multiple = "all"` to keep every match, not just the first.
+25. Filter out all words without a sentiment matched to them.
+26. Group and summarise the count of words by sentiment.
+27. Notice how you can customise the colors using `scale_fill_manual()`: a named vector of `"value" = "color"` pairs manually matches each sentiment to a color.
 
 ### Rejoinder: Narrative progression in ***Moby Dick*** 🐋
 
@@ -616,13 +616,13 @@ chapter_word <- break_chapters |>
 ```
 
 30. Group by title
-31. Create a variable that identifies the word *chapter* and counts to which chapter each line belongs to using the cumulative sum `cumsum()` function
+31. Build a chapter counter: `str_detect()` flags the lines that start a new chapter, and the cumulative sum `cumsum()` turns those flags into a running chapter number for every line
 32. Ungroup the data
 33. Filter out the text before the first chapter
 34. Using the `unite()` function we can create a new variable with the title and chapter columns called document
 35. Unnest the tokens in the text column
 36. Remove stopwords
-37. Count variables and sort them with the `count()` function
+37. Count how many times each word appears in each document with `count()`, sorted from most to least frequent
 
 ### What chapter belongs to which book? *LDA* all-at-once approach[^3]
 
@@ -1129,5 +1129,4 @@ book_sentiments("Hume, David","A Treatise of Human Nature")
 [Track overview: Build with R →](/learn/build-with-r.qmd)
 
 [Next: Making data move →](/sessions_workshop/04-animate/04-animate.qmd)
-:::
 :::

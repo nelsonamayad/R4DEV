@@ -13,6 +13,7 @@ categories:
   - causality
 date: "2022-07-31"
 date-modified: last-modified
+order: 2
 image: mind-blow.gif
 aliases:
   - /sessions_tools/10-resources/10-resources.html

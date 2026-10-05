@@ -201,7 +201,7 @@ world_pop_anim <- readr::read_csv(owid_pop_url) |> # <8>
 8.  Download the data using `read_csv()`
 9.  Keep data for the end of each decade by selecting dates that end with zero using the `str_ends()` function
 10. Rename variables
-11. Add country codes using `countrycodes()`
+11. Add country codes using `countrycode()`
 12. Join data to `sf` map
 13. Exclude Antarctica
 14. Use transition time to an integer year
@@ -275,23 +275,23 @@ maddison_girafe <- ggiraph::girafe(
             title = 'Look, GDP per capita across the world in 2018',
             caption = 'Source: Own calculations based on Maddison Project and OWID'
             ),
-  options = list( # <15>
-    opts_toolbar(position = "top", pngname = "r4dev-gdppc"), # <15>
+  options = list( # <16>
+    opts_toolbar(position = "top", pngname = "r4dev-gdppc"), # <16>
     opts_tooltip(opacity = 0.8, css = "background-color:#AC0909;color:white;padding:5px;border-radius:3px;"
-), # <15>
-    opts_hover(css = girafe_css( # <15>
-      css = "fill:orange;stroke:gray;", # <15>
-      text = "stroke:none; font-size: larger", # <15>
-      line = "fill:none", # <15>
-      area = "stroke-width:1px" # <15>
-    )) # <15>
+), # <16>
+    opts_hover(css = girafe_css( # <16>
+      css = "fill:orange;stroke:gray;", # <16>
+      text = "stroke:none; font-size: larger", # <16>
+      line = "fill:none", # <16>
+      area = "stroke-width:1px" # <16>
+    )) # <16>
   ))
 
 maddison_girafe
 
 ```
 
-15. Additional options in `girafe`, included as a list.
+16. Additional options in `girafe`, included as a list.
 
 ## PART II: Despair in the US {.unnumbered}
 
@@ -318,15 +318,15 @@ Having trouble downloading the data from the CDC?
 library(tidyverse)     # Our old friend
 
 # Get data from CDC portal
-cdc <- "https://data.cdc.gov/resource/xkb8-kh2a.csv?$limit=500000" # <16>
+cdc <- "https://data.cdc.gov/resource/xkb8-kh2a.csv?$limit=500000" # <17>
 
-opioid <- readr::read_csv(cdc) |> # <17>
-  dplyr::filter(str_detect(indicator,"Drug Overdose Deaths"))  # <18>
+opioid <- readr::read_csv(cdc) |> # <18>
+  dplyr::filter(str_detect(indicator,"Drug Overdose Deaths"))  # <19>
 
 # Plot aggregate data
 opioid |>
   dplyr::select(state,state_name,year,month,data_value) |>
-  dplyr::filter(state_name!="United States", year<2023, month=="December") |> # <19>
+  dplyr::filter(state_name!="United States", year<2023, month=="December") |> # <20>
   dplyr::group_by(state_name,year) |>
   dplyr::summarize(opioid = sum(data_value)) |>
   ggplot(aes(x=year,y=opioid,color=state_name))+
@@ -342,15 +342,16 @@ opioid |>
   theme(legend.position = "none")
 ```
 
+17. We identify the CSV version of the data we want from the CDC page, and add `$limit=500000` so the portal sends everything instead of its default 1 000-row page.
+18. Plain `read_csv()` on the API URL --downloading from an API and reading a local file are the same gesture.
+19. The portal mixes several indicators in one table; `str_detect()` inside `filter()` keeps only the rows about drug overdose deaths.
+20. **Warning**: the data includes an aggregate row for the whole US alongside the states. We need to exclude it.
+
 ```{r}
 #| include: false
 #| eval: false
 write_csv(opioid, paste0(getwd(),"/cdc_opioid.csv"))
-``` 
-16. We identify the CSV version of the data we want from the CDC page, and add `$limit=500000` so the portal sends everything instead of its default 1 000-row page
-17. Plain `read_csv()` on the API URL --downloading from an API and reading a local file are the same gesture. We filter only the variable we want to keep
-18. `select` only the variables we want
-19. **Warning**: There is a data point with aggregates for all the US. We need to exclude it.
+```
 
 ### Coordinates for a map {.unnumbered}
 
@@ -367,13 +368,13 @@ library(geodata)
 library(sf)
 library(tidyverse)
 
-us <- geodata::gadm(country="USA", level=1, path = getwd()) # <20> 
+us <- geodata::gadm(country="USA", level=1, path = getwd()) # <21> 
 
-us_state <- sf::st_as_sf(us) # <21> 
+us_state <- sf::st_as_sf(us) # <22> 
 ```
 
-20. We can retrieve coordinates for any country using `gadm()` function. We include the country code for the US and the level we want. 1 for state, 2 for county. We also include the path where the map file will be downloaded. For convenience, we save it in the folder of the project.
-21. The raw object is hard to work with directly. We transform the SpatVector object to our favourite *sf* using `st_as_sf()`.
+21. We can retrieve coordinates for any country using `gadm()` function. We include the country code for the US and the level we want. 1 for state, 2 for county. We also include the path where the map file will be downloaded. For convenience, we save it in the folder of the project.
+22. The raw object is hard to work with directly. We transform the SpatVector object to our favourite *sf* using `st_as_sf()`.
 
 ### Joining data to coordinates {.unnumbered}
 

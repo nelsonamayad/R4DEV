@@ -6,6 +6,7 @@ description: "Take a minute to tell me what you liked, what you didn't like, and
 categories: [feedback]
 date: "2023-04-03"
 date-modified: last-modified
+order: 3
 image: patrick-bateman.gif
 aliases:
   - /sessions_tools/11-feedback/11-feedback.html

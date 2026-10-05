@@ -8,6 +8,7 @@ categories:
   - test
 date: "2022-07-31"
 date-modified: last-modified
+order: 1
 image: jackie.gif
 aliases:
   - /sessions_tools/09-practice/09-practice.html

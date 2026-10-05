@@ -178,8 +178,8 @@ shinyApp(ui=ui_affair, server = server_affair)  # <12>
 6.  We use a `selectInput` object to filter the data in the graph
 7.  Another output as a `plotOutput` and call it *affairs*
 8.  We define the server function, with inputs and outputs
-9.  We recall the output in the UI that we called *happiness*, and use the output `renderOutput` to produce the plot. This plot is independent of the `selectInput`
-10. We recall the output in the UI that we called *affairs*, and use the output `renderOutput` to produce the plot. This plot is affected by decisions in the `selectInput`
+9.  We fill the output slot we called *happiness* in the UI, using `renderPlot()` to produce the plot. This plot is independent of the `selectInput`
+10. We fill the output slot we called *affairs*, again with `renderPlot()`. This plot is affected by decisions in the `selectInput`
 11. Here is where the UI and server connect: the **input\$happy** filters the data in the graph and also changes the subtitle in `labs()`, as they are both affected by the `selectInput` choice.
 12. We combine the UI and server objects we created in the `shinyApp()` function and watch the magic unfold
 

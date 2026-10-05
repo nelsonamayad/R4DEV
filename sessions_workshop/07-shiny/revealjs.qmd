@@ -176,16 +176,16 @@ maddison_girafe <- ggiraph::girafe(
             title = 'Look, GDP per capita across the world in 2018',
             caption = 'Source: Own calculations based on Maddison Project and OWID'
             ),
-  options = list( # <15>
-    opts_toolbar(position = "top", pngname = "r4dev-gdppc"), # <15>
+  options = list(
+    opts_toolbar(position = "top", pngname = "r4dev-gdppc"),
     opts_tooltip(opacity = 0.8, css = "background-color:#AC0909;color:white;padding:5px;border-radius:3px;"
-), # <15>
-    opts_hover(css = girafe_css( # <15>
-      css = "fill:orange;stroke:gray;", # <15>
-      text = "stroke:none; font-size: larger", # <15>
-      line = "fill:none", # <15>
-      area = "stroke-width:1px" # <15>
-    )) # <15>
+),
+    opts_hover(css = girafe_css(
+      css = "fill:orange;stroke:gray;",
+      text = "stroke:none; font-size: larger",
+      line = "fill:none",
+      area = "stroke-width:1px"
+    ))
   ))
 
 maddison_girafe

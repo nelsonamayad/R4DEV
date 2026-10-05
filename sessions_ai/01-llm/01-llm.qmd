@@ -82,15 +82,15 @@ chat <- ellmer::chat_google_gemini( # <1>
 chat$chat("In one sentence: what is a Large Language Model, really?") # <3>
 ```
 
+1. The `chat_*()` family picks your provider: `chat_google_gemini()`, `chat_anthropic()`, `chat_openai()`, `chat_ollama()`... swap this one line and everything else in this session works unchanged.
+2. The **system prompt** sets behaviour for the whole conversation --tone, format, role, constraints. It is the single highest-leverage sentence you will write.
+3. `$chat()` sends a message and returns the answer as a plain string. The `$` syntax is new: chat objects are [R6 objects](https://adv-r.hadley.nz/r6.html), little machines that carry their own state --the conversation history.
+
 ```
 #> An LLM is a neural network trained on vast amounts of text to predict the
 #> next word in a sequence, which when repeated millions of times produces
 #> human-like language output.
 ```
-
-1. The `chat_*()` family picks your provider: `chat_google_gemini()`, `chat_anthropic()`, `chat_openai()`, `chat_ollama()`... swap this one line and everything else in this session works unchanged.
-2. The **system prompt** sets behaviour for the whole conversation --tone, format, role, constraints. It is the single highest-leverage sentence you will write.
-3. `$chat()` sends a message and returns the answer as a plain string. The `$` syntax is new: chat objects are [R6 objects](https://adv-r.hadley.nz/r6.html), little machines that carry their own state --the conversation history.
 
 The system prompt is not decoration. Watch it completely change the machine:
 
@@ -148,6 +148,10 @@ extractor$chat_structured( # <6>
   )
 ```
 
+4. `type_array()` of `type_object()`s means "I want a table with these columns" --one object per row.
+5. Each field gets a *description*, which is really a mini-prompt: the model reads it to decide what goes in the column. Notice how `"ISO format, assume 2024"` quietly handles the date parsing that would take you three lines of `lubridate`.
+6. `$chat_structured()` is `$chat()` with a contract attached. The answer is not prose --it is data, ready for `ggplot`.
+
 ```
 #> # A tibble: 3 × 3
 #>   city    full_bloom note
@@ -156,10 +160,6 @@ extractor$chat_structured( # <6>
 #> 2 Tokyo   2024-04-06 ""
 #> 3 Sapporo 2024-05-01 "far to the north"
 ```
-
-4. `type_array()` of `type_object()`s means "I want a table with these columns" --one object per row.
-5. Each field gets a *description*, which is really a mini-prompt: the model reads it to decide what goes in the column. Notice how `"ISO format, assume 2024"` quietly handles the date parsing that would take you three lines of `lubridate`.
-6. `$chat_structured()` is `$chat()` with a contract attached. The answer is not prose --it is data, ready for `ggplot`.
 
 Think about what just happened: **the PDF scraping, regex wrangling and date parsing of session 3 collapsed into a schema and one function call.** Not always this cleanly --but this is now a tool in your box, and it works on interview transcripts, policy documents, survey open-ends, 19th-century books...
 
@@ -262,13 +262,13 @@ assistant$register_tool(tool( # <13>
 assistant$chat("Is it warmer right now in Kyoto or in Paris? Answer in one sentence with the temperatures.") # <14>
 ```
 
-```
-#> Kyoto is warmer right now at 23.3°C compared to Paris at 16.8°C.
-```
-
 12. An ordinary R function --nothing special about it. Yours could query your database, run a model, read a file.
 13. `register_tool()` describes the function to the model: what it does, what arguments it takes. The descriptions are prompts --write them like documentation.
 14. Watch the loop: the model reads the question, decides it needs data, calls `weather_now()` **twice** (once per city, working out the coordinates itself), reads the numbers, and composes the answer. That loop --model, tools, model again-- is what people mean by the word **agent**.
+
+```
+#> Kyoto is warmer right now at 23.3°C compared to Paris at 16.8°C.
+```
 
 ::: callout-tip
 ## What this costs, roughly

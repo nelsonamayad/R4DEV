@@ -4,10 +4,28 @@ Goal: bring the 2022–2024 workshop up to date — fix what broke, refresh what
 
 > **Status (4 July 2026): largely executed.** Decisions taken: Gemini free tier as teaching default (provider-agnostic ellmer), Open-Meteo replaces Spotify for the API lesson, navbar uses dropdown menus, 13-bayes was finished (minimal) rather than deleted. Items still open are marked ⏳ below; everything checked was done and render-verified.
 
+> **Status (5 October 2026, project review).** Phases 0–3, 4d, 4h and Phases 5–12 have shipped. The site is now **three learning tracks plus tools, 18 lessons**: Build with R (`sessions_workshop/`, 9), Work with AI (`sessions_ai/`, 4 + the Ask R4DEV capstone), Think with data (`sessions_thinking/`, 5), plus `sessions_tools/`. Last commit: 19 July 2026 (`96a50c3`). **Session numbers in Phases 0–9 below are historical** — e.g. "09-llm", "11-ragnar", "12-parallel", "13-bayes" are now `sessions_ai/01-llm`, `sessions_ai/03-ragnar`, `sessions_workshop/09-parallel`, `sessions_thinking/05-bayes` (see Phase 10). Phase 4a–4c/4e–4g remain unstarted pending scope sign-off.
+
+## Open items (consolidated, October 2026)
+
+Everything still open across the phases below and `notes/content-restructure.md`, ordered roughly by cost/benefit:
+
+1. ⏳ **Commit the working tree.** Uncommitted since `96a50c3`: annotation lists moved above pasted `#>` output blocks (01-llm, 03-ragnar, 02-plots, 03-text, 04-animate, 05-maps, 07-shiny, revealjs), `order:` added to the three tools pages, `index.qmd` copy fixed ("eighteen lessons", AI card "4 lessons"), a refreshed masthead hero in `style.css`, and the matching `_freeze/` results.
+2. ⏳ **GitHub remote + push** (Phase 0) — `master` is still local-only inside OneDrive. Blocks everything in 4f (CI, link-rot checker).
+3. ⏳ **Connect Cloud dashboard sweep** (manual; no API): delete `r4dev-chat`, `r4dev-homework-cc`, the pre-rename `-v2`/`-v3`/`-cc` content IDs (Phase 5), the earlier `r4dev-querychat` attempts (current is `-v6`), and the failing `r4dev-earthquakes` deployment if it is not pursued. Retire the old `nelsonamayad.shinyapps.io/r4dev-covid19` too.
+4. ⏳ **`r4dev-earthquakes`** (Phase 9) — still blocked on leaflet → sf → terra/GDAL. Decide: rewrite with `plotly` `scattergeo` (proven to deploy) and embed it in `07-shiny` PART II, which promises "a fresher geospatial example is on the way", or drop it and delete `shiny/r4dev-earthquakes/`.
+5. ⏳ **`07-shiny` PART II still teaches the retired COVID app** (`rworldmap`/`sp`, `eval: false`) under a "being retired" callout; `07-shiny/covid-app.R` remains in the lesson folder; the draft `revealjs.qmd` still iframes `nelsonamayad.shinyapps.io/r4dev-covid19/`. Replace together with item 4.
+6. ⏳ **Rebuild the `r4dev-ask` ragnar store** — it was ingested from the pre-restructure `/sessions_workshop/...` URLs (before Phase 10–12 content changes), so its citations point at aliases and miss the thinking track and new practice sections. Swap to VSS (`embed_google_gemini()`) whenever a quota'd embedding key exists.
+7. ⏳ **Thinking-track practice alignment** — lessons 1–4 still use the old `## Exercises 🏋️` form; `05-bayes` uses the new template but is headed "Practice 13" (should be "Practice 5"). Align all five to the per-track `## 🏗 Practice N` template, adding them to `01-practice`.
+8. ⏳ **Content backlog** (`notes/content-restructure.md`): lesson-split recommendations for 03-text, thinking/04-causal, 07-shiny (RevealJS bonus → 01-quarto?), 02-plots, 05-maps awaiting review; `getwd()` → `here::here()` migration (~30 call sites, one file at a time); the `x="Sentimen AFINN"` typo in `03-text` (line ~1105, still present; batch with other 03-text code edits since any edit re-executes the file).
+9. ⏳ **`param_reports/` fails to render** (pre-existing).
+10. ⏳ **Accessibility** (4g): measured WCAG contrast in both themes, a keyboard walkthrough and mobile checks are still not done (structural fixes shipped, see Phase 11).
+11. ⏳ **Local hygiene**: remove the stale `C:\Program Files\R\R-4.4.1` so Quarto stops auto-detecting it.
+
 ## Phase 0 — Baseline (do first, ~1 session of work)
 
 - [x] Run a full `quarto render` to populate the new `_freeze/` cache and produce the definitive **failure inventory**: which sessions error, which data URLs 404, which packages won't install on R ≥ 4.4. Everything below gets checked against this list.
-- [ ] ⏳ Add a GitHub remote (blocked: `gh auth login` needed) and push (`master` is currently local-only; one OneDrive hiccup from losing history).
+- [ ] ⏳ Add a GitHub remote (blocked: `gh auth login` needed) and push (`master` is currently local-only; one OneDrive hiccup from losing history). *Still open October 2026.*
 - [x] Update vendored extensions (`quarto update <ext>`): `r-wasm/live` supersedes `coatless/webr` — migrate `09-practice` to quarto-live only and drop the webr extension.
 - [ ] Optional (deferred): `renv::init()` to pin the ~70 packages. Recommended *against* for now — it complicates the student experience; revisit if renders become irreproducible.
 
@@ -92,8 +110,10 @@ Plan:
 
 Where Phases 0–3 made the existing workshop *correct and current*, this phase makes it **bigger** — now that the site is public, new tracks that turn R4DEV from "a workshop" into a wider reference. This is a menu, not a schedule: nothing here should start without explicit scope sign-off, since each track below is roughly the size of the whole LLM track (Phase 2) on its own.
 
+> **Numbering note (October 2026):** the session numbers proposed below (`11-causal-methods`, `12-scale`, "renumber Bayes to 14") predate the Phase 10 track split. New lessons now get the next number *within their track* — e.g. causal methods would be `sessions_thinking/06-…`, data at scale `sessions_workshop/10-…`.
+
 ### 4a — Causal inference, for real (extends the `04-animate` bonus track)
-The interactive confounder/mediator/collider trio primed the appetite; this converts it into a full method. New session `11-causal-methods`:
+The interactive confounder/mediator/collider trio primed the appetite; this converts it into a full method. *Partly pre-empted*: `sessions_thinking/04-causal` (DAGs, forks, colliders, identification, an OJS gallery) now covers the conceptual ground, so this would be its methods sequel. New session `11-causal-methods`:
 - Difference-in-differences and event studies (`fixest`, `did`) — reuse the CDC opioid panel from `05-maps` as the running example (state-level policy changes are a natural DiD setup).
 - Regression discontinuity (`rdrobust`) and synthetic control (`tidysynth`) as the other two workhorses of the "credibility revolution."
 - Closes the loop `about.qmd`'s "extra content" section promises but never delivered.
@@ -133,20 +153,20 @@ Unlocked once the GitHub remote exists:
 - Revisit `renv::init()` now that the package surface is larger and LLM-dependent (previously deferred as premature).
 
 ### 4g — Accessibility & reach
-- Alt-text audit: most `gif`/`png` figures currently have no `fig-alt`.
-- WCAG contrast check of the brand palette (`_brand.yml`/`_brand-dark.yml`) — cheap, do it regardless of anything else since the site is now public.
+- [x] Alt-text audit — done structurally in Phase 11 (`checks/site_checks.py` flags generic alt text; the one empty-alt content screenshot fixed; decorative gifs deliberately keep `alt=""`).
+- [ ] ⏳ WCAG contrast check of the brand palette (`_brand.yml`/`_brand-dark.yml`) — cheap, do it regardless of anything else since the site is now public. Still not measured.
 - Given the workshop's OECD/IOM origins and international alumni, consider a bilingual (FR/EN) glossary/cheat-sheet rather than translating full sessions.
 
-### 4h — Deploy all Shiny apps to Posit Connect Cloud, embed live in the site — ✅ done (7/9)
+### 4h — Deploy all Shiny apps to Posit Connect Cloud, embed live in the site — ✅ done (covid19 retired, querychat fixed in Phase 9; replacement geospatial app still open)
 `rsconnect` was already authenticated on this machine for `connect.posit.cloud` — no login blocker after all. Deployed and embedded as live `<iframe>`s:
 - [x] `BayesApp` → live, embedded in `13-bayes`.
 - [x] `collider` → fixed a real bug first (`layout_wrap_column` doesn't exist; deprecated `theme_color`), then live, embedded in `04-animate`.
 - [x] `r4dev-ovb` → needed `gtsummary`/`gt` installed locally (never verified before, since Quarto's render never executes standalone Shiny apps); live, embedded in `04-animate`.
-- [x] `r4dev-chat` → the qmd teaches `GEMINI_API_KEY`, but no Gemini key was ever actually provisioned (only `eval: false` + captured outputs). Deployed demo runs on the already-working `ANTHROPIC_API_KEY` instead; live, embedded in `10-llm-apps`, with a callout explaining the discrepancy to readers.
+- [x] `r4dev-chat` → the qmd teaches `GEMINI_API_KEY`, but no Gemini key was ever actually provisioned (only `eval: false` + captured outputs). Deployed demo runs on the already-working `ANTHROPIC_API_KEY` instead; live, embedded in `10-llm-apps`, with a callout explaining the discrepancy to readers. *(Later retired, Phase 8.)*
 - [x] `affairs1969-navbar`, `affairs1969-sidebar` → previously on shinyapps.io; migrated, both existing iframes in `07-shiny` repointed to Connect Cloud.
-- [x] `shiny-homework` → deployed, not currently embedded anywhere (no session references it directly).
-- [ ] ⏳ `r4dev-covid19` → **blocked**, not app-code fixable: `terra` fails to compile on Connect Cloud's build image (GDAL API mismatch — `AsClassicDataset` signature changed upstream). Left on its working shinyapps.io deployment; `07-shiny`'s iframe untouched.
-- [ ] ⏳ `r4dev-querychat` → **blocked**: app starts and binds its port successfully, but something in `querychat_app()`'s startup sequence (likely a synchronous LLM/schema call) doesn't respond to Connect Cloud's 60s health check. Not a code bug found so far — may need a compute-tier bump or an upstream querychat fix for lazy initialization. Download link in `10-llm-apps` left as the only option for now.
+- [x] `shiny-homework` → deployed, not currently embedded anywhere (no session references it directly). *(Later deleted, Phase 5.)*
+- [x] ~~`r4dev-covid19` → blocked~~ on `terra`/GDAL — **retired outright in Phase 9**; replacement still open (see Open items 4–5).
+- [x] ~~`r4dev-querychat` → blocked~~ on the health check — **fixed in Phase 9** (root cause: `querychat_app()` uses `shiny::runGadget()`); live as `r4dev-querychat-v6`, embedded in `sessions_ai/02-llm-apps` via `nelsonamayad-r4dev-chat-with-your-data.share.connect.posit.cloud`.
 
 Other bugs found and fixed along the way, worth remembering: `rsconnect`'s local metadata (`shiny/*/rsconnect/`) ties redeploys to a cached server-side environment — when a deploy fails due to a *missing package*, adding the package and redeploying under the **same** appId can keep reusing the stale (broken) environment; deleting the local `rsconnect/` folder and deploying under a fresh name forces a clean rebuild and resolved two apps that looked otherwise identical to a working config.
 
@@ -230,3 +250,32 @@ Three reported issues turned out to be one root cause plus one unrelated plottin
 - [x] **`r4dev-collider` layout revisited** — value boxes moved to the top row, DAG diagram left / scatter plot right (previously DAG on top, value boxes below, scatter at the bottom). Also fixed an unrelated crash surfaced while testing locally: the repo's `_brand.yml`/`_brand-dark.yml` had a `color: link:` field that the installed `brand.yml` R package (v0.1.0) doesn't recognize as a valid `color` field (only `foreground/background/primary/secondary/tertiary/success/info/warning/danger/light/dark` — `link` belongs under `typography.link.color`, which was already set correctly) — this crashed (sometimes as a plain error, sometimes as a native segfault when combined with a `bootswatch` preset) any local `bslib::bs_theme()` call in *any* Shiny app in this repo, since `bs_theme()` auto-discovers a `_brand.yml` by walking up parent directories. Removed the redundant `color.link` field from both brand files.
 - [x] **New session `sessions_workshop/12-parallel/12-parallel.qmd`**, "Stop writing for-loops" — functional programming with `purrr` (`map`/`map_dbl`/`map2`/`pmap`/`walk`), then parallelized with `mirai` via `purrr::in_parallel()` (purrr 1.1.0's official parallel backend). Built directly from the [official tidyverse blog post](https://tidyverse.org/blog/2025/07/purrr-1-1-0-parallel/) announcing the feature, reusing its exact `mtcars`/`slow_lm()` teaching example. All chunks execute live at render time (`mirai` needs no API key/quota) — real numbers: sequential fit of 3 groups ≈0.35s, the same code wrapped in `in_parallel()` with 4 daemons ≈0.14s, identical R² values. Added to the "Sessions" navbar dropdown as "12. Scale up"; `about.qmd` learning outcomes updated.
   - **Local tooling detour, worth remembering**: this repo's local R install had CRAN Windows binaries mismatched against its R version (`nanonext`/`mirai`, and other packages, printed "built under R version 4.6.1" while this machine ran R 4.6.0) — severe enough that `nanonext`'s basic socket API (`mirai`'s low-level transport) crashed deterministically. Fixed by `remove.packages()` + a clean `install.packages()` reinstall of `nanonext` and `mirai` (no R version change needed — the user declined upgrading to R 4.6.1 and this repo continues on R 4.6.0). After the reinstall, a *separate*, general flakiness remained where even trivial/unrelated R calls (plain `split()`, a hardcoded JSON string) would segfault on one attempt and succeed on an identical retry — this was **not** specific to mirai/terra/GDAL, appears to be this machine/session's own instability under sustained heavy use, and was worked around by retrying and by preferring an actual `.R` script file over `Rscript -e '...'` one-liners (the latter seemed to fail more often, though this wasn't rigorously confirmed).
+
+## Phase 10 — Track split and renumbering (July 2026, commit `2b02194`)
+
+The single numbered workshop had grown to 13 sessions with collisions against the tools folder. It was split into per-topic folders, each numbered from 01:
+
+- [x] `sessions_ai/` created: `09-llm` → `01-llm`, `10-llm-apps` → `02-llm-apps`, `11-ragnar` → `03-ragnar`, plus a new prose-only `04-agentic` (Claude Code, Codex, OpenClaw, Antigravity; agents/skills/MCP/permissions).
+- [x] `sessions_thinking/` created: new `01-uncertainty`, `02-inference` (infer), `03-regression` (lm/broom), `04-causal` (ggdag, OJS gallery), and `13-bayes` moved in as `05-bayes`. Lessons 1–4 execute fully at render.
+- [x] `12-parallel` → `sessions_workshop/09-parallel`; tools renumbered `09/10/11` → `01-practice`, `02-resources`, `03-feedback`.
+- [x] Every moved file keeps an `aliases:` entry so old published URLs redirect.
+
+## Phase 11 — Content restructure & site quality (July 2026, commits `a426512` → `7817750`)
+
+A 17-item redesign brief, tracked in detail in `notes/content-restructure.md`. Highlights:
+
+- [x] Homepage rebuilt around three tracks (masthead hero, track cards, per-folder listings sorted by `order`); new `start.qmd` (Start here) and `learn/{build-with-r,ai,thinking}.qmd` track overview pages; navbar regrouped into **Build with R / Work with AI / Think with data** dropdowns, each led by its track overview.
+- [x] All 18 lessons standardised: `order`/`level`/`duration`/`track`/`prerequisites` frontmatter, a `.lesson-info` block, "You will learn to", "Key takeaways", and a `.continue-learning` footer.
+- [x] Copyedit: named typos fixed, British-English pass, vague labels replaced, `01-quarto` modernised (website vs blog, `_quarto.yml`, Git-based Netlify deploys).
+- [x] Accessibility (structural only), SEO (`robots.txt`, sitemap generator), and site-quality automation (`checks/site_checks.py`, `checks/generate_sitemap.py`, `checks/dictionary.txt`).
+- [x] Homepage hero iterated three times (`bf7dc78`, `cda0cc8`, plus the uncommitted refresh in Open item 1); visual verification done ad hoc with Playwright in the scratchpad.
+- [ ] ⏳ Deferred by design: lesson splits (awaiting review), `getwd()` → `here::here()`, the 03-text axis-label typo, a measured contrast audit — see Open items 8 and 10.
+
+## Phase 12 — Practice standardisation and causal-app rebuilds (19 July 2026, commit `96a50c3`)
+
+- [x] Every workshop and AI lesson ends with a uniform `## 🏗 Practice N` section (Basic/Intermediate/Advanced, numbered per track); `08-reports` got its first practice section.
+- [x] Eight lessons (workshop 02/03/04/05/06/09, AI 01/03) run Basic/Intermediate exercises in the browser via quarto-live/webR, with fill-in-the-blank chunks, hints and solutions on each lesson's own data (new `sessions_ai/03-ragnar/toy_embeddings.csv`). Quarto-live is now on 10 pages in total.
+- [x] `01-practice` became the practice index plus a sampler.
+- [x] `r4dev-collider` and `r4dev-ovb` rebuilt as scenario-driven teaching tools (conditioning modes, induced-path DAG, exact OVB identity, sign-of-bias table) and redeployed.
+- [x] Fixed unclosed callouts in `02-resources` and `03-text`, a dead Posit AI link, a `site_checks.py` false positive, and the RevealJS deck logo path (logo copied to the project root).
+- [ ] ⏳ The thinking track was not included — see Open item 7.

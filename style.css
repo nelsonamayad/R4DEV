@@ -15,28 +15,55 @@ pre code {
 }
 
 /* ---------- welcome page: masthead (hero banner) ---------- */
-/* Two-column hero: text left, logo mark right. Plain background, no
-   card/gradient/animation -- just type and a bit of breathing room.
-   Bootstrap CSS variables keep both light/dark brands working without
-   any separate dark-mode overrides here. */
+/* Two-column hero: text left, logo mark right. A whisper of brand-colour
+   gradient and a soft glow behind the logo lift it off the page; still no
+   hard card edges or motion. Bootstrap CSS variables keep both light/dark
+   brands working without any separate dark-mode overrides here. */
 .masthead {
   max-width: 74rem;
   margin: 1.5rem auto 3rem;
-  padding: 1rem 0 2rem;
-  border-bottom: 1px solid color-mix(in srgb, var(--bs-body-color) 12%, transparent);
+  padding: 2.25rem clamp(1rem, 4vw, 2.5rem) 2.5rem;
+  border-radius: 1.25rem;
+  background:
+    radial-gradient(60% 90% at 100% 0%, color-mix(in srgb, var(--bs-primary) 10%, transparent), transparent 70%),
+    radial-gradient(50% 75% at 0% 100%, color-mix(in srgb, var(--bs-link-color) 7%, transparent), transparent 70%);
+  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: 2rem 3rem;
   text-align: left;
 }
+.masthead::after {
+  content: "";
+  position: absolute;
+  left: 5%;
+  right: 5%;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--bs-body-color) 18%, transparent) 50%, transparent);
+}
 .masthead .kicker {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--bs-primary);
+}
+.masthead .kicker::before {
+  content: "";
+  display: inline-block;
+  width: 1.5rem;
+  height: 2px;
+  flex: none;
+  background: linear-gradient(90deg, var(--bs-primary), var(--bs-link-color));
+  border-radius: 1px;
+}
+.masthead .masthead-title .accent-word {
+  color: var(--bs-link-color);
 }
 .masthead .masthead-title {
   display: block;
@@ -70,6 +97,11 @@ pre code {
   display: inline-flex;
   align-items: center;
   font-weight: 600;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.masthead .masthead-actions .btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px -6px color-mix(in srgb, var(--bs-body-color) 30%, transparent);
 }
 .masthead .masthead-link {
   font-weight: 600;
@@ -86,15 +118,30 @@ pre code {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
+}
+.masthead-visual::before {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--bs-primary) 22%, transparent), transparent 70%);
+  filter: blur(18px);
+  z-index: 0;
 }
 .masthead-visual img {
-  width: clamp(6.5rem, 9vw, 9rem);
+  position: relative;
+  z-index: 1;
+  width: clamp(7rem, 10vw, 10rem);
   border-radius: 0.75rem;
+  box-shadow: 0 14px 30px -14px color-mix(in srgb, var(--bs-body-color) 40%, transparent);
 }
 @media (max-width: 48rem) {
   .masthead {
     grid-template-columns: 1fr;
     text-align: center;
+  }
+  .masthead .kicker {
+    justify-content: center;
   }
   .masthead .masthead-actions {
     justify-content: center;
@@ -103,7 +150,7 @@ pre code {
     order: -1;
   }
   .masthead-visual img {
-    width: 5rem;
+    width: 5.5rem;
   }
 }
 
@@ -264,5 +311,5 @@ pre code {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  * { scroll-behavior: auto !important; }
+  * { scroll-behavior: auto !important; transition: none !important; }
 }

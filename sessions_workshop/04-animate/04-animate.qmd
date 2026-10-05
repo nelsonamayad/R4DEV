@@ -68,7 +68,7 @@ library(ggpp)
 library(readxl)
 
 # First we upload the data and create a date variable ####
-sakura_data <- readxl::read_excel(paste0(getwd(),"/KyotoFullFlower7.xlsx"), skip = 25) |> # <1> #"/sessions_workshop/04-animate/",
+sakura_data <- readxl::read_excel(paste0(getwd(),"/KyotoFullFlower7.xlsx"), skip = 25) |> # <1>
   tidyr::drop_na() |> # <2>
   dplyr::rename("year"=1,"blossom"=2) |> # <3>
   dplyr::mutate(year = lubridate::make_date(year)) # <4>
@@ -92,7 +92,7 @@ sakura_xx <- tibble(x=lubridate::as_date("1800-01-01"), y=60, # <5>
 
 # Now I create the plot ####
 sakura <- sakura_data |> 
-  dplyr::mutate(sakura = paste0(getwd(),"/sakura.jpg")) |> #"/sessions_workshop/04-animate/", # <6>
+  dplyr::mutate(sakura = paste0(getwd(),"/sakura.jpg")) |> # <6>
   ggplot(aes(x=year, y=blossom))+ 
   geom_plot(data = sakura_xx, aes(x,y,label=plot))+  # <7>
   annotate(geom="rect", xmin=lubridate::as_date("1900-01-01"), xmax=lubridate::as_date("2022-01-01"), # <8>
@@ -114,10 +114,10 @@ sakura <- sakura_data |>
 sakura
 
 ```
-1. Load the data
-2. Drop years without dates
-3. Rename variables
-4. Transform variable to a date using `make_date()` function from **`lubridate`** package
+1. Load the data from the Excel file; `skip = 25` jumps over the metadata rows before the actual table starts
+2. Drop years without a recorded blossom date
+3. Rename the first two columns to `year` and `blossom`
+4. Transform the year into a proper date using the `make_date()` function from the **`lubridate`** package
 5. We first create a tibble with the coordinates where we want our inside plot to be, and a ggplot object saved as a list (all ggplot objects are lists!). We customise the plot, as always
 6. To use **`ggimages`** we need to create a variable with the location of the image file in our directory. The image can vary per observation.
 7. We use the `geom_plot()` geometry to embed a plot within a plot, using the label aesthetic to place the plot and data from the tibble we just created.
@@ -144,7 +144,7 @@ library(ggimage)
 library(gganimate)
 
 sakura_anim <- sakura_data |> 
-  dplyr::mutate(sakura = paste0(getwd(), "/sakura.jpg")) |> #"/sessions/04-animate", # <11>
+  dplyr::mutate(sakura = paste0(getwd(), "/sakura.jpg")) |> # <11>
   dplyr::mutate(y=lubridate::year(year)) |> # <12>
   ggplot(aes(x=year, y=blossom))+ # <13>
   geom_image(aes(image=sakura), size=0.02)+  # <13>
@@ -161,7 +161,7 @@ sakura_anim <- sakura_data |>
 ```
 11. We create a variable that indicates where the image we plan to use as a point is stored
 12. Create a separate year variable for the animation using the `year()` function
-13. We create out ggplot 
+13. We create our ggplot, as usual
 14. We use the `{frame_time}` option within the brackets so the animation saves the year for each frame
 15. We define the `transition_time()` as an integer of years, which will be our animation variable. `as.integer()` makes sure the dates don't include decimals.
 16. We add `shadow_mark()` so old points are displayed as well. 

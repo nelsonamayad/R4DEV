@@ -150,6 +150,10 @@ store <- ragnar_store_create( # <12>
 ragnar_store_ingest(store, session_links, build_index = TRUE) # <13>
 ```
 
+11. Filter the crawl down to R4DEV's own session pages --no point indexing CRAN or GitHub in *our* knowledge base.
+12. A named file instead of `:memory:` means the store survives after R exits --exactly what a deployed app needs.
+13. One call: every page gets read, chunked, embedded, and inserted, and both search indexes (below) get built at the end. Ingestion runs in parallel workers automatically.
+
 ```
 #> Launching 2 parallel workers.
 #> ℹ ingested: https://r4dev.netlify.app/index.html
@@ -162,10 +166,6 @@ ragnar_store_ingest(store, session_links, build_index = TRUE) # <13>
 #> ℹ ingested: https://r4dev.netlify.app/sessions_workshop/10-llm-apps/10-llm-apps.html
 #> Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  100% | ETA:  0s
 ```
-
-11. Filter the crawl down to R4DEV's own session pages --no point indexing CRAN or GitHub in *our* knowledge base.
-12. A named file instead of `:memory:` means the store survives after R exits --exactly what a deployed app needs.
-13. One call: every page gets read, chunked, embedded, and inserted, and both search indexes (below) get built at the end. Ingestion runs in parallel workers automatically.
 
 ## PART VI: Retrieve -- two ways to search
 
@@ -181,6 +181,9 @@ ragnar_retrieve_vss(store, "how do I show information on hover", top_k = 3) # <1
 ragnar_retrieve_bm25(store, "girafe tooltip", top_k = 3) # <15>
 ```
 
+14. A semantic query with no exact keyword overlap ("hover", "information" --neither session actually uses those words) --VSS still lands on `02-plots`, which is genuinely where R4DEV's `ggiraph` tooltip content lives.
+15. The exact term "tooltip" pulls in `05-maps` too --it reuses the same `ggiraph` trick from session 2. Notice both methods can agree; the honest lesson isn't "VSS always wins," it's that they fail in *different* ways --VSS on vocabulary mismatch, BM25 on paraphrase.
+
 ```
 #> # VSS  -- "how do I show information on hover" (no shared words with the text below)
 #>   origin                                                context
@@ -194,9 +197,6 @@ ragnar_retrieve_bm25(store, "girafe tooltip", top_k = 3) # <15>
 #>   05-maps/05-maps.html                                  ""
 #>   02-plots/02-plots.html                                ""
 ```
-
-14. A semantic query with no exact keyword overlap ("hover", "information" --neither session actually uses those words) --VSS still lands on `02-plots`, which is genuinely where R4DEV's `ggiraph` tooltip content lives.
-15. The exact term "tooltip" pulls in `05-maps` too --it reuses the same `ggiraph` trick from session 2. Notice both methods can agree; the honest lesson isn't "VSS always wins," it's that they fail in *different* ways --VSS on vocabulary mismatch, BM25 on paraphrase.
 
 ::: callout-tip
 ## Which one should a deployed app use?
@@ -222,6 +222,10 @@ ragnar_register_tool_retrieve( # <17>
 chat$chat("What R package does this workshop use for structured data extraction from LLMs?") # <18>
 ```
 
+16. Any ellmer chat works --Anthropic here, but `chat_google_gemini()` or `chat_openai()` are equally valid.
+17. One function call wires the whole store up as a callable tool, with a description telling the model what it's for.
+18. Watch the `◯ [tool call]` line in the output below: the model decided *on its own* that it needed to search before answering, called the tool, read the retrieved chunk from the *Talking to machines* session, and answered correctly --with details (`chat_structured()`, `type_object()`, `parallel_chat_structured()`) that only exist in the real retrieved text, not in the model's general training.
+
 ```
 #> ◯ [tool call] search_store_001(text = "R package structured data extraction LLMs")
 #> ● #> [{"origin": "sessions_workshop/09-llm/09-llm.html", "doc_id": 2, "chunk_id": [31, 32], ...}]
@@ -243,11 +247,6 @@ chat$chat("What R package does this workshop use for structured data extraction 
 #> allows you to send multiple prompts concurrently and get back tidy
 #> data frames.
 ```
-
-16. Any ellmer chat works --Anthropic here, but `chat_google_gemini()` or `chat_openai()` are equally valid.
-17. One function call wires the whole store up as a callable tool, with a description telling the model what it's for.
-18. Watch the `◯ [tool call]` line: the model decided *on its own* that it needed to search before answering, called the tool, read the retrieved chunk from the *Talking to machines* session, and answered correctly --with details (`chat_structured()`, `type_object()`, `parallel_chat_structured()`) that only exist in the real retrieved text, not in the model's general training.
-18. The model reads the question, decides it needs to search, calls the tool, reads the retrieved chunks, and answers --grounded, with no separate retrieval code in your prompt-building logic.
 
 ## Capstone: Ask R4DEV, rebuilt {#capstone-ask-r4dev}
 
