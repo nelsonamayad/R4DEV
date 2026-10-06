@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="dcterms.date" content="2022-07-30">
-<meta name="description" content="The core R4DEV workshop track: nine lessons from your first Quarto document to parallel computing.">
+<meta name="description" content="The core R4DEV workshop track: ten lessons from your first Quarto document to parallel computing.">
 
 <title>Build with R – R4DEV</title>
 <style>
@@ -49,9 +49,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-73e373f4a43393be879eaa7f5bec20f5.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-96bf3955d3a35cf5ee340ec4e13f541a.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-3096f9abd66685ad8e6faf44990f2cd1.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-96bf3955d3a35cf5ee340ec4e13f541a.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-f247766226bcc895e77c705a5b584f22.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-fd704f46ef880e09e0b4cd7807fb6275.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-f247766226bcc895e77c705a5b584f22.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <link href="../site_libs/quarto-contrib/fontawesome6-1.2.0/all.min.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/fontawesome6-1.2.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -355,34 +355,39 @@ cookieconsent.run({
  <span class="dropdown-text">3. Data from words</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../sessions_workshop/04-animate/04-animate.html"><i class="bi bi-film" role="img">
+    <a class="dropdown-item" href="../sessions_workshop/04-topics/04-topics.html"><i class="bi bi-book" role="img">
 </i> 
- <span class="dropdown-text">4. Making data move</span></a>
+ <span class="dropdown-text">4. What books are about</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../sessions_workshop/05-maps/05-maps.html"><i class="bi bi-globe" role="img">
+    <a class="dropdown-item" href="../sessions_workshop/05-animate/05-animate.html"><i class="bi bi-film" role="img">
 </i> 
- <span class="dropdown-text">5. Mapping despair in the USA</span></a>
+ <span class="dropdown-text">5. Making data move</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../sessions_workshop/06-scrap/06-scrap.html"><i class="bi bi-wifi" role="img">
+    <a class="dropdown-item" href="../sessions_workshop/06-maps/06-maps.html"><i class="bi bi-globe" role="img">
 </i> 
- <span class="dropdown-text">6. Just take it</span></a>
+ <span class="dropdown-text">6. Mapping despair in the USA</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../sessions_workshop/07-shiny/07-shiny.html"><i class="bi bi-stars" role="img">
+    <a class="dropdown-item" href="../sessions_workshop/07-scrap/07-scrap.html"><i class="bi bi-wifi" role="img">
 </i> 
- <span class="dropdown-text">7. Make it shine</span></a>
+ <span class="dropdown-text">7. Just take it</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../sessions_workshop/08-reports/08-reports.html"><i class="bi bi-android2" role="img">
+    <a class="dropdown-item" href="../sessions_workshop/08-shiny/08-shiny.html"><i class="bi bi-stars" role="img">
 </i> 
- <span class="dropdown-text">8. Smart reports</span></a>
+ <span class="dropdown-text">8. Make it shine</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../sessions_workshop/09-parallel/09-parallel.html"><i class="bi bi-speedometer2" role="img">
+    <a class="dropdown-item" href="../sessions_workshop/09-reports/09-reports.html"><i class="bi bi-android2" role="img">
 </i> 
- <span class="dropdown-text">9. Do it well, do it fast</span></a>
+ <span class="dropdown-text">9. Smart reports</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../sessions_workshop/10-parallel/10-parallel.html"><i class="bi bi-speedometer2" role="img">
+</i> 
+ <span class="dropdown-text">10. Do it well, do it fast</span></a>
   </li>  
     </ul>
   </li>
@@ -458,9 +463,14 @@ cookieconsent.run({
  <span class="dropdown-text">4. Draw your assumptions</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../sessions_thinking/05-bayes/05-bayes.html"><i class="bi bi-infinity" role="img">
+    <a class="dropdown-item" href="../sessions_thinking/05-designs/05-designs.html"><i class="bi bi-sliders" role="img">
 </i> 
- <span class="dropdown-text">5. Think Bayes</span></a>
+ <span class="dropdown-text">5. Earning the arrow</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../sessions_thinking/06-bayes/06-bayes.html"><i class="bi bi-infinity" role="img">
+</i> 
+ <span class="dropdown-text">6. Think Bayes</span></a>
   </li>  
     </ul>
   </li>
@@ -520,7 +530,7 @@ cookieconsent.run({
 
 <div>
   <div class="description">
-    The core R4DEV workshop track: nine lessons from your first Quarto document to parallel computing.
+    The core R4DEV workshop track: ten lessons from your first Quarto document to parallel computing.
   </div>
 </div>
 
@@ -538,7 +548,7 @@ cookieconsent.run({
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">October 5, 2026</p>
+      <p class="date-modified">October 6, 2026</p>
     </div>
   </div>
     
@@ -583,47 +593,53 @@ cookieconsent.run({
 <a class="lesson-row" href="../sessions_workshop/03-text/03-text.html">
   <span class="lesson-num">3</span>
   <span class="lesson-title">Data from words</span>
-  <span class="lesson-outcome">Turn raw text into tidy data and run sentiment and topic analysis.</span>
-  <span class="lesson-meta">Intermediate · 90 min</span>
+  <span class="lesson-outcome">Turn raw text into tidy data, count it, and score its sentiment.</span>
+  <span class="lesson-meta">Intermediate · 60 min</span>
 </a>
-<a class="lesson-row" href="../sessions_workshop/04-animate/04-animate.html">
+<a class="lesson-row" href="../sessions_workshop/04-topics/04-topics.html">
   <span class="lesson-num">4</span>
+  <span class="lesson-title">What books are about</span>
+  <span class="lesson-outcome">Let topic modelling stitch shuffled book chapters back together, and map ideas as a word network.</span>
+  <span class="lesson-meta">Intermediate · 45 min</span>
+</a>
+<a class="lesson-row" href="../sessions_workshop/05-animate/05-animate.html">
+  <span class="lesson-num">5</span>
   <span class="lesson-title">Making data move</span>
   <span class="lesson-outcome">Turn a static plot into an animation that shows change over time.</span>
   <span class="lesson-meta">Intermediate · 75 min</span>
 </a>
-<a class="lesson-row" href="../sessions_workshop/05-maps/05-maps.html">
-  <span class="lesson-num">5</span>
+<a class="lesson-row" href="../sessions_workshop/06-maps/06-maps.html">
+  <span class="lesson-num">6</span>
   <span class="lesson-title">Mapping despair in the USA</span>
   <span class="lesson-outcome">Build static and interactive maps of real spatial data with ggplot2 and leaflet.</span>
   <span class="lesson-meta">Intermediate · 90 min</span>
 </a>
-<a class="lesson-row" href="../sessions_workshop/06-scrap/06-scrap.html">
-  <span class="lesson-num">6</span>
+<a class="lesson-row" href="../sessions_workshop/07-scrap/07-scrap.html">
+  <span class="lesson-num">7</span>
   <span class="lesson-title">Just take it</span>
   <span class="lesson-outcome">Scrape data directly from web pages when no API exists.</span>
   <span class="lesson-meta">Intermediate · 60 min</span>
 </a>
-<a class="lesson-row" href="../sessions_workshop/07-shiny/07-shiny.html">
-  <span class="lesson-num">7</span>
+<a class="lesson-row" href="../sessions_workshop/08-shiny/08-shiny.html">
+  <span class="lesson-num">8</span>
   <span class="lesson-title">Make it shine</span>
   <span class="lesson-outcome">Build an interactive Shiny app and deploy it to the web.</span>
   <span class="lesson-meta">Advanced · 90 min</span>
 </a>
-<a class="lesson-row" href="../sessions_workshop/08-reports/08-reports.html">
-  <span class="lesson-num">8</span>
+<a class="lesson-row" href="../sessions_workshop/09-reports/09-reports.html">
+  <span class="lesson-num">9</span>
   <span class="lesson-title">Smart reports</span>
   <span class="lesson-outcome">Generate a batch of parameterised reports from one template.</span>
   <span class="lesson-meta">Intermediate · 45 min</span>
 </a>
-<a class="lesson-row" href="../sessions_workshop/09-parallel/09-parallel.html">
-  <span class="lesson-num">9</span>
+<a class="lesson-row" href="../sessions_workshop/10-parallel/10-parallel.html">
+  <span class="lesson-num">10</span>
   <span class="lesson-title">Do it well, do it fast</span>
   <span class="lesson-outcome">Replace for-loops with purrr, then parallelise the same code with mirai.</span>
   <span class="lesson-meta">Advanced · 45 min</span>
 </a>
 </div>
-<p><strong>Estimated total time:</strong> ~10.5 hours across 9 lessons (durations are rounded active-work estimates, not automated reading time).</p>
+<p><strong>Estimated total time:</strong> ~10.75 hours across 10 lessons (durations are rounded active-work estimates, not automated reading time).</p>
 <p><a href="../sessions_workshop/01-quarto/01-quarto.html" class="btn btn-primary btn-lg">Start with lesson 1: Blogging with Quarto →</a></p>
 
 

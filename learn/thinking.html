@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="dcterms.date" content="2026-07-01">
-<meta name="description" content="The statistical thinking track: five lessons on simulating your way to intuition, from sampling variation to Bayesian updating.">
+<meta name="description" content="The statistical thinking track: six lessons on simulating your way to intuition, from sampling variation to Bayesian updating.">
 
 <title>Think with data – R4DEV</title>
 <style>
@@ -49,9 +49,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-73e373f4a43393be879eaa7f5bec20f5.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-96bf3955d3a35cf5ee340ec4e13f541a.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-3096f9abd66685ad8e6faf44990f2cd1.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-96bf3955d3a35cf5ee340ec4e13f541a.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-f247766226bcc895e77c705a5b584f22.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-fd704f46ef880e09e0b4cd7807fb6275.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-f247766226bcc895e77c705a5b584f22.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <link href="../site_libs/quarto-contrib/fontawesome6-1.2.0/all.min.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/fontawesome6-1.2.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -355,34 +355,39 @@ cookieconsent.run({
  <span class="dropdown-text">3. Data from words</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../sessions_workshop/04-animate/04-animate.html"><i class="bi bi-film" role="img">
+    <a class="dropdown-item" href="../sessions_workshop/04-topics/04-topics.html"><i class="bi bi-book" role="img">
 </i> 
- <span class="dropdown-text">4. Making data move</span></a>
+ <span class="dropdown-text">4. What books are about</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../sessions_workshop/05-maps/05-maps.html"><i class="bi bi-globe" role="img">
+    <a class="dropdown-item" href="../sessions_workshop/05-animate/05-animate.html"><i class="bi bi-film" role="img">
 </i> 
- <span class="dropdown-text">5. Mapping despair in the USA</span></a>
+ <span class="dropdown-text">5. Making data move</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../sessions_workshop/06-scrap/06-scrap.html"><i class="bi bi-wifi" role="img">
+    <a class="dropdown-item" href="../sessions_workshop/06-maps/06-maps.html"><i class="bi bi-globe" role="img">
 </i> 
- <span class="dropdown-text">6. Just take it</span></a>
+ <span class="dropdown-text">6. Mapping despair in the USA</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../sessions_workshop/07-shiny/07-shiny.html"><i class="bi bi-stars" role="img">
+    <a class="dropdown-item" href="../sessions_workshop/07-scrap/07-scrap.html"><i class="bi bi-wifi" role="img">
 </i> 
- <span class="dropdown-text">7. Make it shine</span></a>
+ <span class="dropdown-text">7. Just take it</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../sessions_workshop/08-reports/08-reports.html"><i class="bi bi-android2" role="img">
+    <a class="dropdown-item" href="../sessions_workshop/08-shiny/08-shiny.html"><i class="bi bi-stars" role="img">
 </i> 
- <span class="dropdown-text">8. Smart reports</span></a>
+ <span class="dropdown-text">8. Make it shine</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../sessions_workshop/09-parallel/09-parallel.html"><i class="bi bi-speedometer2" role="img">
+    <a class="dropdown-item" href="../sessions_workshop/09-reports/09-reports.html"><i class="bi bi-android2" role="img">
 </i> 
- <span class="dropdown-text">9. Do it well, do it fast</span></a>
+ <span class="dropdown-text">9. Smart reports</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../sessions_workshop/10-parallel/10-parallel.html"><i class="bi bi-speedometer2" role="img">
+</i> 
+ <span class="dropdown-text">10. Do it well, do it fast</span></a>
   </li>  
     </ul>
   </li>
@@ -458,9 +463,14 @@ cookieconsent.run({
  <span class="dropdown-text">4. Draw your assumptions</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../sessions_thinking/05-bayes/05-bayes.html"><i class="bi bi-infinity" role="img">
+    <a class="dropdown-item" href="../sessions_thinking/05-designs/05-designs.html"><i class="bi bi-sliders" role="img">
 </i> 
- <span class="dropdown-text">5. Think Bayes</span></a>
+ <span class="dropdown-text">5. Earning the arrow</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../sessions_thinking/06-bayes/06-bayes.html"><i class="bi bi-infinity" role="img">
+</i> 
+ <span class="dropdown-text">6. Think Bayes</span></a>
   </li>  
     </ul>
   </li>
@@ -520,7 +530,7 @@ cookieconsent.run({
 
 <div>
   <div class="description">
-    The statistical thinking track: five lessons on simulating your way to intuition, from sampling variation to Bayesian updating.
+    The statistical thinking track: six lessons on simulating your way to intuition, from sampling variation to Bayesian updating.
   </div>
 </div>
 
@@ -538,7 +548,7 @@ cookieconsent.run({
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">October 5, 2026</p>
+      <p class="date-modified">October 6, 2026</p>
     </div>
   </div>
     
@@ -590,16 +600,22 @@ cookieconsent.run({
   <span class="lesson-num">4</span>
   <span class="lesson-title">Draw your assumptions before drawing your conclusions</span>
   <span class="lesson-outcome">Diagram causal assumptions with DAGs and see confounders and colliders bias an estimate.</span>
-  <span class="lesson-meta">Advanced · 90 min</span>
+  <span class="lesson-meta">Advanced · 45 min</span>
 </a>
-<a class="lesson-row" href="../sessions_thinking/05-bayes/05-bayes.html">
+<a class="lesson-row" href="../sessions_thinking/05-designs/05-designs.html">
   <span class="lesson-num">5</span>
+  <span class="lesson-title">Earning the arrow</span>
+  <span class="lesson-outcome">See why randomisation works, how post-treatment controls break it, and break six research designs with a slider.</span>
+  <span class="lesson-meta">Advanced · 60 min</span>
+</a>
+<a class="lesson-row" href="../sessions_thinking/06-bayes/06-bayes.html">
+  <span class="lesson-num">6</span>
   <span class="lesson-title">Think Bayes</span>
   <span class="lesson-outcome">Update a probability distribution one observation at a time, live in the browser.</span>
   <span class="lesson-meta">Advanced · 60 min</span>
 </a>
 </div>
-<p><strong>Estimated total time:</strong> ~4.75 hours across 5 lessons (durations are rounded active-work estimates, not automated reading time).</p>
+<p><strong>Estimated total time:</strong> ~5 hours across 6 lessons (durations are rounded active-work estimates, not automated reading time).</p>
 <p><a href="../sessions_thinking/01-uncertainty/01-uncertainty.html" class="btn btn-primary btn-lg">Start with lesson 1: Embrace the noise →</a></p>
 
 
