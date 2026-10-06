@@ -126,7 +126,9 @@ that check.
 
 ## Not done, and why
 
-### 1. Oversized-lesson splits (item 14) — recommendation only, by design
+### 1. Oversized-lesson splits (item 14) — reviewed 6 October 2026
+
+**Outcome:** the two largest were split — `03-text` → `03-text` + `04-topics`, and `sessions_thinking/04-causal` → `04-causal` + `05-designs` (see `UPDATE_PLAN.md`, Phase 14). The 02-plots, 05-maps and 07-shiny proposals were declined for now and are kept below for reference; their lesson numbers below are pre-renumbering.
 
 The brief is explicit: *"Do not split or move these lessons until the
 recommendation has been reviewed."* That review hasn't happened, so the
