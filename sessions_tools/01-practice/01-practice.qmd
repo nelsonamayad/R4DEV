@@ -79,12 +79,13 @@ Exercises like the one above now live at the end of their own session, next to t
 - [Practice 1: Create a Quarto blog](/sessions_workshop/01-quarto/01-quarto.qmd#practice-1-create-a-quarto-blog)
 - [Practice 2: Music](/sessions_workshop/02-plots/02-plots.qmd#practice-2-music) ▶ in-browser
 - [Practice 3: Project Gutenberg](/sessions_workshop/03-text/03-text.qmd#practice-3-project-gutenberg) ▶ in-browser
-- [Practice 4: Make it move](/sessions_workshop/04-animate/04-animate.qmd#practice-4-make-it-move) ▶ in-browser
-- [Practice 5: Map it](/sessions_workshop/05-maps/05-maps.qmd#practice-5-map-it) ▶ in-browser
-- [Practice 6: Scrape](/sessions_workshop/06-scrap/06-scrap.qmd#practice-6-scrape) ▶ in-browser
-- [Practice 7: Shine](/sessions_workshop/07-shiny/07-shiny.qmd#practice-7-shine)
-- [Practice 8: Report yourself](/sessions_workshop/08-reports/08-reports.qmd#practice-8-report-yourself)
-- [Practice 9: Map first, parallelize second](/sessions_workshop/09-parallel/09-parallel.qmd#practice-9-map-first-parallelize-second) ▶ in-browser
+- [Practice 4: Shuffle the shelf](/sessions_workshop/04-topics/04-topics.qmd#practice-4-shuffle-the-shelf) ▶ in-browser
+- [Practice 5: Make it move](/sessions_workshop/05-animate/05-animate.qmd#practice-5-make-it-move) ▶ in-browser
+- [Practice 6: Map it](/sessions_workshop/06-maps/06-maps.qmd#practice-6-map-it) ▶ in-browser
+- [Practice 7: Scrape](/sessions_workshop/07-scrap/07-scrap.qmd#practice-7-scrape) ▶ in-browser
+- [Practice 8: Shine](/sessions_workshop/08-shiny/08-shiny.qmd#practice-8-shine)
+- [Practice 9: Report yourself](/sessions_workshop/09-reports/09-reports.qmd#practice-9-report-yourself)
+- [Practice 10: Map first, parallelize second](/sessions_workshop/10-parallel/10-parallel.qmd#practice-10-map-first-parallelize-second) ▶ in-browser
 
 ## Work with AI
 
@@ -98,5 +99,6 @@ Exercises like the one above now live at the end of their own session, next to t
 - [Practice 1: Simulate the boring explanation](/sessions_thinking/01-uncertainty/01-uncertainty.qmd#practice-1-simulate-the-boring-explanation)
 - [Practice 2: Shuffle it](/sessions_thinking/02-inference/02-inference.qmd#practice-2-shuffle-it)
 - [Practice 3: Fit, then doubt](/sessions_thinking/03-regression/03-regression.qmd#practice-3-fit-then-doubt)
-- [Practice 4: Earn the arrow](/sessions_thinking/04-causal/04-causal.qmd#practice-4-earn-the-arrow)
-- [Practice 5: Update yourself](/sessions_thinking/05-bayes/05-bayes.qmd#practice-5-update-yourself) ▶ in-browser
+- [Practice 4: Draw it, then simulate it](/sessions_thinking/04-causal/04-causal.qmd#practice-4-draw-it-then-simulate-it)
+- [Practice 5: Earn the arrow](/sessions_thinking/05-designs/05-designs.qmd#practice-5-earn-the-arrow)
+- [Practice 6: Update yourself](/sessions_thinking/06-bayes/06-bayes.qmd#practice-6-update-yourself) ▶ in-browser

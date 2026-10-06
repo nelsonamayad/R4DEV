@@ -25,4 +25,4 @@
 /.luarc.json
 
 # Unused 120 MB Kontur population file (over GitHub's 100 MB limit) — kept locally only
-/sessions_workshop/05-maps/kontur_population_FR_20231101.gpkg
+**/kontur_population_*.gpkg

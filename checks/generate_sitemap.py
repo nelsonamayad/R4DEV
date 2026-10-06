@@ -38,7 +38,17 @@ def main():
     html_files = sorted(p for p in BLOG.rglob("*.html") if "site_libs" not in p.parts)
 
     urls = []
+    skipped = 0
     for f in html_files:
+        html = f.read_text(encoding="utf-8", errors="ignore")
+        # Quarto writes a tiny JS redirect stub for every `aliases:` entry (old
+        # lesson URLs), and the RevealJS deck is a draft only shown in an iframe.
+        # Neither is a page search engines (or the Ask R4DEV crawler) should see.
+        is_redirect = "<title>Redirect</title>" in html and "window.location.replace" in html
+        is_deck = 'class="reveal"' in html
+        if is_redirect or is_deck:
+            skipped += 1
+            continue
         rel = f.relative_to(BLOG).as_posix()
         urls.append(f"{site_url}/{rel}")
 
@@ -54,7 +64,7 @@ def main():
 
     out = BLOG / "sitemap.xml"
     out.write_text(xml, encoding="utf-8")
-    print(f"Wrote {out} with {len(urls)} URLs.")
+    print(f"Wrote {out} with {len(urls)} URLs ({skipped} redirect stubs/decks skipped).")
     return 0
 
 

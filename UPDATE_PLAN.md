@@ -8,7 +8,7 @@ Goal: bring the 2022–2024 workshop up to date — fix what broke, refresh what
 
 ## Open items (consolidated, October 2026)
 
-Everything that was open across the phases below and `notes/content-restructure.md`, with status after the 6 October 2026 implementation pass (Phase 13):
+Everything that was open across the phases below and `notes/content-restructure.md`, with status after the 6 October 2026 implementation passes (Phases 13–14). Lesson paths below are as they were when each item was written; Phase 14 renumbered two tracks.
 
 1. ✅ **Commit the working tree** — committed (annotation placement, tools `order:`, homepage counts, hero refresh).
 2. ✅ **GitHub remote + push** — done by the GitHub Pages migration (`a26cc01`): `origin` = https://github.com/nelsonamayad/R4DEV, branch renamed `master` → `main`, publishing via `quarto publish gh-pages --no-render`. This unblocks 4f.
@@ -19,13 +19,13 @@ Everything that was open across the phases below and `notes/content-restructure.
 7. ✅ **Thinking-track practice alignment** — all five lessons use `## 🏗 Practice N` with Basic/Intermediate/Advanced tiers (existing exercises regrouped verbatim, plus one new Advanced item each in 01–03 and two in 05-bayes, which had no Advanced tier); `05-bayes` renumbered 13 → 5; `01-practice` index links all five anchors.
 8. Content backlog (`notes/content-restructure.md`):
    - ✅ `x="Sentimen AFINN"` typo in `03-text` fixed.
-   - ⏳ Lesson-split recommendations (03-text, thinking/04-causal, 07-shiny's RevealJS bonus, 02-plots, 05-maps) — **awaiting your review**, by design.
+   - ✅ Lesson splits reviewed: the two largest were done (Phase 14) — 03-text → `03-text` + `04-topics`, thinking 04-causal → `04-causal` + `05-designs`. The other three (02-plots, 05-maps, 07-shiny's RevealJS bonus) were **declined** for now; the recommendations stay in the notes file.
    - ⏳ `getwd()` → `here::here()` migration (~30 call sites) — deliberately not done: `paste0(getwd(), …)` works under Quarto, `here::here()` isn't a drop-in replacement (project-root vs file-relative), and every edit re-executes expensive network/credential chunks. Do it only as its own one-file-at-a-time pass, if at all.
 9. ✅ **`param_reports/` renders** (HTML + PDF, and the batch `retractionwatch_report()` function). Root cause: the `gapminder` package wasn't installed locally; also removed duplicated chunk labels.
 10. Accessibility (4g):
-    - ✅ WCAG contrast measured for both brands (Phase 13 table). Two failures need a brand decision: light-mode links `#F75431` (3.35:1 on white, 2.97:1 on `cloud` cards; AA needs 4.5:1) and the dark-mode navbar (white on `#4FB3C9`, 2.44:1).
+    - ✅ WCAG contrast measured for both brands (Phase 13 table) and both failures **fixed** in Phase 14: light-mode links → `rust` #C2401F (5.19:1 on white, 4.6:1 on cards); dark-mode navbar, footer and primary buttons → `deepteal` #226F7F under white text (5.76:1).
     - ⏳ Keyboard walkthrough and mobile checks still not done (need browser tooling).
-11. ⏳ **Local hygiene**: remove the stale `C:\Program Files\R\R-4.4.1` (needs admin rights; your call).
+11. ⏳ **Local hygiene**: the stale `C:\Program Files\R\R-4.4.1` is only a 64 MB remnant (empty `bin/`, no uninstaller). Deleting it was attempted and refused without admin rights — run `Remove-Item -Recurse -Force "C:\Program Files\R\R-4.4.1"` in an elevated PowerShell.
 
 ## Phase 0 — Baseline (do first, ~1 session of work)
 

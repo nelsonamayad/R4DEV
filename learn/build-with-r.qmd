@@ -1,7 +1,7 @@
 ---
 title: "Build with R"
 subtitle: "Retrieve, transform, visualise, communicate, and scale data workflows with R"
-description: "The core R4DEV workshop track: nine lessons from your first Quarto document to parallel computing."
+description: "The core R4DEV workshop track: ten lessons from your first Quarto document to parallel computing."
 date: "2022-07-30"
 date-modified: last-modified
 toc: true
@@ -40,41 +40,47 @@ Analysts, researchers and students who want a practical, project-based introduct
 <a class="lesson-row" href="/sessions_workshop/03-text/03-text.qmd">
   <span class="lesson-num">3</span>
   <span class="lesson-title">Data from words</span>
-  <span class="lesson-outcome">Turn raw text into tidy data and run sentiment and topic analysis.</span>
-  <span class="lesson-meta">Intermediate · 90 min</span>
+  <span class="lesson-outcome">Turn raw text into tidy data, count it, and score its sentiment.</span>
+  <span class="lesson-meta">Intermediate · 60 min</span>
 </a>
-<a class="lesson-row" href="/sessions_workshop/04-animate/04-animate.qmd">
+<a class="lesson-row" href="/sessions_workshop/04-topics/04-topics.qmd">
   <span class="lesson-num">4</span>
+  <span class="lesson-title">What books are about</span>
+  <span class="lesson-outcome">Let topic modelling stitch shuffled book chapters back together, and map ideas as a word network.</span>
+  <span class="lesson-meta">Intermediate · 45 min</span>
+</a>
+<a class="lesson-row" href="/sessions_workshop/05-animate/05-animate.qmd">
+  <span class="lesson-num">5</span>
   <span class="lesson-title">Making data move</span>
   <span class="lesson-outcome">Turn a static plot into an animation that shows change over time.</span>
   <span class="lesson-meta">Intermediate · 75 min</span>
 </a>
-<a class="lesson-row" href="/sessions_workshop/05-maps/05-maps.qmd">
-  <span class="lesson-num">5</span>
+<a class="lesson-row" href="/sessions_workshop/06-maps/06-maps.qmd">
+  <span class="lesson-num">6</span>
   <span class="lesson-title">Mapping despair in the USA</span>
   <span class="lesson-outcome">Build static and interactive maps of real spatial data with ggplot2 and leaflet.</span>
   <span class="lesson-meta">Intermediate · 90 min</span>
 </a>
-<a class="lesson-row" href="/sessions_workshop/06-scrap/06-scrap.qmd">
-  <span class="lesson-num">6</span>
+<a class="lesson-row" href="/sessions_workshop/07-scrap/07-scrap.qmd">
+  <span class="lesson-num">7</span>
   <span class="lesson-title">Just take it</span>
   <span class="lesson-outcome">Scrape data directly from web pages when no API exists.</span>
   <span class="lesson-meta">Intermediate · 60 min</span>
 </a>
-<a class="lesson-row" href="/sessions_workshop/07-shiny/07-shiny.qmd">
-  <span class="lesson-num">7</span>
+<a class="lesson-row" href="/sessions_workshop/08-shiny/08-shiny.qmd">
+  <span class="lesson-num">8</span>
   <span class="lesson-title">Make it shine</span>
   <span class="lesson-outcome">Build an interactive Shiny app and deploy it to the web.</span>
   <span class="lesson-meta">Advanced · 90 min</span>
 </a>
-<a class="lesson-row" href="/sessions_workshop/08-reports/08-reports.qmd">
-  <span class="lesson-num">8</span>
+<a class="lesson-row" href="/sessions_workshop/09-reports/09-reports.qmd">
+  <span class="lesson-num">9</span>
   <span class="lesson-title">Smart reports</span>
   <span class="lesson-outcome">Generate a batch of parameterised reports from one template.</span>
   <span class="lesson-meta">Intermediate · 45 min</span>
 </a>
-<a class="lesson-row" href="/sessions_workshop/09-parallel/09-parallel.qmd">
-  <span class="lesson-num">9</span>
+<a class="lesson-row" href="/sessions_workshop/10-parallel/10-parallel.qmd">
+  <span class="lesson-num">10</span>
   <span class="lesson-title">Do it well, do it fast</span>
   <span class="lesson-outcome">Replace for-loops with purrr, then parallelise the same code with mirai.</span>
   <span class="lesson-meta">Advanced · 45 min</span>
@@ -82,6 +88,6 @@ Analysts, researchers and students who want a practical, project-based introduct
 </div>
 ```
 
-**Estimated total time:** ~10.5 hours across 9 lessons (durations are rounded active-work estimates, not automated reading time).
+**Estimated total time:** ~10.75 hours across 10 lessons (durations are rounded active-work estimates, not automated reading time).
 
 [Start with lesson 1: Blogging with Quarto →](/sessions_workshop/01-quarto/01-quarto.qmd){.btn .btn-primary .btn-lg}

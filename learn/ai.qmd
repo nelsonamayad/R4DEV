@@ -18,7 +18,7 @@ Anyone who wants to use LLMs as part of an actual R workflow -- extraction, retr
 ## Prerequisites
 
 - **Minimum**: comfort with R and the tidyverse pipe (`|>`), as taught in the [Build with R](build-with-r.qmd) track's first two lessons. This track assumes that, and does not re-teach it.
-- **Helpful**: having built a Shiny app before ([Make it shine](/sessions_workshop/07-shiny/07-shiny.qmd)) makes lesson 2 land faster, but is not required.
+- **Helpful**: having built a Shiny app before ([Make it shine](/sessions_workshop/08-shiny/08-shiny.qmd)) makes lesson 2 land faster, but is not required.
 - No prior AI/ML background needed -- every concept (embeddings, tool calling, retrieval) is introduced from scratch.
 - No API key is required to read any lesson: LLM code chunks are shown with real captured output rather than executed live.
 

@@ -75,24 +75,27 @@ website:
           - text: "3. Data from words"
             icon: "textarea-t"
             href: sessions_workshop/03-text/03-text.qmd
-          - text: "4. Making data move"
+          - text: "4. What books are about"
+            icon: "book"
+            href: sessions_workshop/04-topics/04-topics.qmd
+          - text: "5. Making data move"
             icon: "film"
-            href: sessions_workshop/04-animate/04-animate.qmd
-          - text: "5. Mapping despair in the USA"
+            href: sessions_workshop/05-animate/05-animate.qmd
+          - text: "6. Mapping despair in the USA"
             icon: "globe"
-            href: sessions_workshop/05-maps/05-maps.qmd
-          - text: "6. Just take it"
+            href: sessions_workshop/06-maps/06-maps.qmd
+          - text: "7. Just take it"
             icon: "wifi"
-            href: sessions_workshop/06-scrap/06-scrap.qmd
-          - text: "7. Make it shine"
+            href: sessions_workshop/07-scrap/07-scrap.qmd
+          - text: "8. Make it shine"
             icon: "stars"
-            href: sessions_workshop/07-shiny/07-shiny.qmd
-          - text: "8. Smart reports"
+            href: sessions_workshop/08-shiny/08-shiny.qmd
+          - text: "9. Smart reports"
             icon: "android2"
-            href: sessions_workshop/08-reports/08-reports.qmd
-          - text: "9. Do it well, do it fast"
+            href: sessions_workshop/09-reports/09-reports.qmd
+          - text: "10. Do it well, do it fast"
             icon: "speedometer2"
-            href: sessions_workshop/09-parallel/09-parallel.qmd
+            href: sessions_workshop/10-parallel/10-parallel.qmd
       - text: "Work with AI"
         icon: "robot"
         menu:
@@ -132,9 +135,12 @@ website:
           - text: "4. Draw your assumptions"
             icon: "diagram-3"
             href: sessions_thinking/04-causal/04-causal.qmd
-          - text: "5. Think Bayes"
+          - text: "5. Earning the arrow"
+            icon: "sliders"
+            href: sessions_thinking/05-designs/05-designs.qmd
+          - text: "6. Think Bayes"
             icon: "infinity"
-            href: sessions_thinking/05-bayes/05-bayes.qmd
+            href: sessions_thinking/06-bayes/06-bayes.qmd
       - text: "Practice"
         icon: "trophy"
         href: sessions_tools/01-practice/01-practice.qmd

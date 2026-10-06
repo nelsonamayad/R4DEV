@@ -79,7 +79,7 @@ cat(substr(md, 1, 400)) # <2>
 1. One URL in, one markdown string out. Works on local files too, not just URLs.
 2. The first 400 characters --notice the navbar and cookie banner are already gone.
 
-To index more than one page, `ragnar_find_links()` crawls a page for its own internal links --the same instinct as session 6's scraping, aimed at an entire site instead of one page:
+To index more than one page, `ragnar_find_links()` crawls a page for its own internal links --the same instinct as session 7's scraping, aimed at an entire site instead of one page:
 
 ```{r 11.links}
 links <- ragnar_find_links(page) # <3>

@@ -22,6 +22,7 @@ logo:
 color:
   palette:
     teal: "#4FB3C9"     # primary accent, lifted for dark backgrounds
+    deepteal: "#226F7F" # surfaces under white text (navbar, footer, buttons) -- see style.css
     orange: "#FF7A55"   # links, lifted for dark backgrounds
     slate: "#8FA3A8"    # muted secondary text/elements
     charcoal: "#1B262D" # subtle panel/table-stripe surfaces

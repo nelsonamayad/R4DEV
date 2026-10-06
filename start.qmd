@@ -49,7 +49,7 @@ Complete beginners to R can absolutely take this workshop, but should expect les
 Start here → [Blogging with Quarto](sessions_workshop/01-quarto/01-quarto.qmd) → [Everything in its right place](sessions_workshop/02-plots/02-plots.qmd) → [Data from words](sessions_workshop/03-text/03-text.qmd) → [Chat with your data](sessions_ai/02-llm-apps/02-llm-apps.qmd)
 
 ## Experienced R analyst
-[Do it well, do it fast](sessions_workshop/09-parallel/09-parallel.qmd) (scaling) → [Work with AI track](learn/ai.qmd) → [Think with data track](learn/thinking.qmd)
+[Do it well, do it fast](sessions_workshop/10-parallel/10-parallel.qmd) (scaling) → [Work with AI track](learn/ai.qmd) → [Think with data track](learn/thinking.qmd)
 
 ## Interested in AI
 [Talking to machines](sessions_ai/01-llm/01-llm.qmd) → [Chat with your data](sessions_ai/02-llm-apps/02-llm-apps.qmd) → [Grounded in truth](sessions_ai/03-ragnar/03-ragnar.qmd) → [Agentic coding](sessions_ai/04-agentic/04-agentic.qmd) → [Ask R4DEV capstone](sessions_ai/03-ragnar/03-ragnar.qmd#capstone-ask-r4dev)

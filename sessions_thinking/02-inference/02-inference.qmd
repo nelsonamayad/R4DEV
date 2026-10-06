@@ -178,7 +178,7 @@ Read it as: "if we could rerun this study endlessly, 95% of intervals built this
 
 The p-value may be the most misquoted number in science, enough that the American Statistical Association issued a [formal statement](https://doi.org/10.1080/00031305.2016.1154108) about it. Tattoo the correct reading somewhere: *the probability of data at least this extreme, **assuming nothing is going on***. It is **not**:
 
--   ~~The probability the null hypothesis is true~~ --that question needs [Bayes](/sessions_thinking/05-bayes/05-bayes.qmd), the last stop of this track.
+-   ~~The probability the null hypothesis is true~~ --that question needs [Bayes](/sessions_thinking/06-bayes/06-bayes.qmd), the last stop of this track.
 -   ~~The probability the finding replicates~~.
 -   ~~A measure of importance~~ --with n large enough, a difference of 0.1mm in bill length becomes "significant" while mattering to no penguin.
 

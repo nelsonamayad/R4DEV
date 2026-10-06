@@ -1,0 +1,346 @@
+---
+title: Do it well, do it fast 🏎️
+subtitle: Functional programming with purrr, parallelized with mirai
+author: "Nelson Amaya"
+description: "Functions instead of loops; do multiple things at the same time. Learn purrr's functional style, then parallelize it with a single wrapper function."
+categories:
+  - purrr
+  - functional programming
+  - mirai
+  - parallel computing
+date: "2026-07-05"
+date-modified: last-modified
+order: 10
+level: Advanced
+duration: 45 min
+track: Build with R
+prerequisites: "Everything in its right place"
+image: xmen.gif
+editor_options:
+  chunk_output_type: console
+aliases:
+  - /sessions_workshop/12-parallel/12-parallel.html
+  - /sessions_workshop/09-parallel/09-parallel.html
+citation:
+  url: https://nelsonamayad.github.io/R4DEV/sessions_workshop/10-parallel/10-parallel
+format: live-html
+engine: knitr
+webr:
+  packages:
+    - purrr
+---
+
+{{< include /_extensions/r-wasm/live/_knitr.qmd >}}
+
+> *"We build our computer (systems) the way we build our cities: over time, without a plan, on top of ruins."* <br>--Ellen Ullman
+
+::: {.lesson-info}
+**Level:** Advanced &nbsp;·&nbsp; **Time:** ~45 min &nbsp;·&nbsp; **Prerequisites:** Everything in its right place &nbsp;·&nbsp; **Tools:** purrr, mirai
+:::
+
+## You will learn to
+
+- Replace a for-loop with purrr's `map()` family, functionally.
+- Iterate over two or more lists in parallel with `map2()`/`pmap()`.
+- Understand why a self-contained function is what makes parallelisation possible at all.
+- Parallelise existing purrr code across cores with mirai's `in_parallel()`, without rewriting it.
+
+## PART I: The for-loop has to go
+
+You already know the shape of this problem. You have a list of things --countries, files, model subsets, API responses-- and you need to do the *same operation* to each one. The instinct from other languages is a `for` loop:
+
+```r
+results <- vector("list", length(inputs))
+for (i in seq_along(inputs)) {
+  results[[i]] <- some_function(inputs[[i]])
+}
+```
+
+It works. It is also four lines of bookkeeping (pre-allocate, index, assign, remember the loop variable) around one line of actual logic. **`purrr::map()`** is that one line:
+
+```r
+results <- purrr::map(inputs, some_function)
+```
+
+`map()` always returns a list. Its typed siblings return a vector instead, and fail loudly if your function doesn't produce the type you promised --a feature, not an inconvenience: silently getting a list back when you expected numbers is a classic source of bugs.
+
+```{r 12.map-family}
+library(purrr)
+
+map_dbl(1:4, \(x) x^2)      # <1>
+map_chr(1:4, \(x) paste("Number", x)) # <2>
+map(1:3, \(x) x^2) # <3>
+```
+
+1. `map_dbl()` --always returns a double vector, errors if a result isn't length-1 numeric.
+2. `map_chr()` --same idea, for character output.
+3. Plain `map()` --always returns a list, whatever the contents.
+
+`map2()` and `pmap()` extend this to two or many parallel inputs walked together:
+
+```{r 12.map2-pmap}
+map2_dbl(1:3, 4:6, \(x, y) x + y) # <1>
+
+list(a = 1:3, b = 4:6, c = 7:9) |>
+  pmap_dbl(\(a, b, c) mean(c(a, b, c))) # <2>
+```
+
+1. `map2_dbl()` walks two vectors together, element by element.
+2. `pmap_dbl()` generalizes this to as many parallel inputs as you like, taken from a list.
+
+And when you want the *side effect*, not the return value --printing, saving a file, sending a Slack message-- `walk()` is `map()`'s quiet twin: it runs your function for every element and returns its input invisibly, so nothing clutters your console.
+
+```{r 12.walk}
+1:3 |> walk(\(x) cat("Processing", x, "\n"))
+```
+
+### A real (slightly slow) example
+
+Here's where this stops being a toy. Say you need to fit a model **per group** --a common pattern: split a dataset, fit the same model shape to every piece, compare the results. We'll pretend each fit takes real work (a tenth of a second) so the timing later in this session means something:
+
+```{r 12.slow-lm}
+slow_lm <- function(formula, data) {
+  Sys.sleep(0.1)  # <1>
+  lm(formula, data)
+}
+
+t0 <- Sys.time()
+models <- mtcars |>
+  split(mtcars$cyl) |> # <2>
+  map(\(df) slow_lm(mpg ~ wt + hp, data = df)) # <3>
+t1 <- Sys.time()
+
+cat("Sequential time:", round(as.numeric(t1 - t0, units = "secs"), 2), "sec\n")
+models |> map(summary) |> map_dbl("r.squared") # <4>
+```
+
+1. Stand-in for "this is genuinely slow" --a database query, an API call, a heavy computation.
+2. Base R's `split()` breaks `mtcars` into one data frame per cylinder count.
+3. One `slow_lm()` call per group, via `map()` --no loop, no pre-allocation.
+4. `map_dbl()` again, this time plucking a named element (`"r.squared"`) out of each model summary.
+
+Three groups, a tenth of a second each: about `r round(0.1*3,1)` seconds if nothing overlaps. Hold that number.
+
+## PART II: When parallel is actually worth it
+
+Everything above ran **sequentially** --one group after another, on one CPU core. Your computer almost certainly has several cores sitting idle while that happened. The obvious next thought is "why not do all three at once?" Sometimes you should. Sometimes you shouldn't:
+
+::: callout-note
+## Parallel helps when...
+
+- Each iteration takes a **real amount of time** --at least a millisecond, ideally much more. Model fitting, API calls, web scraping, heavy simulation.
+- The work is **CPU-bound** (lots of computation) or **I/O-bound** (waiting on a network/disk) --both benefit, for different reasons: CPU-bound work spreads across cores, I/O-bound work overlaps the *waiting*.
+- The data passed to each worker isn't enormous --sending gigabytes to every parallel process costs more than it saves.
+:::
+
+::: callout-warning
+## ...and hurts when
+
+Spinning up parallel workers has fixed overhead --starting processes, sending data and code to them, collecting results back. For **quick operations** (simple arithmetic, a fast filter, anything sub-millisecond), that overhead outweighs the work itself. Sequential `map()` will often be *faster* on small, fast tasks. Parallelize the slow thing, not the whole script.
+:::
+
+This is a judgment call, not a rule you can memorize --the right response to "should I parallelize this?" is usually to time both versions and look, which is exactly what the rest of this session does.
+
+## PART III: mirai, purrr's parallel engine
+
+[**`mirai`**](https://mirai.r-lib.org/) is a lightweight async/parallel framework from Posit's Charlie Gao, and as of `purrr` 1.1.0 it's purrr's own official parallel backend. `daemons()` launches persistent background R processes ("daemons") that stick around waiting for work:
+
+```{r 12.mirai-basics}
+library(mirai)
+
+daemons(4) # <1>
+
+m <- mirai({ Sys.sleep(0.2); mean(rnorm(1e5)) }) # <2>
+unresolved(m) # <3>
+Sys.sleep(0.5)
+m[] # <4>
+
+daemons(0) # <5>
+```
+
+1. Launch 4 background R processes, sitting idle and ready.
+2. `mirai({...})` submits one expression to run on a free daemon --**non-blocking**: your R session gets control back immediately.
+3. `unresolved()` checks whether it's still running, without waiting for it.
+4. `m[]` retrieves the result --blocks *only if* the task isn't done yet.
+5. `daemons(0)` shuts the background processes down when you're finished.
+
+For mapping many inputs at once, `mirai_map()` does the same thing `map()` does, distributed across daemons:
+
+```r
+daemons(4)
+mirai_map(1:9, \(x) { Sys.sleep(0.2); x^2 })[.progress, .flat] # <1>
+daemons(0)
+```
+
+1. `.progress` shows a live progress bar; `.flat` returns a flat vector instead of a list of length-1 results --both are optional subsetting flags on the result.
+
+## PART IV: The one-line bridge --`purrr::in_parallel()`
+
+You don't have to rewrite your `map()` calls to use `mirai` directly. `purrr::in_parallel()` wraps the function you're already passing to `map()`, and purrr routes the work to whatever daemons are running:
+
+```{r 12.in-parallel}
+daemons(4)
+
+t0 <- Sys.time()
+models_parallel <- mtcars |>
+  split(mtcars$cyl) |>
+  map(in_parallel(\(df) slow_lm(mpg ~ wt + hp, data = df), slow_lm = slow_lm)) # <1>
+t1 <- Sys.time()
+
+cat("Parallel time:", round(as.numeric(t1 - t0, units = "secs"), 2), "sec\n")
+models_parallel |> map(summary) |> map_dbl("r.squared") # <2>
+
+daemons(0)
+```
+
+1. The **only** change from PART I's code: `slow_lm(...)` wrapped in `in_parallel(...)`, with `slow_lm = slow_lm` passed through explicitly (more on why in PART V).
+2. Same R² values as the sequential version --parallelizing doesn't change *what* you compute, only *how long it takes*.
+
+Same three groups, same tenth-of-a-second delay each, same results --but this time the three `slow_lm()` calls overlap instead of queueing, so the wall-clock time drops toward "however long the *slowest single* group takes," not "the sum of all of them." **If you never call `daemons()`, `in_parallel()` silently falls back to running sequentially** --it's a real gotcha: your code won't error, it just won't be any faster, and you might not notice for a while.
+
+## PART V: The gotcha --parallel functions must be self-contained
+
+A `mirai` daemon is a **separate R process** with no access to your R session's workspace. Whatever `in_parallel()` wraps gets serialized and sent over, which means it can't casually reach for variables sitting in your global environment:
+
+```r
+my_data <- c(1, 2, 3)
+map(1:3, in_parallel(\(x) mean(my_data)))          # ❌ errors: my_data doesn't exist over there
+map(1:3, in_parallel(\(x) mean(my_data), my_data = my_data)) # ✅ passed explicitly
+```
+
+The same applies to packages: reference functions with `pkg::fun()`, or `library()` *inside* the function body, rather than relying on a package you loaded in your main session:
+
+```r
+map(1:3, in_parallel(\(x) vctrs::vec_init(integer(), x)))     # ✅ explicit namespace
+
+map(1:3, in_parallel(\(x) {
+  library(vctrs)
+  vec_init(integer(), x)
+}))                                                            # ✅ also fine
+```
+
+::: callout-important
+## Why this is the #1 way parallel code silently misbehaves
+
+Forgetting to pass a dependency doesn't always error clearly --sometimes it errors confusingly, sometimes (if the daemon happens to have something similarly named loaded) it does the wrong thing quietly. When a `map(in_parallel(...))` call breaks and a plain `map()` call with the same function doesn't, check this first.
+:::
+
+## Already used this, one level up
+
+The AI track's `ellmer::parallel_chat_structured()` (from [Talking to machines](/sessions_ai/01-llm/01-llm.qmd)) --scoring 48 songs concurrently-- is this exact idea, wrapped: ellmer manages the daemons and the request batching for you, because "call this LLM prompt many times at once" is common enough to deserve its own shortcut. Now you know what's underneath it, and that the same mechanism is available for *any* R function, not just LLM calls.
+
+::: callout-tip
+## Where this goes next: responsive Shiny apps
+
+`mirai` also ships event-driven promises and is the recommended async backend for Shiny's `ExtendedTask` --meaning a slow computation (a big model fit, a batch API call) can run in the background *without freezing the app* for every other user. That's a production-Shiny concern, not something we build out today, but it's the same `daemons()`/`mirai()` machinery from PART III underneath.
+:::
+
+## 🏗 Practice 10: Map first, parallelize second {.unnumbered}
+
+The purrr half of this session runs right here in your browser -- the mirai half needs real CPU cores, so it waits for your own R session in the Advanced tier.
+
+::::: {.callout-note icon="false" collapse="true"}
+# Basic
+
+Rewrite this for-loop as a single typed `map` call. The loop is shown in comments -- fill in the two blanks so `results` is a plain numeric vector.
+
+```{webr}
+#| exercise: ex_w10_basic
+library(purrr)
+
+# The loop you'd write in another language:
+# results <- numeric(5)
+# for (i in 1:5) results[i] <- sqrt(i)
+
+results <- ______(1:5, \(x) ______)
+results
+```
+
+:::: {.hint exercise="ex_w10_basic"}
+::: {.callout-note collapse="false"}
+## Hint
+
+You promised a numeric vector, so you want the typed sibling of `map()` that always returns doubles.
+:::
+::::
+
+:::: {.solution exercise="ex_w10_basic"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```r
+library(purrr)
+
+results <- map_dbl(1:5, \(x) sqrt(x))
+results
+```
+:::
+::::
+:::::
+
+::::: {.callout-important icon="false" collapse="true"}
+# Intermediate
+
+Reproduce the split-then-map pattern from PART I, but split `mtcars` by **gear** instead of cylinders, and pull out each model's R². Two blanks: the splitting variable and the typed map that plucks `"r.squared"`.
+
+```{webr}
+#| exercise: ex_w10_inter
+library(purrr)
+
+models <- mtcars |>
+  split(mtcars$______) |>
+  map(\(df) lm(mpg ~ wt, data = df))
+
+models |> map(summary) |> ______("r.squared")
+```
+
+:::: {.hint exercise="ex_w10_inter"}
+::: {.callout-note collapse="false"}
+## Hint
+
+`split()` takes the grouping column; the session's own example ends by plucking a named element out of each summary with a typed map.
+:::
+::::
+
+:::: {.solution exercise="ex_w10_inter"}
+::: {.callout-tip collapse="false"}
+## Solution
+
+```r
+library(purrr)
+
+models <- mtcars |>
+  split(mtcars$gear) |>
+  map(\(df) lm(mpg ~ wt, data = df))
+
+models |> map(summary) |> map_dbl("r.squared")
+```
+:::
+::::
+:::::
+
+::::: {.callout-caution icon="false" collapse="true"}
+# Advanced
+
+Parallelism needs real cores -- these run in your own R session:
+
+- Take one of session 7's scraping functions (fetching one page per artist/URL) and parallelize the fetch with `daemons()` + `in_parallel()`. Time both versions --I/O-bound tasks like network requests often parallelize *better* than CPU-bound ones, since the wait, not the computation, is what overlaps.
+- Deliberately break the self-containment rule (reference a variable from your global environment without passing it to `in_parallel()`) and read the resulting error --this is the error you want to recognize instantly in the wild.
+- Time the sequential PART I example again with 6 groups instead of 3 --does the gap between sequential and parallel grow?
+- Read `mirai`'s docs on remote daemons (SSH, or an HPC scheduler like Slurm) --the `purrr` code you write doesn't change at all; only the `daemons()` call does. What does that separation buy you?
+:::::
+
+## Key takeaways
+
+- `map()` and its variants replace a for-loop with a function applied to every element -- same result, more composable.
+- A function has to be self-contained (no reaching into the global environment) before it can be safely parallelised.
+- mirai parallelises existing purrr code by wrapping it in `in_parallel()` -- the loop logic itself doesn't change.
+- I/O-bound work (network calls, scraping) often benefits from parallelism more than CPU-bound work does.
+
+::: {.continue-learning}
+[← Previous: Smart reports](/sessions_workshop/09-reports/09-reports.qmd)
+
+[Track overview: Build with R →](/learn/build-with-r.qmd)
+
+[Explore another track: Work with AI →](/learn/ai.qmd)
+:::

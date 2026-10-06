@@ -393,7 +393,7 @@ Everything below talks to a real model, so it needs your own R session and an AP
 -   Create a chat object with a system prompt that makes the model answer like a pirate, and ask it about the tidyverse.
 -   Change the system prompt to "Answer only with valid R code, no prose" and ask it to plot `diamonds`. Run what it returns. Would you have written it the same way?
 -   Take three paragraphs from any news article and design a `type_object()` that extracts *who did what, where, when*. Where does the model struggle?
--   Re-run the mood-scoring experiment, but give the model the **lyrics' first line** instead of the title (scrape them --session 6 taught you how). Does the correlation with valence improve?
+-   Re-run the mood-scoring experiment, but give the model the **lyrics' first line** instead of the title (scrape them --session 7 taught you how). Does the correlation with valence improve?
 -   Register two tools --`weather_now()` and a function that geocodes a city name using the [Open-Meteo geocoding API](https://open-meteo.com/en/docs/geocoding-api)-- and ask for the temperature in five cities without ever typing a coordinate.
 :::::
 

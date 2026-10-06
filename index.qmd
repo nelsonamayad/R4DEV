@@ -83,7 +83,7 @@ Learn to turn messy information into reproducible analysis, compelling visualisa
 
 ## Learning tracks {#tracks .section-header}
 
-Three tracks, eighteen lessons. Each is self-contained enough to enter on its own, but reads best in order.
+Three tracks, twenty lessons. Each is self-contained enough to enter on its own, but reads best in order.
 
 ```{=html}
 <div class="track-grid">
@@ -91,7 +91,7 @@ Three tracks, eighteen lessons. Each is self-contained enough to enter on its ow
 <div class="track-card" data-track="build">
   <p class="track-card-title">Build with R</p>
   <p class="track-card-desc">Retrieve, transform, visualise, communicate, and scale data workflows with R.</p>
-  <p class="track-card-meta"><span>9 lessons</span><span>Beginner → Advanced</span></p>
+  <p class="track-card-meta"><span>10 lessons</span><span>Beginner → Advanced</span></p>
   <a class="btn btn-primary" href="learn/build-with-r.qmd">View track →</a>
 </div>
 
@@ -105,7 +105,7 @@ Three tracks, eighteen lessons. Each is self-contained enough to enter on its ow
 <div class="track-card" data-track="thinking">
   <p class="track-card-title">Think with data</p>
   <p class="track-card-desc">Reason clearly about uncertainty, inference, models, causality, and Bayesian evidence.</p>
-  <p class="track-card-meta"><span>5 lessons</span><span>Beginner → Advanced</span></p>
+  <p class="track-card-meta"><span>6 lessons</span><span>Beginner → Advanced</span></p>
   <a class="btn btn-primary" href="learn/thinking.qmd">View track →</a>
 </div>
 

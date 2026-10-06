@@ -313,3 +313,23 @@ pre code {
 @media (prefers-reduced-motion: reduce) {
   * { scroll-behavior: auto !important; transition: none !important; }
 }
+
+/* ---------- dark mode: white-on-teal surfaces (WCAG AA) ---------- */
+/* The dark brand lifts teal to #4FB3C9 so teal *text* reads on the
+   near-black background (7.3:1), but white text on that lifted teal is only
+   2.44:1. Surfaces that carry white text use the deeper brand teal instead
+   (5.76:1). Palette values live in _brand-dark.yml. */
+body.quarto-dark .navbar,
+body.quarto-dark nav.quarto-secondary-nav.color-navbar,
+body.quarto-dark .quarto-banner nav.quarto-secondary-nav,
+body.quarto-dark .nav-footer {
+  background-color: var(--brand-deepteal);
+}
+body.quarto-dark .btn-primary {
+  --bs-btn-bg: var(--brand-deepteal);
+  --bs-btn-border-color: var(--brand-deepteal);
+  --bs-btn-hover-bg: color-mix(in srgb, var(--brand-deepteal) 85%, black);
+  --bs-btn-hover-border-color: color-mix(in srgb, var(--brand-deepteal) 85%, black);
+  --bs-btn-active-bg: color-mix(in srgb, var(--brand-deepteal) 75%, black);
+  --bs-btn-active-border-color: color-mix(in srgb, var(--brand-deepteal) 75%, black);
+}

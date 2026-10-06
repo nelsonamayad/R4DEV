@@ -57,12 +57,12 @@ sample(c("W", "L"), 9, replace = TRUE, prob = c(0.7, 0.3)) # <5>
 2. Three draws from a normal distribution: heights, say.
 3. Three draws from a uniform: any value between 0 and 1, all equally likely.
 4. Three draws from a binomial: count of successes in 10 coin flips.
-5. And `sample()` for anything discrete --here, the globe-tossing experiment you will meet again in [Think Bayes](/sessions_thinking/05-bayes/05-bayes.qmd).
+5. And `sample()` for anything discrete --here, the globe-tossing experiment you will meet again in [Think Bayes](/sessions_thinking/06-bayes/06-bayes.qmd).
 
 ::: callout-tip
 ## The simulation mindset
 
-Classic statistics answers "how different could this have been?" with algebra done by 20th-century geniuses under assumptions you have to memorize. Simulation answers it with brute force under assumptions you can *read in your own code*. Both give the same answers where they overlap --but only one of them scales to problems the geniuses never solved, and you already know the tool: it's a `map()` loop, straight from [Do it well, do it fast](/sessions_workshop/09-parallel/09-parallel.qmd).
+Classic statistics answers "how different could this have been?" with algebra done by 20th-century geniuses under assumptions you have to memorize. Simulation answers it with brute force under assumptions you can *read in your own code*. Both give the same answers where they overlap --but only one of them scales to problems the geniuses never solved, and you already know the tool: it's a `map()` loop, straight from [Do it well, do it fast](/sessions_workshop/10-parallel/10-parallel.qmd).
 :::
 
 ## PART II: Sampling variation, made visible

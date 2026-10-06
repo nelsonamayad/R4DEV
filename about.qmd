@@ -33,7 +33,7 @@ Here's what the workshop is all about:
 
 -   {{< fa eye >}} `Visualization:` Build static and interactive plots with [ggplot2](https://ggplot2.tidyverse.org/), [plotly](https://plotly.com/r/), [ggiraph](http://davidgohel.github.io/ggiraph/), [tidygraph](https://cran.r-project.org/web/packages/ggraph/vignettes/tidygraph.html) and learn to do animations using [gganimate](https://gganimate.com/articles/gganimate.html). Explore many [ggplot2 extensions](https://exts.ggplot2.tidyverse.org/).
 
--   {{< fa book-open >}} `Text analysis:` Transform characters, words, sentences, pages and books into data with [tidytext](https://cran.r-project.org/web/packages/tidytext/vignettes/tidytext.html), [regex](https://stringr.tidyverse.org/articles/regular-expressions.html) and [ggwordcloud](https://lepennec.github.io/ggwordcloud/)
+-   {{< fa book-open >}} `Text analysis:` Transform characters, words, sentences, pages and books into data with [tidytext](https://cran.r-project.org/web/packages/tidytext/vignettes/tidytext.html), [regex](https://stringr.tidyverse.org/articles/regular-expressions.html) and [ggwordcloud](https://lepennec.github.io/ggwordcloud/), then find what a whole shelf of books is about with [topic models](sessions_workshop/04-topics/04-topics.qmd)
 
 -   {{< fa file-shield >}} `Reporting:` Write reports with prose and data at the same time [Quarto](https://quarto.org/docs/computations/r.html) and learn how to manage references with [Zotero](https://www.zotero.org/)
 
@@ -69,7 +69,7 @@ If time allows, these are additional topics that we'll cover with overly enthusi
 
 -   {{< fa robot >}} `Models`: Learn how to build reproducible and tractable models with [tidymodels](https://www.tidymodels.org/)
 
--   {{< fa chart-area >}} `Bayesian analysis`: You need to unlearn a lot of what you were taught on statistics, but the [Think Bayes session](sessions_thinking/05-bayes/05-bayes.qmd) will start you off, and so will [rethinking](https://github.com/rmcelreath/rethinking), [bayesplot](http://mc-stan.org/bayesplot/index.html), [brms](https://paul-buerkner.github.io/brms/) and [bayesrules](https://www.bayesrulesbook.com/)
+-   {{< fa chart-area >}} `Bayesian analysis`: You need to unlearn a lot of what you were taught on statistics, but the [Think Bayes session](sessions_thinking/06-bayes/06-bayes.qmd) will start you off, and so will [rethinking](https://github.com/rmcelreath/rethinking), [bayesplot](http://mc-stan.org/bayesplot/index.html), [brms](https://paul-buerkner.github.io/brms/) and [bayesrules](https://www.bayesrulesbook.com/)
 
--   {{< fa diagram-project >}} `Causal inference`: Why you must draw your assumptions before you compute --colliders, confounders and mediators, animated and interactive in the [bonus track of session 4](sessions_workshop/04-animate/04-animate.qmd)
+-   {{< fa diagram-project >}} `Causal inference`: Why you must draw your assumptions before you compute --colliders, confounders and mediators, animated and interactive in the [bonus track of session 5](sessions_workshop/05-animate/05-animate.qmd), then simulated properly in the Think with data track's [DAG lesson](sessions_thinking/04-causal/04-causal.qmd) and its [gallery of research designs](sessions_thinking/05-designs/05-designs.qmd)
 :::

@@ -28,7 +28,7 @@ citation:
 
 > *"The most profound technologies are those that disappear."*<br>--Mark Weiser
 
-In session 7 you built Shiny apps where users interact through sliders and dropdowns. In the previous session, [Talking to machines](/sessions_ai/01-llm/01-llm.qmd), you learned to call an LLM from code. This session welds the two: apps where the interface is **a conversation**, and where the model translates human questions into the filters, queries and charts you used to build by hand.
+In session 8 you built Shiny apps where users interact through sliders and dropdowns. In the previous session, [Talking to machines](/sessions_ai/01-llm/01-llm.qmd), you learned to call an LLM from code. This session welds the two: apps where the interface is **a conversation**, and where the model translates human questions into the filters, queries and charts you used to build by hand.
 
 Everything runs on the same [`ellmer`](https://ellmer.tidyverse.org/) chat objects from the previous session, so your API key setup carries over unchanged.
 
@@ -91,7 +91,7 @@ server <- function(input, output, session) {
 shinyApp(ui, server)
 ```
 
-2. `chat_ui()` drops the whole chat interface into your layout, like any other Shiny widget. It fills the page like the dashboards from session 7.
+2. `chat_ui()` drops the whole chat interface into your layout, like any other Shiny widget. It fills the page like the dashboards from session 8.
 3. The chat object is created **once per user session** --it carries the conversation memory, so follow-up questions work.
 4. Whatever the user types arrives as `input$chat_user_input` --a plain Shiny input, nothing exotic.
 5. `$stream_async()` returns the answer as it is generated, and `chat_append()` streams it into the UI word by word. Async matters: while one user waits for an answer, the app stays responsive for everyone else.
@@ -106,7 +106,7 @@ This minimal version is deliberately un-grounded --it answers from the model's g
 
 ## PART II: querychat, or the end of the filter sidebar
 
-Now the genuinely new idea. In session 7's COVID app, filtering data meant building a sidebar of inputs --one widget per variable, wired to `filter()` calls. [**`querychat`**](https://posit-dev.github.io/querychat/r/) replaces that whole apparatus: the user *asks* for the subset they want, the LLM writes **SQL**, and your app reacts to the result.
+Now the genuinely new idea. In session 8's earthquakes app, filtering data meant building a sidebar of inputs --one widget per variable, wired to `filter()` calls. [**`querychat`**](https://posit-dev.github.io/querychat/r/) replaces that whole apparatus: the user *asks* for the subset they want, the LLM writes **SQL**, and your app reacts to the result.
 
 The safety design deserves attention before the code: **the model never sees your data and never executes anything.** It only reads the table's *schema* --column names and types-- and proposes a read-only `SELECT` statement, which querychat runs locally against a [DuckDB](https://duckdb.org/) copy of your data frame. Hallucinated SQL fails loudly; it cannot delete, modify or leak a single row.
 

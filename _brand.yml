@@ -21,7 +21,8 @@ logo:
 color:
   palette:
     teal: "#226F7F"    # primary accent, navbar
-    orange: "#F75431"  # links and highlights
+    orange: "#F75431"  # highlights and accents (3.35:1 on white -- too light for body-size link text)
+    rust: "#C2401F"    # links -- WCAG AA on paper (5.19:1) and on cloud cards (4.6:1)
     slate: "#5C6B70"   # muted secondary text/elements
     cloud: "#EEF2F3"   # subtle panel/table-stripe surfaces
     paper: "#FFFFFF"   # page background — clean, no tint
@@ -46,4 +47,4 @@ typography:
     weight: 700
   monospace: Fira Code
   link:
-    color: orange
+    color: rust

@@ -425,7 +425,7 @@ animation::saveGIF(
 
 APIs (*Application Programming Interfaces*) are front doors to access databases online, and they are a wonderful resource. Instead of downloading a file by hand, you send a **request** describing exactly what you want, and the server sends back the data --usually as **JSON**, a nested text format that R can easily turn into a tibble.
 
-We will use the [**`httr2`**](https://httr2.r-lib.org/) package, the tidyverse-adjacent tool for talking to APIs, and knock on the door of [**Open-Meteo**](https://open-meteo.com/), a free weather API that requires no account, no token, no key. We'll request 75 years of daily temperatures for **Kyoto**. Why Kyoto? Remember the cherry blossoms: in session 4 you'll animate 1,200 years of sakura bloom dates, and this data tells the other half of that story.
+We will use the [**`httr2`**](https://httr2.r-lib.org/) package, the tidyverse-adjacent tool for talking to APIs, and knock on the door of [**Open-Meteo**](https://open-meteo.com/), a free weather API that requires no account, no token, no key. We'll request 75 years of daily temperatures for **Kyoto**. Why Kyoto? Remember the cherry blossoms: in session 5 you'll animate 1,200 years of sakura bloom dates, and this data tells the other half of that story.
 
 ```{r 2.openmeteo}
 #| fig-cap: "Spring is arriving earlier in Kyoto"

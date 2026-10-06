@@ -1,7 +1,7 @@
 ---
 title: "Think with data"
 subtitle: "Reason clearly about uncertainty, inference, models, causality, and Bayesian evidence"
-description: "The statistical thinking track: five lessons on simulating your way to intuition, from sampling variation to Bayesian updating."
+description: "The statistical thinking track: six lessons on simulating your way to intuition, from sampling variation to Bayesian updating."
 date: "2026-07-01"
 date-modified: last-modified
 toc: true
@@ -47,10 +47,16 @@ Analysts and researchers who use statistics regularly but want firmer intuition 
   <span class="lesson-num">4</span>
   <span class="lesson-title">Draw your assumptions before drawing your conclusions</span>
   <span class="lesson-outcome">Diagram causal assumptions with DAGs and see confounders and colliders bias an estimate.</span>
-  <span class="lesson-meta">Advanced · 90 min</span>
+  <span class="lesson-meta">Advanced · 45 min</span>
 </a>
-<a class="lesson-row" href="/sessions_thinking/05-bayes/05-bayes.qmd">
+<a class="lesson-row" href="/sessions_thinking/05-designs/05-designs.qmd">
   <span class="lesson-num">5</span>
+  <span class="lesson-title">Earning the arrow</span>
+  <span class="lesson-outcome">See why randomisation works, how post-treatment controls break it, and break six research designs with a slider.</span>
+  <span class="lesson-meta">Advanced · 60 min</span>
+</a>
+<a class="lesson-row" href="/sessions_thinking/06-bayes/06-bayes.qmd">
+  <span class="lesson-num">6</span>
   <span class="lesson-title">Think Bayes</span>
   <span class="lesson-outcome">Update a probability distribution one observation at a time, live in the browser.</span>
   <span class="lesson-meta">Advanced · 60 min</span>
@@ -58,6 +64,6 @@ Analysts and researchers who use statistics regularly but want firmer intuition 
 </div>
 ```
 
-**Estimated total time:** ~4.75 hours across 5 lessons (durations are rounded active-work estimates, not automated reading time).
+**Estimated total time:** ~5 hours across 6 lessons (durations are rounded active-work estimates, not automated reading time).
 
 [Start with lesson 1: Embrace the noise →](/sessions_thinking/01-uncertainty/01-uncertainty.qmd){.btn .btn-primary .btn-lg}
