@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://nelsonamayad.github.io/R4DEV/sitemap.xml

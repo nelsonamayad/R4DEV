@@ -1,0 +1,1546 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.11">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Nelson Amaya">
+<meta name="dcterms.date" content="2026-07-04">
+<meta name="description" content="Build a real RAG pipeline end to end with ragnar: crawl a site, chunk it, embed it for free with a local model, store it in DuckDB, retrieve two different ways, and hand retrieval to the LLM as a tool.">
+
+<title>Grounded in truth 🧭 – R4DEV</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../logo/r4dev_dalle_1.png" rel="icon" type="image/png">
+<script src="../../site_libs/cookie-consent/cookie-consent.js"></script>
+<link href="../../site_libs/cookie-consent/cookie-consent.css" rel="stylesheet">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-38657194d1c30378fa75d534d26568ab.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-a9fd7636a0121265c406fb04c3bba8e4.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-38657194d1c30378fa75d534d26568ab.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-6c38322d9f9f24ecac829e5a74f2d863.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-8b52ae35cce9f9674958c41746453119.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-6c38322d9f9f24ecac829e5a74f2d863.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="../../site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
+<link href="../../site_libs/quarto-contrib/fontawesome6-1.2.0/all.min.css" rel="stylesheet">
+<link href="../../site_libs/quarto-contrib/fontawesome6-1.2.0/latex-fontsize.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-CE27LT98M2"></script>
+
+<script type="text/plain" cookie-consent="tracking">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-CE27LT98M2', { 'anonymize_ip': true});
+</script>
+
+<script type="text/javascript" charset="UTF-8">
+document.addEventListener('DOMContentLoaded', function () {
+cookieconsent.run({
+  "notice_banner_type":"simple",
+  "consent_type":"express",
+  "palette":"light",
+  "language":"en",
+  "page_load_consent_levels":["strictly-necessary"],
+  "notice_banner_reject_button_hide":false,
+  "preferences_center_close_button_hide":false,
+  "website_name":""
+  ,
+"language":"en"
+  });
+});
+</script> 
+  
+<script async="" src="https://hypothes.is/embed.js"></script>
+<script>
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    document.body.classList.add('hypothesis-enabled');
+  });
+</script>
+<script type="module" src="../../site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="../../site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+
+
+<meta property="og:title" content="R4DEV">
+<meta property="og:description" content="Data workshop created by Nelson Amaya D.">
+<meta property="og:image" content="https://nelsonamayad.github.io/R4DEV/sessions_ai/03-ragnar/ragnar.png">
+<meta property="og:site_name" content="R4DEV">
+<meta property="og:image:height" content="610">
+<meta property="og:image:width" content="506">
+<meta name="twitter:title" content="R4DEV">
+<meta name="twitter:description" content="Data workshop created by Nelson Amaya D.">
+<meta name="twitter:image" content="https://nelsonamayad.github.io/R4DEV/sessions_ai/03-ragnar/ragnar.png">
+<meta name="twitter:creator" content="@nelsonamayad">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image-height" content="610">
+<meta name="twitter:image-width" content="506">
+</head>
+
+<body class="nav-fixed fullcontent quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../logo/r4dev_dalle_1.png" alt="" class="navbar-logo light-content">
+    <img src="../../logo/r4dev_dalle_1.png" alt="" class="navbar-logo dark-content">
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> <i class="bi bi-house-door" role="img">
+</i> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../start.html"> <i class="bi bi-signpost-2" role="img">
+</i> 
+<span class="menu-text">Start here</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-build-with-r" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+      <i class="bi bi-code-slash" role="img">
+</i> 
+ <span class="menu-text">Build with R</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-build-with-r">    
+        <li>
+    <a class="dropdown-item" href="../../learn/build-with-r.html"><i class="bi bi-mortarboard" role="img">
+</i> 
+ <span class="dropdown-text">Track overview</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../sessions_workshop/01-quarto/01-quarto.html"><i class="bi bi-book-half" role="img">
+</i> 
+ <span class="dropdown-text">1. Blogging with Quarto</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../sessions_workshop/02-plots/02-plots.html"><i class="bi bi-music-note-list" role="img">
+</i> 
+ <span class="dropdown-text">2. Everything in its right place</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../sessions_workshop/03-text/03-text.html"><i class="bi bi-textarea-t" role="img">
+</i> 
+ <span class="dropdown-text">3. Data from words</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../sessions_workshop/04-animate/04-animate.html"><i class="bi bi-film" role="img">
+</i> 
+ <span class="dropdown-text">4. Making data move</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../sessions_workshop/05-maps/05-maps.html"><i class="bi bi-globe" role="img">
+</i> 
+ <span class="dropdown-text">5. Mapping despair in the USA</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../sessions_workshop/06-scrap/06-scrap.html"><i class="bi bi-wifi" role="img">
+</i> 
+ <span class="dropdown-text">6. Just take it</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../sessions_workshop/07-shiny/07-shiny.html"><i class="bi bi-stars" role="img">
+</i> 
+ <span class="dropdown-text">7. Make it shine</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../sessions_workshop/08-reports/08-reports.html"><i class="bi bi-android2" role="img">
+</i> 
+ <span class="dropdown-text">8. Smart reports</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../sessions_workshop/09-parallel/09-parallel.html"><i class="bi bi-speedometer2" role="img">
+</i> 
+ <span class="dropdown-text">9. Do it well, do it fast</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-work-with-ai" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+      <i class="bi bi-robot" role="img">
+</i> 
+ <span class="menu-text">Work with AI</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-work-with-ai">    
+        <li>
+    <a class="dropdown-item" href="../../learn/ai.html"><i class="bi bi-mortarboard" role="img">
+</i> 
+ <span class="dropdown-text">Track overview</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../sessions_ai/01-llm/01-llm.html"><i class="bi bi-robot" role="img">
+</i> 
+ <span class="dropdown-text">1. Talking to machines</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../sessions_ai/02-llm-apps/02-llm-apps.html"><i class="bi bi-chat-dots" role="img">
+</i> 
+ <span class="dropdown-text">2. Chat with your data</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../sessions_ai/03-ragnar/03-ragnar.html"><i class="bi bi-compass" role="img">
+</i> 
+ <span class="dropdown-text">3. Grounded in truth</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../sessions_ai/04-agentic/04-agentic.html"><i class="bi bi-terminal" role="img">
+</i> 
+ <span class="dropdown-text">4. Agentic coding</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../sessions_ai/03-ragnar/03-ragnar.html#capstone-ask-r4dev"><i class="bi bi-stars" role="img">
+</i> 
+ <span class="dropdown-text">Ask R4DEV 🤖 (live capstone)</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-think-with-data" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+      <i class="bi bi-dice-5" role="img">
+</i> 
+ <span class="menu-text">Think with data</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-think-with-data">    
+        <li>
+    <a class="dropdown-item" href="../../learn/thinking.html"><i class="bi bi-mortarboard" role="img">
+</i> 
+ <span class="dropdown-text">Track overview</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../sessions_thinking/01-uncertainty/01-uncertainty.html"><i class="bi bi-dice-5" role="img">
+</i> 
+ <span class="dropdown-text">1. Embrace the noise</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../sessions_thinking/02-inference/02-inference.html"><i class="bi bi-shuffle" role="img">
+</i> 
+ <span class="dropdown-text">2. There is only one test</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../sessions_thinking/03-regression/03-regression.html"><i class="bi bi-graph-up" role="img">
+</i> 
+ <span class="dropdown-text">3. All models are wrong</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../sessions_thinking/04-causal/04-causal.html"><i class="bi bi-diagram-3" role="img">
+</i> 
+ <span class="dropdown-text">4. Draw your assumptions</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../sessions_thinking/05-bayes/05-bayes.html"><i class="bi bi-infinity" role="img">
+</i> 
+ <span class="dropdown-text">5. Think Bayes</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../../sessions_tools/01-practice/01-practice.html"> <i class="bi bi-trophy" role="img">
+</i> 
+<span class="menu-text">Practice</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../sessions_tools/02-resources/02-resources.html"> <i class="bi bi-eye-fill" role="img">
+</i> 
+<span class="menu-text">Resources</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> <i class="bi bi-question-circle-fill" role="img">
+</i> 
+<span class="menu-text">About R4DEV</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Grounded in truth 🧭</h1>
+<p class="subtitle lead">A deep dive into retrieval-augmented generation with ragnar</p>
+  <div class="quarto-categories">
+    <div class="quarto-category">RAG</div>
+    <div class="quarto-category">ragnar</div>
+    <div class="quarto-category">ellmer</div>
+    <div class="quarto-category">embeddings</div>
+    <div class="quarto-category">vector search</div>
+    <div class="quarto-category">ollama</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Build a real RAG pipeline end to end with ragnar: crawl a site, chunk it, embed it for free with a local model, store it in DuckDB, retrieve two different ways, and hand retrieval to the LLM as a tool.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Nelson Amaya </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">July 4, 2026</p>
+    </div>
+  </div>
+  
+    <div>
+    <div class="quarto-title-meta-heading">Modified</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">October 5, 2026</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+
+</header>
+
+
+<blockquote class="blockquote">
+<p><em>“It is a capital mistake to theorize before one has data.”</em> <br>–Arthur Conan Doyle, <em>A Scandal in Bohemia</em></p>
+</blockquote>
+<section id="part-i-why-retrieval-not-memory" class="level2">
+<h2 class="anchored" data-anchor-id="part-i-why-retrieval-not-memory">PART I: Why retrieval, not memory</h2>
+<p><a href="../../sessions_ai/01-llm/01-llm.html">Talking to machines</a> ended on an uncomfortable result: asked to judge song mood from titles alone, the model answered fluently and confidently – and its answers had <em>zero</em> correlation with the songs’ actual audio valence. The model wasn’t malfunctioning. It was doing exactly what you asked, articulately, from a question the input couldn’t actually answer.</p>
+<p><strong>Retrieval-augmented generation (RAG)</strong> is the fix for a related but distinct problem: instead of asking a model to answer from what it memorized during training (which might be outdated, wrong, or simply not about <em>your</em> content), you first <strong>retrieve</strong> the actual relevant text from a real source, then hand the model that text and ask it to answer <em>from it</em>. The model stops guessing and starts reading.</p>
+<p><a href="https://ragnar.tidyverse.org/"><strong><code>ragnar</code></strong></a> is a tidyverse-style toolkit that does the unglamorous half of RAG well: turning real documents into a searchable store. It has one function for each stage of the pipeline, and –true to form for this workshop– we’ll train it on <strong>R4DEV’s own published site</strong>, the same trick ragnar’s own homepage example plays on the <em>R for Data Science</em> book.</p>
+<div class="lesson-info">
+<p><strong>Level:</strong> Advanced &nbsp;·&nbsp; <strong>Time:</strong> ~60 min &nbsp;·&nbsp; <strong>Prerequisites:</strong> Talking to machines &nbsp;·&nbsp; <strong>Tools:</strong> ragnar, ellmer, DuckDB</p>
+</div>
+</section>
+<section id="you-will-learn-to" class="level2">
+<h2 class="anchored" data-anchor-id="you-will-learn-to">You will learn to</h2>
+<ul>
+<li>Explain why retrieval beats relying on a model’s memorised training data.</li>
+<li>Turn a website into a searchable store: read, chunk, embed and store real content in DuckDB.</li>
+<li>Retrieve relevant chunks two ways – keyword (BM25) and semantic (vector similarity).</li>
+<li>Register a retrieval store as a tool an LLM can call on its own.</li>
+<li>See the whole pipeline running live in the “Ask R4DEV” capstone at the end of this lesson.</li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>The whole pipeline in one sentence
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Read</strong> a page into clean markdown → <strong>chunk</strong> it into retrievable pieces → <strong>embed</strong> each chunk as a vector → <strong>store</strong> everything in DuckDB → <strong>retrieve</strong> the pieces relevant to a question → hand them to an LLM. Every section below is one verb.</p>
+</div>
+</div>
+</section>
+<section id="part-ii-read-turning-a-page-into-markdown" class="level2">
+<h2 class="anchored" data-anchor-id="part-ii-read-turning-a-page-into-markdown">PART II: Read – turning a page into markdown</h2>
+<p>The web is HTML: navigation bars, footers, cookie banners, ads. None of that belongs in a knowledge base. <code>read_as_markdown()</code> fetches a URL and extracts just the article content (by default it keeps <code>&lt;main&gt;</code> and discards <code>&lt;nav&gt;</code>), returning clean markdown.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-1"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-1-1"><a href="#annotated-cell-1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ragnar)</span>
+<span id="annotated-cell-1-2"><a href="#annotated-cell-1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-1-3"><a href="#annotated-cell-1-3" aria-hidden="true" tabindex="-1"></a>page <span class="ot">&lt;-</span> <span class="st">"https://nelsonamayad.github.io/R4DEV/sessions_workshop/02-plots/02-plots.html"</span></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-1-4" class="code-annotation-target"><a href="#annotated-cell-1-4" aria-hidden="true" tabindex="-1"></a>md <span class="ot">&lt;-</span> <span class="fu">read_as_markdown</span>(page)</span>
+<span id="annotated-cell-1-5"><a href="#annotated-cell-1-5" aria-hidden="true" tabindex="-1"></a></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-1-6" class="code-annotation-target"><a href="#annotated-cell-1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">substr</span>(md, <span class="dv">1</span>, <span class="dv">400</span>))</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-1" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-1" data-code-lines="4" data-code-annotation="1">One URL in, one markdown string out. Works on local files too, not just URLs.</span>
+</dd>
+<dt data-target-cell="annotated-cell-1" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-1" data-code-lines="6" data-code-annotation="2">The first 400 characters –notice the navbar and cookie banner are already gone.</span>
+</dd>
+</dl>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># Everything in its right place 🎼 – R4DEV
+
+# Everything in its right place 🎼
+
+Learn how to retrieve information from APIs and create interactive visualisations
+
+API
+
+httr2
+
+interactive
+
+ggplot2
+
+plotly
+
+ggiraph
+
+Learn how to get information from APIs with httr2, and create interactive visualisations of historical GDP, Kyoto weather and archived Spotify songs using ggplot2, plotly and ggiraph.
+
+Aut</code></pre>
+</div>
+</div>
+<p>To index more than one page, <code>ragnar_find_links()</code> crawls a page for its own internal links –the same instinct as session 6’s scraping, aimed at an entire site instead of one page:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-2"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="3" onclick="event.preventDefault();">3</a><span id="annotated-cell-2-1" class="code-annotation-target"><a href="#annotated-cell-2-1" aria-hidden="true" tabindex="-1"></a>links <span class="ot">&lt;-</span> <span class="fu">ragnar_find_links</span>(page)</span>
+<span id="annotated-cell-2-2"><a href="#annotated-cell-2-2" aria-hidden="true" tabindex="-1"></a></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="4" onclick="event.preventDefault();">4</a><span id="annotated-cell-2-3" class="code-annotation-target"><a href="#annotated-cell-2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(links)</span>
+<span id="annotated-cell-2-4"><a href="#annotated-cell-2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(links, <span class="dv">6</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-2" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-2" data-code-lines="1" data-code-annotation="3">Starting from the plots session, find every link it points to.</span>
+</dd>
+<dt data-target-cell="annotated-cell-2" data-target-annotation="4">4</dt>
+<dd>
+<span data-code-cell="annotated-cell-2" data-code-lines="3" data-code-annotation="4">Dozens of links –external package docs, other sessions, footnotes. We’ll filter this down before indexing anything.</span>
+</dd>
+</dl>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 45
+[1] "http://davidgohel.github.io/ggiraph"                                        
+[2] "http://rcharlie.net/sentify"                                                
+[3] "https://cran.r-project.org/web/packages/esquisse/vignettes/get-started.html"
+[4] "https://creativecommons.org/licenses/by/4.0"                                
+[5] "https://docs.owid.io/projects/etl/api"                                      
+[6] "https://ggplot2.tidyverse.org/reference/ggtheme.html"                       </code></pre>
+</div>
+</div>
+</section>
+<section id="part-iii-chunk-splitting-for-retrieval" class="level2">
+<h2 class="anchored" data-anchor-id="part-iii-chunk-splitting-for-retrieval">PART III: Chunk – splitting for retrieval</h2>
+<p>An LLM’s context window is finite, and stuffing an entire session into one prompt wastes it on irrelevant paragraphs. <code>markdown_chunk()</code> splits a document into overlapping, retrievable pieces, trying to respect paragraph and heading boundaries rather than cutting mid-sentence.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-3"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><a class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="5" onclick="event.preventDefault();">5</a><span id="annotated-cell-3-1" class="code-annotation-target"><a href="#annotated-cell-3-1" aria-hidden="true" tabindex="-1"></a>chunks <span class="ot">&lt;-</span> <span class="fu">markdown_chunk</span>(md)</span>
+<span id="annotated-cell-3-2"><a href="#annotated-cell-3-2" aria-hidden="true" tabindex="-1"></a></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="6" onclick="event.preventDefault();">6</a><span id="annotated-cell-3-3" class="code-annotation-target"><a href="#annotated-cell-3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(chunks)</span>
+<span id="annotated-cell-3-4"><a href="#annotated-cell-3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(chunks)</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="7" onclick="event.preventDefault();">7</a><span id="annotated-cell-3-5" class="code-annotation-target"><a href="#annotated-cell-3-5" aria-hidden="true" tabindex="-1"></a>chunks[<span class="dv">10</span>, <span class="fu">c</span>(<span class="st">"context"</span>, <span class="st">"text"</span>)]</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-3" data-target-annotation="5">5</dt>
+<dd>
+<span data-code-cell="annotated-cell-3" data-code-lines="1" data-code-annotation="5"><code>target_size</code> (default 1600 characters) and <code>target_overlap</code> (default 50%) control chunk granularity –smaller chunks retrieve more precisely but lose surrounding context.</span>
+</dd>
+<dt data-target-cell="annotated-cell-3" data-target-annotation="6">6</dt>
+<dd>
+<span data-code-cell="annotated-cell-3" data-code-lines="3" data-code-annotation="6">A <code>MarkdownDocumentChunks</code> tibble –just a data frame with extra structure, so anything you know from <code>dplyr</code> still applies.</span>
+</dd>
+<dt data-target-cell="annotated-cell-3" data-target-annotation="7">7</dt>
+<dd>
+<span data-code-cell="annotated-cell-3" data-code-lines="5" data-code-annotation="7"><code>context</code> carries the heading breadcrumb for that chunk (which section it came from); <code>text</code> is the chunk content itself. This is what eventually gets embedded and retrieved.</span>
+</dd>
+</dl>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "ragnar::MarkdownDocumentChunks" "tbl_df"                        
+[3] "tbl"                            "data.frame"                    
+[5] "S7_object"                     
+[1] 54
+# @document@origin:
+#   https://nelsonamayad.github.io/R4DEV/sessions_workshop/02-plots/02-plots.html
+# A tibble:         1 × 2
+  context                                                                  text 
+  &lt;chr&gt;                                                                    &lt;chr&gt;
+1 "# Everything in its right place \U0001f3bc\n## PART I: The story of a … "The…</code></pre>
+</div>
+</div>
+</section>
+<section id="part-iv-embed-turning-text-into-vectors-for-free" class="level2">
+<h2 class="anchored" data-anchor-id="part-iv-embed-turning-text-into-vectors-for-free">PART IV: Embed – turning text into vectors for free</h2>
+<p>An <strong>embedding</strong> turns text into a vector of numbers positioned so that similar meanings land near each other in space – “leaflet” and “interactive map” end up close together even though they don’t share a single letter. This is what makes <em>semantic</em> search possible, as opposed to matching exact keywords.</p>
+<p><code>ragnar</code> speaks to embedding providers the same way <code>ellmer</code> speaks to chat providers: <code>embed_openai()</code>, <code>embed_google_gemini()</code>, <code>embed_azure_openai()</code>, <code>embed_bedrock()</code>… one function per provider, same interface. We will use <strong><code>embed_ollama()</code></strong>, which runs a model entirely on your own machine via <a href="https://ollama.com/">Ollama</a> –no API key, no quota, no cost, ever. Install Ollama, pull an embedding model once (<code>ollama pull embeddinggemma</code>), and you have a private, free embedding service running on <code>localhost</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-4"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><a class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="8" onclick="event.preventDefault();">8</a><span id="annotated-cell-4-1" class="code-annotation-target"><a href="#annotated-cell-4-1" aria-hidden="true" tabindex="-1"></a>embed_fn <span class="ot">&lt;-</span> ragnar<span class="sc">::</span><span class="fu">embed_ollama</span>(<span class="at">model =</span> <span class="st">"embeddinggemma"</span>)</span>
+<span id="annotated-cell-4-2"><a href="#annotated-cell-4-2" aria-hidden="true" tabindex="-1"></a></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="9" onclick="event.preventDefault();">9</a><span id="annotated-cell-4-3" class="code-annotation-target"><a href="#annotated-cell-4-3" aria-hidden="true" tabindex="-1"></a>vec <span class="ot">&lt;-</span> <span class="fu">embed_fn</span>(<span class="st">"How do I make an interactive map?"</span>)</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="10" onclick="event.preventDefault();">10</a><span id="annotated-cell-4-4" class="code-annotation-target"><a href="#annotated-cell-4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(vec)</span>
+<span id="annotated-cell-4-5"><a href="#annotated-cell-4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(vec[<span class="dv">1</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>], <span class="dv">3</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-4" data-target-annotation="8">8</dt>
+<dd>
+<span data-code-cell="annotated-cell-4" data-code-lines="1" data-code-annotation="8"><code>embed_ollama()</code> talks to Ollama’s local API at <code>http://localhost:11434</code> by default.</span>
+</dd>
+<dt data-target-cell="annotated-cell-4" data-target-annotation="9">9</dt>
+<dd>
+<span data-code-cell="annotated-cell-4" data-code-lines="3" data-code-annotation="9">Any character vector goes in; embeddings often batch multiple texts in one call for speed.</span>
+</dd>
+<dt data-target-cell="annotated-cell-4" data-target-annotation="10">10</dt>
+<dd>
+<span data-code-cell="annotated-cell-4" data-code-lines="4" data-code-annotation="10">One row per input text, one column per embedding dimension –768 here. The actual numbers are meaningless in isolation; what matters is <em>distance</em> between vectors, which is what retrieval computes next.</span>
+</dd>
+</dl>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]   1 768
+[1] -0.135 -0.008  0.020  0.023  0.018  0.045 -0.058 -0.013</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>This workshop nearly didn’t have this section
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Building the “Ask R4DEV” capstone (end of this session) first tried a paid embedding API and hit a wall: no Gemini key was ever provisioned, and the OpenAI key on file had <code>insufficient_quota</code>. <strong>Local embeddings solved it completely, for free.</strong> If you only remember one thing from this section, remember that <code>ollama pull embeddinggemma</code> is a legitimate, production-grade answer to “I don’t have an embedding API key” –not just a workaround for a workshop.</p>
+</div>
+</div>
+</section>
+<section id="part-v-store-a-duckdb-backed-knowledge-base" class="level2">
+<h2 class="anchored" data-anchor-id="part-v-store-a-duckdb-backed-knowledge-base">PART V: Store – a DuckDB-backed knowledge base</h2>
+<p>Reading, chunking and embedding one page by hand is instructive; indexing a whole site by hand is tedious. <code>ragnar_store_create()</code> opens a DuckDB file (or <code>:memory:</code>) configured to hold chunks and their vectors, and <code>ragnar_store_ingest()</code> does read + chunk + embed + insert + index in one call, for as many pages as you give it.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-5"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-5-1"><a href="#annotated-cell-5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Keep the site to its own session pages, skip everything external</span></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="11" onclick="event.preventDefault();">11</a><span id="annotated-cell-5-2" class="code-annotation-target"><a href="#annotated-cell-5-2" aria-hidden="true" tabindex="-1"></a>session_links <span class="ot">&lt;-</span> links[<span class="fu">grepl</span>(<span class="st">"sessions_(workshop|tools)/.*</span><span class="sc">\\</span><span class="st">.html$"</span>, links)]</span>
+<span id="annotated-cell-5-3"><a href="#annotated-cell-5-3" aria-hidden="true" tabindex="-1"></a></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="12" onclick="event.preventDefault();">12</a><span id="annotated-cell-5-4" class="code-annotation-target"><a href="#annotated-cell-5-4" aria-hidden="true" tabindex="-1"></a>store <span class="ot">&lt;-</span> <span class="fu">ragnar_store_create</span>(</span>
+<span id="annotated-cell-5-5"><a href="#annotated-cell-5-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"r4dev_ragnar.duckdb"</span>,</span>
+<span id="annotated-cell-5-6"><a href="#annotated-cell-5-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">embed =</span> ragnar<span class="sc">::</span><span class="fu">embed_ollama</span>(<span class="at">model =</span> <span class="st">"embeddinggemma"</span>),</span>
+<span id="annotated-cell-5-7"><a href="#annotated-cell-5-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">title =</span> <span class="st">"R4DEV workshop content"</span></span>
+<span id="annotated-cell-5-8"><a href="#annotated-cell-5-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="annotated-cell-5-9"><a href="#annotated-cell-5-9" aria-hidden="true" tabindex="-1"></a></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="13" onclick="event.preventDefault();">13</a><span id="annotated-cell-5-10" class="code-annotation-target"><a href="#annotated-cell-5-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ragnar_store_ingest</span>(store, session_links, <span class="at">build_index =</span> <span class="cn">TRUE</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-5" data-target-annotation="11">11</dt>
+<dd>
+<span data-code-cell="annotated-cell-5" data-code-lines="2" data-code-annotation="11">Filter the crawl down to R4DEV’s own session pages –no point indexing CRAN or GitHub in <em>our</em> knowledge base.</span>
+</dd>
+<dt data-target-cell="annotated-cell-5" data-target-annotation="12">12</dt>
+<dd>
+<span data-code-cell="annotated-cell-5" data-code-lines="4" data-code-annotation="12">A named file instead of <code>:memory:</code> means the store survives after R exits –exactly what a deployed app needs.</span>
+</dd>
+<dt data-target-cell="annotated-cell-5" data-target-annotation="13">13</dt>
+<dd>
+<span data-code-cell="annotated-cell-5" data-code-lines="10" data-code-annotation="13">One call: every page gets read, chunked, embedded, and inserted, and both search indexes (below) get built at the end. Ingestion runs in parallel workers automatically.</span>
+</dd>
+</dl>
+</div>
+</div>
+<pre><code>#&gt; Launching 2 parallel workers.
+#&gt; ℹ ingested: https://r4dev.netlify.app/index.html
+#&gt; ℹ ingested: https://r4dev.netlify.app/sessions_workshop/02-plots/02-plots.html
+#&gt; ℹ ingested: https://r4dev.netlify.app/sessions_workshop/03-text/03-text.html
+#&gt; ℹ ingested: https://r4dev.netlify.app/sessions_workshop/04-animate/04-animate.html
+#&gt; ℹ ingested: https://r4dev.netlify.app/sessions_workshop/05-maps/05-maps.html
+#&gt; ℹ ingested: https://r4dev.netlify.app/sessions_workshop/06-scrap/06-scrap.html
+#&gt; ℹ ingested: https://r4dev.netlify.app/sessions_workshop/09-llm/09-llm.html
+#&gt; ℹ ingested: https://r4dev.netlify.app/sessions_workshop/10-llm-apps/10-llm-apps.html
+#&gt; Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  100% | ETA:  0s</code></pre>
+</section>
+<section id="part-vi-retrieve-two-ways-to-search" class="level2">
+<h2 class="anchored" data-anchor-id="part-vi-retrieve-two-ways-to-search">PART VI: Retrieve – two ways to search</h2>
+<p>A store speaks two retrieval languages, and they disagree often enough to be worth knowing both:</p>
+<ul>
+<li><strong><code>ragnar_retrieve_vss()</code></strong> – vector similarity search. Finds chunks whose <em>meaning</em> is close to the query, even with no shared words. Needs an embedding of the query itself, computed the same way the chunks were.</li>
+<li><strong><code>ragnar_retrieve_bm25()</code></strong> – classic keyword ranking (the same algorithm the <code>ggsql</code>/DuckDB FTS work in <a href="../../sessions_ai/02-llm-apps/02-llm-apps.html">Chat with your data</a> used). Finds chunks that share the query’s actual words. Needs no embedding step at all.</li>
+</ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-7"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><a class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="14" onclick="event.preventDefault();">14</a><span id="annotated-cell-7-1" class="code-annotation-target"><a href="#annotated-cell-7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ragnar_retrieve_vss</span>(store, <span class="st">"how do I show information on hover"</span>, <span class="at">top_k =</span> <span class="dv">3</span>)</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="15" onclick="event.preventDefault();">15</a><span id="annotated-cell-7-2" class="code-annotation-target"><a href="#annotated-cell-7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ragnar_retrieve_bm25</span>(store, <span class="st">"girafe tooltip"</span>, <span class="at">top_k =</span> <span class="dv">3</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-7" data-target-annotation="14">14</dt>
+<dd>
+<span data-code-cell="annotated-cell-7" data-code-lines="1" data-code-annotation="14">A semantic query with no exact keyword overlap (“hover”, “information” –neither session actually uses those words) –VSS still lands on <code>02-plots</code>, which is genuinely where R4DEV’s <code>ggiraph</code> tooltip content lives.</span>
+</dd>
+<dt data-target-cell="annotated-cell-7" data-target-annotation="15">15</dt>
+<dd>
+<span data-code-cell="annotated-cell-7" data-code-lines="2" data-code-annotation="15">The exact term “tooltip” pulls in <code>05-maps</code> too –it reuses the same <code>ggiraph</code> trick from session 2. Notice both methods can agree; the honest lesson isn’t “VSS always wins,” it’s that they fail in <em>different</em> ways –VSS on vocabulary mismatch, BM25 on paraphrase.</span>
+</dd>
+</dl>
+</div>
+</div>
+<pre><code>#&gt; # VSS  -- "how do I show information on hover" (no shared words with the text below)
+#&gt;   origin                                                context
+#&gt;   06-scrap/06-scrap.html                                "Just take it"
+#&gt;   02-plots/02-plots.html                                "Everything in its right place"
+#&gt;   02-plots/02-plots.html                                "Everything in its right place"
+#&gt;
+#&gt; # BM25 -- "girafe tooltip" (exact term match)
+#&gt;   origin                                                context
+#&gt;   02-plots/02-plots.html                                "Everything in its right place"
+#&gt;   05-maps/05-maps.html                                  ""
+#&gt;   02-plots/02-plots.html                                ""</code></pre>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Which one should a deployed app use?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>BM25 needs nothing but the stored text –it runs anywhere, including a server with no route to an embedding provider. VSS needs to embed the <em>live user question</em> at query time, using whatever service embedded the original chunks. If that service is a local Ollama instance, a cloud-deployed app simply can’t reach it. This is exactly why the “Ask R4DEV” capstone below runs on BM25 in production, even though this session demonstrates VSS with real local execution –theory and production constraints are allowed to disagree, and knowing why is the actual skill.</p>
+</div>
+</div>
+</section>
+<section id="part-vii-give-the-model-the-tool" class="level2">
+<h2 class="anchored" data-anchor-id="part-vii-give-the-model-the-tool">PART VII: Give the model the tool</h2>
+<p><a href="../../sessions_ai/01-llm/01-llm.html">Talking to machines</a> taught tool calling by hand: write a function, describe it, register it, let the model decide when to call it. <code>ragnar_register_tool_retrieve()</code> does exactly that for retrieval in one line –the model gets to decide <em>when</em> it needs to search, instead of your code always searching before every message.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-9"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-9-1"><a href="#annotated-cell-9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ellmer)</span>
+<span id="annotated-cell-9-2"><a href="#annotated-cell-9-2" aria-hidden="true" tabindex="-1"></a></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="16" onclick="event.preventDefault();">16</a><span id="annotated-cell-9-3" class="code-annotation-target"><a href="#annotated-cell-9-3" aria-hidden="true" tabindex="-1"></a>chat <span class="ot">&lt;-</span> ellmer<span class="sc">::</span><span class="fu">chat_anthropic</span>()</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="17" onclick="event.preventDefault();">17</a><span id="annotated-cell-9-4" class="code-annotation-target"><a href="#annotated-cell-9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ragnar_register_tool_retrieve</span>(</span>
+<span id="annotated-cell-9-5"><a href="#annotated-cell-9-5" aria-hidden="true" tabindex="-1"></a>  chat, store,</span>
+<span id="annotated-cell-9-6"><a href="#annotated-cell-9-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">store_description =</span> <span class="st">"R4DEV workshop session content"</span></span>
+<span id="annotated-cell-9-7"><a href="#annotated-cell-9-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="annotated-cell-9-8"><a href="#annotated-cell-9-8" aria-hidden="true" tabindex="-1"></a></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="18" onclick="event.preventDefault();">18</a><span id="annotated-cell-9-9" class="code-annotation-target"><a href="#annotated-cell-9-9" aria-hidden="true" tabindex="-1"></a>chat<span class="sc">$</span><span class="fu">chat</span>(<span class="st">"What R package does this workshop use for structured data extraction from LLMs?"</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-9" data-target-annotation="16">16</dt>
+<dd>
+<span data-code-cell="annotated-cell-9" data-code-lines="3" data-code-annotation="16">Any ellmer chat works –Anthropic here, but <code>chat_google_gemini()</code> or <code>chat_openai()</code> are equally valid.</span>
+</dd>
+<dt data-target-cell="annotated-cell-9" data-target-annotation="17">17</dt>
+<dd>
+<span data-code-cell="annotated-cell-9" data-code-lines="4" data-code-annotation="17">One function call wires the whole store up as a callable tool, with a description telling the model what it’s for.</span>
+</dd>
+<dt data-target-cell="annotated-cell-9" data-target-annotation="18">18</dt>
+<dd>
+<span data-code-cell="annotated-cell-9" data-code-lines="9" data-code-annotation="18">Watch the <code>◯ [tool call]</code> line in the output below: the model decided <em>on its own</em> that it needed to search before answering, called the tool, read the retrieved chunk from the <em>Talking to machines</em> session, and answered correctly –with details (<code>chat_structured()</code>, <code>type_object()</code>, <code>parallel_chat_structured()</code>) that only exist in the real retrieved text, not in the model’s general training.</span>
+</dd>
+</dl>
+</div>
+</div>
+<pre><code>#&gt; ◯ [tool call] search_store_001(text = "R package structured data extraction LLMs")
+#&gt; ● #&gt; [{"origin": "sessions_workshop/09-llm/09-llm.html", "doc_id": 2, "chunk_id": [31, 32], ...}]
+#&gt;
+#&gt; Based on the workshop content, the R package used for structured data
+#&gt; extraction from LLMs is **`ellmer`**.
+#&gt;
+#&gt; From the workshop materials, `ellmer` is described as the package from the
+#&gt; tidyverse team that enables you to:
+#&gt;
+#&gt; 1. **Extract structured data from text** -- Using the `$chat_structured()`
+#&gt; function, you define the shape of data you want (using `type_object()`,
+#&gt; like a contract), and `ellmer` forces the model's answer into exactly
+#&gt; that shape.
+#&gt; 2. **Work with multiple LLM providers** -- It speaks to every major
+#&gt; provider (Google Gemini, Anthropic, OpenAI, Mistral, and local models
+#&gt; via Ollama) with the same functions.
+#&gt; 3. **Scale extraction** -- The `parallel_chat_structured()` function
+#&gt; allows you to send multiple prompts concurrently and get back tidy
+#&gt; data frames.</code></pre>
+</section>
+<section id="capstone-ask-r4dev" class="level2">
+<h2 class="anchored" data-anchor-id="capstone-ask-r4dev">Capstone: Ask R4DEV, rebuilt</h2>
+<p>This is the deployed, always-on version of everything above: a chatbot that answers questions about R4DEV using only real, retrieved excerpts from the 13 other sessions. It’s built with <code>ragnar</code>’s own ingestion pipeline (a real improvement over an earlier hand-rolled version of this app, which chunked by regex-splitting on markdown headings instead of <code>markdown_chunk()</code>’s semantic boundaries).</p>
+<iframe src="https://nelsonamayad-r4dev-ragnar.share.connect.posit.cloud/" style="border: none; width: 100%; height: 650px" frameborder="0">
+</iframe>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Why this runs on BM25, not VSS
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The store behind this app was built locally with <code>embed_ollama()</code> –free, and genuinely used during development. But the <em>deployed</em> app runs on Posit Connect Cloud, which has no route back to a local Ollama instance, and this workshop has no cloud embedding provider with usable quota yet. So the live app retrieves with <code>ragnar_retrieve_bm25()</code> instead –a real production trade-off, not a shortcut. The moment a Gemini or OpenAI key with quota exists, swapping <code>embed_ollama()</code> for <code>embed_google_gemini()</code> in the ingestion script and redeploying is the entire fix.</p>
+</div>
+</div>
+</section>
+<section id="practice-3-retrieve-something-real" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="practice-3-retrieve-something-real">🏗 Practice 3: Retrieve something real</h2>
+<p>Semantic search sounds like magic until you compute one by hand. The Basic tier does exactly that, in your browser, on a toy store of 10 chunks with 8-dimensional embeddings – the same arithmetic <code>ragnar_retrieve_vss()</code> runs over thousands of chunks with hundreds of dimensions.</p>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Basic
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Retrieve the best chunk for the question <em>“how do I color regions of a map by a value?”</em> – already embedded as a vector below. Two blanks: the dot product at the heart of cosine similarity, and the verb that ranks the results.</p>
+<div class="cell" data-exercise="ex_a03_basic">
+<div>
+<div id="webr-1" class="exercise-cell">
+
+</div>
+<script type="webr-1-contents">
+eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWUsImV4ZXJjaXNlIjoiZXhfYTAzX2Jhc2ljIn0sImNvZGUiOiJsaWJyYXJ5KGRwbHlyKVxuXG5jaHVua3MgPC0gcmVhZC5jc3YoXCJ0b3lfZW1iZWRkaW5ncy5jc3ZcIilcblxuIyBUaGUgcXVlc3Rpb24sIGVtYmVkZGVkIGluIHRoZSBzYW1lIDggdG9waWMgZGltZW5zaW9ucyBhcyB0aGUgY2h1bmtzXG5xdWVzdGlvbiA8LSBjKDAuMiwgMC45LCAwLCAwLCAwLCAwLCAwLjEsIDApXG5cbmNvc2luZSA8LSBmdW5jdGlvbihhLCBiKSBfX19fX18oYSAqIGIpIC8gKHNxcnQoc3VtKGFeMikpICogc3FydChzdW0oYl4yKSkpXG5cbmVtYiA8LSBhcy5tYXRyaXgoY2h1bmtzWywgLTFdKVxuXG5jaHVua3MgfD5cbiAgbXV0YXRlKHNpbWlsYXJpdHkgPSBhcHBseShlbWIsIDEsIFxcKHYpIGNvc2luZSh2LCBxdWVzdGlvbikpKSB8PlxuICBzZWxlY3QoY2h1bmssIHNpbWlsYXJpdHkpIHw+XG4gIF9fX19fXyhkZXNjKHNpbWlsYXJpdHkpKSB8PlxuICBzbGljZV9oZWFkKG4gPSAzKSJ9
+</script>
+</div>
+</div>
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_a03_basic">
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Hint
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>A dot product multiplies two vectors element-wise and then adds everything up – <code>a * b</code> is already done for you. Ranking descending is a dplyr verb you use every day.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_a03_basic">
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>chunks <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"toy_embeddings.csv"</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>question <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">0.9</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.1</span>, <span class="dv">0</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>cosine <span class="ot">&lt;-</span> <span class="cf">function</span>(a, b) <span class="fu">sum</span>(a <span class="sc">*</span> b) <span class="sc">/</span> (<span class="fu">sqrt</span>(<span class="fu">sum</span>(a<span class="sc">^</span><span class="dv">2</span>)) <span class="sc">*</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>(b<span class="sc">^</span><span class="dv">2</span>)))</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>emb <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(chunks[, <span class="sc">-</span><span class="dv">1</span>])</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>chunks <span class="sc">|&gt;</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">similarity =</span> <span class="fu">apply</span>(emb, <span class="dv">1</span>, \(v) <span class="fu">cosine</span>(v, question))) <span class="sc">|&gt;</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(chunk, similarity) <span class="sc">|&gt;</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(similarity)) <span class="sc">|&gt;</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The choropleth chunk wins – the question and the chunk share almost no words, but their <em>vectors</em> point the same way. That’s the whole trick behind semantic search. Try re-embedding the question for a different topic (e.g.&nbsp;put the 0.9 in the LLM dimension) and re-run.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-important no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Intermediate
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Real stores, real embeddings – your own R session with ragnar and Ollama installed:</p>
+<ul>
+<li>Crawl a small documentation site you use often (a package’s <code>pkgdown</code> site is a good target) and build a store from its first 5-10 pages.</li>
+<li>Retrieve with <code>ragnar_retrieve_bm25()</code> for a question you already know the answer to. Does it find the right page?</li>
+<li>Take three questions about R4DEV and compare <code>ragnar_retrieve_vss()</code> against <code>ragnar_retrieve_bm25()</code> for each. Which query type (conceptual vs.&nbsp;keyword-heavy) favors which method?</li>
+<li>Change <code>markdown_chunk()</code>’s <code>target_size</code> to something much smaller (e.g.&nbsp;400) and re-inspect the store. What happens to retrieval quality on a broad question versus a specific one?</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-caution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Caution</span>Advanced
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ul>
+<li>Register <strong>two</strong> tools on one chat: the retrieval tool from this session and the <code>weather_now()</code> tool from <a href="../../sessions_ai/01-llm/01-llm.html">Talking to machines</a>. Ask a question that needs both, and watch the model choose which to call and when.</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="key-takeaways" class="level2">
+<h2 class="anchored" data-anchor-id="key-takeaways">Key takeaways</h2>
+<ul>
+<li>Retrieval fixes a different problem than a bigger model: it gives the model real text to answer from instead of relying on what it memorised.</li>
+<li>The RAG pipeline is one verb per stage – read, chunk, embed, store, retrieve – and ragnar has one function per verb.</li>
+<li>Keyword search (BM25) and semantic search (VSS) find different things; a production app should know which one it needs.</li>
+<li>A tool-calling model decides <em>for itself</em> when to search, without special-cased retrieval code in the prompt.</li>
+<li>Local, free embeddings (<code>embed_ollama()</code>) are a legitimate production answer when no paid API key is available – not just a workshop workaround.</li>
+</ul>
+<div class="continue-learning">
+<p><a href="../../sessions_ai/02-llm-apps/02-llm-apps.html">← Previous: Chat with your data</a></p>
+<p><a href="../../learn/ai.html">Track overview: Work with AI →</a></p>
+<p><a href="../../sessions_ai/04-agentic/04-agentic.html">Next: Agentic coding →</a></p>
+</div>
+
+
+<script type="webr-data">
+eyJvcHRpb25zIjp7ImJhc2VVcmwiOiJodHRwczovL3dlYnIuci13YXNtLm9yZy92MC42LjAvIn0sInBhY2thZ2VzIjp7InBrZ3MiOlsiZXZhbHVhdGUiLCJrbml0ciIsImh0bWx0b29scyIsImRwbHlyIl0sInJlcG9zIjpbXX0sInJlbmRlcl9kZiI6ImRlZmF1bHQifQ==
+</script>
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W3siY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0xIiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV8xO1xuICBpZiAod2luZG93LkhUTUxXaWRnZXRzKSB7XG4gICAgd2luZG93LkhUTUxXaWRnZXRzLnN0YXRpY1JlbmRlcigpO1xuICB9XG4gIGlmICh3aW5kb3cuUGFnZWRUYWJsZURvYykge1xuICAgIHdpbmRvdy5QYWdlZFRhYmxlRG9jLmluaXRBbGwoKTtcbiAgfVxufVxuIn0seyJjZWxsTmFtZSI6IndlYnItMSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzEgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici0xLWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgLy8gRGVmYXVsdCBleGVyY2lzZSBjb25maWd1cmF0aW9uXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKFxuICAgIHtcbiAgICAgIGlkOiBcIndlYnItMS1jb250ZW50c1wiLFxuICAgICAgZW52aXI6IGBleGVyY2lzZS1lbnYtJHtibG9jay5hdHRyLmV4ZXJjaXNlfWAsXG4gICAgICBlcnJvcjogZmFsc2UsXG4gICAgICBjYXB0aW9uOiAnRXhlcmNpc2UnLFxuICAgIH0sXG4gICAgYmxvY2suYXR0clxuICApO1xuXG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxudmlld29mIF93ZWJyX3ZhbHVlXzEgPSB3ZWJST2pzLnByb2Nlc3MoX3dlYnJfZWRpdG9yXzEsIHt9KTtcbl93ZWJyX2ZlZWRiYWNrXzEgPSB7XG4gIGNvbnN0IHsgV2ViUkdyYWRlciB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3QgZW1wdHlGZWVkYmFjayA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2RpdicpO1xuXG4gIGNvbnN0IGdyYWRlciA9IG5ldyBXZWJSR3JhZGVyKF93ZWJyX3ZhbHVlXzEuZXZhbHVhdG9yKTtcbiAgY29uc3QgZmVlZGJhY2sgPSBhd2FpdCBncmFkZXIuZ3JhZGVFeGVyY2lzZSgpO1xuICBpZiAoIWZlZWRiYWNrKSByZXR1cm4gZW1wdHlGZWVkYmFjaztcbiAgcmV0dXJuIGZlZWRiYWNrO1xufVxuIn0seyJjZWxsTmFtZSI6IndlYnItcHJlbHVkZSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IndlYlJPanMgPSB7XG4gIGNvbnN0IHsgV2ViUiwgQ2hhbm5lbFR5cGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWUuV2ViUjtcbiAgY29uc3Qge1xuICAgIFdlYlJFdmFsdWF0b3IsXG4gICAgV2ViUkVudmlyb25tZW50TWFuYWdlcixcbiAgICBzZXR1cFIsXG4gICAgYjY0RGVjb2RlLFxuICAgIGNvbGxhcHNlUGF0aFxuICB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcblxuICBjb25zdCBzdGF0dXNDb250YWluZXIgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZChcImV4ZXJjaXNlLWxvYWRpbmctc3RhdHVzXCIpO1xuICBjb25zdCBpbmRpY2F0b3JDb250YWluZXIgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZChcImV4ZXJjaXNlLWxvYWRpbmctaW5kaWNhdG9yXCIpO1xuICBpbmRpY2F0b3JDb250YWluZXIuY2xhc3NMaXN0LnJlbW92ZShcImQtbm9uZVwiKTtcblxuICBsZXQgc3RhdHVzVGV4dCA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoXCJkaXZcIilcbiAgc3RhdHVzVGV4dC5jbGFzc0xpc3QgPSBcImV4ZXJjaXNlLWxvYWRpbmctZGV0YWlsc1wiO1xuICBzdGF0dXNUZXh0ID0gc3RhdHVzQ29udGFpbmVyLmFwcGVuZENoaWxkKHN0YXR1c1RleHQpO1xuICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYEluaXRpYWxpc2VgO1xuXG4gIC8vIEhvaXN0IGluZGljYXRvciBvdXQgZnJvbSBmaW5hbCBzbGlkZSB3aGVuIHJ1bm5pbmcgdW5kZXIgcmV2ZWFsXG4gIGNvbnN0IHJldmVhbFN0YXR1cyA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoXCIucmV2ZWFsIC5leGVyY2lzZS1sb2FkaW5nLWluZGljYXRvclwiKTtcbiAgaWYgKHJldmVhbFN0YXR1cykge1xuICAgIHJldmVhbFN0YXR1cy5yZW1vdmUoKTtcbiAgICBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKFwiLnJldmVhbCA+IC5zbGlkZXNcIikuYXBwZW5kQ2hpbGQocmV2ZWFsU3RhdHVzKTtcbiAgfVxuXG4gIC8vIE1ha2UgYW55IHJldmVhbCBzbGlkZXMgd2l0aCBsaXZlIGNlbGxzIHNjcm9sbGFibGVcbiAgZG9jdW1lbnQucXVlcnlTZWxlY3RvckFsbChcIi5yZXZlYWwgLmV4ZXJjaXNlLWNlbGxcIikuZm9yRWFjaCgoZWwpID0+IHtcbiAgICBlbC5jbG9zZXN0KCdzZWN0aW9uLnNsaWRlJykuY2xhc3NMaXN0LmFkZChcInNjcm9sbGFibGVcIik7XG4gIH0pXG5cbiAgLy8gd2ViUiBzdXBwbGVtZW50YWwgZGF0YSBhbmQgb3B0aW9uc1xuICBjb25zdCBkYXRhQ29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJ3ZWJyLWRhdGFcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBkYXRhID0gSlNPTi5wYXJzZShiNjREZWNvZGUoZGF0YUNvbnRlbnQpKTtcblxuICAvLyBHcmFiIGxpc3Qgb2YgcmVzb3VyY2VzIHRvIGJlIGRvd25sb2FkZWRcbiAgY29uc3QgZmlsZXNDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcInZmcy1maWxlXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgZmlsZXMgPSBKU09OLnBhcnNlKGI2NERlY29kZShmaWxlc0NvbnRlbnQpKTtcblxuICAvLyBJbml0aWFsaXNlIHdlYlIgYW5kIHNldHVwIGZvciBSIGNvZGUgZXZhbHVhdGlvblxuICBsZXQgd2ViUlByb21pc2UgPSAoYXN5bmMgKHdlYlIpID0+IHtcbiAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYERvd25sb2FkaW5nIHdlYlJgO1xuICAgIGF3YWl0IHdlYlIuaW5pdCgpO1xuXG4gICAgLy8gSW5zdGFsbCBwcm92aWRlZCBsaXN0IG9mIHBhY2thZ2VzXG4gICAgLy8gRW5zdXJlIHdlYlIgZGVmYXVsdCByZXBvIGlzIGluY2x1ZGVkXG4gICAgZGF0YS5wYWNrYWdlcy5yZXBvcy5wdXNoKFwiaHR0cHM6Ly9yZXBvLnItd2FzbS5vcmdcIilcbiAgICBhd2FpdCBkYXRhLnBhY2thZ2VzLnBrZ3MubWFwKChwa2cpID0+ICgpID0+IHtcbiAgICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgRG93bmxvYWRpbmcgcGFja2FnZTogJHtwa2d9YDtcbiAgICAgIHJldHVybiB3ZWJSLmV2YWxSVm9pZChgXG4gICAgICAgIHdlYnI6Omluc3RhbGwocGtnLCByZXBvcyA9IHJlcG9zKVxuICAgICAgICBsaWJyYXJ5KHBrZywgY2hhcmFjdGVyLm9ubHkgPSBUUlVFKVxuICAgICAgYCwgeyBlbnY6IHtcbiAgICAgICAgcGtnOiBwa2csXG4gICAgICAgIHJlcG9zOiBkYXRhLnBhY2thZ2VzLnJlcG9zLFxuICAgICAgfX0pO1xuICAgIH0pLnJlZHVjZSgoY3VyLCBuZXh0KSA9PiBjdXIudGhlbihuZXh0KSwgUHJvbWlzZS5yZXNvbHZlKCkpO1xuXG4gICAgLy8gRG93bmxvYWQgYW5kIGluc3RhbGwgcmVzb3VyY2VzXG4gICAgYXdhaXQgZmlsZXMubWFwKChmaWxlKSA9PiBhc3luYyAoKSA9PiB7XG4gICAgICBjb25zdCBuYW1lID0gZmlsZS5zdWJzdHJpbmcoZmlsZS5sYXN0SW5kZXhPZignLycpICsgMSk7XG4gICAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYERvd25sb2FkaW5nIHJlc291cmNlOiAke25hbWV9YDtcbiAgICAgIGNvbnN0IHJlc3BvbnNlID0gYXdhaXQgZmV0Y2goZmlsZSk7XG4gICAgICBpZiAoIXJlc3BvbnNlLm9rKSB7XG4gICAgICAgIHRocm93IG5ldyBFcnJvcihgQ2FuJ3QgZG93bmxvYWQgXFxgJHtmaWxlfVxcYC4gRXJyb3IgJHtyZXNwb25zZS5zdGF0dXN9OiBcIiR7cmVzcG9uc2Uuc3RhdHVzVGV4dH1cIi5gKTtcbiAgICAgIH1cbiAgICAgIGNvbnN0IGRhdGEgPSBhd2FpdCByZXNwb25zZS5hcnJheUJ1ZmZlcigpO1xuXG4gICAgICAvLyBTdG9yZSBVUkxzIGluIHRoZSBjd2Qgd2l0aG91dCBhbnkgc3ViZGlyZWN0b3J5IHN0cnVjdHVyZVxuICAgICAgaWYgKGZpbGUuaW5jbHVkZXMoXCI6Ly9cIikpIHtcbiAgICAgICAgZmlsZSA9IG5hbWU7XG4gICAgICB9XG5cbiAgICAgIC8vIENvbGxhcHNlIGhpZ2hlciBkaXJlY3Rvcnkgc3RydWN0dXJlXG4gICAgICBmaWxlID0gY29sbGFwc2VQYXRoKGZpbGUpO1xuXG4gICAgICAvLyBDcmVhdGUgZGlyZWN0b3J5IHRyZWUsIGlnbm9yaW5nIFwiZGlyZWN0b3J5IGV4aXN0c1wiIFZGUyBlcnJvcnNcbiAgICAgIGNvbnN0IHBhcnRzID0gZmlsZS5zcGxpdCgnLycpLnNsaWNlKDAsIC0xKTtcbiAgICAgIGxldCBwYXRoID0gJyc7XG4gICAgICB3aGlsZSAocGFydHMubGVuZ3RoID4gMCkge1xuICAgICAgICBwYXRoICs9IHBhcnRzLnNoaWZ0KCkgKyAnLyc7XG4gICAgICAgIGNvbnN0IGFuYWx5c2lzID0gYXdhaXQgd2ViUi5GUy5hbmFseXplUGF0aChwYXRoKTtcbiAgICAgICAgaWYgKCFhbmFseXNpcy5leGlzdHMpIHtcbiAgICAgICAgICB0cnkge1xuICAgICAgICAgICAgYXdhaXQgd2ViUi5GUy5ta2RpcihwYXRoKTtcbiAgICAgICAgICB9IGNhdGNoIChlKSB7XG4gICAgICAgICAgICB0aHJvdyBuZXcgRXJyb3IoYEZpbGVzeXN0ZW0gRXJyb3I6IFwiJHtlLm1lc3NhZ2V9XCIuYCk7XG4gICAgICAgICAgfVxuICAgICAgICB9XG4gICAgICB9XG5cbiAgICAgIC8vIFdyaXRlIHRoaXMgZmlsZSB0byB0aGUgVkZTXG4gICAgICByZXR1cm4gYXdhaXQgd2ViUi5GUy53cml0ZUZpbGUoZmlsZSwgbmV3IFVpbnQ4QXJyYXkoZGF0YSkpO1xuICAgIH0pLnJlZHVjZSgoY3VyLCBuZXh0KSA9PiBjdXIudGhlbihuZXh0KSwgUHJvbWlzZS5yZXNvbHZlKCkpO1xuXG4gICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBJbnN0YWxsaW5nIHdlYlIgc2hpbXNgO1xuICAgIGF3YWl0IHdlYlIuZXZhbFJWb2lkKGB3ZWJyOjpzaGltX2luc3RhbGwoKWApO1xuXG4gICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBXZWJSIGVudmlyb25tZW50IHNldHVwYDtcbiAgICBhd2FpdCBzZXR1cFIod2ViUiwgZGF0YSk7XG5cbiAgICBzdGF0dXNUZXh0LnJlbW92ZSgpO1xuICAgIGlmIChzdGF0dXNDb250YWluZXIuY2hpbGRyZW4ubGVuZ3RoID09IDApIHtcbiAgICAgIHN0YXR1c0NvbnRhaW5lci5wYXJlbnROb2RlLnJlbW92ZSgpO1xuICAgIH1cbiAgICByZXR1cm4gd2ViUjtcbiAgfSkobmV3IFdlYlIoZGF0YS5vcHRpb25zKSk7XG5cbiAgLy8gS2VlcCB0cmFjayBvZiBpbml0aWFsIE9KUyBibG9jayByZW5kZXJcbiAgY29uc3QgcmVuZGVyZWRPanMgPSB7fTtcblxuICBjb25zdCBwcm9jZXNzID0gYXN5bmMgKGNvbnRleHQsIGlucHV0cykgPT4ge1xuICAgIGNvbnN0IHdlYlIgPSBhd2FpdCB3ZWJSUHJvbWlzZTtcbiAgICBjb25zdCBldmFsdWF0b3IgPSBuZXcgV2ViUkV2YWx1YXRvcih3ZWJSLCBjb250ZXh0KVxuICAgIGF3YWl0IGV2YWx1YXRvci5wcm9jZXNzKGlucHV0cyk7XG4gICAgcmV0dXJuIGV2YWx1YXRvci5jb250YWluZXI7XG4gIH1cblxuICByZXR1cm4ge1xuICAgIHByb2Nlc3MsXG4gICAgd2ViUlByb21pc2UsXG4gICAgcmVuZGVyZWRPanMsXG4gIH07XG59XG4ifV19
+</script>
+<div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2">
+<div id="exercise-loading-status" class="d-flex gap-2">
+
+</div>
+<div class="spinner-grow spinner-grow-sm">
+
+</div>
+</div>
+<script type="vfs-file">
+WyJ0b3lfZW1iZWRkaW5ncy5jc3YiXQ==
+</script>
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{amaya2026,
+  author = {Amaya, Nelson},
+  title = {Grounded in Truth 🧭},
+  date = {2026-07-04},
+  url = {https://nelsonamayad.github.io/R4DEV/sessions_ai/03-ragnar/03-ragnar},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-amaya2026" class="csl-entry quarto-appendix-citeas" role="listitem">
+Amaya, Nelson. 2026. <span>“Grounded in Truth 🧭.”</span> July 4. <a href="https://nelsonamayad.github.io/R4DEV/sessions_ai/03-ragnar/03-ragnar">https://nelsonamayad.github.io/R4DEV/sessions_ai/03-ragnar/03-ragnar</a>.
+</div></div></section></div></main> <!-- /main -->
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W119
+</script>
+<script type="module">
+if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+window._ojs.paths.runtimeToDoc = "../../sessions_ai/03-ragnar";
+window._ojs.paths.runtimeToRoot = "../..";
+window._ojs.paths.docToRoot = "../..";
+window._ojs.selfContained = false;
+window._ojs.runtime.interpretFromScriptTags();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/nelsonamayad\.github\.io\/R4DEV\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>📉 R4DEV 📈</p>
+</div>   
+    <div class="nav-footer-center">
+<p><span class="faux-block">Licensed under<br><a href="https://creativecommons.org/licenses/by/4.0/"><i class="fa-brands fa-creative-commons" aria-label="creative-commons"></i> <i class="fa-brands fa-creative-commons-by" aria-label="creative-commons-by"></i> Creative Commons CC BY 4.0</a></span></p>
+<div class="cookie-consent-footer"><a href="#" id="open_preferences_center">Cookie Preferences</a></div></div>
+    <div class="nav-footer-right">
+<p><span class="faux-block">Created with <i class="fa-brands fa-r-project" title="R" aria-label="r-project"></i> R and <a href="https://quarto.org/">Quarto</a></span></p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

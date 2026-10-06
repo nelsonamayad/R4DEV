@@ -1,0 +1,1607 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.11">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>R4DEV</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./logo/r4dev_dalle_1.png" rel="icon" type="image/png">
+<script src="site_libs/quarto-listing/list.min.js"></script>
+<script src="site_libs/quarto-listing/quarto-listing.js"></script>
+<script src="site_libs/cookie-consent/cookie-consent.js"></script>
+<link href="site_libs/cookie-consent/cookie-consent.css" rel="stylesheet">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-73e373f4a43393be879eaa7f5bec20f5.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-7866983ca643604dcd4b1790e1c86039.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-73e373f4a43393be879eaa7f5bec20f5.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-dd6c45b54541880a299e0dee00286204.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-7ffa57463c0571ce90511b27d8e31a79.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-dd6c45b54541880a299e0dee00286204.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/quarto-contrib/fontawesome6-1.2.0/all.min.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/fontawesome6-1.2.0/latex-fontsize.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script>
+
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-build-with-r .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
+
+    const options = {
+      valueNames: ['listing-image','listing-title','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      
+      searchColumns: ["listing-title","listing-author","listing-date","listing-image","listing-description"],
+    };
+
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-build-with-r'] = new List('listing-build-with-r', options);
+
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
+
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  
+
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-work-with-ai .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
+
+    const options = {
+      valueNames: ['listing-image','listing-title','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      
+      searchColumns: ["listing-title","listing-author","listing-date","listing-image","listing-description"],
+    };
+
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-work-with-ai'] = new List('listing-work-with-ai', options);
+
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
+
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  
+
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-think-with-data .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
+
+    const options = {
+      valueNames: ['listing-image','listing-title','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      
+      searchColumns: ["listing-title","listing-author","listing-date","listing-image","listing-description"],
+    };
+
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-think-with-data'] = new List('listing-think-with-data', options);
+
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
+
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  
+
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-tools .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
+
+    const options = {
+      valueNames: ['listing-image','listing-title','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      
+      searchColumns: ["listing-title","listing-author","listing-date","listing-image","listing-description"],
+    };
+
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-tools'] = new List('listing-tools', options);
+
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
+
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  </script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-CE27LT98M2"></script>
+
+<script type="text/plain" cookie-consent="tracking">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-CE27LT98M2', { 'anonymize_ip': true});
+</script>
+
+<script type="text/javascript" charset="UTF-8">
+document.addEventListener('DOMContentLoaded', function () {
+cookieconsent.run({
+  "notice_banner_type":"simple",
+  "consent_type":"express",
+  "palette":"light",
+  "language":"en",
+  "page_load_consent_levels":["strictly-necessary"],
+  "notice_banner_reject_button_hide":false,
+  "preferences_center_close_button_hide":false,
+  "website_name":""
+  ,
+"language":"en"
+  });
+});
+</script> 
+  
+<style>html{ scroll-behavior: smooth; }</style>
+<script async="" src="https://hypothes.is/embed.js"></script>
+<script>
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    document.body.classList.add('hypothesis-enabled');
+  });
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="style.css">
+<meta property="og:title" content="R4DEV">
+<meta property="og:description" content="Data workshop created by Nelson Amaya D.">
+<meta property="og:image" content="https://nelsonamayad.github.io/R4DEV/logo/r4dev_dalle_1.png">
+<meta property="og:site_name" content="R4DEV">
+<meta property="og:image:height" content="584">
+<meta property="og:image:width" content="478">
+<meta name="twitter:title" content="R4DEV">
+<meta name="twitter:description" content="Data workshop created by Nelson Amaya D.">
+<meta name="twitter:image" content="https://nelsonamayad.github.io/R4DEV/logo/r4dev_dalle_1.png">
+<meta name="twitter:creator" content="@nelsonamayad">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image-height" content="584">
+<meta name="twitter:image-width" content="478">
+</head>
+
+<body class="floating nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const queryPrefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    const darkModeDefault = queryPrefersDark.matches;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    queryPrefersDark.addEventListener("change", e => {
+      if(window.localStorage.getItem("quarto-color-scheme") !== null)
+        return;
+      const alternate = e.matches
+      toggleColorMode(alternate);
+      localAlternateSentinel = e.matches ? 'alternate' : 'default'; // this is used alongside local storage!
+      toggleGiscusIfUsed(alternate, darkModeDefault);
+    });
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    <img src="./logo/r4dev_dalle_1.png" alt="" class="navbar-logo light-content">
+    <img src="./logo/r4dev_dalle_1.png" alt="" class="navbar-logo dark-content">
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="./index.html" aria-current="page"> <i class="bi bi-house-door" role="img">
+</i> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./start.html"> <i class="bi bi-signpost-2" role="img">
+</i> 
+<span class="menu-text">Start here</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-build-with-r" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+      <i class="bi bi-code-slash" role="img">
+</i> 
+ <span class="menu-text">Build with R</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-build-with-r">    
+        <li>
+    <a class="dropdown-item" href="./learn/build-with-r.html"><i class="bi bi-mortarboard" role="img">
+</i> 
+ <span class="dropdown-text">Track overview</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./sessions_workshop/01-quarto/01-quarto.html"><i class="bi bi-book-half" role="img">
+</i> 
+ <span class="dropdown-text">1. Blogging with Quarto</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./sessions_workshop/02-plots/02-plots.html"><i class="bi bi-music-note-list" role="img">
+</i> 
+ <span class="dropdown-text">2. Everything in its right place</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./sessions_workshop/03-text/03-text.html"><i class="bi bi-textarea-t" role="img">
+</i> 
+ <span class="dropdown-text">3. Data from words</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./sessions_workshop/04-animate/04-animate.html"><i class="bi bi-film" role="img">
+</i> 
+ <span class="dropdown-text">4. Making data move</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./sessions_workshop/05-maps/05-maps.html"><i class="bi bi-globe" role="img">
+</i> 
+ <span class="dropdown-text">5. Mapping despair in the USA</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./sessions_workshop/06-scrap/06-scrap.html"><i class="bi bi-wifi" role="img">
+</i> 
+ <span class="dropdown-text">6. Just take it</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./sessions_workshop/07-shiny/07-shiny.html"><i class="bi bi-stars" role="img">
+</i> 
+ <span class="dropdown-text">7. Make it shine</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./sessions_workshop/08-reports/08-reports.html"><i class="bi bi-android2" role="img">
+</i> 
+ <span class="dropdown-text">8. Smart reports</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./sessions_workshop/09-parallel/09-parallel.html"><i class="bi bi-speedometer2" role="img">
+</i> 
+ <span class="dropdown-text">9. Do it well, do it fast</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-work-with-ai" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+      <i class="bi bi-robot" role="img">
+</i> 
+ <span class="menu-text">Work with AI</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-work-with-ai">    
+        <li>
+    <a class="dropdown-item" href="./learn/ai.html"><i class="bi bi-mortarboard" role="img">
+</i> 
+ <span class="dropdown-text">Track overview</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./sessions_ai/01-llm/01-llm.html"><i class="bi bi-robot" role="img">
+</i> 
+ <span class="dropdown-text">1. Talking to machines</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./sessions_ai/02-llm-apps/02-llm-apps.html"><i class="bi bi-chat-dots" role="img">
+</i> 
+ <span class="dropdown-text">2. Chat with your data</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./sessions_ai/03-ragnar/03-ragnar.html"><i class="bi bi-compass" role="img">
+</i> 
+ <span class="dropdown-text">3. Grounded in truth</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./sessions_ai/04-agentic/04-agentic.html"><i class="bi bi-terminal" role="img">
+</i> 
+ <span class="dropdown-text">4. Agentic coding</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./sessions_ai/03-ragnar/03-ragnar.html#capstone-ask-r4dev"><i class="bi bi-stars" role="img">
+</i> 
+ <span class="dropdown-text">Ask R4DEV 🤖 (live capstone)</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-think-with-data" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+      <i class="bi bi-dice-5" role="img">
+</i> 
+ <span class="menu-text">Think with data</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-think-with-data">    
+        <li>
+    <a class="dropdown-item" href="./learn/thinking.html"><i class="bi bi-mortarboard" role="img">
+</i> 
+ <span class="dropdown-text">Track overview</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./sessions_thinking/01-uncertainty/01-uncertainty.html"><i class="bi bi-dice-5" role="img">
+</i> 
+ <span class="dropdown-text">1. Embrace the noise</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./sessions_thinking/02-inference/02-inference.html"><i class="bi bi-shuffle" role="img">
+</i> 
+ <span class="dropdown-text">2. There is only one test</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./sessions_thinking/03-regression/03-regression.html"><i class="bi bi-graph-up" role="img">
+</i> 
+ <span class="dropdown-text">3. All models are wrong</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./sessions_thinking/04-causal/04-causal.html"><i class="bi bi-diagram-3" role="img">
+</i> 
+ <span class="dropdown-text">4. Draw your assumptions</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./sessions_thinking/05-bayes/05-bayes.html"><i class="bi bi-infinity" role="img">
+</i> 
+ <span class="dropdown-text">5. Think Bayes</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="./sessions_tools/01-practice/01-practice.html"> <i class="bi bi-trophy" role="img">
+</i> 
+<span class="menu-text">Practice</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./sessions_tools/02-resources/02-resources.html"> <i class="bi bi-eye-fill" role="img">
+</i> 
+<span class="menu-text">Resources</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./about.html"> <i class="bi bi-question-circle-fill" role="img">
+</i> 
+<span class="menu-text">About R4DEV</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<!-- sidebar -->
+  
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content column-page" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><h1 class="title display-7">R4DEV</h1></header>
+
+
+<header id="title-block-header">
+
+
+</header>
+
+
+<style>
+/* The masthead is the title of this page -- hide the auto-generated title header. */
+#title-block-header { display: none; }
+</style>
+<div class="masthead">
+<div class="masthead-content">
+<p><span class="kicker">A hands-on workshop · running since 2022</span></p>
+<p><span class="masthead-title">More fiction is written in <span class="accent-word">Excel</span> than in Word.</span></p>
+<div class="lede">
+<p>Learn to turn messy information into reproducible analysis, compelling visualisations, interactive applications, and AI-assisted workflows – all in R.</p>
+</div>
+<div class="masthead-actions">
+<p><a href="./start.html" class="btn btn-primary btn-lg">Start learning →</a> <a href="#tracks" class="btn btn-outline-primary btn-lg">Explore the curriculum →</a></p>
+</div>
+<p><span class="masthead-fineprint">All progress is piecemeal, so the workshop improves permanently. Keep the <a href="https://rstudio.github.io/cheatsheets/">Posit cheat sheets</a> and the <a href="https://style.tidyverse.org/">tidyverse style guide</a> close. Thanks to Zélie, Rebecca, Rossana, Romane, Emma, Shivona, Maria, Valeria, Laura, Sofia, Maëlle and many others who tested, often with their patience, earlier versions of this workshop.</span></p>
+</div>
+<div class="masthead-visual">
+<img src="logo/r4dev_dalle_1.png" alt="Yes, I have a DALL-E logo">
+</div>
+</div>
+<section id="tracks" class="level2 section-header">
+<h2 class="section-header anchored" data-anchor-id="tracks">Learning tracks</h2>
+<p>Three tracks, eighteen lessons. Each is self-contained enough to enter on its own, but reads best in order.</p>
+<div class="track-grid">
+
+<div class="track-card" data-track="build">
+  <p class="track-card-title">Build with R</p>
+  <p class="track-card-desc">Retrieve, transform, visualise, communicate, and scale data workflows with R.</p>
+  <p class="track-card-meta"><span>9 lessons</span><span>Beginner → Advanced</span></p>
+  <a class="btn btn-primary" href="./learn/build-with-r.html">View track →</a>
+</div>
+
+<div class="track-card" data-track="ai">
+  <p class="track-card-title">Work with AI</p>
+  <p class="track-card-desc">Use large language models as programmable tools for extraction, analysis, retrieval, and application development.</p>
+  <p class="track-card-meta"><span>4 lessons</span><span>Beginner → Advanced</span></p>
+  <a class="btn btn-primary" href="./learn/ai.html">View track →</a>
+</div>
+
+<div class="track-card" data-track="thinking">
+  <p class="track-card-title">Think with data</p>
+  <p class="track-card-desc">Reason clearly about uncertainty, inference, models, causality, and Bayesian evidence.</p>
+  <p class="track-card-meta"><span>5 lessons</span><span>Beginner → Advanced</span></p>
+  <a class="btn btn-primary" href="./learn/thinking.html">View track →</a>
+</div>
+
+</div>
+<p>New to R4DEV? <a href="./start.html">Start here</a> for prerequisites, install steps, and a recommended route through the material.</p>
+<section id="build-with-r" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="build-with-r">Build with R</h3>
+<div id="listing-build-with-r" class="quarto-listing quarto-listing-container-grid">
+<div class="list grid quarto-listing-cols-3">
+<div class="g-col-1" data-index="0" data-categories="bmV0bGlmeSUyQ3F1YXJ0byUyQ3dlYnNpdGUlMkNibG9nJTJDaHlwb3RoZXNpcyUyQ2Jvb3Rzd2F0Y2g=" data-listing-date-sort="1659132000000" data-listing-file-modified-sort="1791227225640" data-listing-date-modified-sort="1791227225000" data-listing-reading-time-sort="8" data-listing-word-count-sort="1522">
+<a href="./sessions_workshop/01-quarto/01-quarto.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="./sessions_workshop/01-quarto/swordfish.gif" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Blogging with Quarto 📓
+</h5>
+<div class="card-text listing-description delink">
+<p>Learn to work with Quarto, to write prose and analyse data at the same time. Create and update a blog using Quarto and then publish it online using Netlify</p>
+</div>
+</div>
+</div></a>
+</div>
+<div class="g-col-1" data-index="1" data-categories="QVBJJTJDaHR0cjIlMkNpbnRlcmFjdGl2ZSUyQ2dncGxvdDIlMkNwbG90bHklMkNnZ2lyYXBo" data-listing-date-sort="1659218400000" data-listing-file-modified-sort="1791227225698" data-listing-date-modified-sort="1791227225000" data-listing-reading-time-sort="33" data-listing-word-count-sort="6463">
+<a href="./sessions_workshop/02-plots/02-plots.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="./sessions_workshop/02-plots/thom-dance.gif" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Everything in its right place 🎼
+</h5>
+<div class="card-text listing-description delink">
+<p>Learn how to get information from APIs with httr2, and create interactive visualisations of historical GDP, Kyoto weather and archived Spotify songs using ggplot2, plotly…</p>
+</div>
+</div>
+</div></a>
+</div>
+<div class="g-col-1" data-index="2" data-categories="dGV4dCUyQ3NlbnRpbWVudCUyQ25ncmFtcyUyQ3BkZiUyQ2Jvb2slMkNuZXR3b3JrJTJDcmVnZXglMkN3b3JkY2xvdWQ=" data-listing-date-sort="1659218400000" data-listing-file-modified-sort="1791227226127" data-listing-date-modified-sort="1791227226000" data-listing-reading-time-sort="40" data-listing-word-count-sort="7836">
+<a href="./sessions_workshop/03-text/03-text.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="./sessions_workshop/03-text/darwin.gif" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Data from words 📚
+</h5>
+<div class="card-text listing-description delink">
+<p>Import, clean, tokenise and stem text, plus do sentiment analysis, topic modelling and learn how functions in R make your work so much easier.</p>
+</div>
+</div>
+</div></a>
+</div>
+<div class="g-col-1" data-index="3" data-categories="Z2dhbmltYXRlJTJDY2F1c2FsJTIwaW5mZXJlbmNlJTJDZ2dwbG90MiUyQ2dnaW1hZ2UlMkNnZ3BwJTJDdHJlZW1hcA==" data-listing-date-sort="1659218400000" data-listing-file-modified-sort="1791227227062" data-listing-date-modified-sort="1791227227000" data-listing-reading-time-sort="26" data-listing-word-count-sort="5171">
+<a href="./sessions_workshop/04-animate/04-animate.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="./sessions_workshop/04-animate/homer.gif" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Making data move 🚶
+</h5>
+<div class="card-text listing-description delink">
+<p>Transform static plots into animations using gganimate. Examples include millennia of cherry tree blossoms, COVID-19 aftermath and why causation does not imply correlation.</p>
+</div>
+</div>
+</div></a>
+</div>
+<div class="g-col-1" data-index="4" data-categories="bWFwJTJDQVBJJTJDaW50ZXJhY3RpdmUlMkNsZWFmbGV0JTJDc2YlMkNnZ2lyYXBoJTJDcmF5c2hhZGVy" data-listing-date-sort="1659218400000" data-listing-file-modified-sort="1791227227339" data-listing-date-modified-sort="1791227227000" data-listing-reading-time-sort="31" data-listing-word-count-sort="6126">
+<a href="./sessions_workshop/05-maps/05-maps.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="./sessions_workshop/05-maps/map-fractal.gif" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Mapping despair in the USA 🗺️
+</h5>
+<div class="card-text listing-description delink">
+<p>Learn how to find, download and visualise spatial data. We’ll create static and interactive maps using ggplot2 and leaflet, using data on the opioid epidemic in the United…</p>
+</div>
+</div>
+</div></a>
+</div>
+<div class="g-col-1" data-index="5" data-categories="cnZlc3QlMkNzZW50aW1lbnQlMkNyZWFjdGFibGUlMkN3aGlsZSUyQ3NjcmFw" data-listing-date-sort="1659218400000" data-listing-file-modified-sort="1791227228981" data-listing-date-modified-sort="1791227228000" data-listing-reading-time-sort="16" data-listing-word-count-sort="3162">
+<a href="./sessions_workshop/06-scrap/06-scrap.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="./sessions_workshop/06-scrap/bono-wink.gif" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Just take it 🌏
+</h5>
+<div class="card-text listing-description delink">
+<p>Sometimes you need to bring data straight from a website. Scrape IMDb movie rankings, U2 lyrics and untranslatable words.</p>
+</div>
+</div>
+</div></a>
+</div>
+<div class="g-col-1" data-index="6" data-categories="c2hpbnklMkNkYXNoYm9hcmQlMkNxdWFydG8lMkN3ZWJzaXRlJTJDbWFwJTJDcmVhY3RpdmUlMkNwcmVzZW50YXRpb24lMkNyZXZlYWxqcw==" data-listing-date-sort="1659218400000" data-listing-file-modified-sort="1791227229344" data-listing-date-modified-sort="1791227229000" data-listing-reading-time-sort="39" data-listing-word-count-sort="7669">
+<a href="./sessions_workshop/07-shiny/07-shiny.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="./sessions_workshop/07-shiny/shining.gif" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Make it shine 🌟
+</h5>
+<div class="card-text listing-description delink">
+<p>These are the best sessions, bringing together all the tools from previous sessions to create interactive apps. You’ll learn how to build and publish Shiny dashboards and…</p>
+</div>
+</div>
+</div></a>
+</div>
+<div class="g-col-1" data-index="7" data-categories="cXVhcnRvJTJDcGRmJTJDaHRtbCUyQ3dvcmQlMkNwYXJhbWV0cmlzZWQlMjByZXBvcnRzJTJDem90ZXJv" data-listing-date-sort="1659218400000" data-listing-file-modified-sort="1791227229681" data-listing-date-modified-sort="1791227229000" data-listing-reading-time-sort="10" data-listing-word-count-sort="1858">
+<a href="./sessions_workshop/08-reports/08-reports.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="./sessions_workshop/08-reports/smart.gif" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Smart reports 🧠
+</h5>
+<div class="card-text listing-description delink">
+<p>Create parametrised reports and learn to work with references using Zotero.</p>
+</div>
+</div>
+</div></a>
+</div>
+<div class="g-col-1" data-index="8" data-categories="cHVycnIlMkNmdW5jdGlvbmFsJTIwcHJvZ3JhbW1pbmclMkNtaXJhaSUyQ3BhcmFsbGVsJTIwY29tcHV0aW5n" data-listing-date-sort="1783202400000" data-listing-file-modified-sort="1791227230060" data-listing-date-modified-sort="1791227230000" data-listing-reading-time-sort="10" data-listing-word-count-sort="1954">
+<a href="./sessions_workshop/09-parallel/09-parallel.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="./sessions_workshop/09-parallel/xmen.gif" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Do it well, do it fast 🏎️
+</h5>
+<div class="card-text listing-description delink">
+<p>Functions instead of loops; do multiple things at the same time. Learn purrr’s functional style, then parallelize it with a single wrapper function.</p>
+</div>
+</div>
+</div></a>
+</div>
+</div>
+<div class="listing-no-matching d-none">No matching items</div>
+</div>
+</section>
+<section id="work-with-ai" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="work-with-ai">Work with AI</h3>
+<div id="listing-work-with-ai" class="quarto-listing quarto-listing-container-grid">
+<div class="list grid quarto-listing-cols-3">
+<div class="g-col-1" data-index="0" data-categories="TExNJTJDZWxsbWVyJTJDQUklMkNzdHJ1Y3R1cmVkJTIwZGF0YSUyQ0FQSQ==" data-listing-date-sort="1783116000000" data-listing-file-modified-sort="1791227224991" data-listing-date-modified-sort="1791227224000" data-listing-reading-time-sort="13" data-listing-word-count-sort="2418">
+<a href="./sessions_ai/01-llm/01-llm.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="./sessions_ai/01-llm/robot.gif" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Talking to machines 🤖
+</h5>
+<div class="card-text listing-description delink">
+<p>LLMs are not just chatbots: they are functions you can call from R. Learn to chat, design prompts, extract structured data from text, and give models tools –all with ellmer.</p>
+</div>
+</div>
+</div></a>
+</div>
+<div class="g-col-1" data-index="1" data-categories="TExNJTJDc2hpbnklMkNzaGlueWNoYXQlMkNxdWVyeWNoYXQlMkNnZ3NxbCUyQ1NRTA==" data-listing-date-sort="1783116000000" data-listing-file-modified-sort="1791227225047" data-listing-date-modified-sort="1791227225000" data-listing-reading-time-sort="8" data-listing-word-count-sort="1597">
+<a href="./sessions_ai/02-llm-apps/02-llm-apps.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="./sessions_ai/02-llm-apps/her.gif" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Chat with your data 💬
+</h5>
+<div class="card-text listing-description delink">
+<p>Put a language model inside your Shiny apps: streaming chat UIs with shinychat, natural-language data filtering with querychat, and SQL that draws its own charts with ggsql.</p>
+</div>
+</div>
+</div></a>
+</div>
+<div class="g-col-1" data-index="2" data-categories="UkFHJTJDcmFnbmFyJTJDZWxsbWVyJTJDZW1iZWRkaW5ncyUyQ3ZlY3RvciUyMHNlYXJjaCUyQ29sbGFtYQ==" data-listing-date-sort="1783116000000" data-listing-file-modified-sort="1791227225093" data-listing-date-modified-sort="1791227225000" data-listing-reading-time-sort="14" data-listing-word-count-sort="2778">
+<a href="./sessions_ai/03-ragnar/03-ragnar.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="./sessions_ai/03-ragnar/ragnar.png" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Grounded in truth 🧭
+</h5>
+<div class="card-text listing-description delink">
+<p>Build a real RAG pipeline end to end with ragnar: crawl a site, chunk it, embed it for free with a local model, store it in DuckDB, retrieve two different ways, and hand…</p>
+</div>
+</div>
+</div></a>
+</div>
+<div class="g-col-1" data-index="3" data-categories="QUklMkNhZ2VudHMlMkNMTE0lMkNDbGF1ZGUlMjBDb2RlJTJDTUNQ" data-listing-date-sort="1783202400000" data-listing-file-modified-sort="1791227225106" data-listing-date-modified-sort="1791227225000" data-listing-reading-time-sort="16" data-listing-word-count-sort="3065">
+<a href="./sessions_ai/04-agentic/04-agentic.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="./sessions_ai/04-agentic/cat-computer.gif" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Agentic coding 🦾
+</h5>
+<div class="card-text listing-description delink">
+<p>An agent is an LLM in a loop with tools. Learn what that actually means, meet the main agentic coding tools –Claude Code, Codex, OpenClaw, Antigravity– and the vocabulary…</p>
+</div>
+</div>
+</div></a>
+</div>
+</div>
+<div class="listing-no-matching d-none">No matching items</div>
+</div>
+</section>
+<section id="think-with-data" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="think-with-data">Think with data</h3>
+<div id="listing-think-with-data" class="quarto-listing quarto-listing-container-grid">
+<div class="list grid quarto-listing-cols-3">
+<div class="g-col-1" data-index="0" data-categories="c3RhdGlzdGljcyUyQ3Byb2JhYmlsaXR5JTJDc2ltdWxhdGlvbiUyQ2luZmVyZW5jZQ==" data-listing-date-sort="1782856800000" data-listing-file-modified-sort="1791227225211" data-listing-date-modified-sort="1791227225000" data-listing-reading-time-sort="9" data-listing-word-count-sort="1671">
+<a href="./sessions_thinking/01-uncertainty/01-uncertainty.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="./sessions_thinking/01-uncertainty/uncertainty.png" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Embrace the noise 🎲
+</h5>
+<div class="card-text listing-description delink">
+<p>Every number you compute from data could have come out differently. Learn to see sampling variation by simulating it: random draws, the law of large numbers, and the central…</p>
+</div>
+</div>
+</div></a>
+</div>
+<div class="g-col-1" data-index="1" data-categories="c3RhdGlzdGljcyUyQ2luZmVyZW5jZSUyQ2Jvb3RzdHJhcCUyQ2luZmVyJTJDcC12YWx1ZQ==" data-listing-date-sort="1782943200000" data-listing-file-modified-sort="1791227225217" data-listing-date-modified-sort="1791227225000" data-listing-reading-time-sort="9" data-listing-word-count-sort="1690">
+<a href="./sessions_thinking/02-inference/02-inference.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="./sessions_thinking/02-inference/inference.png" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+There is only one test 🃏
+</h5>
+<div class="card-text listing-description delink">
+<p>All of hypothesis testing is one idea: build a world where nothing is going on, simulate it, and ask if your data would be surprising there. Learn it by shuffling with the…</p>
+</div>
+</div>
+</div></a>
+</div>
+<div class="g-col-1" data-index="2" data-categories="c3RhdGlzdGljcyUyQ3JlZ3Jlc3Npb24lMkNicm9vbSUyQ3VuY2VydGFpbnR5JTJDbW9kZWxsaW5n" data-listing-date-sort="1783029600000" data-listing-file-modified-sort="1791227225227" data-listing-date-modified-sort="1791227225000" data-listing-reading-time-sort="9" data-listing-word-count-sort="1704">
+<a href="./sessions_thinking/03-regression/03-regression.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="./sessions_thinking/03-regression/regression.png" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+All models are wrong 📏
+</h5>
+<div class="card-text listing-description delink">
+<p>The regression line is the most used –and most over-trusted– model on Earth. Learn to fit it, tidy it with broom, dress it in honest uncertainty with the bootstrap, and…</p>
+</div>
+</div>
+</div></a>
+</div>
+<div class="g-col-1" data-index="3" data-categories="c3RhdGlzdGljcyUyQ2NhdXNhbGl0eSUyQ0RBRyUyQ2dnZGFnJTJDc2ltdWxhdGlvbiUyQ25hdHVyYWwlMjBleHBlcmltZW50cw==" data-listing-date-sort="1783116000000" data-listing-file-modified-sort="1791227225242" data-listing-date-modified-sort="1791227225000" data-listing-reading-time-sort="53" data-listing-word-count-sort="10515">
+<a href="./sessions_thinking/04-causal/04-causal.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="./sessions_thinking/04-causal/causal.png" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Draw your assumptions before drawing your conclusions 🔀
+</h5>
+<div class="card-text listing-description delink">
+<p>Correlation is not causation –but why, exactly, and what would be? Learn the three atoms of causal structure (fork, chain, collider), simulate each one to see when…</p>
+</div>
+</div>
+</div></a>
+</div>
+<div class="g-col-1" data-index="4" data-categories="c3RhdGlzdGljcyUyQ3Byb2JhYmlsaXR5JTJDYmF5ZXM=" data-listing-date-sort="1783202400000" data-listing-file-modified-sort="1791227225250" data-listing-date-modified-sort="1791227225000" data-listing-reading-time-sort="7" data-listing-word-count-sort="1275">
+<a href="./sessions_thinking/05-bayes/05-bayes.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="./sessions_thinking/05-bayes/bayes_globe.png" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Think Bayes 🤔
+</h5>
+<div class="card-text listing-description delink">
+<p>Toss a globe, count the water, and watch a probability distribution learn. A gentle first contact with Bayesian inference, animated with the tools from session 4.</p>
+</div>
+</div>
+</div></a>
+</div>
+</div>
+<div class="listing-no-matching d-none">No matching items</div>
+</div>
+</section>
+</section>
+<section id="resources" class="level2 section-header">
+<h2 class="section-header anchored" data-anchor-id="resources">Resources</h2>
+<div id="listing-tools" class="quarto-listing quarto-listing-container-grid">
+<div class="list grid quarto-listing-cols-3">
+<div class="g-col-1" data-index="0" data-categories="d2ViciUyQ3Rlc3Q=" data-listing-date-sort="1659218400000" data-listing-file-modified-sort="1791227225257" data-listing-date-modified-sort="1791227225000" data-listing-reading-time-sort="2" data-listing-word-count-sort="278">
+<a href="./sessions_tools/01-practice/01-practice.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="./sessions_tools/01-practice/jackie.gif" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Practice, test 💪
+</h5>
+<div class="card-text listing-description delink">
+<p>Every session’s practice section in one index, plus a taste of in-browser R: no installation needed, thanks to the quarto-live extension.</p>
+</div>
+</div>
+</div></a>
+</div>
+<div class="g-col-1" data-index="1" data-categories="Ym9vayUyQ3N0YXRpc3RpY3MlMkNwcm9iYWJpbGl0eSUyQ2Jsb2clMkNzcGF0aWFsJTJDc2hpbnklMkNjYXVzYWxpdHk=" data-listing-date-sort="1659218400000" data-listing-file-modified-sort="1791227225291" data-listing-date-modified-sort="1791227225000" data-listing-reading-time-sort="2" data-listing-word-count-sort="394">
+<a href="./sessions_tools/02-resources/02-resources.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="./sessions_tools/02-resources/mind-blow.gif" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+R-sources 📙
+</h5>
+<div class="card-text listing-description delink">
+<p>This is just the beginning. Here you will find a repository of resources to learn more by topic: statistics, geocomputation, text analysis, building apps, etc.</p>
+</div>
+</div>
+</div></a>
+</div>
+<div class="g-col-1" data-index="2" data-categories="ZmVlZGJhY2s=" data-listing-date-sort="1680472800000" data-listing-file-modified-sort="1791227225624" data-listing-date-modified-sort="1791227225000" data-listing-reading-time-sort="1" data-listing-word-count-sort="36">
+<a href="./sessions_tools/03-feedback/03-feedback.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="./sessions_tools/03-feedback/patrick-bateman.gif" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Feedback 🔁
+</h5>
+<div class="card-text listing-description delink">
+<p>Take a minute to tell me what you liked, what you didn’t like, and how to improve the workshop. Anonymously, if you’d like.</p>
+</div>
+</div>
+</div></a>
+</div>
+</div>
+<div class="listing-no-matching d-none">No matching items</div>
+</div>
+<div class="resources-strip">
+<p><a href="https://rstudio.github.io/cheatsheets/">Posit cheat sheets</a> <a href="https://style.tidyverse.org/">Tidyverse style guide</a></p>
+</div>
+
+
+
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/nelsonamayad\.github\.io\/R4DEV\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        const annoteTargets = window.document.querySelectorAll('.code-annotation-anchor');
+        for (let i=0; i<annoteTargets.length; i++) {
+          const annoteTarget = annoteTargets[i];
+          const targetCell = annoteTarget.getAttribute("data-target-cell");
+          const targetAnnotation = annoteTarget.getAttribute("data-target-annotation");
+          const contentFn = () => {
+            const content = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+            if (content) {
+              const tipContent = content.cloneNode(true);
+              tipContent.classList.add("code-annotation-tip-content");
+              return tipContent.outerHTML;
+            }
+          }
+          const config = {
+            allowHTML: true,
+            content: contentFn,
+            onShow: (instance) => {
+              selectCodeLines(instance.reference);
+              instance.reference.classList.add('code-annotation-active');
+              window.tippy.hideAll();
+            },
+            onHide: (instance) => {
+              unselectCodeLines();
+              instance.reference.classList.remove('code-annotation-active');
+            },
+            maxWidth: 300,
+            delay: [50, 0],
+            duration: [200, 0],
+            offset: [5, 10],
+            arrow: true,
+            appendTo: function(el) {
+              return el.parentElement.parentElement.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'quarto',
+            placement: 'right',
+            popperOptions: {
+              modifiers: [
+              {
+                name: 'flip',
+                options: {
+                  flipVariations: false, // true by default
+                  allowedAutoPlacements: ['right'],
+                  fallbackPlacements: ['right', 'top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left'],
+                },
+              },
+              {
+                name: 'preventOverflow',
+                options: {
+                  mainAxis: false,
+                  altAxis: false
+                }
+              }
+              ]        
+            }      
+          };
+          window.tippy(annoteTarget, config); 
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>📉 R4DEV 📈</p>
+</div>   
+    <div class="nav-footer-center">
+<p><span class="faux-block">Licensed under<br><a href="https://creativecommons.org/licenses/by/4.0/"><i class="fa-brands fa-creative-commons" aria-label="creative-commons"></i> <i class="fa-brands fa-creative-commons-by" aria-label="creative-commons-by"></i> Creative Commons CC BY 4.0</a></span></p>
+<div class="cookie-consent-footer"><a href="#" id="open_preferences_center">Cookie Preferences</a></div></div>
+    <div class="nav-footer-right">
+<p><span class="faux-block">Created with <i class="fa-brands fa-r-project" title="R" aria-label="r-project"></i> R and <a href="https://quarto.org/">Quarto</a></span></p>
+</div>
+  </div>
+</footer>
+
+
+
+
+<script src="site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

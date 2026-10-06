@@ -1,0 +1,315 @@
+/* ---------- legacy tweaks ---------- */
+p.caption {
+  color: #777;
+  margin-top: 10px;
+}
+p code {
+  white-space: inherit;
+}
+pre {
+  word-break: normal;
+  word-wrap: normal;
+}
+pre code {
+  white-space: inherit;
+}
+
+/* ---------- welcome page: masthead (hero banner) ---------- */
+/* Two-column hero: text left, logo mark right. A whisper of brand-colour
+   gradient and a soft glow behind the logo lift it off the page; still no
+   hard card edges or motion. Bootstrap CSS variables keep both light/dark
+   brands working without any separate dark-mode overrides here. */
+.masthead {
+  max-width: 74rem;
+  margin: 1.5rem auto 3rem;
+  padding: 2.25rem clamp(1rem, 4vw, 2.5rem) 2.5rem;
+  border-radius: 1.25rem;
+  background:
+    radial-gradient(60% 90% at 100% 0%, color-mix(in srgb, var(--bs-primary) 10%, transparent), transparent 70%),
+    radial-gradient(50% 75% at 0% 100%, color-mix(in srgb, var(--bs-link-color) 7%, transparent), transparent 70%);
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 2rem 3rem;
+  text-align: left;
+}
+.masthead::after {
+  content: "";
+  position: absolute;
+  left: 5%;
+  right: 5%;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--bs-body-color) 18%, transparent) 50%, transparent);
+}
+.masthead .kicker {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--bs-primary);
+}
+.masthead .kicker::before {
+  content: "";
+  display: inline-block;
+  width: 1.5rem;
+  height: 2px;
+  flex: none;
+  background: linear-gradient(90deg, var(--bs-primary), var(--bs-link-color));
+  border-radius: 1px;
+}
+.masthead .masthead-title .accent-word {
+  color: var(--bs-link-color);
+}
+.masthead .masthead-title {
+  display: block;
+  font-weight: 700;
+  font-size: clamp(2rem, 4.5vw, 3rem);
+  line-height: 1.1;
+  color: var(--bs-body-color);
+}
+.masthead p:has(> .masthead-title) {
+  margin: 0.75rem 0 0;
+}
+.masthead .masthead-title.accent {
+  color: var(--bs-link-color);
+}
+.masthead .lede {
+  max-width: 38rem;
+  margin: 1rem 0 0;
+  font-size: 1.1rem;
+  color: color-mix(in srgb, var(--bs-body-color) 80%, transparent);
+}
+.masthead .masthead-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.75rem 1.5rem;
+  margin-top: 1.6rem;
+}
+.masthead .masthead-actions .btn {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  font-weight: 600;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.masthead .masthead-actions .btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px -6px color-mix(in srgb, var(--bs-body-color) 30%, transparent);
+}
+.masthead .masthead-link {
+  font-weight: 600;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1.5px;
+}
+.masthead .masthead-fineprint {
+  display: block;
+  margin-top: 1.5rem;
+  font-size: 0.85rem;
+  color: color-mix(in srgb, var(--bs-body-color) 55%, transparent);
+}
+.masthead-visual {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+.masthead-visual::before {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--bs-primary) 22%, transparent), transparent 70%);
+  filter: blur(18px);
+  z-index: 0;
+}
+.masthead-visual img {
+  position: relative;
+  z-index: 1;
+  width: clamp(7rem, 10vw, 10rem);
+  border-radius: 0.75rem;
+  box-shadow: 0 14px 30px -14px color-mix(in srgb, var(--bs-body-color) 40%, transparent);
+}
+@media (max-width: 48rem) {
+  .masthead {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .masthead .kicker {
+    justify-content: center;
+  }
+  .masthead .masthead-actions {
+    justify-content: center;
+  }
+  .masthead-visual {
+    order: -1;
+  }
+  .masthead-visual img {
+    width: 5.5rem;
+  }
+}
+
+/* ---------- welcome page: section headers ---------- */
+.section-header {
+  border-bottom: 3px solid var(--bs-primary);
+  display: inline-block;
+  padding-bottom: 0.15rem;
+  margin-top: 2.5rem;
+}
+
+/* ---------- welcome page: hero action buttons ---------- */
+.masthead-actions .btn {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* ---------- curriculum: track cards ---------- */
+/* One card per learning track (homepage + track overview pages). Accent is
+   derived from the two existing brand colours so it stays correct in both
+   themes automatically, instead of hard-coding a third hex per theme. */
+.track-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 1.5rem;
+  margin: 1.5rem 0 2.5rem;
+}
+.track-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding: 1.6rem 1.6rem 1.35rem;
+  border: 1px solid color-mix(in srgb, var(--bs-body-color) 14%, transparent);
+  border-top: 4px solid var(--bs-primary);
+  border-radius: 0.5rem;
+  background: color-mix(in srgb, var(--bs-body-color) 3%, transparent);
+  text-decoration: none;
+  color: inherit;
+}
+.track-card[data-track="ai"] { border-top-color: var(--bs-link-color); }
+.track-card[data-track="thinking"] {
+  border-top-color: color-mix(in srgb, var(--bs-primary) 55%, var(--bs-link-color) 45%);
+}
+.track-card-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--bs-body-color);
+}
+.track-card-desc {
+  color: color-mix(in srgb, var(--bs-body-color) 80%, transparent);
+  margin: 0;
+  flex-grow: 1;
+}
+.track-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--bs-body-color) 55%, transparent);
+  margin-top: 0.15rem;
+}
+.track-card .btn {
+  align-self: flex-start;
+  margin-top: 0.4rem;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* ---------- curriculum: lesson list (track overview pages) ---------- */
+.lesson-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 1.25rem 0 2rem;
+  border-top: 1px solid color-mix(in srgb, var(--bs-body-color) 14%, transparent);
+}
+.lesson-row {
+  display: grid;
+  grid-template-columns: 2.75rem 1fr auto;
+  gap: 0.25rem 1rem;
+  align-items: baseline;
+  padding: 1rem 0.25rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--bs-body-color) 14%, transparent);
+  text-decoration: none;
+  color: inherit;
+}
+.lesson-row:hover .lesson-title { text-decoration: underline; }
+.lesson-num {
+  font-family: var(--bs-font-monospace, "Fira Code", monospace);
+  font-weight: 700;
+  color: var(--bs-primary);
+  grid-row: 1 / span 2;
+}
+.lesson-title {
+  font-weight: 700;
+  color: var(--bs-body-color);
+}
+.lesson-outcome {
+  grid-column: 2;
+  color: color-mix(in srgb, var(--bs-body-color) 78%, transparent);
+  font-size: 0.95rem;
+}
+.lesson-meta {
+  grid-column: 3;
+  grid-row: 1 / span 2;
+  align-self: center;
+  text-align: right;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: color-mix(in srgb, var(--bs-body-color) 55%, transparent);
+  white-space: nowrap;
+}
+@media (max-width: 40rem) {
+  .lesson-row { grid-template-columns: 2.25rem 1fr; }
+  .lesson-meta { grid-column: 1 / span 2; grid-row: 3; text-align: left; }
+}
+
+/* ---------- lesson pages: info block, learning objectives, continue-learning ---------- */
+.lesson-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  font-size: 0.88rem;
+  padding: 0.85rem 1.1rem;
+  margin: 1rem 0 1.5rem;
+  border: 1px solid color-mix(in srgb, var(--bs-body-color) 14%, transparent);
+  border-radius: 0.4rem;
+  background: color-mix(in srgb, var(--bs-body-color) 3%, transparent);
+}
+.lesson-info b { color: var(--bs-primary); }
+.continue-learning {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+  margin-top: 2.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid color-mix(in srgb, var(--bs-body-color) 14%, transparent);
+  font-size: 0.95rem;
+}
+
+/* ---------- homepage: compact resources strip ---------- */
+.resources-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.25rem;
+  margin: 1rem 0 2rem;
+  font-size: 0.95rem;
+}
+.resources-strip a {
+  padding: 0.35rem 0.1rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { scroll-behavior: auto !important; transition: none !important; }
+}
