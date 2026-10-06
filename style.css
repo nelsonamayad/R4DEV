@@ -325,6 +325,14 @@ body.quarto-dark .quarto-banner nav.quarto-secondary-nav,
 body.quarto-dark .nav-footer {
   background-color: var(--brand-deepteal);
 }
+/* The dark theme derives the active/hover link colour as a near-black (it was
+   computed against the lifted teal); on deepteal that text vanishes. */
+body.quarto-dark .navbar {
+  --bs-navbar-active-color: #fff;
+  --bs-navbar-hover-color: rgba(255, 255, 255, 0.8);
+  --bs-navbar-brand-color: #fff;
+  --bs-navbar-brand-hover-color: rgba(255, 255, 255, 0.8);
+}
 body.quarto-dark .btn-primary {
   --bs-btn-bg: var(--brand-deepteal);
   --bs-btn-border-color: var(--brand-deepteal);
