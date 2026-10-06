@@ -23,7 +23,7 @@ prerequisites: "Everything in its right place"
 bibliography: references.bib
 image: shining.gif
 citation:
-  url: https://r4dev.netlify.app/sessions_workshop/07-shiny/07-shiny
+  url: https://nelsonamayad.github.io/R4DEV/sessions_workshop/07-shiny/07-shiny
 ---
 
 > "*The internet broke the private-public wall; impulsive and inelegant utterances that used to be kept private are now available for literal interpretation.*" <br>-- N. N. Taleb
@@ -33,7 +33,7 @@ One of the best things about working with R is publishing your work online. The 
 In these final sessions you will learn how to build apps. Let's get started.
 
 ::: {.lesson-info}
-**Level:** Advanced &nbsp;·&nbsp; **Time:** ~90 min &nbsp;·&nbsp; **Prerequisites:** Everything in its right place &nbsp;·&nbsp; **Tools:** shiny, bslib, shinyWidgets
+**Level:** Advanced &nbsp;·&nbsp; **Time:** ~90 min &nbsp;·&nbsp; **Prerequisites:** Everything in its right place &nbsp;·&nbsp; **Tools:** shiny, bslib, shinyWidgets, plotly
 :::
 
 ## You will learn to
@@ -528,126 +528,109 @@ To embed a deployed ShinyApp in your blog, just place the URL inside of an ifram
 
 ## PART II: Shiny, in all its glory
 
-Now let's create a proper Shiny app that uses many of the elements from previous sessions: interactive graphs and maps to visualise COVID-19.
+Now let's build a proper Shiny app that brings together elements from previous sessions --data from an API, an interactive map and an interactive plot-- to watch the planet shake in near real time: every earthquake of magnitude 4.5 or more recorded in the last 30 days.
 
 We'll look at each part of the app separately and then put them together.
 
 ### The Data 📊
 
-This step is similar to the one we did before. We'll download the COVID-19 data and a map of the world. We'll use an `sp` map, just to vary things a bit and show you how to work with other formats of geospatial data.
+The [US Geological Survey](https://earthquake.usgs.gov/earthquakes/feed/v1.0/geojson.php) publishes a free, keyless feed of recent earthquakes as **GeoJSON**, refreshed every few minutes. Each earthquake is a *point*: a magnitude, a place name, a time, and a pair of coordinates (plus depth). That's all we need to map it --no country borders or shapefiles to download.
 
-```{r 6.shiny-covid19-data}
+We wrap the download in a function, `read_quakes()`, rather than running it once at the top of the script. That way the app can call it again whenever the user asks for fresh data.
+
+```{r 7.shiny-quakes-data}
 #| eval: false
 
-# Packages ####
-library(rworldmap)
-library(lubridate)
-library(tidyverse)
+library(dplyr)
+library(purrr)
+library(jsonlite)
 
-# Data ####
-covid_df <- readr::read_csv("https://raw.githubusercontent.com/owid/covid-19-data/refs/heads/master/public/data/cases_deaths/full_data.csv") %>%
-  dplyr::mutate(date = lubridate::as_date(date),
-                n = row_number(),
-                year = year(date)) %>%
-  dplyr::mutate(iso3c = countrycode::countrycode(location, "country.name","iso3c")) |>
-  dplyr::select(iso3c, country=location, date, total_deaths, new_deaths)
+read_quakes <- function(feed = "4.5_month") { # <1>
+  raw <- jsonlite::fromJSON( # <2>
+    paste0("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/", feed, ".geojson")
+  )
+  coords <- raw$features$geometry$coordinates # <3>
 
-# let's download the worldmap as a sp file. Look at the file in the Viewer, what is different from other data frames? ####
-world_sp <- rworldmap::getMap(resolution = "low")
+  tibble::tibble(
+    place    = raw$features$properties$place,
+    mag      = raw$features$properties$mag,
+    lon      = purrr::map_dbl(coords, 1), # <4>
+    lat      = purrr::map_dbl(coords, 2),
+    depth_km = purrr::map_dbl(coords, 3),
+    time     = as.POSIXct(raw$features$properties$time / 1000, origin = "1970-01-01", tz = "UTC") # <5>
+  ) |>
+    dplyr::filter(!is.na(mag), !is.na(lon), !is.na(lat)) |>
+    dplyr::arrange(dplyr::desc(time))
+}
+
+quakes <- read_quakes()
 ```
+
+1. USGS publishes several feeds (`significant_week`, `2.5_day`, `all_hour`...). We default to magnitude 4.5+ over the past month: usually a few hundred rows, a comfortable size for an app.
+2. `fromJSON()` reads straight from the URL and simplifies the nested GeoJSON into data frames and lists.
+3. Coordinates come as a *list* with one `c(longitude, latitude, depth)` vector per earthquake.
+4. `map_dbl(coords, 1)` pulls the first element out of every vector --a compact `purrr` trick you'll meet properly in [Do it well, do it fast](/sessions_workshop/09-parallel/09-parallel.qmd).
+5. USGS stores time as milliseconds since 1 January 1970, so we divide by 1000 and convert to a date-time.
 
 ### The UI 🙂
 
-Let's first look at the UI. We first start by using the `page_navbar` layout which will put a horizontal bar at the top of the page. Inside we start by providing a title to the app, and defining a theme using `bslib`. I've chosen a very psychedelic theme --just because I can, not because I like it but to show how many things change in the dashboard look by picking a particular template (in this case, quartz). Colour, fonts, buttons --all are parameters that you can customise with `bslib`.
+We start with the `page_navbar` layout, which puts a horizontal bar at the top of the page. Inside, we give the app a title and define a theme using `bslib`. I've chosen a very psychedelic theme --not because I like it, but to show how much the look of a dashboard changes just by picking a particular Bootswatch template (in this case, quartz). Colour, fonts, buttons --all are parameters you can customise with `bslib`.
 
-Then comes the `sidebar` where we will organise our **inputs**. We'll have three types inputs: **button**, **date selector** and **countries selector**, which will together define the time span for COVID-19 and the geographical scope we want to map. We use `card` to box-in the inputs and a short description of the app, and an `accordion` layout to collapse the selectors.
+Then comes the `sidebar`, where we organise our **inputs**. There are three: a **button** to download fresh data, a **slider** for the minimum magnitude and a **date range**. We use a `card` to box in the button and a short description of the app, and an `accordion` to collapse the selectors. At the top of the card, a `value_box` (built on the server and placed here with `uiOutput`) summarises the strongest earthquake on screen.
 
-Within the sidebar, we first add a `value_box` to summarise a key data point using the `uiOutput` option, and then the `actionButton`. The `actionButton` will trigger the update, and we will use `dateInput` for selecting a moment in time and `selectInput` to select countries to map. The date is pretty simple, but for the countries we need to make sure the input recognises multiple countries adding the option `multiple = TRUE`, so we can select one if we like or many.
+Finally, two `nav_panel`s hold our two outputs: a map and a plot. Both are made with **plotly**, so both use `plotlyOutput()`. The IDs we give them here (`"map"`, `"mag_time"`) must match the names we fill in on the server.
 
-Finally, we use two `navset_panel` layout to place our 2 tab outputs: a leaflet map and an plotly chart. We give them icons and names that will need to match what we compute in the server, and make sure we use the correct type of outputs: In this case, we'll want a Leaflet map and a Plotly graph, so we need to use `leafletOutput` and `plotlyOutput`.
-
-We'll use that truly ugly quartz Bootswatch theme, just for pedagogical purposes.
-
-```{r 6.shiny-covid19-ui}
+```{r 7.shiny-quakes-ui}
 #| eval: false
 
 library(shiny)
 library(bslib)
-library(hrbrthemes)
-library(tidyverse)
-library(plotly)
-library(ggthemes)
-library(bslib)
 library(bsicons)
-library(shinyWidgets)
-library(leaflet)
 library(plotly)
 
-# The UI ####
-{ui_covid <- page_navbar(
-  # Here we add the Quartz Bootswatch theme
-  theme = bslib::bs_theme(bootswatch = "quartz"),
-  title = "COVID-19: Aftermath",
+ui <- page_navbar(
+  theme = bslib::bs_theme(bootswatch = "quartz", primary = "#226F7F"), # <1>
+  title = "Global Earthquakes",
   sidebar = sidebar(
     gap = "5px",
-    width = 500,
-    # Value box 
-      card(
-        full_screen = TRUE,
-        card_header(
-          uiOutput("total_deaths"),
-        ),
-        card_body(
-          markdown("Shiny App to show the evolution of Covid-related deaths around the world since March 2020, using the repository of [OWID](https://github.com/owid/covid-19-data/tree/master/public/data)"),
-        # A button that will trigger the update of the map/graph
-        actionButton(
-          inputId = "update",
-          label = "Update data", 
-          icon = icon("refresh"),
-          class = "btn-primary"
-          )),
-        accordion(
-          open = TRUE,
-          accordion_panel(
-            "Selectors:",
-            # Adding the period input
-            dateInput(
-              inputId = "date",
-              label = "Select date:",
-              value = "2023-06-30",
-              min=min(covid_df$date),
-              max=max(covid_df$date)),
-            # Adding the countries input
-            selectInput(
-              inputId = "country",
-              label = "Select countries:",
-              choices = sort(unique(covid_df$country)),
-              selected = c("France","Italy","Colombia","India","Brazil","Japan","Nigeria"),
-              multiple = TRUE
-              ))) 
-      )),
-  # Now we add the tabs
-    nav_panel(
-      title = "Map",
-      icon =  bsicons::bs_icon("compass"),
-      leafletOutput("map")
-      ),
-    nav_panel(
-      title = "Trajectories", 
-      icon = bsicons::bs_icon("clock-history"),
-      plotlyOutput("countries")
-      ),
-    nav_item(input_dark_mode(id = "dark_mode",mode = "light"))
-  )
-}
-
-
+    width = 380,
+    card(
+      full_screen = TRUE,
+      card_header(uiOutput("summary_box")), # <2>
+      card_body(
+        markdown("Earthquakes of magnitude 4.5+ over the last 30 days, from the [USGS real-time feed](https://earthquake.usgs.gov/earthquakes/feed/v1.0/geojson.php)."),
+        actionButton("update", "Download fresh data", icon = icon("refresh"), class = "btn-primary") # <3>
+      )
+    ),
+    accordion(
+      open = TRUE,
+      accordion_panel(
+        "Selectors:",
+        sliderInput("min_mag", "Minimum magnitude",
+                    min = 4.5, max = 8, value = 5, step = 0.1), # <4>
+        dateRangeInput("date_range", "Date range",
+                       start = Sys.Date() - 30, end = Sys.Date(),
+                       min = Sys.Date() - 30, max = Sys.Date())
+      )
+    )
+  ),
+  nav_panel(title = "Map", icon = bsicons::bs_icon("globe"), plotlyOutput("map", height = "100%")), # <5>
+  nav_panel(title = "Magnitude over time", icon = bsicons::bs_icon("graph-up"), plotlyOutput("mag_time", height = "100%")),
+  nav_item(input_dark_mode(id = "dark_mode", mode = "light")) # <6>
+)
 ```
 
-::: callout-tip
-## Help! Is there's an easier way to design User Interfaces? 
+1. That truly ugly quartz Bootswatch theme, for pedagogical purposes, with the R4DEV teal as the primary colour.
+2. A placeholder for UI that the server will build --here, a value box that changes with the data.
+3. An `actionButton` does nothing on its own; it just counts clicks. The server decides what a click means.
+4. Magnitude is logarithmic: an M6 shakes about ten times harder than an M5. Sliding from 4.5 to 6 hides the great majority of the points.
+5. Each tab holds one output. The ID (`"map"`) is the contract between UI and server.
+6. A light/dark switch, for free.
 
-You can use the recently released [shinyeditor](https://rstudio.github.io/shinyuieditor/) package to design your UI elements and layout. 
+::: callout-tip
+## Help! Is there an easier way to design user interfaces?
+
+You can use the [shinyuieditor](https://rstudio.github.io/shinyuieditor/) package to design your UI elements and layout by dragging and dropping.
 
 Start with the [live demo](https://rstudio.github.io/shinyuieditor/live-demo/)
 :::
@@ -656,7 +639,7 @@ Start with the [live demo](https://rstudio.github.io/shinyuieditor/live-demo/)
 
 Now we build the server function, where things get interesting for two reasons: **reactive functions** and **events**.
 
-The server function for Shiny has 2 main parts: `input`, which connect the server with the objects defined in the UI labelled inputs, and `output`, which calculates something based in the inputs and produces a result --a plot, a table, a map, you name it. So the server is always saved a a function with those two arguments [^1].
+The server function has two main arguments: `input`, which connects the server to the inputs defined in the UI, and `output`, where we store whatever we compute from those inputs --a plot, a table, a map, you name it [^1].
 
 [^1]: A third argument called `session` is often used, but we won't go into that here.
 
@@ -665,133 +648,121 @@ The server function for Shiny has 2 main parts: `input`, which connect the serve
 
 > [*"Reactive programming is a style of programming that focuses on values that change over time, and calculations and actions that depend on those values"*](https://mastering-shiny.org/reactive-motivation.html#motivation) --[@wickham_mastering_2020]
 
-Put differently, reactive functions make it easier to link inputs-and-outputs by creating an intermediary object that changes with inputs, so we can unify in a single object all the changes produced by inputs. I know this sounds abstract now, but it will become clear soon.
+Put differently, reactive functions make it easier to link inputs and outputs by creating an intermediary object that changes with the inputs, so that every change flows through a single object. I know this sounds abstract now, but it will become clear soon.
 :::
 
-In the server of this app we are expecting two outputs: a map and a plot. But we have some intermediary steps to build before we can render both outputs. Let's go one by one:
+This app has three outputs (a value box, a map and a plot), but before we can render them we build two intermediary steps:
 
--   **Working with buttons**: We included an `actionButton` in the UI, but how do we use it? A button usually triggers something, and in this case we want the clicking of the button to send the filtered data to the output we want to observe, so that the map and plot are updates with country and date inputs only when the button is clicked. This is very simple to do: we wrap the filtered data around an `eventReactive()` function, so that this event will be triggered with the clicking of the button including the `input$update` argument and then the action it will perform --in this case, the action is updating the data that will be fed into the map and plot.
+-   **Working with buttons**: downloading the feed takes a second or two, and we don't want to hit USGS every time someone nudges a slider. So we wrap the download in `eventReactive(input$update, ...)`: it runs only when the button is clicked. With `ignoreNULL = FALSE` it also runs once at start-up, so the app never opens empty.
 
--   **Our reactive functions**: We will create two `reactive()` functions that will feed filtered data into each of our outputs. These functions will store the data that is affected by input changes and be the sole object within the outputs that change with inputs. The reactive function `data()` will be the one that affects the plot, and that function will also affect `data_map()` which will filter the data for the map. Once we have defined the reactive function, we call it by its name and end with a parenthesis `reactive()`, as it is a function, and include it as the starting point for our outputs.
+-   **Our reactive function**: filtering a few hundred rows, on the other hand, is instant. So the filtering lives in a plain `reactive()`, which re-runs automatically whenever `input$min_mag` or `input$date_range` change. Every output reads this filtered data --called like a function, `quakes_shown()`-- and nothing else.
 
-**Reactivity is not easy and takes practice**, but it is very useful because apps can get complex really fast, and you can lose track of which inputs affect what.
+Notice the chain: **button → `quakes()` → `quakes_shown()` ← selectors**, and all three outputs hang off `quakes_shown()`. **Reactivity is not easy and takes practice**, but drawing that chain before you write any code is the best habit you can build, because apps get complex fast and it is easy to lose track of which inputs affect what.
 
-The other key part of this app is a `leaflet` map, which you already know how to build. However, for Shiny apps, there is a trick you need to use to make your leaflet map not to computationally heavy and the app slow. You first need to render an empty map using the `leaflet` standard function, and then you need to include reactivity within the `leafletProxy` output.
+The map itself is a plotly `scattergeo` trace: one marker per earthquake at its longitude/latitude, sized and coloured by magnitude, on a world basemap that plotly draws for us.
 
-Look at every piece of the server function below. Even the fancy leaflet background and the customised icon for the marker.
-
-```{r 6.shiny-covid19-server}
+```{r 7.shiny-quakes-server}
 #| eval: false
 #| code-fold: true
 
-# Packages ####
-library(rworldmap)
-library(rnaturalearth)
-library(leaflet)
-library(leaflet.providers)
-library(sp)
-library(lubridate)
-library(shiny)
-library(RColorBrewer)
-library(tidyverse)
-library(plotly)
-library(ggthemes)
+server <- function(input, output, session) {
 
-# Server ####
-server_covid <- function(input,output) {
-  
-  # A data object is created so that each click of the button updates the data that is fed to the map
-  data <- eventReactive(input$update,{
-    covid_df %>%
-      # Filter the date and countries selected in each input
-      dplyr::filter(date==input$date,
-                    !str_detect(iso3c,"_"),
-                    !is.na(total_deaths),
-                    country %in% input$country) %>%
-      dplyr::group_by(iso3c,country) %>%
-      dplyr::summarise(country_deaths = sum(total_deaths)) 
+  quakes <- eventReactive(input$update, { # <1>
+    read_quakes()
+  }, ignoreNULL = FALSE)
+
+  quakes_shown <- reactive({ # <2>
+    quakes() |>
+      dplyr::filter(mag >= input$min_mag,
+                    as.Date(time) >= input$date_range[1],
+                    as.Date(time) <= input$date_range[2])
   })
-  
-  # Value boxes ####
-  output$total_deaths <- renderUI({
-  
+
+  output$summary_box <- renderUI({ # <3>
+    d <- quakes_shown()
     value_box(
-      title = "Total COVID-19 deaths",
-      value = covid_df %>%
-        dplyr::filter(!str_detect(iso3c,"_")) |>
-        dplyr::summarise(deaths = sum(new_deaths, na.rm = TRUE)) |>
-        dplyr::transmute(deaths = deaths |> round(digit=1) |> format(big.mark = " ")) |>
-        as.character(),
+      title = "Strongest earthquake shown",
+      value = if (nrow(d) > 0) paste0("M", round(max(d$mag), 1)) else "—",
       theme = "danger",
-      showcase = bs_icon("virus"),
-      p("Source: WHO & OWID")
+      showcase = bsicons::bs_icon("exclamation-triangle"),
+      p(paste(nrow(d), "earthquakes in range"))
     )
-    
   })
 
-  # The data that goes to the map
-  data_map <- reactive({
-    # First create a copy of the base map
-    world_sp2 <- world_sp
-    
-    # Then join the selected data inside of the sp object
-    world_sp2@data <- world_sp2@data %>%
-      dplyr::inner_join(
-        covid_df %>%
-          dplyr::filter(date==input$date,
-                        !str_detect(iso3c,"_"),
-                        !is.na(total_deaths),
-                        country %in% input$country), 
-        by=c("ISO3"="iso3c"))
+  output$map <- renderPlotly({ # <4>
+    plot_ly(
+      quakes_shown(),
+      type = "scattergeo", mode = "markers",
+      lon = ~lon, lat = ~lat,
+      marker = list(
+        size = ~4 + (mag - 4.5) * 5,
+        color = ~mag, cmin = 4.5, cmax = 8,
+        colorscale = list(c(0, "#F2C078"), c(0.5, "#F75431"), c(1, "#8C1D0E")),
+        colorbar = list(title = "Magnitude"),
+        opacity = 0.8, line = list(width = 0)
+      ),
+      text = ~paste0("M", mag, " — ", place,
+                     "<br>", format(time, "%d %b %Y, %H:%M UTC"),
+                     "<br>depth: ", round(depth_km), " km"),
+      hoverinfo = "text"
+    ) |>
+      layout(
+        geo = list(
+          projection = list(type = "natural earth"), # <5>
+          showland = TRUE, landcolor = "#D9D9D9",
+          showocean = TRUE, oceancolor = "#EEF4F6",
+          showcountries = TRUE, countrycolor = "white",
+          bgcolor = "rgba(0,0,0,0)"
+        ),
+        paper_bgcolor = "rgba(0,0,0,0)",
+        margin = list(l = 0, r = 0, t = 0, b = 0)
+      )
   })
-  
-  # Create an empty map 
-  output$map <- renderLeaflet({
-    
-    leaflet() |>
-      addTiles() |>
-      addProviderTiles("Esri.WorldImagery") |>
-      setView(lng = -20, lat= 30, zoom = 3)
-  })
-  
-  # Overlay in the empty map the selected data
-  observeEvent(input$update,
-          {
-    leafletProxy("map") |>
-      clearMarkers() |>
-      addMarkers(data = data_map(),
-                       icon = covid_icon,
-                       label= ~paste0(country,": ",as.integer(total_deaths) |> format(big.mark = " ")))
-  })
-  
 
-  # Another graph with plotly in the second tab
-  output$countries <- renderPlotly({
-    
-    p <- covid_df %>%
-      dplyr::filter(country %in% input$country) |>
-      ggplot(aes(x=date, y=total_deaths, color=country))+
-      geom_path(show.legend = FALSE)+
-      labs(x=NULL,y="Registered deaths",
-           title="Progression in selected countries",
-           caption = "Source: OWID")+
-      hrbrthemes::theme_ipsum()
-    
-    ggplotly(p)
-    
+  output$mag_time <- renderPlotly({ # <6>
+    plot_ly(
+      quakes_shown(), x = ~time, y = ~mag,
+      type = "scatter", mode = "markers",
+      color = ~depth_km, colors = c("#0E8CA8", "#F75431"),
+      text = ~paste0("M", mag, " — ", place, "<br>depth: ", round(depth_km), " km"),
+      hoverinfo = "text"
+    ) |>
+      layout(
+        xaxis = list(title = ""), yaxis = list(title = "Magnitude"),
+        title = "Magnitude over time (colour = depth in km)"
+      )
   })
-  
 }
 
+shinyApp(ui, server) # <7>
 ```
+
+1. The expensive step, tied to the button: each click re-downloads the feed.
+2. The cheap step, tied to the selectors: re-filters instantly. Note that it *reads* `quakes()`, so a fresh download flows through it too.
+3. `renderUI()` builds a piece of UI on the server --it fills the `uiOutput("summary_box")` slot.
+4. `renderPlotly()` fills `plotlyOutput("map")`. The `~` formulas map columns of the data to aesthetics, much like `aes()` in ggplot2.
+5. Try `"orthographic"` for a globe you can spin.
+6. Same data, different view: time on the x-axis, colour by depth. Deep earthquakes cluster along subduction zones --hover to find them.
+7. UI + server = app.
+
+::: callout-important
+## Why plotly and not leaflet?
+
+You built leaflet maps in [Mapping despair in the USA](/sessions_workshop/05-maps/05-maps.qmd), and leaflet works beautifully *on your own machine*. But to deploy an app, the hosting server must install every package it uses, and their dependencies. `leaflet` depends on `sf`, which depends on `terra`, and in 2026 `terra` fails to compile on the servers of both shinyapps.io and Posit Connect Cloud (their geospatial system libraries are older than what `terra` expects). An app that runs locally but can't be deployed is a lesson in itself: **check your dependency chain before you build**. Plotly draws its own world basemap with no geospatial packages at all, so this app deploys anywhere.
+:::
 
 ### The Full ShinyApp ✨
 
-::: callout-note
-## This example is being retired
+Here is the full app, deployed and embedded with an `<iframe>`. Click the button, slide the magnitude, switch tabs --and download the code to run it yourself.
 
-The COVID-19 map app that used to live here has been retired — it leaned on `rworldmap`/`sp`, both long unmaintained, and its geospatial dependency chain (`sf` → `terra`) broke on every modern hosting platform. A fresher, easier-to-reproduce geospatial example is on the way.
+::: column-margin
+{{< downloadthis r4dev-earthquakes-app.R dname = r4dev-earthquakes-app label="Download the earthquakes app" icon=download type=info >}}
 :::
+
+```{=html}
+<iframe src="https://nelsonamayad-r4dev-earthquakes.share.connect.posit.cloud/" style="border: none; width: 100%; height: 750px" frameborder="0" title="Global Earthquakes Shiny app">
+</iframe>
+```
 
 Making an app quickly is easy, making a good app is not and requires a lot more tinkering to make sure the computations are efficient, and the UI is user-friendly, clear and useful. Otherwise it will be another app in a website nobody has any use for.
 
@@ -838,7 +809,7 @@ A Shiny app needs a live R process, so all of this happens in your own R session
 ::: {.callout-important icon="false" collapse="true"}
 # Intermediate
 
--   Replicate the UI and Server design of the COVID-19 app built above and make it your own: different data, different inputs
+-   Replicate the UI and server design of the earthquakes app built above and make it your own: a different USGS feed (try `significant_month` or `2.5_week`), a new input (a depth slider?), or a third tab
 -   Create a Shiny app that shows the frequency of use of all Eunoia words you scraped, by country. Use **`gtrendsR`** package to look up the frequency of each word by country.
 -   Create a Shiny app for your project
 :::

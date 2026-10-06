@@ -1102,7 +1102,7 @@ book_sentiments <- function(author_name,book_name) {
     annotate("text",x=4,y=1000000, label ="Positive", color = "blue")+
     labs(title = paste0("Sentiment analysis for ",print(book_name)," by ",print(author_name)), 
            subtitle = "Book from Project Gutenberg",
-    x="Sentimen AFINN",
+    x="Sentiment AFINN",
     y= "Word frequency",
     caption = "Source: R4DEV workshop")
     

@@ -193,13 +193,28 @@ One last piece of thinking the formula won't do for you. The same `lm()` serves 
 
 Confusing them is how "people who take vitamin X live longer" becomes a headline. Which is precisely the [next session](/sessions_thinking/04-causal/04-causal.qmd).
 
-::: callout-tip
-## Exercises 🏋️
+## 🏗 Practice 3: Fit, then doubt {.unnumbered}
 
-1.  Add `species` to the model: `lm(flipper_length_mm ~ body_mass_kg + species, data = penguins)`. Tidy it. How does the mass coefficient change, and what does each species coefficient mean?
-2.  Run `broom::augment(fit)` and plot residuals (`.resid`) against fitted values (`.fitted`). Which Anscombe dataset does the pattern resemble?
-3.  Rebuild the spaghetti plot with only 30 randomly sampled penguins. How much wider is the bundle?
-4.  Regression to the mean, in the wild: in the `students` simulation, "treat" the bottom 10% of test 1 with a worthless intervention (add exactly 0) and compute their test-2 improvement. Write the press release, then debunk it.
+Run these in your own R session with `lm()` and `broom`, building on the penguins models from this session.
+
+::: {.callout-note icon="false" collapse="true"}
+# Basic
+
+-   Run `broom::augment(fit)` and plot residuals (`.resid`) against fitted values (`.fitted`). Which Anscombe dataset does the pattern resemble?
+-   Rebuild the spaghetti plot with only 30 randomly sampled penguins. How much wider is the bundle?
+:::
+
+::: {.callout-important icon="false" collapse="true"}
+# Intermediate
+
+-   Add `species` to the model: `lm(flipper_length_mm ~ body_mass_kg + species, data = penguins)`. Tidy it. How does the mass coefficient change, and what does each species coefficient mean?
+:::
+
+::: {.callout-caution icon="false" collapse="true"}
+# Advanced
+
+-   Regression to the mean, in the wild: in the `students` simulation, "treat" the bottom 10% of test 1 with a worthless intervention (add exactly 0) and compute their test-2 improvement. Write the press release, then debunk it.
+-   Fit a regression on a dataset from your own work. Before reading a single coefficient, plot the residuals against the fitted values and bootstrap the slope. Report the coefficient *with* its bootstrap interval, and one sentence on what the residual plot tells you the model is missing.
 :::
 
 ## Key takeaways

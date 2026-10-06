@@ -4,28 +4,33 @@ Goal: bring the 2022–2024 workshop up to date — fix what broke, refresh what
 
 > **Status (4 July 2026): largely executed.** Decisions taken: Gemini free tier as teaching default (provider-agnostic ellmer), Open-Meteo replaces Spotify for the API lesson, navbar uses dropdown menus, 13-bayes was finished (minimal) rather than deleted. Items still open are marked ⏳ below; everything checked was done and render-verified.
 
-> **Status (5 October 2026, project review).** Phases 0–3, 4d, 4h and Phases 5–12 have shipped. The site is now **three learning tracks plus tools, 18 lessons**: Build with R (`sessions_workshop/`, 9), Work with AI (`sessions_ai/`, 4 + the Ask R4DEV capstone), Think with data (`sessions_thinking/`, 5), plus `sessions_tools/`. Last commit: 19 July 2026 (`96a50c3`). **Session numbers in Phases 0–9 below are historical** — e.g. "09-llm", "11-ragnar", "12-parallel", "13-bayes" are now `sessions_ai/01-llm`, `sessions_ai/03-ragnar`, `sessions_workshop/09-parallel`, `sessions_thinking/05-bayes` (see Phase 10). Phase 4a–4c/4e–4g remain unstarted pending scope sign-off.
+> **Status (5 October 2026, project review).** Phases 0–3, 4d, 4h and Phases 5–12 have shipped. The site is now **three learning tracks plus tools, 18 lessons**: Build with R (`sessions_workshop/`, 9), Work with AI (`sessions_ai/`, 4 + the Ask R4DEV capstone), Think with data (`sessions_thinking/`, 5), plus `sessions_tools/`. Hosting moved from Netlify to GitHub Pages on 5 October 2026 (see the Git/publishing section of `CLAUDE.md`). **Session numbers in Phases 0–9 below are historical** — e.g. "09-llm", "11-ragnar", "12-parallel", "13-bayes" are now `sessions_ai/01-llm`, `sessions_ai/03-ragnar`, `sessions_workshop/09-parallel`, `sessions_thinking/05-bayes` (see Phase 10). Phase 4a–4c/4e–4g remain unstarted pending scope sign-off.
 
 ## Open items (consolidated, October 2026)
 
-Everything still open across the phases below and `notes/content-restructure.md`, ordered roughly by cost/benefit:
+Everything that was open across the phases below and `notes/content-restructure.md`, with status after the 6 October 2026 implementation pass (Phase 13):
 
-1. ⏳ **Commit the working tree.** Uncommitted since `96a50c3`: annotation lists moved above pasted `#>` output blocks (01-llm, 03-ragnar, 02-plots, 03-text, 04-animate, 05-maps, 07-shiny, revealjs), `order:` added to the three tools pages, `index.qmd` copy fixed ("eighteen lessons", AI card "4 lessons"), a refreshed masthead hero in `style.css`, and the matching `_freeze/` results.
-2. ⏳ **GitHub remote + push** (Phase 0) — `master` is still local-only inside OneDrive. Blocks everything in 4f (CI, link-rot checker).
-3. ⏳ **Connect Cloud dashboard sweep** (manual; no API): delete `r4dev-chat`, `r4dev-homework-cc`, the pre-rename `-v2`/`-v3`/`-cc` content IDs (Phase 5), the earlier `r4dev-querychat` attempts (current is `-v6`), and the failing `r4dev-earthquakes` deployment if it is not pursued. Retire the old `nelsonamayad.shinyapps.io/r4dev-covid19` too.
-4. ⏳ **`r4dev-earthquakes`** (Phase 9) — still blocked on leaflet → sf → terra/GDAL. Decide: rewrite with `plotly` `scattergeo` (proven to deploy) and embed it in `07-shiny` PART II, which promises "a fresher geospatial example is on the way", or drop it and delete `shiny/r4dev-earthquakes/`.
-5. ⏳ **`07-shiny` PART II still teaches the retired COVID app** (`rworldmap`/`sp`, `eval: false`) under a "being retired" callout; `07-shiny/covid-app.R` remains in the lesson folder; the draft `revealjs.qmd` still iframes `nelsonamayad.shinyapps.io/r4dev-covid19/`. Replace together with item 4.
-6. ⏳ **Rebuild the `r4dev-ask` ragnar store** — it was ingested from the pre-restructure `/sessions_workshop/...` URLs (before Phase 10–12 content changes), so its citations point at aliases and miss the thinking track and new practice sections. Swap to VSS (`embed_google_gemini()`) whenever a quota'd embedding key exists.
-7. ⏳ **Thinking-track practice alignment** — lessons 1–4 still use the old `## Exercises 🏋️` form; `05-bayes` uses the new template but is headed "Practice 13" (should be "Practice 5"). Align all five to the per-track `## 🏗 Practice N` template, adding them to `01-practice`.
-8. ⏳ **Content backlog** (`notes/content-restructure.md`): lesson-split recommendations for 03-text, thinking/04-causal, 07-shiny (RevealJS bonus → 01-quarto?), 02-plots, 05-maps awaiting review; `getwd()` → `here::here()` migration (~30 call sites, one file at a time); the `x="Sentimen AFINN"` typo in `03-text` (line ~1105, still present; batch with other 03-text code edits since any edit re-executes the file).
-9. ⏳ **`param_reports/` fails to render** (pre-existing).
-10. ⏳ **Accessibility** (4g): measured WCAG contrast in both themes, a keyboard walkthrough and mobile checks are still not done (structural fixes shipped, see Phase 11).
-11. ⏳ **Local hygiene**: remove the stale `C:\Program Files\R\R-4.4.1` so Quarto stops auto-detecting it.
+1. ✅ **Commit the working tree** — committed (annotation placement, tools `order:`, homepage counts, hero refresh).
+2. ✅ **GitHub remote + push** — done by the GitHub Pages migration (`a26cc01`): `origin` = https://github.com/nelsonamayad/R4DEV, branch renamed `master` → `main`, publishing via `quarto publish gh-pages --no-render`. This unblocks 4f.
+3. ⏳ **Connect Cloud dashboard sweep** (manual; no API): delete `r4dev-chat`, `r4dev-homework-cc`, the pre-rename `-v2`/`-v3`/`-cc` content IDs (Phase 5) and the earlier `r4dev-querychat` attempts (current is `-v6`), and retire the old `nelsonamayad.shinyapps.io/r4dev-covid19`. The old failing `r4dev-earthquakes` deployment was already gone.
+4. ✅ **`r4dev-earthquakes`** — rebuilt with plotly `scattergeo` (no leaflet/sf/terra) and deployed fresh to Connect Cloud (content `01a10d6c-…`); build succeeded. ⏳ **Needs you**: create its share URL in the dashboard as `nelsonamayad-r4dev-earthquakes`, which the iframes already point to (it returns 404 until then).
+5. ✅ **`07-shiny` PART II rewritten** around the earthquakes app (data → UI → server → full app, with a "why plotly and not leaflet?" callout and a downloadable student copy); `covid-app.R` deleted; `revealjs.qmd` iframe repointed.
+6. ⏳ **Rebuild the `r4dev-ask` ragnar store** — worse than thought: the live store covers only **8 pages**, all old Netlify `/sessions_workshop/...` URLs (no thinking track, no AI 03/04, no workshop 01/07/08/09). `shiny/build_r4dev_ask_store.R` now does the rebuild from the published sitemap (smoke-tested on two pages), and the app's prompt/comments are refreshed. **Blocked on publishing**: run it once https://nelsonamayad.github.io/R4DEV/ is live with this pass's content, then redeploy `shiny/r4dev-ask`. Swap to VSS (`embed_google_gemini()`) whenever a quota'd embedding key exists.
+7. ✅ **Thinking-track practice alignment** — all five lessons use `## 🏗 Practice N` with Basic/Intermediate/Advanced tiers (existing exercises regrouped verbatim, plus one new Advanced item each in 01–03 and two in 05-bayes, which had no Advanced tier); `05-bayes` renumbered 13 → 5; `01-practice` index links all five anchors.
+8. Content backlog (`notes/content-restructure.md`):
+   - ✅ `x="Sentimen AFINN"` typo in `03-text` fixed.
+   - ⏳ Lesson-split recommendations (03-text, thinking/04-causal, 07-shiny's RevealJS bonus, 02-plots, 05-maps) — **awaiting your review**, by design.
+   - ⏳ `getwd()` → `here::here()` migration (~30 call sites) — deliberately not done: `paste0(getwd(), …)` works under Quarto, `here::here()` isn't a drop-in replacement (project-root vs file-relative), and every edit re-executes expensive network/credential chunks. Do it only as its own one-file-at-a-time pass, if at all.
+9. ✅ **`param_reports/` renders** (HTML + PDF, and the batch `retractionwatch_report()` function). Root cause: the `gapminder` package wasn't installed locally; also removed duplicated chunk labels.
+10. Accessibility (4g):
+    - ✅ WCAG contrast measured for both brands (Phase 13 table). Two failures need a brand decision: light-mode links `#F75431` (3.35:1 on white, 2.97:1 on `cloud` cards; AA needs 4.5:1) and the dark-mode navbar (white on `#4FB3C9`, 2.44:1).
+    - ⏳ Keyboard walkthrough and mobile checks still not done (need browser tooling).
+11. ⏳ **Local hygiene**: remove the stale `C:\Program Files\R\R-4.4.1` (needs admin rights; your call).
 
 ## Phase 0 — Baseline (do first, ~1 session of work)
 
 - [x] Run a full `quarto render` to populate the new `_freeze/` cache and produce the definitive **failure inventory**: which sessions error, which data URLs 404, which packages won't install on R ≥ 4.4. Everything below gets checked against this list.
-- [ ] ⏳ Add a GitHub remote (blocked: `gh auth login` needed) and push (`master` is currently local-only; one OneDrive hiccup from losing history). *Still open October 2026.*
+- [x] Add a GitHub remote and push — done 5 October 2026 with the GitHub Pages move (`origin` = github.com/nelsonamayad/R4DEV, branch `main`).
 - [x] Update vendored extensions (`quarto update <ext>`): `r-wasm/live` supersedes `coatless/webr` — migrate `09-practice` to quarto-live only and drop the webr extension.
 - [ ] Optional (deferred): `renv::init()` to pin the ~70 packages. Recommended *against* for now — it complicates the student experience; revisit if renders become irreproducible.
 
@@ -279,3 +284,26 @@ A 17-item redesign brief, tracked in detail in `notes/content-restructure.md`. H
 - [x] `r4dev-collider` and `r4dev-ovb` rebuilt as scenario-driven teaching tools (conditioning modes, induced-path DAG, exact OVB identity, sign-of-bias table) and redeployed.
 - [x] Fixed unclosed callouts in `02-resources` and `03-text`, a dead Posit AI link, a `site_checks.py` false positive, and the RevealJS deck logo path (logo copied to the project root).
 - [ ] ⏳ The thinking track was not included — see Open item 7.
+
+## Phase 13 — Open-items pass (5–6 October 2026)
+
+Worked through the consolidated open-items list, in parallel with a separate session that moved hosting to GitHub Pages (`a26cc01`).
+
+- [x] **`r4dev-earthquakes` rebuilt and deployed.** Leaflet swapped for a plotly `scattergeo` map; data loading moved into a `read_quakes()` function so the button really re-downloads the USGS feed (`eventReactive`, also on start-up) while the magnitude/date selectors filter instantly (`reactive`). Verified with `shiny::testServer()` (512 quakes loaded; 150 at M5+; 4 at M6+; refresh re-downloads; all three outputs render), then deployed fresh: no terra/sf/leaflet in the manifest, so the build succeeded. The old deployment had already been deleted on Connect Cloud, so rsconnect's stale record had to be removed first.
+- [x] **`07-shiny` PART II rewritten** around that app (annotated data/UI/server chunks mirroring `app.R`, a callout explaining the deployment dependency chain as a lesson in itself, iframe + downloadable `r4dev-earthquakes-app.R`); practice bullet and `.lesson-info` tools updated; `covid-app.R` deleted; the RevealJS deck's iframe repointed. Rendered clean.
+- [x] **Thinking track aligned to the practice template** (all five lessons + `01-practice` index); rendered clean; anchors verified in the HTML.
+- [x] **`03-text` typo** fixed (`Sentiment AFINN`); lesson re-rendered (any edit re-executes it).
+- [x] **`param_reports/` fixed** — HTML, PDF and the batch function all render.
+- [x] **`r4dev-ask` rebuild prepared** — `shiny/build_r4dev_ask_store.R` (sitemap → ingest → checkpoint → atomic swap), smoke-tested; app prompt now describes all three tracks. Rebuild + redeploy waits for the github.io site to be published.
+- [x] **WCAG contrast audit** of both brands:
+
+| Pair | Light | Dark |
+|---|---|---|
+| Body text on background | 15.59 ✅ | 13.96 ✅ |
+| Links on background | **3.35 ❌** (large text only) | 6.92 ✅ |
+| Links on card surface (`cloud`/`charcoal`) | **2.97 ❌** | 6.00 ✅ |
+| Muted `slate` text on background | 5.54 ✅ | 6.75 ✅ |
+| Teal text on background | 5.76 ✅ | 7.30 ✅ |
+| Navbar/footer: white on primary teal | 5.76 ✅ | **2.44 ❌** |
+
+  Candidate fixes (not applied — brand decision): a darker light-mode link orange such as `#C93C1E` (5.06 on white, 4.49 on `cloud`), and either a darker dark-mode navbar background (e.g. keep `#226F7F`: 5.76 with white text) while keeping the lifted `#4FB3C9` for text accents, or dark navbar text.

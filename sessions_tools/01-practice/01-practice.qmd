@@ -95,8 +95,8 @@ Exercises like the one above now live at the end of their own session, next to t
 
 ## Think with data
 
-- [Embrace the noise -- exercises](/sessions_thinking/01-uncertainty/01-uncertainty.qmd)
-- [There is only one test -- exercises](/sessions_thinking/02-inference/02-inference.qmd)
-- [All models are wrong -- exercises](/sessions_thinking/03-regression/03-regression.qmd)
-- [Draw your assumptions -- exercises](/sessions_thinking/04-causal/04-causal.qmd)
-- [Think Bayes -- practice](/sessions_thinking/05-bayes/05-bayes.qmd#practice-13-update-yourself) ▶ in-browser
+- [Practice 1: Simulate the boring explanation](/sessions_thinking/01-uncertainty/01-uncertainty.qmd#practice-1-simulate-the-boring-explanation)
+- [Practice 2: Shuffle it](/sessions_thinking/02-inference/02-inference.qmd#practice-2-shuffle-it)
+- [Practice 3: Fit, then doubt](/sessions_thinking/03-regression/03-regression.qmd#practice-3-fit-then-doubt)
+- [Practice 4: Earn the arrow](/sessions_thinking/04-causal/04-causal.qmd#practice-4-earn-the-arrow)
+- [Practice 5: Update yourself](/sessions_thinking/05-bayes/05-bayes.qmd#practice-5-update-yourself) ▶ in-browser

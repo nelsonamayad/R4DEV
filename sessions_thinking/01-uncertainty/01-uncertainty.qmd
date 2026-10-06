@@ -186,13 +186,28 @@ The habit this session installs: **never report a number you wouldn't show the d
 2.  **Ask "compared to what?"** Every "sales rose 4%" hides a sampling distribution --is 4% a signal, or is it inside the range that pure noise produces? (Next session answers this precisely.)
 3.  **Simulate the boring explanation first.** Before celebrating a pattern, write ten lines of R in which *nothing is going on* and see how often the pattern shows up anyway. You will be humbled more often than you expect.
 
-::: callout-tip
-## Exercises 🏋️
+## 🏗 Practice 1: Simulate the boring explanation {.unnumbered}
 
-1.  Change the survey simulation to n = 5,000 per survey. How much narrower is the sampling distribution? Check the $\sqrt{n}$ rule: 100× the sample should give 10× the precision.
-2.  Replace `rexp()` in the CLT simulation with `rbinom(k, 1, 0.02)` --a rare event, like a 2% conversion rate. How large must n be before the bell appears? (This is why A/B tests on rare outcomes need huge samples.)
-3.  The birthday problem: simulate rooms of 23 people (`sample(1:365, 23, replace = TRUE)`) and estimate the probability at least two share a birthday (`any(duplicated(...))`). Before running: write down your guess.
-4.  Simulate rule 3 in action: generate two *completely independent* variables of n = 20 with `rnorm()`, compute their correlation, repeat 1,000 times. How often does pure noise produce |correlation| > 0.3?
+Every exercise here is a simulation: a few lines of R, run in your own session, that show you what chance alone can do.
+
+::: {.callout-note icon="false" collapse="true"}
+# Basic
+
+-   Change the survey simulation to n = 5,000 per survey. How much narrower is the sampling distribution? Check the $\sqrt{n}$ rule: 100× the sample should give 10× the precision.
+-   The birthday problem: simulate rooms of 23 people (`sample(1:365, 23, replace = TRUE)`) and estimate the probability at least two share a birthday (`any(duplicated(...))`). Before running: write down your guess.
+:::
+
+::: {.callout-important icon="false" collapse="true"}
+# Intermediate
+
+-   Replace `rexp()` in the CLT simulation with `rbinom(k, 1, 0.02)` --a rare event, like a 2% conversion rate. How large must n be before the bell appears? (This is why A/B tests on rare outcomes need huge samples.)
+-   Simulate rule 3 in action: generate two *completely independent* variables of n = 20 with `rnorm()`, compute their correlation, repeat 1,000 times. How often does pure noise produce |correlation| > 0.3?
+:::
+
+::: {.callout-caution icon="false" collapse="true"}
+# Advanced
+
+-   Take a pattern from your own work --a difference between two groups, a month-on-month change, a correlation-- and write the simulation in which *nothing is going on*: same sample sizes, same noise, no effect. How often does pure noise produce something at least as striking as what you saw? Write the answer in one sentence for a non-technical colleague.
 :::
 
 ## Key takeaways

@@ -205,13 +205,28 @@ tibble(experiment = 1:20) |>
 The jelly-bean trap doesn't require running twenty literal tests. Choosing which outcome to measure, which subgroups to inspect, which observations count as outliers --each choice is a fork, and enough forks guarantee a "finding". The defence is the discipline this workshop has preached from session 1: decide your analysis *before* looking, write it as code, version it. A committed script is a pre-registration you gave yourself.
 :::
 
-::: callout-tip
-## Exercises 🏋️
+## 🏗 Practice 2: Shuffle it {.unnumbered}
 
-1.  Rerun the permutation test with `stat = "diff in medians"`. Does the conclusion survive a change of statistic? (Robust findings usually do.)
-2.  Use the full penguins data to test whether *Gentoo* and *Adelie* differ in `flipper_length_mm`, start to finish with `infer`.
-3.  Shrink the data: `dplyr::slice_sample(n = 10, by = species)` before the pipeline. What happens to the width of the bootstrap interval? Connect this to the $\sqrt{n}$ rule from the [previous session](/sessions_thinking/01-uncertainty/01-uncertainty.qmd).
-4.  Simulate the forking-paths trap: generate one fake dataset with a null effect and 10 outcome variables; test all ten; report "the significant one". Then explain, in one sentence, to your former self why this felt like science.
+All of these use the `infer` pipeline from this session, run in your own R session on the penguins data.
+
+::: {.callout-note icon="false" collapse="true"}
+# Basic
+
+-   Rerun the permutation test with `stat = "diff in medians"`. Does the conclusion survive a change of statistic? (Robust findings usually do.)
+-   Shrink the data: `dplyr::slice_sample(n = 10, by = species)` before the pipeline. What happens to the width of the bootstrap interval? Connect this to the $\sqrt{n}$ rule from the [previous session](/sessions_thinking/01-uncertainty/01-uncertainty.qmd).
+:::
+
+::: {.callout-important icon="false" collapse="true"}
+# Intermediate
+
+-   Use the full penguins data to test whether *Gentoo* and *Adelie* differ in `flipper_length_mm`, start to finish with `infer`.
+:::
+
+::: {.callout-caution icon="false" collapse="true"}
+# Advanced
+
+-   Simulate the forking-paths trap: generate one fake dataset with a null effect and 10 outcome variables; test all ten; report "the significant one". Then explain, in one sentence, to your former self why this felt like science.
+-   Pick a published result from your own field that reports a p-value or confidence interval. Get (or simulate, matching its sample size and summary statistics) the data, and rerun the test as a permutation test with `infer`. Does the conclusion survive? If you had to simulate, say which assumptions you had to invent.
 :::
 
 ## Key takeaways

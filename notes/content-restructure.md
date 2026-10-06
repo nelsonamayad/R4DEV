@@ -209,7 +209,7 @@ especially) have expensive, credential- or network-dependent chunks
 costly to catch. Recommend doing this as its own dedicated pass, one file
 at a time, each with a full re-render to verify before moving to the next.
 
-### 3. One live-code typo, deferred for the same reason
+### 3. One live-code typo, deferred for the same reason — ✅ fixed 6 October 2026
 
 `sessions_workshop/03-text/03-text.qmd`'s `book_sentiments()` function has
 an axis-label typo, `x="Sentimen AFINN"` (should be "Sentiment AFINN") —

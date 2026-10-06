@@ -67,7 +67,7 @@ The data recently became public thanks to CrossRef (@rosa-clark_news_nodate) and
 
 **Retraction Watch** has recently been featured in many articles (@the_economist, @van_noorden_more_2023). Their work has been Check out the map of retractions below (@fig-map).
 
-```{r map}
+```{r}
 #| label: fig-map
 library(ggiraph)
 library(sf)
@@ -138,7 +138,7 @@ Retractions for authors from `r params$country` reached `r retractions_country`,
 
 Putting `r params$country` in an international perspective. `r params$country` ranks `r country_rank` in retractions (@fig-top).
 
-```{r top}
+```{r}
 #| label: fig-top
 
 library(ggiraph)
@@ -191,7 +191,7 @@ ggiraph::girafe(
 
 Why were the articles retracted? The most frequent reason authors from `r params$country` have their articles retracted is *`r country_top_reason`* (@fig-reasons)
 
-```{r reasons}
+```{r}
 #| label: fig-reasons
 
 library(ggiraph)
@@ -231,7 +231,7 @@ ggiraph::girafe(
 
 Who are the most retracted authors in `r params$country`. Let's look at specific researchers (@fig-authors).
 
-```{r authors}
+```{r}
 #| label: fig-authors
 
 library(ggiraph)
@@ -271,7 +271,7 @@ ggiraph::girafe(
 
 Which institutions host the most retracted authors in `r params$country`? (@fig-institutions).
 
-```{r institutions}
+```{r}
 #| label: fig-institutions
 
 library(ggiraph)

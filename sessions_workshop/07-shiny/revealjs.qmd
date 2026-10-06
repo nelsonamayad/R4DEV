@@ -10,7 +10,7 @@ format:
     preview-links: auto
     theme: moon
     logo: r4dev_logo.png
-    footer: <https://r4dev.netlify.app/>
+    footer: <https://nelsonamayad.github.io/R4DEV/>
 ---
 
 ## Content
@@ -59,18 +59,18 @@ Never ever ever handle data in Excel
 
 :::: {.columns}
 ::: {.column width="50%"}
-### [I. Quarto](https://r4dev.netlify.app/sessions/01-quarto/01-quarto.html)
-### [II. Visualisation](https://r4dev.netlify.app/sessions/02-plots/02-plots.html)
-### [III. Text](https://r4dev.netlify.app/sessions/03-text/03-text.html)
-### [IV. Animation](https://r4dev.netlify.app/sessions/04-animate/04-animate.html)
+### [I. Quarto](https://nelsonamayad.github.io/R4DEV/sessions_workshop/01-quarto/01-quarto.html)
+### [II. Visualisation](https://nelsonamayad.github.io/R4DEV/sessions_workshop/02-plots/02-plots.html)
+### [III. Text](https://nelsonamayad.github.io/R4DEV/sessions_workshop/03-text/03-text.html)
+### [IV. Animation](https://nelsonamayad.github.io/R4DEV/sessions_workshop/04-animate/04-animate.html)
 
 :::
 
 ::: {.column width="50%"}
-### [V. Mapping](https://r4dev.netlify.app/sessions/05-mapping/05-mapping.html)
-### [VI. Scraping](https://r4dev.netlify.app/sessions/06-scrap/06-scrap.html)
-### [VII. Interactivity](https://r4dev.netlify.app/sessions/07-shiny/07-shiny.html)
-### [r-sources](https://r4dev.netlify.app/sessions/09-resources/09-resources.html)
+### [V. Mapping](https://nelsonamayad.github.io/R4DEV/sessions_workshop/05-maps/05-maps.html)
+### [VI. Scraping](https://nelsonamayad.github.io/R4DEV/sessions_workshop/06-scrap/06-scrap.html)
+### [VII. Interactivity](https://nelsonamayad.github.io/R4DEV/sessions_workshop/07-shiny/07-shiny.html)
+### [r-sources](https://nelsonamayad.github.io/R4DEV/sessions_tools/02-resources/02-resources.html)
 :::
 
 ::::
@@ -195,7 +195,7 @@ maddison_girafe
 ## Example: Shiny
 
 ```{=html}
-<iframe id="covid" src="https://nelsonamayad.shinyapps.io/r4dev-covid19/" style="border: none; width: 100%; height: 550px" frameborder="0">
+<iframe id="earthquakes" src="https://nelsonamayad-r4dev-earthquakes.share.connect.posit.cloud/" style="border: none; width: 100%; height: 550px" frameborder="0" title="Global Earthquakes Shiny app">
 </iframe>
 ```
 

@@ -156,7 +156,7 @@ This was the whole idea of Bayes in one session; the rest is craft. When you are
 -   [**`brms`**](https://paul-buerkner.github.io/brms/) --when you want real models: multilevel regression with `lm()`-like syntax, Stan under the hood.
 -   [**`bayesplot`**](http://mc-stan.org/bayesplot/) --diagnostics and posterior visualisations that match what you learned in session 2.
 
-## 🏗 Practice 13: Update yourself {.unnumbered}
+## 🏗 Practice 5: Update yourself {.unnumbered}
 
 ::: {.callout-note icon="false" collapse="true"}
 # Basic
@@ -170,6 +170,13 @@ This was the whole idea of Bayes in one session; the rest is craft. When you are
 
 -   Animate the 100-toss updating. At what point does the animation get boring? That boredom has a name: *convergence*
 -   The globe example has one parameter. Write down --just on paper-- what the grid would look like for **two** parameters. Now you know why MCMC exists
+:::
+
+::: {.callout-caution icon="false" collapse="true"}
+# Advanced
+
+-   Fit the globe model with real MCMC in your own R session: `brms::brm(W | trials(N) ~ 1, family = binomial, data = tibble::tibble(W = 6, N = 9))`. Convert the intercept back to a proportion with `plogis()` and compare the posterior to your grid approximation. Where do they differ, and why? (Hint: brms puts its default prior on the log-odds scale, not on the proportion.)
+-   Pick a question from your own work where you already hold a belief (a conversion rate, a share, a success rate). Write your prior as a Beta distribution *before* looking at new data, update it with the data, and report how much the data moved you.
 :::
 
 ## Key takeaways
