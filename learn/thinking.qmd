@@ -9,7 +9,7 @@ toc: true
 
 ## Track description
 
-This track teaches statistical reasoning by **simulation first, formula second**: you'll see sampling variation, hypothesis testing, regression uncertainty, causal bias, and Bayesian updating happen in front of you before -- or instead of -- proving them algebraically. Several lessons run live, interactive R in your browser via WebAssembly, so there's nothing to install to follow along.
+This track teaches statistical reasoning by **simulation first, formula second**: you'll see sampling variation, hypothesis testing, regression uncertainty, causal bias, and Bayesian updating happen in front of you before -- or instead of -- proving them algebraically. Two lessons come with interactive explainers you drive with sliders and toggles, and the last one runs live R in your browser via WebAssembly. Everything else needs only R and a handful of packages.
 
 ## Who this is for
 

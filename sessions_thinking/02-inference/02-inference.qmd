@@ -124,7 +124,7 @@ Zero out of 5,000[^2]. A t-test would have told you the same thing through a for
 
 [^2]: Which we honestly report as p < 1/5000, not p = 0 --our simulation just wasn't big enough to see an event that rare.
 
-## PART III: The same machine, industrialized --infer
+## PART III: The same machine, industrialised --infer
 
 The [`infer`](https://infer.tidymodels.org/) package (tidymodels family) turns the four steps into four verbs --`specify()`, `hypothesize()`, `generate()`, `calculate()`-- so the code reads like the logic:
 
@@ -146,7 +146,7 @@ null_dist |>
 
 1. The statistic's recipe: outcome ~ grouping.
 2. The null world: species and bill length are independent.
-3. Build it 5,000 times, by permutation --our shuffle, industrialized.
+3. Build it 5,000 times, by permutation --our shuffle, industrialised.
 4. Which statistic to track. Change `"diff in means"` to `"diff in medians"`, `"t"`, `"Chisq"`... and you have replaced half the textbook zoo without learning a new formula.
 
 ### Bootstrap: the other side of the same coin

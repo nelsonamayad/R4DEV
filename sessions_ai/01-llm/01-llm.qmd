@@ -70,7 +70,7 @@ Remember session 2: this workshop once leaked a pair of Spotify credentials by w
 
 Every conversation starts by creating a **chat object**, and the `system prompt` is where you tell the model who it should be:
 
-```{r 9.hello}
+```{r 1.hello}
 #| eval: false
 
 library(ellmer)
@@ -94,7 +94,7 @@ chat$chat("In one sentence: what is a Large Language Model, really?") # <3>
 
 The system prompt is not decoration. Watch it completely change the machine:
 
-```{r 9.haiku}
+```{r 1.haiku}
 #| eval: false
 
 poet <- ellmer::chat_google_gemini(
@@ -120,9 +120,9 @@ Model outputs on this page were captured once (with Claude Haiku) and pasted in 
 
 Chatting is a party trick. The feature that changes your work as an analyst is **structured extraction**: you describe the shape of the data you want --a `type_object()`, like a contract-- and `ellmer` forces the model's answer into exactly that shape. Text goes in, a tibble comes out.
 
-Remember the Kyoto cherry blossoms from session 2? Here is a news-style paragraph about them, the kind of unstructured text the world produces by the ton:
+Remember Kyoto's cherry blossoms, from the weather of session 2 and the animation of session 5? Here is a news-style paragraph about them, the kind of unstructured text the world produces by the ton:
 
-```{r 9.extract}
+```{r 1.extract}
 #| eval: false
 
 library(ellmer)
@@ -165,9 +165,9 @@ Think about what just happened: **the PDF scraping, regex wrangling and date par
 
 ### The machine judges our music
 
-Let's do extraction *at scale*, and be properly skeptical about it. From session 2's Spotify archive we sampled 48 songs. We asked the model to rate --**judging only by the title**-- how positive each song sounds, using `parallel_chat_structured()` to score them all concurrently:
+Let's do extraction *at scale*, and be properly sceptical about it. From session 2's Spotify archive we sampled 48 songs. We asked the model to rate --**judging only by the title**-- how positive each song sounds, using `parallel_chat_structured()` to score them all concurrently:
 
-```{r 9.mood-code}
+```{r 1.mood-code}
 #| eval: false
 
 library(tidyverse)
@@ -197,7 +197,7 @@ songs$llm_mood <- moods$mood
 
 Now the real question: does the machine's guess agree with Spotify's `valence`, which was computed from the *audio itself*?
 
-```{r 9.mood-plot}
+```{r 1.mood-plot}
 #| fig-cap: "The LLM never heard the song"
 
 library(tidyverse)
@@ -234,7 +234,7 @@ The correlation is **essentially zero**. The model did exactly what we asked --i
 
 One more superpower. An LLM knows nothing about *right now* --its training data ended months ago. But you can hand it **your R functions** and let it decide when to call them. Here we wrap the Open-Meteo API from session 2 into a function, register it, and ask a question the model cannot answer alone:
 
-```{r 9.tools}
+```{r 1.tools}
 #| eval: false
 
 library(ellmer)

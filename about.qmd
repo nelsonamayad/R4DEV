@@ -31,21 +31,23 @@ Here's what the workshop is all about:
 
 -   {{< fa person-digging >}} `Wrangling:` Clean, transform and prepare data for analysis with [dplyr](https://dplyr.tidyverse.org/index.html), [tidyr](https://tidyr.tidyverse.org/), [stringr](https://stringr.tidyverse.org/), [lubridate](https://lubridate.tidyverse.org/), [forcats](https://forcats.tidyverse.org/), [tibble](https://tibble.tidyverse.org/)
 
--   {{< fa eye >}} `Visualization:` Build static and interactive plots with [ggplot2](https://ggplot2.tidyverse.org/), [plotly](https://plotly.com/r/), [ggiraph](http://davidgohel.github.io/ggiraph/), [tidygraph](https://cran.r-project.org/web/packages/ggraph/vignettes/tidygraph.html) and learn to do animations using [gganimate](https://gganimate.com/articles/gganimate.html). Explore many [ggplot2 extensions](https://exts.ggplot2.tidyverse.org/).
+-   {{< fa eye >}} `Visualisation:` Build static and interactive plots with [ggplot2](https://ggplot2.tidyverse.org/), [plotly](https://plotly.com/r/), [ggiraph](https://davidgohel.github.io/ggiraph/), [tidygraph](https://cran.r-project.org/web/packages/ggraph/vignettes/tidygraph.html) and learn to do animations using [gganimate](https://gganimate.com/articles/gganimate.html). Explore many [ggplot2 extensions](https://exts.ggplot2.tidyverse.org/).
 
 -   {{< fa book-open >}} `Text analysis:` Transform characters, words, sentences, pages and books into data with [tidytext](https://cran.r-project.org/web/packages/tidytext/vignettes/tidytext.html), [regex](https://stringr.tidyverse.org/articles/regular-expressions.html) and [ggwordcloud](https://lepennec.github.io/ggwordcloud/), then find what a whole shelf of books is about with [topic models](sessions_workshop/04-topics/04-topics.qmd)
 
--   {{< fa file-shield >}} `Reporting:` Write reports with prose and data at the same time [Quarto](https://quarto.org/docs/computations/r.html) and learn how to manage references with [Zotero](https://www.zotero.org/)
+-   {{< fa file-shield >}} `Reporting:` Write reports that weave prose and data together with [Quarto](https://quarto.org/docs/computations/r.html) and learn how to manage references with [Zotero](https://www.zotero.org/)
 
--   {{< fa earth-americas >}}️ `Mapping:` visualise geospatial data with [sf](https://r-spatial.github.io/sf/), and go interactive with [leaflet](https://rstudio.github.io/leaflet/) and spectacular with [rayshader](https://www.rayshader.com/)
+-   {{< fa earth-americas >}}️ `Mapping:` Visualise geospatial data with [sf](https://r-spatial.github.io/sf/), and go interactive with [leaflet](https://rstudio.github.io/leaflet/) and spectacular with [rayshader](https://www.rayshader.com/)
 
 -   {{< fa user-secret >}} `Data recovery:` Import data from APIs and webpages with [httr2](https://httr2.r-lib.org/), [rvest](https://rvest.tidyverse.org/), [chromote](https://rstudio.github.io/chromote/), [pdftools](https://ropensci.org/blog/2016/03/01/pdftools-and-jeroen/), [readr](https://readr.tidyverse.org/)
 
--   {{< fa upload >}} `Publishing:` Create apps and dashboards with [shiny](https://shiny.rstudio.com/). Build entire websites with [quarto](https://quarto.org/docs/computations/r.html)
+-   {{< fa upload >}} `Publishing:` Create apps and dashboards with [shiny](https://shiny.posit.co/). Build entire websites with [Quarto](https://quarto.org/docs/computations/r.html)
 
--   {{< fa robot >}} `AI, programmatically:` Call Large Language Models from R with [ellmer](https://ellmer.tidyverse.org/), turn prose into tidy data with structured extraction, and build apps that chat with your data using [shinychat](https://posit-dev.github.io/shinychat/r/), [querychat](https://posit-dev.github.io/querychat/r/) and [ggsql](https://r.ggsql.org/)
+-   {{< fa robot >}} `AI, programmatically:` Call Large Language Models from R with [ellmer](https://ellmer.tidyverse.org/), turn prose into tidy data with structured extraction, and build apps that chat with your data using [shinychat](https://posit-dev.github.io/shinychat/r/), [querychat](https://posit-dev.github.io/querychat/r/) and [ggsql](https://r.ggsql.org/), ground a model's answers in your own documents with [ragnar](https://ragnar.tidyverse.org/), and work alongside agentic coding tools
 
--   {{< fa gauge-high >}} `Scale:` Replace for-loops with [purrr](https://purrr.tidyverse.org/)'s functional style, then parallelize that same code across cores (or a cluster) with a single wrapper function using [mirai](https://mirai.r-lib.org/)
+-   {{< fa gauge-high >}} `Scale:` Replace for-loops with [purrr](https://purrr.tidyverse.org/)'s functional style, then parallelise that same code across cores (or a cluster) with a single wrapper function using [mirai](https://mirai.r-lib.org/)
+
+-   {{< fa scale-balanced >}} `Statistical thinking:` See sampling variation by simulating it, test hypotheses and build bootstrap intervals with [infer](https://infer.tidymodels.org/), fit and doubt regressions with [broom](https://broom.tidymodels.org/), draw causal assumptions as DAGs with [ggdag](https://r-causal.github.io/ggdag/), and update beliefs the Bayesian way
 :::
 
 ## 💫 Apply it to your own project!
@@ -65,11 +67,9 @@ The idea of this project is not to burden you with extra work, but to avoid that
 
 If time allows, these are additional topics that we'll cover with overly enthusiastic and committed students:
 
--   {{< fa repeat >}} `Iteration`: You'll learn to write better and shorter code with functional programming [purrr](https://purrr.tidyverse.org/)
-
 -   {{< fa robot >}} `Models`: Learn how to build reproducible and tractable models with [tidymodels](https://www.tidymodels.org/)
 
--   {{< fa chart-area >}} `Bayesian analysis`: You need to unlearn a lot of what you were taught on statistics, but the [Think Bayes session](sessions_thinking/06-bayes/06-bayes.qmd) will start you off, and so will [rethinking](https://github.com/rmcelreath/rethinking), [bayesplot](http://mc-stan.org/bayesplot/index.html), [brms](https://paul-buerkner.github.io/brms/) and [bayesrules](https://www.bayesrulesbook.com/)
+-   {{< fa chart-area >}} `Bayesian analysis`: You need to unlearn a lot of what you were taught on statistics, but the [Think Bayes session](sessions_thinking/06-bayes/06-bayes.qmd) will start you off, and so will [rethinking](https://github.com/rmcelreath/rethinking), [bayesplot](https://mc-stan.org/bayesplot/), [brms](https://paul-buerkner.github.io/brms/) and [bayesrules](https://www.bayesrulesbook.com/)
 
 -   {{< fa diagram-project >}} `Causal inference`: Why you must draw your assumptions before you compute --colliders, confounders and mediators, animated and interactive in the [bonus track of session 5](sessions_workshop/05-animate/05-animate.qmd), then simulated properly in the Think with data track's [DAG lesson](sessions_thinking/04-causal/04-causal.qmd) and its [gallery of research designs](sessions_thinking/05-designs/05-designs.qmd)
 :::

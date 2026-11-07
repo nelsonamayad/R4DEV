@@ -145,7 +145,7 @@ server_affair_alt <- function(input, output) {
       ggiraph::geom_col_interactive()+
       theme_classic()+
       facet_wrap(gender~cheat)+
-      scale_fill_viridis_d("plasma")+
+      scale_fill_viridis_d(option = "plasma")+
       theme(legend.position = "none")+
       labs(title = "Respondents by self-declared happiness, by age and gender",
            subtitle = paste("Among", input$happy, "respondents"),
@@ -200,11 +200,11 @@ server_affair_alt <- function(input, output) {
         ggplot(aes(x=education,y=n,fill=cheat))+
         geom_col()+
         geom_label(aes(label=n), fill="black",color="white", vjust=-0.5)+
-        scale_fill_brewer("Set2")+
+        scale_fill_brewer(palette = "Set2")+
         facet_wrap(gender~cheat)+
         theme_classic()+
         theme(legend.position = "none")+
-        labs(title = paste("Among", input$happy, "respondents"),
+        labs(title = "Respondents with children",
              x="Respondent education",
              y="# respondents")
     }
@@ -216,10 +216,10 @@ server_affair_alt <- function(input, output) {
         geom_col()+
         geom_label(aes(label=n), fill="black",color="white", vjust=-0.5)+
         facet_wrap(gender~cheat)+
-        scale_fill_viridis_d("rocket")+
+        scale_fill_viridis_d(option = "rocket")+
         theme_classic()+
         theme(legend.position = "none")+
-        labs(title = paste("Among", input$happy, "respondents"),
+        labs(title = "Respondents without children",
              x="Respondent education",
              y="# respondents")
     }
@@ -237,10 +237,10 @@ server_affair_alt <- function(input, output) {
         geom_col()+
         geom_label(aes(label=n), fill="black",color="white", vjust=-0.5)+
         facet_wrap(gender~cheat)+
-        scale_fill_brewer("Set2")+
+        scale_fill_brewer(palette = "Set2")+
         theme_classic()+
         theme(legend.position = "none")+
-        labs(title = paste("Among", input$happy, "respondents"),
+        labs(title = "Respondents with children",
              x="Respondent years of marriage",
              y="# respondents")
       
@@ -253,10 +253,10 @@ server_affair_alt <- function(input, output) {
           geom_col()+
           geom_label(aes(label=n), fill="black",color="white", vjust=-0.5)+
           facet_wrap(gender~cheat)+
-          scale_fill_viridis_d("rocket")+
+          scale_fill_viridis_d(option = "rocket")+
           theme_classic()+
           theme(legend.position = "none")+
-          labs(title = paste("Among", input$happy, "respondents"),
+          labs(title = "Respondents without children",
              x="Respondent years of marriage",
              y="# respondents")
       }

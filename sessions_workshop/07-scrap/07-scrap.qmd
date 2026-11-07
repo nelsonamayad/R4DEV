@@ -8,7 +8,7 @@ categories:
   - sentiment
   - reactable
   - while
-  - scrap
+  - scraping
 date: "2022-07-31" 
 date-modified: last-modified
 order: 7
@@ -48,7 +48,7 @@ webr:
 
 ## PART I: Pick it, grab it
 
-Although you've learned to use API and dedicated packages to get information from online sources, sometimes you want to just take a table from Wikipedia, or some text from a webpage and bring it into R.
+Although you've learned to use APIs and dedicated packages to get information from online sources, sometimes you want to just take a table from Wikipedia, or some text from a webpage and bring it into R.
 
 To do this you need two tools:
 
@@ -63,7 +63,7 @@ Check out the [**`rvest`**](https://rvest.tidyverse.org/) vignette
 
 How does the Selector Gadget work? By clicking in an HTML page until the objects you want are selected in green.
 
-Imagine you want to extract text from the Home page of R4DEV, but you only want one paragraph. Clicking the elements you want until only what you want is highlighted in green, as shown below, will let you know which element you'll scrap. The selected element **`p:nth-child(4)`** will appear below and you can copy it to use it as it is shown below.
+Imagine you want to extract text from the Home page of R4DEV, but you only want one paragraph. Clicking the elements you want until only what you want is highlighted in green, as shown below, will let you know which element you'll scrape. The selected element **`p:nth-child(4)`** will appear below and you can copy it to use it as it is shown below.
 
 ::: {#selector layout-ncol="2"}
 ![Selecting some elements](selector_gadget_before.png){width="80%"}
@@ -73,13 +73,13 @@ Imagine you want to extract text from the Home page of R4DEV, but you only want 
 
 ### Top movies according to IMDb {.unnumbered}
 
-[IMDb](https://www.imdb.com/chart/top/) has a list of the best ranked movies. We'll pull it straight from the website using `rvest`. Using the Selector Gadget, we click on the objects of the webpage we want and bring them to the code that will pull that information and transform it into text.
+[IMDb](https://www.imdb.com/chart/top/) has a list of the best ranked movies. IMDb's own terms of use forbid scraping it, so we'll pull a copy of the list using `rvest` from somewhere that welcomes it. Using the Selector Gadget, we click on the objects of the webpage we want and bring them to the code that will pull that information and transform it into text.
 
-We will extract the ranking, title, year and country of every movie from the [Wikipedia](https://fr.wikipedia.org/wiki/Top_250_de_l%27Internet_Movie_Database) entry.
+We will extract the ranking, title, year and country of every movie from the French [Wikipedia](https://fr.wikipedia.org/wiki/Top_250_de_l%27Internet_Movie_Database) entry, which mirrors the chart in a tidy table.
 
 For **tables**, `rvest` has a shortcut that spares you the click-hunting: `html_table()` grabs an HTML table and returns it as a tibble directly. Whenever what you want *looks like a table on the page*, reach for it first --hand-picked selectors like the ones above are brittle, and break whenever the page structure changes (this very session broke that way once; ask the instructor).
 
-```{r 5.rvest}
+```{r 7.rvest}
 
 library(tidyverse)
 library(rvest)
@@ -109,7 +109,7 @@ Learn a little HTML, it will help you identify quickly the information you want 
 
 Now a little cleaning --scraped column names arrive messy and accented-- and we create a searchable table using [**`reactable`**](https://glin.github.io/reactable/index.html), which should be your go-to package for interactive tables.
 
-```{r 5.imdb}
+```{r 7.imdb}
 
 library(tidyverse)
 library(RColorBrewer)
@@ -137,9 +137,9 @@ imdb_top_250_raw |> # <6>
 
 ### Rejoinder: Feeling U2
 
-Now that we know how to get data from websites, carry out text analysis and visualise, let's put together all three to something concrete: doing sentiment analysis of all U2 lyrics.
+Now that we know how to get data from websites, carry out text analysis and visualise, let's put all three together into something concrete: doing sentiment analysis of all U2 lyrics.
 
-First, we get all lyrics from U2, which are collected in their [website](https://www.u2.com/music/lyrics). We go to the lyrics page and retrieve the URL of each song. There are over 240 lyrics, but the URLs for each one are not sequential, and include random large numbers. So after extracting the element we want using `html_elements()`, we use the `html_attr()` function to retrieve the URL for each lyric. Then we can pass all URLs through a loop and save into an empty list, as we did with songs before.
+First, we get all lyrics from U2, which are collected in their [website](https://www.u2.com/music/lyrics). We go to the lyrics page and retrieve the URL of each song. There are over 240 lyrics, but the URLs for each one are not sequential, and include random large numbers. So after extracting the element we want using `html_elements()`, we use the `html_attr()` function to retrieve the URL for each lyric. Then we can pass all URLs through a loop and save each lyric into an empty list.
 
 ::: column-margin
 ![The Edge](u2.gif)
@@ -195,11 +195,11 @@ u2_lyrics <- split(dplyr::select(u2_lyrics_df, value), u2_lyrics_df$url)
 
 Second, we do a little wrangling to transform the list to a tibble, our favourite layout and format for rectangular datasets. We use `imap()` to name each element in the list, and then `map_df()` to bind them all together. This leaves us with a dataset where each row includes the lyrics of a song.
 
-Third, we tokenise by words, remove stopwords and join the sentiment lexicon. Just as we did with books before. With a twist: we'll use both words and n-grams as tokens. For words, we calculate the frequency for each value of the sentiment lexicon, and feed into **`ggplot`**. For flair, we add the most frequent word for each sentiment value at the top of the graph and plot the frequency of all words lyrics. For ngrams, we just count the expressions that are more frequent in the entire lyrics space.
+Third, we tokenise by words, remove stopwords and join the sentiment lexicon. Just as we did with books before. With a twist: we'll use both words and n-grams as tokens. For words, we calculate the frequency for each value of the sentiment lexicon, and feed into **`ggplot`**. For flair, we add the most frequent word for each sentiment value at the top of the graph and plot the frequency of all words in the lyrics. For ngrams, we just count the expressions that are more frequent in the entire lyrics space.
 
 ::: {.panel-tabset}
 
-## Token: Using sindle words
+## Token: Using single words
 
 ```{r u2-sent-word}
 library(tidyverse)
@@ -217,31 +217,25 @@ u2_lyrics |>
   dplyr::anti_join(stopwords::stopwords("en") |> as_tibble(), by=c("text"="value")) |>
   # Join sentiment lexicon
   dplyr::inner_join(tidytext::get_sentiments("afinn"), by=c("text"="word")) |>
-  # Calculate most frequent word by sentiment lexicon
-  dplyr::group_by(text) |>
-  dplyr::mutate(word_freq = n()) |>
-  dplyr::ungroup() |>
-  # Summarise ####
-  dplyr::group_by(value) |>
-  dplyr::mutate(n = n(),
-                p = n/sum(n),
-                c = case_when(value<0 ~ "Negative",
+  # Count each word once per sentiment value ####
+  dplyr::count(value, text, name = "word_freq") |>
+  # Total words per sentiment value, and a label for each side ####
+  dplyr::mutate(n = sum(word_freq), .by = value) |>
+  dplyr::mutate(c = case_when(value<0 ~ "Negative",
                               value==0 ~ "Neutral",
                               value>0 ~ "Positive") |>
                   factor()) |>
-  # Feed to ggplot
-  ggplot(aes(x=value,y=n,fill=c, color=c))+
+  # Feed to ggplot: the words of each value stack into one bar
+  ggplot(aes(x=value,y=word_freq,fill=c, color=c))+
   geom_col()+
   # Notice how the data is filtered inside of the geom ####
-  geom_text(data = . %>%
-              dplyr::group_by(value) %>%
-              dplyr::slice_max(n=1, order_by = word_freq) %>%
-              dplyr::distinct(text, .keep_all = TRUE),
-             aes(y=700000, label=text), 
+  geom_text(data = \(d) dplyr::slice_max(d, order_by = word_freq, n = 1,
+                                          by = value, with_ties = FALSE),
+            aes(y = max(n) * 1.15, label=text),
             angle=60, size=5)+
   geom_vline(xintercept = 0)+
   scale_x_continuous(breaks=seq(from=-5,to=5,by=1))+
-  scale_y_continuous(limits = c(0, 750000))+
+  scale_y_continuous(expand = expansion(mult = c(0, 0.35)))+
   scale_fill_brewer(palette = "Set1")+
   scale_color_brewer(palette = "Set1")+
   labs(title = "U2 lyrics: A feel-good band, mostly",
@@ -282,14 +276,14 @@ u2_lyrics |>
 ::: callout-tip
 ## More **`ggplot2` extensions**
 
-You now know how to work with **`ggplot2`** and some extensions like **`ggridges`** or **`ggiraph`**. But there are many more you might want to check out. [The gallery of over a hundred extensions is here](https://exts.ggplot2.tidyverse.org/gallery/), and some of my favorites are listed below:
+You now know how to work with **`ggplot2`** and some extensions like **`ggridges`** or **`ggiraph`**. But there are many more you might want to check out. [The gallery of over a hundred extensions is here](https://exts.ggplot2.tidyverse.org/gallery/), and some of my favourites are listed below:
 
 - [**`ggdist`**](https://mjskay.github.io/ggdist) provides stats and geoms for visualising distributions and uncertainty.
 - [**`ggExtra`**](https://github.com/daattali/ggExtra) lets you add marginal density plots or histograms to ggplot2 scatterplots.
-- [**`ggpattern`**](https://github.com/coolbutuseless/ggpattern) includes pattern fills for geoms.
+- [**`ggpattern`**](https://github.com/trevorld/ggpattern) includes pattern fills for geoms.
 - [**`ggcorrplot`**](https://rpkgs.datanovia.com/ggcorrplot/) enables correlation matrix plots
 - [**`hrbrthemes`**](https://github.com/hrbrmstr/hrbrthemes) nice themes
-- [**`ggdag`**](https://ggdag.malco.io/) for causal inference fans: Directed Acyclical Graphs (DAGs).
+- [**`ggdag`**](https://r-causal.github.io/ggdag/) for causal inference fans: Directed Acyclic Graphs (DAGs).
 - [**`ggmapinset`**](https://cidm-ph.github.io/ggmapinset/) zoom into parts of `sf` maps.
 
 :::
@@ -302,9 +296,9 @@ This site holds words and concepts in multiple languages that don't translate. G
 ![Exactly](sofia-vergara.gif)
 :::
 
-How many words are there, how can we scrap them? As of late 2021, there were over 500. In 2023, that number grew even more, to over 700. 
+How many words are there, and how can we scrape them? As of late 2021, there were over 500. In 2023, that number grew even more, to over 700. 
 
-We are doing this task by throwing computational brute force: we will scrape the site multiple times until no new words are retrieved, using `while` function that will run until no new words are found. 
+We are doing this task by throwing computational brute force: we will scrape the site multiple times until no new words are retrieved, using a `while` loop that will run until no new words are found. 
 
 The code takes time to run, but it does the trick.
 
@@ -322,10 +316,10 @@ eunoia_url <- "https://eunoia.world/"
 eunoia <- list()
 eunoia_df <- tibble()
 
-# Step 2 - We'll use while function to scrap the website until we have 700 different words ####
-while (tally(eunoia_df) <= 690) {
+# Step 2 - We'll use a while loop to scrape the website until we have 700 different words ####
+while (nrow(eunoia_df) < 700) {
   
-  # i) Loop 100 scraps of the website and save them into the empty list
+  # i) Loop 100 scrapes of the website and save them into the empty list
   for (i in c(1:100)) {
   
   # A - Start with empty list and double bracket to save as elements
@@ -348,14 +342,14 @@ while (tally(eunoia_df) <= 690) {
 
 ``` 
 
-```{r eunioia-save}
+```{r eunoia-save}
 #| include: false
 #| eval: false
 
 write_csv(eunoia_df, paste0(getwd(),"/eunoia.csv"))
 ``` 
 
-Now let's check all the downloaded untranslatable words is a **`reactable`** table, using a bootswatch theme and aggregating all words by language groups using `groupBy()` and a bit of column styling. 
+Now let's check all the downloaded untranslatable words in a **`reactable`** table, using a Bootswatch theme and aggregating all words by language groups using `groupBy()` and a bit of column styling. 
 
 ::: callout-tip
 ## **`reactable`** tables can be very fancy
@@ -369,7 +363,7 @@ You can customise these tables a lot. [Check out these examples](https://glin.gi
 #| include: false
 library(tidyverse)
 
-eunoia_scraped <- readr::read_csv(paste0(getwd(),"/eunoia.csv")) #"/sessions_workshop/07-scrap/",
+eunoia_scraped <- readr::read_csv(paste0(getwd(),"/eunoia.csv"))
 ```
 
 
@@ -407,9 +401,9 @@ eunoia_scraped |>
 
 Everything so far assumed the data is *already in the page*: `read_html()` downloads the HTML the server sends, and we harvest it. But many modern websites arrive almost empty and build their content afterwards, by running **JavaScript** in your browser. `read_html()` never runs JavaScript, so it sees only the hollow shell.
 
-See it for yourself. [quotes.toscrape.com](https://quotes.toscrape.com/) is a sandbox built for practicing scraping, and it serves the *same* quotes twice: once as normal HTML, and once rendered by JavaScript at [`/js/`](https://quotes.toscrape.com/js/). Watch what happens when we scrape the JavaScript version the old way:
+See it for yourself. [quotes.toscrape.com](https://quotes.toscrape.com/) is a sandbox built for practising scraping, and it serves the *same* quotes twice: once as normal HTML, and once rendered by JavaScript at [`/js/`](https://quotes.toscrape.com/js/). Watch what happens when we scrape the JavaScript version the old way:
 
-```{r 6.js-fail}
+```{r 7.js-fail}
 library(tidyverse)
 library(rvest)
 
@@ -422,7 +416,7 @@ rvest::read_html("https://quotes.toscrape.com/js/") |> # <11>
 
 The fix is one function swap: `read_html_live()` opens a real (but invisible) Chrome window using the **`chromote`** package, lets the JavaScript run, and then hands the *rendered* page to the exact same selector functions you already know.
 
-```{r 6.js-live}
+```{r 7.js-live}
 quotes_live <- rvest::read_html_live("https://quotes.toscrape.com/js/") # <12>
 
 quotes_live |>

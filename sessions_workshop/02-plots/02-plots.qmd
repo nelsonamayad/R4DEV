@@ -35,7 +35,7 @@ resources:
 
 {{< include /_extensions/r-wasm/live/_knitr.qmd >}}
 
-> "*Truth is much too complicated to allow anything but approximations.”*<br>--John von Neumann
+> "*Truth is much too complicated to allow anything but approximations.*"<br>--John von Neumann
 
 ::: {.lesson-info}
 **Level:** Beginner &nbsp;·&nbsp; **Time:** ~90 min &nbsp;·&nbsp; **Prerequisites:** Blogging with Quarto &nbsp;·&nbsp; **Tools:** httr2, ggplot2, plotly, ggiraph, tidyr
@@ -60,7 +60,7 @@ This session focuses on building plots using the **grammar of graphics** --how y
 To get us started, we'll tell a story of how to visualise cross-country comparisons of GDP per capita. The first chapter: importing the data into R.
 
 ::: callout-tip
-## Tidy your data: How your data should look like
+## Tidy your data: What your data should look like
 
 ![Tidy format](tidy.png)
 :::
@@ -75,19 +75,19 @@ To begin, we look for the data we need. The Maddison Project has data in Excel a
 The GitHub catalog we read from below was **archived in 2022** --it still works, and it will always return the same numbers (which is why this workshop keeps using it: reproducibility). For *current* data, Our World in Data now serves every chart on its site as a clean CSV: take any chart URL and append `.csv` to its grapher address, like `https://ourworldindata.org/grapher/gdp-per-capita-maddison-project-database.csv`. [The documentation is here](https://docs.owid.io/projects/etl/api/).
 :::
 
-One thing you'll notice about the data is that it only has country names. No regions, continents, of other geographical aggregates.
+One thing you'll notice about the data is that it only has country names. No regions, continents, or other geographical aggregates.
 
-We'll use the incredibly handy **`countrycodes`** package to add regions and country ISO3 codes, which is a convention that will save you a lot of time and headaches from country names spelled differently, or in other languages. We'll also use the `clean_names()` function from the **`janitor`** package to handle the long and capitalized names of the variables in the data easily.
+We'll use the incredibly handy **`countrycode`** package to add regions and country ISO3 codes, which is a convention that will save you a lot of time and headaches from country names spelled differently, or in other languages. We'll also use the `clean_names()` function from the **`janitor`** package to handle the long and capitalised names of the variables in the data easily.
 
 ::: callout-tip
-## The end of inconsistent contry names/codes: **`countrycodes`**
+## The end of inconsistent country names/codes: **`countrycode`**
 
-Country names and codes are a headache. They often come in different naming conventions, different spelling or special characters. **`countrycodes`** package solves the problem by looking in a huge library of spellings and coding conventions, so you can have retrieve the names or codes for countries and regions as needed.
+Country names and codes are a headache. They often come in different naming conventions, different spelling or special characters. The **`countrycode`** package solves the problem by looking in a huge library of spellings and coding conventions, so you can retrieve the names or codes for countries and regions as needed.
 :::
 
 ### Take 1: A first, very ugly, graph
 
-With the data downloaded into R, and the country regions and codes added to it, we can make our first plot. We filter the data for the year 1990 and feed it to **`ggplot`**. Given that reach region has multiple countries, we'd like to plot the distribution of GDP per capita within each region. There are many geometries in **`ggplot`** that accomplish this, so we'll use the simplest one `geom_boxplot()`.
+With the data downloaded into R, and the country regions and codes added to it, we can make our first plot. We filter the data for the year 1990 and feed it to **`ggplot`**. Given that each region has multiple countries, we'd like to plot the distribution of GDP per capita within each region. There are many geometries in **`ggplot`** that accomplish this, so we'll use the simplest one `geom_boxplot()`.
 
 Notice that within ggplot we don't use the pipe anymore: to add options, we use the **`+`** operator.
 
@@ -121,7 +121,7 @@ maddison_proj_1 # <8>
 1.  OWID repository for the Maddison Project data
 2.  Start with the raw data and save to a new data frame
 3.  We clean the variable names using the `clean_names()` function and shorten even further the GDP per capita variable name using `rename()`
-4.  Add country 3-digit ISO code and region using the `countrycode()` function
+4.  Add the 3-letter ISO country code and region using the `countrycode()` function
 5.  Filter for year 1990
 6.  Pipe data into ggplot and define X and Y axis
 7.  Show a boxplot
@@ -130,7 +130,7 @@ maddison_proj_1 # <8>
 ::: callout-tip
 ## Learn to love the pipe
 
-The pipe **`|>`** or **`%>%`** lets you sequentially chain many operations together and avoid "Russian doll" coding, where you put operations within operations and get quickly get lost on which parenthesis closes which operation.
+The pipe **`|>`** or **`%>%`** lets you sequentially chain many operations together and avoid "Russian doll" coding, where you put operations within operations and quickly get lost on which parenthesis closes which operation.
 
 The pipe is very simple: **`x |> f(y)`** is equivalent to **`f(x,y)`**. Learn to love it.
 :::
@@ -145,11 +145,11 @@ We can also see that the labels overlap and are hard to read, the labels of the 
 
 ### Take 2: Reorder, log, remove defaults
 
-We'll change the aggregate axis from region to continent using `countrycode()` again and remove subregion aggregates, filtering all empty values of the continent variable using the `filter()` function and the `is.na()` function preceded by `*!*` operator, which does the inverse of any function (as in !x = not x).
+We'll change the aggregate axis from region to continent using `countrycode()` again and remove subregion aggregates, filtering all empty values of the continent variable using the `filter()` function and the `is.na()` function preceded by the `!` operator, which negates any logical test (`!x` means "not x").
 
-Then we create an ordering variable to sort the continents from higher to lower median GDP per capita levels using `group_by()` and `mutate()`. We can then reorder our continent variable using this newly-created median by factoring the variable and using this median to order it with `fct_reorder()`. As we are dealing with a wide range of GDP per capita levels, we can also change the scale of the axis to a logarithmic scale using `scale_x_log10()`.
+Then we create an ordering variable to sort the continents from higher to lower median GDP per capita levels using `group_by()` and `mutate()`. We can then reorder our continent variable using this newly-created median by factoring the variable and using this median to order it with `fct_reorder()`. As we are dealing with a wide range of GDP per capita levels, we can also change the scale of the axis to a logarithmic scale using `scale_y_log10()`.
 
-By default, the plot includes a grey background and other features we can do without. We use a theme that cleans the plot from background colors and other features that **`ggplot`** uses by default. The clean theme we use is `theme_classic()`, which makes the plot more focused in the information being conveyed.
+By default, the plot includes a grey background and other features we can do without. We use a theme that cleans the plot from background colours and other features that **`ggplot`** uses by default. The clean theme we use is `theme_classic()`, which makes the plot more focused on the information being conveyed.
 
 We do all this in the same pipe we built before, and this is the result:
 
@@ -200,9 +200,9 @@ maddison_proj_2
 ***Creating Data*** and ***Modifying Data*** are totally different processes. Follow the seemingly trivial rule of never modifying your raw data to avoid making really ***big mistakes*** in your data workflow that can seriously undermine any project. <br> Always create new objects based on the raw data instead of overwriting it.
 :::
 
-### Take 3: Re-scale axis
+### Take 3: Flip the axes
 
-We can improve the figure by transforming the X axis to logarithm using `scale_x_log10()`:
+The continent names still crowd each other on the X axis, so we flip the plot: continents go on the Y axis, where long labels have room, and GDP per capita moves to the X axis, keeping its log scale with `scale_x_log10()`. We also colour each box by continent:
 
 ```{r 2.maddison-3}
 #| fig-cap: "A third, better, plot"
@@ -229,15 +229,15 @@ maddison_proj_3
 
 ### Take 4: Add flair
 
-Now we add points for each data point around the boxplot using `geom_jitter()`, which adds random noise to each point so they don't overlap. We'll include a shape option to give a different shape to the points of each continent.We also use the **`RColorBrewer`** package to set a nicer color palette for each continent, and change the intensity of the color of outlier points using the outlier.alpha option within the geom.
+Now we add points for each data point around the boxplot using `geom_jitter()`, which adds random noise to each point so they don't overlap. We'll include a shape option to give a different shape to the points of each continent. We also use the **`RColorBrewer`** package to set a nicer colour palette for each continent, and change the intensity of the colour of outlier points using the outlier.alpha option within the geom.
 
 ```{r 2.maddison-4}
-#| fig-cap: "A forth attempt, adding more features"
+#| fig-cap: "A fourth attempt, adding more features"
 
 library(tidyverse)
 library(RColorBrewer)
 
-# A forth visual ####
+# A fourth visual ####
 maddison_proj_4 <- owid_maddison_proj_df2 |>
   dplyr::filter(year==1990, !is.na(continent)) |>
   dplyr::group_by(continent) |>
@@ -257,21 +257,21 @@ maddison_proj_4
 ```
 
 21. Make the outliers lighter
-22. Show jittered points colored by continent, with random noise so they don't overlap
-23. Set a color palette for continents
+22. Show jittered points coloured by continent, with random noise so they don't overlap
+23. Set a colour palette for continents
 
 ### Take 5: Doing labels right
 
-Finally we add labels, titles and subtitles. We also will create floating labels for one country in each continent: China, Mexico, Australia, France and Nigeria, which we filter within the geom. Notice how the data is filtered for only this text geom. We use the **`.`** operator, which is used to work from whatever data comes down the pipe, and then we filter the three countries we want to label.
+Finally we add labels, titles and subtitles. We also will create floating labels for one country in each continent: China, Mexico, Australia, France and Nigeria, which we filter within the geom. Notice how the data is filtered for only this text geom. We use the **`.`** operator, which is used to work from whatever data comes down the pipe, and then we filter the five countries we want to label.
 
-We use **`ggrepel`** package for this.The `geom_label_repel()` will make sure the labels don't overlap by, as the name suggests, repelling them from one another. We add the option `position_jitter()` so that the labels match the points with random noise that we had included when using `geom_point()` using the same positioning.
+We use the **`ggrepel`** package for this. The `geom_label_repel()` will make sure the labels don't overlap by, as the name suggests, repelling them from one another. We also swap `geom_jitter()` for `geom_point()` with `position_jitter(seed = 1)`, and give the labels that same position, so the labels and the points get exactly the same random noise.
 
-We also replace the scaling of the Y axis to something more flexible, using `scale_y_continuous()` and adding a few things to it: the breaks option, so the labels shown make more sense for this scaling, and number formatting using `number_format()`.
+We also replace the scaling of the X axis with something more flexible, using `scale_x_continuous()` and adding a few things to it: `trans = "log10"` to keep the log scale, and number formatting using `number_format()`.
 
 ::: callout-tip
 ## How do I handle long labels? Use **`scales`**
 
-Sometimes you have very long or uneven text in an axis or legend, which makes the plot look terrible. Using the **`scales`** package, you can fix this by wrapping the label by a desired number of characters. Use the `label = scales::label_wrap()` option when labeling text to break across lines.
+Sometimes you have very long or uneven text in an axis or legend, which makes the plot look terrible. Using the **`scales`** package, you can fix this by wrapping the label by a desired number of characters. Use the `label = scales::label_wrap()` option when labelling text to break across lines.
 :::
 
 ```{r 2.maddison-5}
@@ -314,10 +314,10 @@ maddison_proj_5
 ```
 
 24. You can control the data that goes into each layer of ggplot2. The `.` operator stands for whatever data is in the `ggplot()` function at the top of the pipe, and you can pipe in more operations that apply only to this layer.
-25. Filter Mexico, China, Nigeria and 1990 only for this geom.
-26. Add an `arrow()`.
+25. Filter the five countries we want to label, only for this geom.
+26. Make the labels small and black, so they stand out from the coloured points.
 27. Notice we add `position` to align the labels with the jittering.
-28. Improve the log scale display using breaks and space between thousands digits using `number_format()`
+28. Keep the log scale with `trans` and separate thousands with a space using `number_format()`
 29. Add multiple labels to the plot: title, subtitle, caption
 30. Increase size of continent axis label and drop the legend
 
@@ -353,7 +353,7 @@ maddison_proj_6 <- owid_maddison_proj_df2 |>
   scale_x_continuous(trans = "log10",labels = scales::number_format(big.mark=" "))+
   scale_color_brewer(palette="Set1")+
   facet_wrap(~year, nrow=2)+ # <31>
-  labs(x = NULL, y = "GDP per capita",
+  labs(y = NULL, x = "GDP per capita",
        title = "Maddison Project - GDP per capita in 1990 vs 2015",
        subtitle = "GDP per capita",
        caption = "Source: Own calculations based on Maddison Project and OWID GitHub") + 
@@ -371,12 +371,12 @@ maddison_proj_6
 
 ### Final take: Themes
 
-The final transformation involves themes. They are an essential part of the grammar, helping you control the non-data parts of their plots, such as titles, labels, fonts, background, grid lines, and more. The list is [loooong](https://ggplot2.tidyverse.org/reference/ggtheme.html). The idea is to make it easy to modify the appearance of plots without changing the underlying data or the type of plot.
+The final transformation involves themes. They are an essential part of the grammar, helping you control the non-data parts of your plots, such as titles, labels, fonts, background, grid lines, and more. The list is [loooong](https://ggplot2.tidyverse.org/reference/ggtheme.html). The idea is to make it easy to modify the appearance of plots without changing the underlying data or the type of plot.
 
 We will use another package [`hrbrthemes`](https://github.com/hrbrmstr/hrbrthemes) to finish our plot. Notice that I just add a new layer to the earlier figure. We use the `theme_ipsum_rc()` function and this is the result:
 
 ```{r 2.maddison-7}
-#| fig-cap: "A final version, with a predfined theme"
+#| fig-cap: "A final version, with a predefined theme"
 library(tidyverse)
 library(ggrepel)
 library(RColorBrewer)
@@ -425,7 +425,7 @@ animation::saveGIF(
 
 APIs (*Application Programming Interfaces*) are front doors to access databases online, and they are a wonderful resource. Instead of downloading a file by hand, you send a **request** describing exactly what you want, and the server sends back the data --usually as **JSON**, a nested text format that R can easily turn into a tibble.
 
-We will use the [**`httr2`**](https://httr2.r-lib.org/) package, the tidyverse-adjacent tool for talking to APIs, and knock on the door of [**Open-Meteo**](https://open-meteo.com/), a free weather API that requires no account, no token, no key. We'll request 75 years of daily temperatures for **Kyoto**. Why Kyoto? Remember the cherry blossoms: in session 5 you'll animate 1,200 years of sakura bloom dates, and this data tells the other half of that story.
+We will use the [**`httr2`**](https://httr2.r-lib.org/) package, the tidyverse-adjacent tool for talking to APIs, and knock on the door of [**Open-Meteo**](https://open-meteo.com/), a free weather API that requires no account, no token, no key. We'll request 75 years of daily temperatures for **Kyoto**. Why Kyoto? Remember the cherry blossoms: in lesson 5 you'll animate 1,200 years of sakura bloom dates, and this data tells the other half of that story.
 
 ```{r 2.openmeteo}
 #| fig-cap: "Spring is arriving earlier in Kyoto"
@@ -479,7 +479,7 @@ kyoto_temp |>
 
 ### Feel the music: the Spotify story {.unnumbered}
 
-This section used to teach APIs with **Spotify**: using the [`spotifyr`](https://github.com/charlie86/spotifyr) package, you could download *audio features* --danceability, energy, valence-- for every song of every artist. It was glorious.
+This section used to teach APIs with **Spotify**: using the [`spotifyr`](https://github.com/sillyplots/spotifyr) package, you could download *audio features* --danceability, energy, valence-- for every song of every artist. It was glorious.
 
 Then, on **27 November 2024, Spotify shut those endpoints down** for new applications. No deprecation period, no replacement. Thousands of analyses, blog posts, theses and workshop sessions --including this one-- broke overnight.
 
@@ -515,7 +515,7 @@ Now let's compare some musical features of Radiohead's studio albums. We will pl
 
 -   **Valence**: a measure from 0 to 1 describing the musical *positiveness* conveyed by a track. Tracks with high valence sound more positive (e.g. happy, cheerful, euphoric), while tracks with low valence sound more negative (e.g. sad, depressed, angry).
 
-Looking at the density of each variable for every album, we can see that *A Moon Shaped Pool*, their latest album and most mellow-sounding one, has the least energy, while *The King of Limbs*, which include the awesome track *Lotus Flower*, is the most energetic one.
+Looking at the density of each variable for every album, we can see that *A Moon Shaped Pool*, their latest album and most mellow-sounding one, has the least energy, while *The King of Limbs*, which includes the awesome track *Lotus Flower*, is the most energetic one.
 
 The code below is kept as a **museum piece** --it ran while the API was alive, and the figure it produced is preserved beneath it. Read the code anyway: the `pivot_longer()` + `geom_density_ridges()` + `facet_wrap()` pattern is one you will reuse constantly, and Practice 2 asks you to reproduce it on the archive snapshot.
 
@@ -549,7 +549,7 @@ radiohead_spotify |>  # <37>
 41. With the `ggridges` package we use a better geometry for the data, overlapping density plots --one ridge per album. `show.legend=FALSE` drops the legend, redundant here because the facets are already labelled.
 42. We add some labels to the plot.
 43. Remember faceting? The long format pays off: `facet_wrap(~metric)` splits the plot into 4 panels in 2 rows, one per musical feature, each with its own x-scale.
-44. We apply a manual color scale, so that each metric gets its own color.
+44. We apply a manual colour scale, so that each metric gets its own colour.
 
 ![Rendered in November 2024, days before the API closed. Dance Thom, dance!](radiohead_archive.png){width="100%"}
 
@@ -571,7 +571,7 @@ The `pivot_wider()` function allows you to spread values across new columns base
 
 Let's have some fun with the Spotify snapshot.
 
-The archive holds the full discographies of 8 artists --the favourites of the workshop's first cohort. Below we attach each favorite artist to the person who chose them, using `tribble()` to build the lookup table by hand and `left_join()` to merge it in.
+The archive holds the full discographies of 8 artists --the favourites of the workshop's first cohort. Below we attach each favourite artist to the person who chose them, using `tribble()` to build the lookup table by hand and `left_join()` to merge it in.
 
 ```{r 2.tastes}
 
@@ -597,9 +597,9 @@ favorites_music <- spotify_archive |> # <46>
 favorites_music # <47>
 ```
 
-45. We create a list of favorites artists using `tribble`, a function we can use to manually create rectangular databases on the fly. First row uses the `~` operator to name variables and the rest are the values of each observation.
+45. We create a list of favourite artists using `tribble`, a function we can use to manually create rectangular databases on the fly. First row uses the `~` operator to name variables and the rest are the values of each observation.
 46. `left_join()` keeps every song in the snapshot and adds the `name` column wherever the artist matches --joins are the glue of the tidyverse, and you will use them constantly.
-47. When the API was alive, this step was a `for` loop of API calls, one per artist (you already met loops in Part I). The snapshot spares us the wait --and the rate limits.
+47. When the API was alive, this step was a `for` loop of API calls, one per artist (you'll replace loops like that one with `purrr` in [Do it well, do it fast](/sessions_workshop/10-parallel/10-parallel.qmd)). The snapshot spares us the wait --and the rate limits.
 
 ::: column-margin
 ::: callout-tip
@@ -611,7 +611,7 @@ favorites_music # <47>
 :::
 ::: 
 
-Now let's compare the songs of these artists in a Energy/Valence scale inspired by this [Sentify Shiny app](http://rcharlie.net/sentify/). We will improve our aesthetics by using a color palette inspired by a [great work of art in the Metropolitan Museum of Art in New York](https://github.com/BlakeRMills/MetBrewer).
+Now let's compare the songs of these artists on an Energy/Valence scale inspired by Charlie Thompson's [Sentify Shiny app](https://github.com/sillyplots/sentify). We will improve our aesthetics by using a colour palette inspired by a [great work of art in the Metropolitan Museum of Art in New York](https://github.com/BlakeRMills/MetBrewer).
 
 ```{r 2.favorites-2}
 
@@ -639,7 +639,7 @@ favorites_music |> # <48>
 50. Create a first geometry and vary the point by artist using `shape`
 51. Add some lines to create 4 quadrants
 52. Include the name of each quadrant using `annotate`
-53. Use a color palette from the `MetBrewer` package. We pick Ingres.
+53. Use a colour palette from the `MetBrewer` package. We pick Ingres.
 54. Specify the shapes of points manually
 55. Use a theme that cleans the plot from noisy background
 56. Position the legend at the top of the figure
@@ -651,7 +651,7 @@ With a single step we can make this plot interactive using the **`plotly`** libr
 
 We can turn a **`ggplot2`** figure into an interactive plot easily using the `ggplotly()` function. Look at the trick in the `geom_point()` function to make the tooltip work well.
 
-Plotly wraps well around ggplot, and gives additional funcionalities with very little additional coding.
+Plotly wraps well around ggplot, and gives additional functionalities with very little additional coding.
 
 ```{r 2.plotly}
 
@@ -677,18 +677,18 @@ plotly::ggplotly(favorites_plot, tooltip = "text") # <60>
 
 ```
 
-59. Create tooltip information for `ggplotly`. <br> is new line in HTML.
+59. Create tooltip information for `ggplotly`. `<br>` is a new line in HTML.
 60. Use `ggplotly` on a `ggplot` figure to transform it to an interactive plot.
 
 ::: callout-tip
 ## Want to create a plot interactively? Use [**`esquisse`**](https://cran.r-project.org/web/packages/esquisse/vignettes/get-started.html)
 
-**`esquisse`** is a package that allows you to create and edit a plot using point-click. It will appear as an Add-in like shown below or you can launch it in the console using `esquisser()`.
+**`esquisse`** is a package that allows you to create and edit a plot using point-and-click. It will appear as an Add-in like shown below or you can launch it in the console using `esquisser()`.
 
 ![esquisse](esquisse.png)
 :::
 
-## Bonus track: Better interactivity with [girafe](http://davidgohel.github.io/ggiraph/){.unnumbered} 
+## Bonus track: Better interactivity with [ggiraph](https://davidgohel.github.io/ggiraph/){.unnumbered} 
 
 ### Using 🦒 in the Maddison Project data
 
@@ -696,7 +696,7 @@ We can create multiple graphs that interact with each other using the **`ggiraph
 
 We'll add time to the first plot we made in this session. First, we will create two visualisations that will be connected to one another: a line that tracks GDP per capita through time, and a distributional plot like the latest version of the plot above.
 
-We create each one separately using the extended geoms that the **`ggiraph`** package includes, which has the option `_interactive` at the end of geoms we already know. So we'll use `geom_point_interactive()` for the line plot and `geom_boxplot_interactive()` for the distributional plot, and connect them to each other with the **data_id** and **tooltip** options.
+We create each one separately using the extended geoms that the **`ggiraph`** package includes, which add the suffix `_interactive` to geoms we already know. So we'll use `geom_path_interactive()` for the line plot and `geom_boxplot_interactive()` for the distributional plot, and connect them to each other with the **data_id** and **tooltip** options.
 
 We can then add both plots (literally, add them using the **`patchwork`** package) inside of `girafe()` in the `ggobj` option. Using the function `plot_annotation()` we can add title, subtitle and caption in a way that applies to both plots.
 
@@ -720,7 +720,7 @@ maddison_time <- owid_maddison_proj_df2 |>
   dplyr::arrange(continent, year) |>
   ggplot(aes(x=year,y=m_gdppc, color=continent))+
   geom_path_interactive(aes(data_id=continent, tooltip=continent))+  # <63>
-  scale_x_log10()+
+  scale_y_log10()+
   scale_color_brewer(palette="Set1")+
   labs(x = NULL, y = "GDP per capita") +
   theme_classic()+
@@ -735,7 +735,7 @@ maddison_continent <- owid_maddison_proj_df2 |>
   geom_boxplot_interactive(aes(data_id=continent, tooltip=continent))+ # <65>
   scale_x_continuous(trans = "log10",labels = scales::number_format(big.mark=" "))+
   scale_fill_brewer(palette="Set1")+
-  labs(x = NULL, y = "GDP per capita") + 
+  labs(x = "GDP per capita", y = NULL) + 
   theme_classic()+
   theme(legend.position = "none")
 
@@ -758,10 +758,10 @@ options = list(
 61. To create a summary statistic by year and continent, we first group the data
 62. We use `summarise()` that will return only the computed tabulated result. **Gotcha**: `summarise()` on two grouping variables returns rows ordered by the *first* one (`year`), so consecutive rows alternate between continents. `geom_path()` connects points strictly in row order --with continents interleaved, every "line" would be a single disconnected point. `arrange(continent, year)` puts each continent's years back-to-back so the path actually draws a continuous line per continent.
 63. We use the `ggiraph` geom --notice the `_interactive` and the extra content in the aesthetics: **data_id** and **tooltip**.
-64. We add points and a violin geometries
+64. We add jittered points and a violin geometry
 65. We add the interactive boxplot using the **data_id** and **tooltip**
 66. We open the `girafe()` function to add the interactive graphs
-67. Using the **`patchwork`** package we can layout multiple plots together
+67. Using the **`patchwork`** package we can lay out multiple plots together
 68. We can define annotations that will apply to all plots
 69. We make the selection salient by making the rest less visible using `opts_hover_inv()`
 70. We define the size of the plot
@@ -904,7 +904,7 @@ These need live network access and your own R session:
 
 -   Use the Open-Meteo archive API to download daily temperatures for **your** home town and plot the trend for your birth month.
 -   Import an indicator from OWID (append `.csv` to any grapher URL) and plot it.
--   Pick a dataset from the [**RDataset collection**](https://vincentarelbundock.github.io/Rdatasets/articles/data.html) and create two side-by-side interactive visualisations using **`ggiraph`**.
+-   Pick a dataset from the [**Rdatasets collection**](https://vincentarelbundock.github.io/Rdatasets/articles/data.html) and create two side-by-side interactive visualisations using **`ggiraph`**.
 :::::
 
 ## Key takeaways

@@ -50,13 +50,13 @@ webr:
 
 ## PART I: Cherry tree blossoms {-}
 
-People in Kyoto have been keeping track of the day the cherry trees blossom since the year 812. You can find the [data here](http://atmenv.envi.osakafu-u.ac.jp/aono/kyophenotemp4/). 
+People in Kyoto have been keeping track of the day the cherry trees blossom since the year 812. The series was compiled by Yasuyuki Aono, and Our World in Data [charts and serves it here](https://ourworldindata.org/grapher/date-of-the-peak-cherry-tree-blossom-in-kyoto). 
 
 ### Sakura
 
-Let's first plot it and add a smoothing LOESS curve. We'll use **`ggimages`** to change the point to an image of a cherry blossom and **`ggpp`** to add a plot inside of another plot that focuses attention on one part, with the `geom_plot()` function. This way we can focus attention on a particular part of the graph.
+Let's first plot it and add a smoothing LOESS curve. We'll use **`ggimage`** to change the point to an image of a cherry blossom and **`ggpp`** to add a plot inside of another plot that focuses attention on one part, with the `geom_plot()` function. This way we can focus attention on a particular part of the graph.
 
-Notice that during the XX century the cherries started to blossom way earlier than they did for over a millennium.
+Notice that during the 20th century the cherries started to blossom way earlier than they did for over a millennium.
 
 ::: column-margin
 {{< downloadthis sakura.jpg dname = sakura label="Download sakura.jpg" icon=flower3 type=success >}}
@@ -75,7 +75,7 @@ sakura_data <- readxl::read_excel(paste0(getwd(),"/KyotoFullFlower7.xlsx"), skip
   dplyr::rename("year"=1,"blossom"=2) |> # <3>
   dplyr::mutate(year = lubridate::make_date(year)) # <4>
   
-# Now we create a plot for only the XX century.  ####
+# Now we create a plot for only the 20th century ####
 sakura_xx <- tibble(x=lubridate::as_date("1800-01-01"), y=60, # <5>
                     # I save the plot as a list
                     plot = list(sakura_data |> # <5>
@@ -121,7 +121,7 @@ sakura
 3. Rename the first two columns to `year` and `blossom`
 4. Transform the year into a proper date using the `make_date()` function from the **`lubridate`** package
 5. We first create a tibble with the coordinates where we want our inside plot to be, and a ggplot object saved as a list (all ggplot objects are lists!). We customise the plot, as always
-6. To use **`ggimages`** we need to create a variable with the location of the image file in our directory. The image can vary per observation.
+6. To use **`ggimage`** we need to create a variable with the location of the image file in our directory. The image can vary per observation.
 7. We use the `geom_plot()` geometry to embed a plot within a plot, using the label aesthetic to place the plot and data from the tibble we just created.
 8. We create some annotations to box the plot within the other plot
 9. We change the shape of the point for an image stored locally or in a URL using the `geom_image()` geometry and the image aesthetic.
@@ -137,7 +137,7 @@ Dates are notoriously annoying to handle, but the [lubridate](https://lubridate.
 
 To introduce animation with **`gganimate`** package, let's drop the inference from the smooth curve and add two lines of code to the ggplot: `transition_time()`, which will create one frame per year in the data, and `shadow_mark()`, which will keep old values once they are shown.
 
-What do these functions mean? How do they work? How do you export the animations? 
+What do these functions mean? How do they work? How do you export the animations? The annotations below answer the first two. For the third, `anim_save()` writes the animation to a GIF file, which is how the one further down was made.
 
 ```{r sakura-animation}
 library(tidyverse)
@@ -164,7 +164,7 @@ sakura_anim <- sakura_data |>
 11. We create a variable that indicates where the image we plan to use as a point is stored
 12. Create a separate year variable for the animation using the `year()` function
 13. We create our ggplot, as usual
-14. We use the `{frame_time}` option within the brackets so the animation saves the year for each frame
+14. We put `{frame_time}` inside the subtitle's curly brackets, so each frame shows its own year
 15. We define the `transition_time()` as an integer of years, which will be our animation variable. `as.integer()` makes sure the dates don't include decimals.
 16. We add `shadow_mark()` so old points are displayed as well. 
 
@@ -203,15 +203,15 @@ sakura
 Check out the [**`gganimate`**](https://gganimate.com/reference/index.html) references to learn what options best suit your project
 :::
 
-## PART II: COVID-19 & C02 emissions {-}
+## PART II: COVID-19 & CO2 emissions {-}
 
-Now let's turn to another topics. First we'll create an animation at what has happened over the past few years with the COVID-19 pandemic, then we'll turn to pollution.
+Now let's turn to other topics. First we'll create an animation of what happened during the first two years of the COVID-19 pandemic, then we'll turn to pollution.
 
 ### COVID-19 data from OWID
 
 First, we're going to use the data from the [COVID-19 repository from Our World in Data](https://github.com/owid/covid-19-data/tree/master/public/data) available in GitHub.
 
-```{r 4.covid}
+```{r 5.covid}
 
 library(tidyverse)
 
@@ -222,9 +222,9 @@ owid_covid <- readr::read_csv("https://raw.githubusercontent.com/owid/covid-19-d
 
 Now we're going to paint a grim picture: The evolution of COVID-19 related deaths per million inhabitants, in each of our countries, in 2020 and 2021.
 
-We will first create ggplot objects for each year using a simple loop and store them in a list. Then we'll add a few simple **`gganimate`** parameters and voila, animation done. The key parameter is the one that defines the transition between different moments `transition_time()` where we add our time variable. The rest is just decoration to smooth the change between one state and the next one, showing each new state while keeping the old ones, and define how each state is introduced.
+We will first create ggplot objects for each year using a simple loop and store them in a list. Then we'll add a few simple **`gganimate`** parameters and voilà, animation done. The key parameter is the one that defines the transition between different moments `transition_time()` where we add our time variable. The rest is just decoration to smooth the change between one state and the next one, showing each new state while keeping the old ones, and define how each state is introduced.
 
-```{r 4.covid-animation}
+```{r 5.covid-animation}
 
 library(tidyverse)
 library(RColorBrewer)
@@ -239,7 +239,7 @@ covid_animation <- list()
 for(i in c(2020:2021)) {
 
  # Step 1:  Create plot for each year 
- covid_plot[[paste0("year_",i)]] <- owid_covid %>%
+ covid_plot[[paste0("year_",i)]] <- owid_covid |>
   # Format date
   dplyr::mutate(date = lubridate::as_date(date),
                 n = row_number(),
@@ -249,7 +249,7 @@ for(i in c(2020:2021)) {
   ggplot(aes(x=date,y=total_deaths_per_million,color=location))+
   geom_point(alpha=0.7)+
   labs(title = i,
-       # Notice the bracket term, which will show the frame rate for the animation we define below
+       # Notice the bracket term, which will show the month of each frame of the animation we define below
        subtitle = "Month: {frame_time}",
        x=NULL,
        y=NULL)+
@@ -297,7 +297,7 @@ gganimate::anim_save(animation = covid_animation[[2]],
                      res = 150)
 
 # Cover for blog ####
-covid_cover <- owid_covid %>%
+covid_cover <- owid_covid |>
   dplyr::mutate(date = lubridate::as_date(date),
                 n = row_number(),
                 year = lubridate::year(date)) |>
@@ -335,11 +335,11 @@ Even though Italy was the locus for the spread of the virus in Europe, the speed
 
 ### CO2 emissions
 
-We find the repository from the [Our World in Data](https://github.com/owid/owid-datasets/tree/master/datasets/Annual%20share%20of%20CO2%20emissions%20OWID%20based%20on%20GCP%2C%202017) and import the data.
+We find the [repository in Our World in Data's GitHub](https://github.com/owid/owid-datasets/tree/master/datasets/Annual%20share%20of%20CO2%20emissions%20(OWID%20based%20on%20GCP%2C%202017)) and import the data.
 
-Now we use the package **`treemapify`** to build a treemap of the distribution of emissions through time using the `geom_treemap()` geometry. We place the the `inferno` option for the fill in the **`viridis`** package and done.
+Now we use the package **`treemapify`** to build a treemap of the distribution of emissions through time using the `geom_treemap()` geometry. We place the `inferno` option for the fill in the **`viridis`** package and done.
 
-```{r 4.c02-anim}
+```{r 5.co2-anim}
 library(treemapify)
 library(tidyverse)
 library(janitor)
@@ -360,14 +360,14 @@ co2_anim <- owid_co2 |>
     place = "centre",
     grow = TRUE)+
   scale_fill_viridis_c(option = "inferno", name = "CO2 emissions (% total)")+
-  labs(title = "{closest_state}", caption = "Source: OWID based on GPC 2017")+
+  labs(title = "{closest_state}", caption = "Source: OWID based on GCP 2017")+
   theme(legend.position = "top")+
   gganimate::transition_states(as.integer(year))+
   ease_aes("linear")
 
 ```
 
-```{r c02-save}
+```{r co2-save}
 #| include: false
 #| eval: false
 
@@ -380,15 +380,15 @@ gganimate::anim_save(animation = last_animation(),
                      res = 150)
 ```
 
-![C02 Emissions in the XX century](co2_anim.gif){#fig-c02}
+![CO2 emissions since 1900](co2_anim.gif){#fig-co2}
 
 ## Bonus track: Correlation, causation --and why data never speaks for itself {-}
 
-*"While correlation does not imply causation, causation does imply correlation"* wrote Daniel Kahneman in his latest book [**Noise**](https://www.amazon.com/Noise-Flaw-Human-Judgment/dp/B08LNYM39M/ref=sr_1_1?keywords=daniel+kahneman+noise&qid=1668962412&sr=8-1). Mr Kahneman, I'm afraid you are wrong. By a mile. Let's see why.
+*"While correlation does not imply causation, causation does imply correlation"* wrote Daniel Kahneman in his last book, [**Noise**](https://www.amazon.com/Noise-Flaw-Human-Judgment/dp/B08LNYM39M). Mr Kahneman, I'm afraid you are wrong. By a mile. Let's see why.
 
-We only need to prove that a causal relationship might not reflect a correlation. This is surprisingly easy to do, conceptually and statistically. Let's first see a simple simulation and then look at a nice example from Scott Cunningham's [*Causal Inference: The Mixtape"*](https://mixtape.scunning.com/).
+We only need to prove that a causal relationship might not reflect a correlation. This is surprisingly easy to do, conceptually and statistically. Let's first see a simple simulation and then look at a nice example from Scott Cunningham's [*Causal Inference: The Mixtape*](https://mixtape.scunning.com/).
 
-The simple setup below shows two random variables $X$ and $Y$ that represent 10 000 independent tosses of a fair coin. Now let's build another variable $Z$ that takes the value of 1 when $X$ and $Y$ both land the same result, heads of tails. This means that $Z$ is, by definition, causally dependent on both $X$ and $Y$, as when both variables are equal, $Z$ is "turned on".
+The simple setup below shows two random variables $X$ and $Y$ that represent 10 000 independent tosses of a fair coin. Now let's build another variable $Z$ that takes the value of 1 when $X$ and $Y$ both land the same result, heads or tails. This means that $Z$ is, by definition, causally dependent on both $X$ and $Y$, as when both variables are equal, $Z$ is "turned on".
 
 ```{r cause-cor}
 X <- rbinom(seq(1:1e4),1,0.5)
@@ -419,7 +419,9 @@ How the hell are these correlations bordering 0 if these variables are actually 
 
 Run the code again. Make the samples bigger. This is not a fluke.
 
-Well, it turns out that this is a case of a ***collider***, and one of the many reasons why you cannot ignore causal inference theory.
+Here is the trick: knowing $X$ alone tells you nothing about $Z$, because $Z$ only switches on when $X$ *and* $Y$ agree, and $Y$ is a fair coin either way. The causal effect is real, but it lives in the *combination* of the two causes, and a correlation, a single straight-line summary of one pair, cannot see it.
+
+$Z$ is also a ***collider***: two arrows point into it. Condition on it (look only at the tosses where $Z = 1$) and $X$ and $Y$, independent coins, suddenly become perfectly correlated. That is one of the many reasons why you cannot ignore causal inference theory.
 
 ::: {.column-margin}
 !['You like DAGs?' - Mickey, Snatch (2000)](snatch-dags.png)
@@ -434,10 +436,10 @@ library(dagitty)
 library(ggdag)
 
 dagify(
-  W ~ Y,
-  W ~ Z,
-  coords = list(x = c(Y = 2, Z = 1, W = 1.5),
-                y = c(Y = 1, Z = 1, W = 2))
+  Z ~ X,
+  Z ~ Y,
+  coords = list(x = c(X = 1, Y = 2, Z = 1.5),
+                y = c(X = 1, Y = 1, Z = 2))
 ) |>
   ggplot(aes(x = x, y = y, xend = xend, yend = yend)) +
   geom_dag_edges() +
@@ -458,12 +460,11 @@ library(ggthemes)
 # Create collider ####
 collider_data <- tibble(X = rnorm(200)+1,
                         Y = rnorm(200)+1,
-                        time="1") %>%
-  dplyr::mutate(C = ifelse((X + Y + rnorm(200)/2)>2,1,0)) %>%
-  dplyr::group_by(C) %>%
-  dplyr::mutate(mean_X=mean(X),mean_Y=mean(Y)) %>%
-  dplyr::ungroup() 
-  #dplyr::mutate(Y_hat = predict(lm(Y~X,data=collider_data)))
+                        time="1") |>
+  dplyr::mutate(C = ifelse((X + Y + rnorm(200)/2)>2,1,0)) |>
+  dplyr::group_by(C) |>
+  dplyr::mutate(mean_X=mean(X),mean_Y=mean(Y)) |>
+  dplyr::ungroup()
 
 cor(collider_data$X,collider_data$Y)
 
@@ -472,28 +473,28 @@ collider_before_cor <- paste("1. Start with raw data, ignoring C. Correlation be
 
 collider_after_cor <- paste("7. Analyze what's left! Correlation between X and Y controlling for C: ",round(cor(collider_data$X-collider_data$mean_X,collider_data$Y-collider_data$mean_Y),3),sep='')
 
-# Add animation steps: 2 (demean X), 3 (demean X and Y) and 4 (label)
+# Stack seven copies of the data, one per step of the animation ####
 collider_full <- dplyr::bind_rows(
   #Step 1: Raw data only
-  collider_data %>% 
+  collider_data |>
     dplyr::mutate(mean_X=NA,mean_Y=NA,C=0,time=collider_before_cor),
-  #Step 2: Raw data only
-  collider_data %>% 
+  #Step 2: Colour the points by C
+  collider_data |>
     dplyr::mutate(mean_X=NA,mean_Y=NA,time='2. Separate data by the values of C.'),
   #Step 3: Add x-lines
-  collider_data %>% 
+  collider_data |>
     dplyr::mutate(mean_Y=NA,time='3. Figure out what differences in X are explained by C'),
-  #Step 4: X de-meaned 
-  collider_data %>% 
+  #Step 4: X de-meaned
+  collider_data |>
     dplyr::mutate(X = X - mean_X,mean_X=0,mean_Y=NA,time="4. Remove differences in X explained by C"),
   #Step 5: Remove X lines, add Y
-  collider_data %>% 
+  collider_data |>
     dplyr::mutate(X = X - mean_X,mean_X=NA,time="5. Figure out what differences in Y are explained by C"),
   #Step 6: Y de-meaned
-  collider_data %>% 
+  collider_data |>
     dplyr::mutate(X = X - mean_X,Y = Y - mean_Y,mean_X=NA,mean_Y=0,time="6. Remove differences in Y explained by C"),
   #Step 7: Raw demeaned data only
-  collider_data %>% 
+  collider_data |>
     dplyr::mutate(X = X - mean_X,Y = Y - mean_Y,mean_X=NA,mean_Y=NA,time=collider_after_cor)) |>
   dplyr::mutate(C = factor(C))
 
@@ -533,7 +534,7 @@ gganimate::anim_save(animation = collider_anim,
 
 ``` 
 
-![Collider bias, or how a spurious correlations is born](collider.gif){#fig-collider width=75%}
+![Collider bias, or how a spurious correlation is born](collider.gif){#fig-collider width=75%}
 
 ### The Mixtape example: beauty, talent, and the movies
 
@@ -582,7 +583,7 @@ coll <- tibble(x = beauty, y = talent, group = ifelse(star, "Movie star", "The r
 ojs_define(conf_r = conf, med_r = med, coll_r = coll) # <2>
 ```
 
-1. "Adjusting" here is done the honest way, by **residualizing**: we keep only the part of each variable that the third variable does *not* explain. This is exactly what the step-by-step demeaning animation above does, and exactly what multiple regression does for you silently.
+1. "Adjusting" here is done the honest way, by **residualising**: we keep only the part of each variable that the third variable does *not* explain. This is exactly what the step-by-step demeaning animation above does, and exactly what multiple regression does for you silently.
 2. `ojs_define()` hands R objects to **Observable JS**, Quarto's built-in language for interactive graphics --this is what makes the toggles below react instantly, with no server behind this page.
 
 ```{ojs}
@@ -650,17 +651,17 @@ The moral fits in one sentence, and it is the most important sentence in this wo
 
 -   [**The DAG Almanac**](https://dags.andrewheiss.com/) by Andrew Heiss --interactive confounders, mediators and colliders, with the do-calculus behind them (and it's built with Quarto, like this site).
 -   [**Understanding adjustment**](https://rpsychologist.com/descriptive-adjustment/) by Kristoffer Magnusson --the most beautiful interactive explanation of what "controlling for" really does.
--   *The Mixtape* [chapter on DAGs](https://mixtape.scunning.com/03-directed_acyclical_graphs), free online.
--   Play more: this repo ships two little Shiny simulators, live below --or run them yourself with `shiny::runApp("shiny/collider")` / `shiny::runApp("shiny/r4dev-ovb")`.
+-   *The Mixtape* [chapter on DAGs](https://mixtape-1ed.netlify.app/03-directed_acyclical_graphs), free online.
+-   Play more: this repo ships two little Shiny simulators, live below --or run them yourself with `shiny::runApp("shiny/r4dev-collider")` / `shiny::runApp("shiny/r4dev-ovb")`.
 :::
 
 ::: {#collider-ovb .column-screen-inset layout-ncol="2"}
 ```{=html}
-<iframe src="https://nelsonamayad-r4dev-collider.share.connect.posit.cloud/" style="border: none; width: 100%; height: 900px" frameborder="0">
+<iframe src="https://nelsonamayad-r4dev-collider.share.connect.posit.cloud/" title="Collider bias simulator (Shiny app)" style="border: none; width: 100%; height: 900px" frameborder="0">
 </iframe>
 ```
 ```{=html}
-<iframe src="https://nelsonamayad-r4dev-ovb.share.connect.posit.cloud/" style="border: none; width: 100%; height: 900px" frameborder="0">
+<iframe src="https://nelsonamayad-r4dev-ovb.share.connect.posit.cloud/" title="Omitted variable bias simulator (Shiny app)" style="border: none; width: 100%; height: 900px" frameborder="0">
 </iframe>
 ```
 :::
@@ -771,8 +772,8 @@ Re-run with several values of `frame_year` -- the sequence of plots you just mad
 Rendering real animations needs gganimate and your own R session:
 
 - Make an animation of any data we've used so far, save it as a .gif and share it with the group.
-- Choose one [causal graph from Nick Huntington Klein's GitHub page](https://github.com/NickCH-K/causalgraphs), replicate it, and describe it.
-- In the three-toggle explainer above, the mediator tab erases a *real* effect when you adjust. Simulate a fourth structure --a chain with a confounder on top (**Z → X, Z → Y, X → M → Y**)-- and decide: which variables do you adjust for to recover the true effect of X on Y? Verify with `lm()`
+- Choose one [causal graph from Nick Huntington-Klein's GitHub page](https://github.com/NickCH-K/causalgraphs), replicate it, and describe it.
+- In the three-toggle explainer above, the mediator tab erases a *real* effect when you adjust. Simulate a fourth structure --a chain with a confounder on top (**Z → X, Z → Y, X → M → Y**)-- and decide: which variables do you adjust for to recover the true effect of X on Y? Verify with `lm()`.
 :::::
 
 ## Key takeaways
@@ -783,7 +784,7 @@ Rendering real animations needs gganimate and your own R session:
 - What a chart shows moving together is not, by itself, evidence that one causes the other.
 
 ::: {.continue-learning}
-[← Previous: Data from words](/sessions_workshop/03-text/03-text.qmd)
+[← Previous: What books are about](/sessions_workshop/04-topics/04-topics.qmd)
 
 [Track overview: Build with R →](/learn/build-with-r.qmd)
 

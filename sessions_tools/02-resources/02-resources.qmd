@@ -19,9 +19,9 @@ aliases:
   - /sessions_tools/10-resources/10-resources.html
 ---
 
-The joy of learning R is that you can learn anything as long as you put the time. R is free, so is RStudio. Most books on R are also free, and have wonderful online versions you can consult.
+The joy of learning R is that you can learn anything as long as you put in the time. R is free, so is RStudio. Most books on R are also free, and have wonderful online versions you can consult.
 
-Below a list of my favourite online resources on R, organised by topic:
+Below is a list of my favourite online resources on R, organised by topic:
 
 ::: columns
 ::: {.column width="50%"}
@@ -36,7 +36,7 @@ Below a list of my favourite online resources on R, organised by topic:
 
 -   [R for Data Science 1st edition](https://r4ds.had.co.nz/) and [2nd edition](https://r4ds.hadley.nz/)
 
--   [Introduction to Data Science](https://rafalab.github.io/dsbook/)
+-   [Introduction to Data Science](https://rafalab.dfci.harvard.edu/dsbook/)
 
 -   [R Programming for Data Science](https://bookdown.org/rdpeng/rprogdatascience/)
 
@@ -50,9 +50,9 @@ Below a list of my favourite online resources on R, organised by topic:
 ::: {.callout-note collapse="true" icon="false"}
 ## Mapping
 
--   [Geocomputation with R](https://geocompr.robinlovelace.net/)
+-   [Geocomputation with R](https://r.geocompx.org/)
 
--   [Spatial Data Science](https://rspatial.org/raster/#)
+-   [Spatial Data Science](https://rspatial.org/)
 
 -   [Leaflet for R](https://rstudio.github.io/leaflet/)
 :::
@@ -84,9 +84,9 @@ Below a list of my favourite online resources on R, organised by topic:
 
 -   [Quarto](https://quarto.org/docs/reference/)
 
--   [R Markdown Cookbook](https://bookdown.org/yihui/rmarkdown-cookbook/)
+-   [R Markdown Cookbook](https://pkg.yihui.org/rmarkdown-cookbook/)
 
--   [R Markdown: The Definitive Guide](https://bookdown.org/yihui/rmarkdown/)
+-   [R Markdown: The Definitive Guide](https://pkg.yihui.org/rmarkdown-book/)
 
 :::
 
@@ -133,7 +133,7 @@ Below a list of my favourite online resources on R, organised by topic:
 
 -   [Stan User's Guide](https://mc-stan.org/docs/stan-users-guide/index.html)
 
--   [Bayes Rules! An introduction to applied bayesian modelling](https://www.bayesrulesbook.com/)
+-   [Bayes Rules! An introduction to applied Bayesian modelling](https://www.bayesrulesbook.com/)
 
 -   [Tidymodels](https://www.tidymodels.org/)
 

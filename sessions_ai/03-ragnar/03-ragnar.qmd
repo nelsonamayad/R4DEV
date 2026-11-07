@@ -37,14 +37,6 @@ resources:
 
 > *"It is a capital mistake to theorize before one has data."* <br>--Arthur Conan Doyle, *A Scandal in Bohemia*
 
-## PART I: Why retrieval, not memory
-
-[Talking to machines](/sessions_ai/01-llm/01-llm.qmd) ended on an uncomfortable result: asked to judge song mood from titles alone, the model answered fluently and confidently -- and its answers had *zero* correlation with the songs' actual audio valence. The model wasn't malfunctioning. It was doing exactly what you asked, articulately, from a question the input couldn't actually answer.
-
-**Retrieval-augmented generation (RAG)** is the fix for a related but distinct problem: instead of asking a model to answer from what it memorized during training (which might be outdated, wrong, or simply not about *your* content), you first **retrieve** the actual relevant text from a real source, then hand the model that text and ask it to answer *from it*. The model stops guessing and starts reading.
-
-[**`ragnar`**](https://ragnar.tidyverse.org/) is a tidyverse-style toolkit that does the unglamorous half of RAG well: turning real documents into a searchable store. It has one function for each stage of the pipeline, and --true to form for this workshop-- we'll train it on **R4DEV's own published site**, the same trick ragnar's own homepage example plays on the *R for Data Science* book.
-
 ::: {.lesson-info}
 **Level:** Advanced &nbsp;·&nbsp; **Time:** ~60 min &nbsp;·&nbsp; **Prerequisites:** Talking to machines &nbsp;·&nbsp; **Tools:** ragnar, ellmer, DuckDB
 :::
@@ -57,6 +49,14 @@ resources:
 - Register a retrieval store as a tool an LLM can call on its own.
 - See the whole pipeline running live in the "Ask R4DEV" capstone at the end of this lesson.
 
+## PART I: Why retrieval, not memory
+
+[Talking to machines](/sessions_ai/01-llm/01-llm.qmd) ended on an uncomfortable result: asked to judge song mood from titles alone, the model answered fluently and confidently -- and its answers had *zero* correlation with the songs' actual audio valence. The model wasn't malfunctioning. It was doing exactly what you asked, articulately, from a question the input couldn't actually answer.
+
+**Retrieval-augmented generation (RAG)** is the fix for a related but distinct problem: instead of asking a model to answer from what it memorised during training (which might be outdated, wrong, or simply not about *your* content), you first **retrieve** the actual relevant text from a real source, then hand the model that text and ask it to answer *from it*. The model stops guessing and starts reading.
+
+[**`ragnar`**](https://ragnar.tidyverse.org/) is a tidyverse-style toolkit that does the unglamorous half of RAG well: turning real documents into a searchable store. It has one function for each stage of the pipeline, and --true to form for this workshop-- we'll train it on **R4DEV's own published site**, the same trick ragnar's own homepage example plays on the *R for Data Science* book.
+
 ::: callout-tip
 ## The whole pipeline in one sentence
 
@@ -67,7 +67,7 @@ resources:
 
 The web is HTML: navigation bars, footers, cookie banners, ads. None of that belongs in a knowledge base. `read_as_markdown()` fetches a URL and extracts just the article content (by default it keeps `<main>` and discards `<nav>`), returning clean markdown.
 
-```{r 11.read}
+```{r 3.read}
 library(ragnar)
 
 page <- "https://nelsonamayad.github.io/R4DEV/sessions_workshop/02-plots/02-plots.html"
@@ -81,7 +81,7 @@ cat(substr(md, 1, 400)) # <2>
 
 To index more than one page, `ragnar_find_links()` crawls a page for its own internal links --the same instinct as session 7's scraping, aimed at an entire site instead of one page:
 
-```{r 11.links}
+```{r 3.links}
 links <- ragnar_find_links(page) # <3>
 
 length(links) # <4>
@@ -95,7 +95,7 @@ head(links, 6)
 
 An LLM's context window is finite, and stuffing an entire session into one prompt wastes it on irrelevant paragraphs. `markdown_chunk()` splits a document into overlapping, retrievable pieces, trying to respect paragraph and heading boundaries rather than cutting mid-sentence.
 
-```{r 11.chunk}
+```{r 3.chunk}
 chunks <- markdown_chunk(md) # <5>
 
 class(chunks) # <6>
@@ -113,7 +113,7 @@ An **embedding** turns text into a vector of numbers positioned so that similar 
 
 `ragnar` speaks to embedding providers the same way `ellmer` speaks to chat providers: `embed_openai()`, `embed_google_gemini()`, `embed_azure_openai()`, `embed_bedrock()`... one function per provider, same interface. We will use **`embed_ollama()`**, which runs a model entirely on your own machine via [Ollama](https://ollama.com/) --no API key, no quota, no cost, ever. Install Ollama, pull an embedding model once (`ollama pull embeddinggemma`), and you have a private, free embedding service running on `localhost`.
 
-```{r 11.embed}
+```{r 3.embed}
 embed_fn <- ragnar::embed_ollama(model = "embeddinggemma") # <8>
 
 vec <- embed_fn("How do I make an interactive map?") # <9>
@@ -135,11 +135,11 @@ Building the "Ask R4DEV" capstone (end of this session) first tried a paid embed
 
 Reading, chunking and embedding one page by hand is instructive; indexing a whole site by hand is tedious. `ragnar_store_create()` opens a DuckDB file (or `:memory:`) configured to hold chunks and their vectors, and `ragnar_store_ingest()` does read + chunk + embed + insert + index in one call, for as many pages as you give it.
 
-```{r 11.store}
+```{r 3.store}
 #| eval: false
 
 # Keep the site to its own session pages, skip everything external
-session_links <- links[grepl("sessions_(workshop|tools)/.*\\.html$", links)] # <11>
+session_links <- links[grepl("sessions_(workshop|ai|thinking|tools)/.*\\.html$", links)] # <11>
 
 store <- ragnar_store_create( # <12>
   "r4dev_ragnar.duckdb",
@@ -153,6 +153,8 @@ ragnar_store_ingest(store, session_links, build_index = TRUE) # <13>
 11. Filter the crawl down to R4DEV's own session pages --no point indexing CRAN or GitHub in *our* knowledge base.
 12. A named file instead of `:memory:` means the store survives after R exits --exactly what a deployed app needs.
 13. One call: every page gets read, chunked, embedded, and inserted, and both search indexes (below) get built at the end. Ingestion runs in parallel workers automatically.
+
+The output below was captured in July 2026, when the site still lived on Netlify and had fewer lessons --the lesson paths in it have moved since.
 
 ```
 #> Launching 2 parallel workers.
@@ -172,9 +174,9 @@ ragnar_store_ingest(store, session_links, build_index = TRUE) # <13>
 A store speaks two retrieval languages, and they disagree often enough to be worth knowing both:
 
 - **`ragnar_retrieve_vss()`** -- vector similarity search. Finds chunks whose *meaning* is close to the query, even with no shared words. Needs an embedding of the query itself, computed the same way the chunks were.
-- **`ragnar_retrieve_bm25()`** -- classic keyword ranking (the same algorithm the `ggsql`/DuckDB FTS work in [Chat with your data](/sessions_ai/02-llm-apps/02-llm-apps.qmd) used). Finds chunks that share the query's actual words. Needs no embedding step at all.
+- **`ragnar_retrieve_bm25()`** -- classic keyword ranking, the algorithm behind most search engines before embeddings, run here by DuckDB's full-text-search extension. Finds chunks that share the query's actual words. Needs no embedding step at all.
 
-```{r 11.retrieve}
+```{r 3.retrieve}
 #| eval: false
 
 ragnar_retrieve_vss(store, "how do I show information on hover", top_k = 3) # <14>
@@ -182,7 +184,7 @@ ragnar_retrieve_bm25(store, "girafe tooltip", top_k = 3) # <15>
 ```
 
 14. A semantic query with no exact keyword overlap ("hover", "information" --neither session actually uses those words) --VSS still lands on `02-plots`, which is genuinely where R4DEV's `ggiraph` tooltip content lives.
-15. The exact term "tooltip" pulls in `05-maps` too --it reuses the same `ggiraph` trick from session 2. Notice both methods can agree; the honest lesson isn't "VSS always wins," it's that they fail in *different* ways --VSS on vocabulary mismatch, BM25 on paraphrase.
+15. The exact term "tooltip" pulls in the maps lesson too (then numbered `05-maps`) --it reuses the same `ggiraph` trick from session 2. Notice both methods can agree; the honest lesson isn't "VSS always wins," it's that they fail in *different* ways --VSS on vocabulary mismatch, BM25 on paraphrase.
 
 ```
 #> # VSS  -- "how do I show information on hover" (no shared words with the text below)
@@ -208,7 +210,7 @@ BM25 needs nothing but the stored text --it runs anywhere, including a server wi
 
 [Talking to machines](/sessions_ai/01-llm/01-llm.qmd) taught tool calling by hand: write a function, describe it, register it, let the model decide when to call it. `ragnar_register_tool_retrieve()` does exactly that for retrieval in one line --the model gets to decide *when* it needs to search, instead of your code always searching before every message.
 
-```{r 11.tool}
+```{r 3.tool}
 #| eval: false
 
 library(ellmer)
@@ -250,10 +252,10 @@ chat$chat("What R package does this workshop use for structured data extraction 
 
 ## Capstone: Ask R4DEV, rebuilt {#capstone-ask-r4dev}
 
-This is the deployed, always-on version of everything above: a chatbot that answers questions about R4DEV using only real, retrieved excerpts from the 13 other sessions. It's built with `ragnar`'s own ingestion pipeline (a real improvement over an earlier hand-rolled version of this app, which chunked by regex-splitting on markdown headings instead of `markdown_chunk()`'s semantic boundaries).
+This is the deployed, always-on version of everything above: a chatbot that answers questions about R4DEV using only real, retrieved excerpts from the rest of this site's lessons and pages. It's built with `ragnar`'s own ingestion pipeline (a real improvement over an earlier hand-rolled version of this app, which chunked by regex-splitting on markdown headings instead of `markdown_chunk()`'s semantic boundaries).
 
 ```{=html}
-<iframe src="https://nelsonamayad-r4dev-ragnar.share.connect.posit.cloud/" style="border: none; width: 100%; height: 650px" frameborder="0">
+<iframe src="https://nelsonamayad-r4dev-ragnar.share.connect.posit.cloud/" title="Ask R4DEV: retrieval-augmented chatbot" style="border: none; width: 100%; height: 650px" frameborder="0">
 </iframe>
 ```
 
@@ -270,7 +272,7 @@ Semantic search sounds like magic until you compute one by hand. The Basic tier 
 ::::: {.callout-note icon="false" collapse="true"}
 # Basic
 
-Retrieve the best chunk for the question *"how do I color regions of a map by a value?"* -- already embedded as a vector below. Two blanks: the dot product at the heart of cosine similarity, and the verb that ranks the results.
+Retrieve the best chunk for the question *"how do I colour regions of a map by a value?"* -- already embedded as a vector below. Two blanks: the dot product at the heart of cosine similarity, and the verb that ranks the results.
 
 ```{webr}
 #| exercise: ex_a03_basic
@@ -334,7 +336,7 @@ Real stores, real embeddings -- your own R session with ragnar and Ollama instal
 
 -   Crawl a small documentation site you use often (a package's `pkgdown` site is a good target) and build a store from its first 5-10 pages.
 -   Retrieve with `ragnar_retrieve_bm25()` for a question you already know the answer to. Does it find the right page?
--   Take three questions about R4DEV and compare `ragnar_retrieve_vss()` against `ragnar_retrieve_bm25()` for each. Which query type (conceptual vs. keyword-heavy) favors which method?
+-   Take three questions about R4DEV and compare `ragnar_retrieve_vss()` against `ragnar_retrieve_bm25()` for each. Which query type (conceptual vs. keyword-heavy) favours which method?
 -   Change `markdown_chunk()`'s `target_size` to something much smaller (e.g. 400) and re-inspect the store. What happens to retrieval quality on a broad question versus a specific one?
 :::::
 

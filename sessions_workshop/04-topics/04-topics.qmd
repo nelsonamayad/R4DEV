@@ -116,14 +116,14 @@ shuffle_books |>
 1. Create a `tribble` with the Gutenberg ID for each book
 2. Download all the books. Use [another mirror](https://www.gutenberg.org/MIRRORS.ALL) if the download does not work.
 
-Alternatively, you can read the plain text files for each book, as the `gutenbergr` mirrors might not work using the `readLines` function:
+Gutenberg mirrors come and go, so here is a sturdier route that this page itself uses when it renders: read each book's plain-text file straight from Project Gutenberg with `readLines()`. It overwrites `shuffle_books` from the chunk above.
 
 ```{r 4-shuffle-books-alt}
 
-# Add URL for plan text for each book ####
+# Add URL for the plain text of each book ####
 shuffle_titles_url <- tribble(~title,~gutenberg_id, ~url,
-            "The Art of War", 17405,"https://www.gutenberg.org/cache/epub/132/pg132.txt",
-            "The Prince", 26253,"https://www.gutenberg.org/cache/epub/57037/pg57037.txt",
+            "The Art of War", 132,"https://www.gutenberg.org/cache/epub/132/pg132.txt",
+            "The Prince", 57037,"https://www.gutenberg.org/cache/epub/57037/pg57037.txt",
             "On Liberty", 34901,"https://www.gutenberg.org/cache/epub/34901/pg34901.txt",
             "Pride and Prejudice",1342,"https://www.gutenberg.org/cache/epub/1342/pg1342.txt",
             "War and Peace",2600,"https://www.gutenberg.org/cache/epub/2600/pg2600.txt",
@@ -184,7 +184,7 @@ What is a topic? In LDA, topics are **latent variables**, variables we can't obs
 
 For instance, in news articles, a topic might represent the probability distribution over words such as *politics*, *government*, *sports* or *election*. In a scientific publication, topics might represent the probability distribution over words such as *science*, *research* and *technology*.
 
-Topics are inferred by the LDA model, and the number of topics is usually specified by the modeler before training the model. LDA will group words together in the corpus, creating topics based on the co-occurrence of words in the documents. These inferred topics can be used for different downstream tasks such as document classification, which is what we'll do.
+Topics are inferred by the LDA model, and the number of topics is usually specified by the modeller before training the model. LDA will group words together in the corpus, creating topics based on the co-occurrence of words in the documents. These inferred topics can be used for different downstream tasks such as document classification, which is what we'll do.
 
 ```{mermaid}
 flowchart LR
@@ -194,7 +194,7 @@ flowchart LR
     classDef doc fill:#E46507
 ```
 
-Before estimating our model, we need to transform the data we tokenized into a *Document Term Matrix*, which is needed as an input for the function that actually estimates the model. This is easy enough using the `cast_dtm()` function.
+Before estimating our model, we need to transform the data we tokenised into a *Document Term Matrix*, which is needed as an input for the function that actually estimates the model. This is easy enough using the `cast_dtm()` function.
 
 Then we estimate our model. We use $k = 6$ because we have 6 books, and run the model with the `LDA()` function from **`topicmodels`**:
 
@@ -212,7 +212,7 @@ shuffle_dtm <- chapter_word |>
 shuffle_lda <- topicmodels::LDA(shuffle_dtm, # <12>
                                 # As many topics as books, but we can include more if we wanted to
                                 k = length(unique(shuffle_titles$gutenberg_id)), # <13>
-                                # For reproduciblity 
+                                # For reproducibility
                                 control = list(seed = 1234)) # <14>
 ```
 
@@ -221,7 +221,7 @@ shuffle_lda <- topicmodels::LDA(shuffle_dtm, # <12>
 13. *k* represents the number of topics.
 14. We use a seed to make sure the results replicate
 
-Let's look at the words with the highest probabilities to below to each of the 6 topics. There are clearly some words from each book that are more salient in some topics. Let's get serious and use all the model results.
+Let's look at the words with the highest probabilities to belong to each of the 6 topics. There are clearly some words from each book that are more salient in some topics. Let's get serious and use all the model results.
 
 ```{r 4.shuffle-check-topics}
 
@@ -249,9 +249,11 @@ broom::tidy(shuffle_lda, matrix = "beta") |>  # <15>
 
 ### Working with word-topic ($\beta$) and topic-book ($\gamma$) probabilities
 
-$\beta$ controls the distribution of words *within* a topic. It is a Dirichlet prior on the per-topic word distributions. In other words, it represents the probability of a specific word being present in a topic. A higher beta value will result in a more diverse set of words within a topic, while a lower beta value will lead to a more focused set of words.
+$\beta$ describes the distribution of words *within* a topic: for every topic, the probability that each word in the vocabulary is drawn from it. A topic is nothing more than this list of probabilities, so reading its highest-$\beta$ words is how you put a name to it.
 
-$\gamma$ controls the distribution of topics *within* a document. It is a Dirichlet prior on the per-document topic distributions. It governs the probability of a specific topic being present in a document. A higher gamma value will result in a more diverse set of topics within a document, while a lower gamma value will lead to a more focused set of topics.
+$\gamma$ describes the distribution of topics *within* a document: for every chapter, the share of its words the model attributes to each topic. A chapter with $\gamma = 0.95$ for topic 3 is almost entirely "about" topic 3.
+
+Both are estimated from the data, and each sits on top of a Dirichlet prior that sets how concentrated the distributions are allowed to be: a flatter prior allows more diverse topics and documents, a sharper one more focused ones. In `topicmodels::LDA()` the document-side prior is the `alpha` parameter, which the model estimates for you by default.
 
 We extract model results in tidy format using the **`broom`** package `tidy()` function, which extracts model results in our favourite format. Let's look in detail at model results for both key parameters.
 
@@ -270,7 +272,7 @@ chapters_gamma <- broom::tidy(shuffle_lda, matrix = "gamma") # <17>
 # Plot
 broom::tidy(shuffle_lda, matrix = "gamma") |>
   tidyr::separate(document, c("title", "chapter"), sep = "_", convert = TRUE) |> # <18>
-  dplyr::mutate(title = reorder(title, gamma * topic)) %>%
+  dplyr::mutate(title = reorder(title, gamma * topic)) |>
   ggplot(aes(factor(topic), gamma, color=title)) +
   geom_boxplot() +
   facet_wrap(~title) +
@@ -303,36 +305,36 @@ library(scales)
 
 # Save chapter classifications ####
 chapter_classifications <- broom::tidy(shuffle_lda, matrix = "gamma") |>
-  tidyr::separate(document, c("title", "chapter"), sep = "_", convert = TRUE)  %>%
-  dplyr::group_by(title, chapter) %>%
-  dplyr::slice_max(gamma) %>%
+  tidyr::separate(document, c("title", "chapter"), sep = "_", convert = TRUE) |>
+  dplyr::group_by(title, chapter) |>
+  dplyr::slice_max(gamma) |>
   dplyr::ungroup()
 
 # Save most likely topics for each book ####
-book_topics <- chapter_classifications %>% # <19>
-  dplyr::count(title, topic) %>% # <19>
-  dplyr::group_by(title) %>% # <19>
-  dplyr::slice_max(n, n = 1) %>%  # <19>
-  dplyr::ungroup() %>% # <19>
+book_topics <- chapter_classifications |> # <19>
+  dplyr::count(title, topic) |> # <19>
+  dplyr::group_by(title) |> # <19>
+  dplyr::slice_max(n, n = 1) |>  # <19>
+  dplyr::ungroup() |> # <19>
   dplyr::transmute(consensus = title, topic) # <19>
 
 # Join the results ####
-chapter_classifications %>% # <20>
-  dplyr::left_join(book_topics, by = "topic") %>% # <20>
+chapter_classifications |> # <20>
+  dplyr::left_join(book_topics, by = "topic") |> # <20>
   dplyr::filter(title != consensus) # <20>
 
 # Add Document Term Matrix data to results and join book classifications ####
 assignments <- broom::augment(shuffle_lda, data = shuffle_dtm) |>
   tidyr::separate(document, c("title", "chapter"), 
-           sep = "_", convert = TRUE) %>%
+           sep = "_", convert = TRUE) |>
   dplyr::left_join(book_topics, by = c(".topic" = "topic"))
 
 # Visualise the result ####
-assignments %>%
-  dplyr::count(title, consensus, wt = count) %>%
-  dplyr::mutate(across(c(title, consensus), ~str_wrap(., 20))) %>% # <21>
-  dplyr::group_by(title) %>%
-  dplyr::mutate(percent = n / sum(n)) %>%
+assignments |>
+  dplyr::count(title, consensus, wt = count) |>
+  dplyr::mutate(across(c(title, consensus), ~str_wrap(., 20))) |> # <21>
+  dplyr::group_by(title) |>
+  dplyr::mutate(percent = n / sum(n)) |>
   ggplot(aes(consensus, title, fill = percent)) +
   geom_tile() +
   scale_fill_distiller(palette = "Spectral", direction=1,label = percent_format()) +
@@ -355,11 +357,11 @@ assignments %>%
 
 library(rayshader)
 
-shuffle_assign <- assignments %>%
-  dplyr::count(title, consensus, wt = count) %>%
-  dplyr::mutate(across(c(title, consensus), ~str_wrap(., 20))) %>%
-  dplyr::group_by(title) %>%
-  dplyr::mutate(percent = n / sum(n)) %>%
+shuffle_assign <- assignments |>
+  dplyr::count(title, consensus, wt = count) |>
+  dplyr::mutate(across(c(title, consensus), ~str_wrap(., 20))) |>
+  dplyr::group_by(title) |>
+  dplyr::mutate(percent = n / sum(n)) |>
   ggplot(aes(consensus, title, fill = percent)) +
   geom_tile() +
   scale_fill_distiller(
@@ -374,7 +376,7 @@ shuffle_assign <- assignments %>%
        y = "Book words came from",
        fill = "% of assignments")
 
-# create a 3D map of California
+# Lift the tile plot into 3D
 rayshader::plot_gg(shuffle_assign,
                    multicore=TRUE,
                    width=5,
@@ -386,7 +388,7 @@ rayshader::plot_gg(shuffle_assign,
                    zoom = 0.65,
                    phi = 50)
 
-# render the 3D map
+# Render a snapshot of the 3D plot
 rayshader::render_snapshot()
 ```
 
@@ -394,9 +396,9 @@ rayshader::render_snapshot()
 
 There are many types of relational analysis you can do with text. An interesting one is how expressions, measured as *n-grams* (adjacent words), are related to one another using networks. We'll use David Hume's *An Enquiry Concerning Human Understanding* to illustrate, which we will import from [Project Gutenberg](https://www.gutenberg.org/).
 
-We will tokenize differently using the `n-grams` output option in the `unnest_tokens()` function. We need to decide how many adjacent words will be tokenized, so for ease we will do pairs of words.
+We will tokenise differently, using the `token = "ngrams"` option of the `unnest_tokens()` function. We need to decide how many adjacent words go in each token, so for ease we will do pairs of words.
 
-After we tokenize and count, we need to turn each pair of words into a network, which is easy using the **`igraph`** package and then well use the **`ggraph`** package to visualise it. Networks are made of nodes and edges, and in this case an n-gram of two words means two nodes are connected to each other by an edge. Using the `graph_from_data_frame()` function, we can turn a tibble made of pairs of words into a network.
+After we tokenize and count, we need to turn each pair of words into a network, which is easy using the **`igraph`** package and then we'll use the **`ggraph`** package to visualise it. Networks are made of nodes and edges, and in this case an n-gram of two words means two nodes are connected to each other by an edge. Using the `graph_from_data_frame()` function, we can turn a tibble made of pairs of words into a network.
 
 ::: callout-tip
 ## **`ggraph`** vignette
@@ -404,7 +406,7 @@ After we tokenize and count, we need to turn each pair of words into a network, 
 Take a look at the vignette for this package [here](https://ggraph.data-imaginist.com/)
 :::
 
-Look at the code below that shows all the steps, from tokenizing to plotting the network. Notice the changes in **`ggraph`**, like the [layout](https://cran.r-project.org/web/packages/ggraph/vignettes/Layouts.html) (an algorithm that places nodes in the graph according to their properties) and the geoms --for both edges and nodes.
+Look at the code below that shows all the steps, from tokenising to plotting the network. Notice the changes in **`ggraph`**, like the [layout](https://ggraph.data-imaginist.com/articles/Layouts.html) (an algorithm that places nodes in the graph according to their properties) and the geoms --for both edges and nodes.
 
 But also look at the results. The n-grams show relationships between key concepts in this important work on epistemology, like natural events, or how reasoning is connected to observation, the mind and matter.
 
@@ -426,7 +428,7 @@ gutenbergr::gutenberg_download(gutenberg_id = 9662, mirror = "http://mirrors.xmi
     n=2, # <22>  
     token = "ngrams", # <22> 
     to_lower = TRUE) |> # <22>
-  tidyr::separate(ngrams, into = rep(paste0("word_",1:2), sep = " ")) |>  # <23>
+  tidyr::separate(ngrams, into = c("word_1", "word_2"), sep = " ") |>  # <23>
   dplyr::filter(!word_1 %in% stopwords::stopwords(language = "en"),  # <24>
                 !word_2 %in% stopwords::stopwords(language = "en")) |>  # <24>
   dplyr::filter(nchar(word_1) > 1,nchar(word_2) > 1) |>  # <24>
@@ -449,8 +451,8 @@ gutenbergr::gutenberg_download(gutenberg_id = 9662, mirror = "http://mirrors.xmi
 26. Turn data frame into igraph object to build a network using the `graph_from_data_frame()` function
 27. Use ggraph with specified layout
 28. Graph the edges or links
-29. Graph the nodes and labels them
-30. Clean up with theme made for networks and put a color scale on the connections
+29. Graph the nodes and label them
+30. Clean up with a theme made for networks and put a colour scale on the connections
 
 ## 🏗 Practice 4: Shuffle the shelf {.unnumbered}
 

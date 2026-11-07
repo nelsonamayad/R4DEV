@@ -1,6 +1,6 @@
 ---
 title: Think Bayes 🤔
-subtitle: A very short introduction to bayesian updating
+subtitle: A very short introduction to Bayesian updating
 author: "Nelson Amaya"
 description: "Toss a globe, count the water, and watch a probability distribution learn. A gentle first contact with Bayesian inference, animated with the tools from session 5."
 categories:
@@ -56,7 +56,7 @@ The classic teaching example, from Richard McElreath's [*Statistical Rethinking*
 
 Nine tosses give us `W L W W W L W L W` --six waters. What should we believe about $p$? We compute it with a **grid approximation**: try every candidate value of $p$, score how well each explains the data, and weigh by what we believed before.
 
-```{r 13.grid}
+```{r 6.grid}
 library(tidyverse)
 
 tosses <- c("W","L","W","W","W","L","W","L","W") # <1>
@@ -81,15 +81,26 @@ globe_posterior |>
 1. Our data: nine catches, six fingers on water.
 2. The "grid": 200 candidate values for $p$ between 0 (all land) and 1 (all water).
 3. A **flat prior**: before tossing, we pretend every proportion is equally plausible. Priors can --and usually should-- know more than this.
-4. The **likelihood**: for each candidate $p$, the probability of seeing 6 waters in 9 tosses. Plain old `dbinom()` --you have used it since session 5's coin flips.
+4. The **likelihood**: for each candidate $p$, the probability of seeing 6 waters in 9 tosses. Plain old `dbinom()` --the probability sibling of the `rbinom()` that tossed coins in session 5.
 5. **Bayes' theorem**, literally typed out: posterior ∝ likelihood × prior. The division just makes it sum to one.
 6. We never told the code the answer --look where the belief piles up anyway.
+
+Because the posterior is a distribution *over $p$ itself*, you can ask it questions directly. How sure are we, after nine tosses, that the Earth is mostly water?
+
+```{r 6.mostly-water}
+globe_posterior |>
+  dplyr::summarise(prob_mostly_water = sum(posterior[p > 0.5])) # <1>
+```
+
+1. Add up the posterior over every candidate $p$ above one half --a probability statement about the parameter, read straight off the distribution.
+
+That one line is the difference from the frequentist tools of [There is only one test](/sessions_thinking/02-inference/02-inference.qmd). A 95% confidence interval is a promise about the *procedure*: build intervals this way forever and 95% of them catch the truth. It says nothing about the probability that $p$ sits inside *this* interval. A posterior says exactly that, given this prior and these data. With a flat prior and plenty of data the two often land on similar numbers, but they answer different questions --and only the posterior answers the one people actually ask.
 
 ### Watch the learning happen
 
 A posterior is not a verdict, it is a *running belief* --so let's animate it updating toss by toss, with the exact `gganimate` tools from session 5. Frame $n$ shows what we believe after the first $n$ tosses:
 
-```{r 13.updating-anim}
+```{r 6.updating-anim}
 #| fig-cap: "Bayesian updating, one toss at a time"
 
 library(gganimate)
@@ -121,7 +132,7 @@ update_frames |>
 
 ## Part II: Your turn to believe
 
-The window below runs R **in your browser**. Change the prior --make it stubborn (`p^10`), skeptical of water (`(1-p)^3`), or opinionated like a geographer (`dbeta(p, 7, 3)`)-- and watch how much (or little) the same 9 tosses can teach different minds.
+The window below runs R **in your browser**. Change the prior --make it stubborn (`p^10`), sceptical of water (`(1-p)^3`), or opinionated like a geographer (`dbeta(p, 7, 3)`)-- and watch how much (or little) the same 9 tosses can teach different minds.
 
 ```{webr}
 p <- seq(0, 1, length.out = 200)
@@ -144,7 +155,7 @@ This repo ships a small Shiny simulator with sliders for the prior and the data 
 :::
 
 ::: column-screen-inset
-<iframe src="https://nelsonamayad-r4dev-bayesapp.share.connect.posit.cloud/" style="border: none; width: 100%; height: 650px" frameborder="0">
+<iframe src="https://nelsonamayad-r4dev-bayesapp.share.connect.posit.cloud/" title="Bayesian updating simulator (Shiny app)" style="border: none; width: 100%; height: 650px" frameborder="0">
 </iframe>
 :::
 
@@ -155,9 +166,11 @@ This was the whole idea of Bayes in one session; the rest is craft. When you are
 -   [**Statistical Rethinking**](https://xcelab.net/rm/) (McElreath) --start here, no contest. R code for everything.
 -   [**Bayes Rules!**](https://www.bayesrulesbook.com/) --free online, gentler on-ramp, tidyverse throughout.
 -   [**`brms`**](https://paul-buerkner.github.io/brms/) --when you want real models: multilevel regression with `lm()`-like syntax, Stan under the hood.
--   [**`bayesplot`**](http://mc-stan.org/bayesplot/) --diagnostics and posterior visualisations that match what you learned in session 2.
+-   [**`bayesplot`**](https://mc-stan.org/bayesplot/) --diagnostics and posterior visualisations that match what you learned in session 2.
 
 ## 🏗 Practice 6: Update yourself {.unnumbered}
+
+The browser window above is enough for the Basic tier; the rest needs your own R session (and `brms` for the Advanced one).
 
 ::: {.callout-note icon="false" collapse="true"}
 # Basic
@@ -191,4 +204,6 @@ This was the whole idea of Bayes in one session; the rest is craft. When you are
 [← Previous: Earning the arrow](/sessions_thinking/05-designs/05-designs.qmd)
 
 [Track overview: Think with data →](/learn/thinking.qmd)
+
+[Explore another track: Build with R →](/learn/build-with-r.qmd)
 :::

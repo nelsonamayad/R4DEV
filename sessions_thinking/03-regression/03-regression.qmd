@@ -61,7 +61,7 @@ broom::tidy(fit, conf.int = TRUE)                              # <2>
 1. `lm()` --linear model-- is base R's regression engine, older than most people reading this, and still the workhorse under half the dashboards on Earth.
 2. `broom::tidy()` turns the model into what this workshop loves: **a tibble**. One row per coefficient, with a confidence interval when you ask. No more squinting at `summary()` printouts --model results become data you can filter, join and plot.
 
-Read the `body_mass_kg` row like a statistician: each extra kilo of penguin comes with about 15 more millimeters of flipper, *plus or minus* --the interval, not the point, is the finding. `broom` has two siblings worth knowing: `glance(fit)` (one row of model-level stats, like R²) and `augment(fit)` (your data with fitted values and residuals attached --the raw material of diagnostics).
+Read the `body_mass_kg` row like a statistician: each extra kilo of penguin comes with about 15 more millimetres of flipper, *plus or minus* --the interval, not the point, is the finding. `broom` has two siblings worth knowing: `glance(fit)` (one row of model-level stats, like R²) and `augment(fit)` (your data with fitted values and residuals attached --the raw material of diagnostics).
 
 ## PART II: Always plot. Always. --Anscombe's warning
 
@@ -149,7 +149,7 @@ The bundle above is estimated on penguins between roughly 2.7 and 6.3 kg. Ask it
 predict(fit, newdata = tibble(body_mass_kg = 10)) |> round(1)
 ```
 
-A 291mm flipper on a penguin that doesn't exist. The model doesn't know where its data ended; *you* have to. Rule: a regression is a map of the territory it was fit on --outside it, you are not predicting, you are doodling[^2].
+A `r round(predict(fit, newdata = tibble(body_mass_kg = 10)))` mm flipper on a penguin that doesn't exist. The model doesn't know where its data ended; *you* have to. Rule: a regression is a map of the territory it was fit on --outside it, you are not predicting, you are doodling[^2].
 
 [^2]: The canonical cautionary tale: a 2004 *Nature* paper extrapolated 100m sprint times to conclude women would outsprint men by 2156 --and, further out, that sprints would eventually finish in negative time.
 

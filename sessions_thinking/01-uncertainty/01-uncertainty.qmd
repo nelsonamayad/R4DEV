@@ -62,19 +62,19 @@ sample(c("W", "L"), 9, replace = TRUE, prob = c(0.7, 0.3)) # <5>
 ::: callout-tip
 ## The simulation mindset
 
-Classic statistics answers "how different could this have been?" with algebra done by 20th-century geniuses under assumptions you have to memorize. Simulation answers it with brute force under assumptions you can *read in your own code*. Both give the same answers where they overlap --but only one of them scales to problems the geniuses never solved, and you already know the tool: it's a `map()` loop, straight from [Do it well, do it fast](/sessions_workshop/10-parallel/10-parallel.qmd).
+Classic statistics answers "how different could this have been?" with algebra done by 20th-century geniuses under assumptions you have to memorise. Simulation answers it with brute force under assumptions you can *read in your own code*. Both give the same answers where they overlap --but only one of them scales to problems the geniuses never solved, and you already know the tool: it's a `map()` loop, straight from [Do it well, do it fast](/sessions_workshop/10-parallel/10-parallel.qmd).
 :::
 
 ## PART II: Sampling variation, made visible
 
-Say the true average height in a country is 170cm (sd 10). You survey 50 people. What do you report?
+Say the true average height in a country is 170 cm (sd 10). You survey 50 people. What do you report?
 
 ```{r 1.one-sample}
 set.seed(42)
 mean(rnorm(50, mean = 170, sd = 10))
 ```
 
-You're off by almost a centimeter, and you did nothing wrong. **That gap is not an error --it is sampling variation**, and the only honest way to describe your estimate is to know how big that gap tends to be. So: run the survey 5,000 times.
+You're off by about a third of a centimetre, and you did nothing wrong. **That gap is not an error --it is sampling variation**, and the only honest way to describe your estimate is to know how big that gap tends to be. So: run the survey 5,000 times.
 
 ```{r 1.many-samples}
 set.seed(42)
@@ -180,7 +180,7 @@ This is why the normal distribution is everywhere: not because nature loves bell
 
 ## PART IV: Why single numbers lie
 
-The habit this session installs: **never report a number you wouldn't show the distribution of.** A mean without its spread is a coin with one face. Three self-defense rules:
+The habit this session installs: **never report a number you wouldn't show the distribution of.** A mean without its spread is a coin with one face. Three self-defence rules:
 
 1.  **Plot the raw data before summarising it** --session 2 of the workshop gave you every tool; distributions with the same mean can tell opposite stories.
 2.  **Ask "compared to what?"** Every "sales rose 4%" hides a sampling distribution --is 4% a signal, or is it inside the range that pure noise produces? (Next session answers this precisely.)

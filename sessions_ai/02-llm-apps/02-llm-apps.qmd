@@ -28,7 +28,7 @@ citation:
 
 > *"The most profound technologies are those that disappear."*<br>--Mark Weiser
 
-In session 8 you built Shiny apps where users interact through sliders and dropdowns. In the previous session, [Talking to machines](/sessions_ai/01-llm/01-llm.qmd), you learned to call an LLM from code. This session welds the two: apps where the interface is **a conversation**, and where the model translates human questions into the filters, queries and charts you used to build by hand.
+In [Make it shine](/sessions_workshop/08-shiny/08-shiny.qmd) you built Shiny apps where users interact through sliders and dropdowns. In the previous session, [Talking to machines](/sessions_ai/01-llm/01-llm.qmd), you learned to call an LLM from code. This session welds the two: apps where the interface is **a conversation**, and where the model translates human questions into the filters, queries and charts you used to build by hand.
 
 Everything runs on the same [`ellmer`](https://ellmer.tidyverse.org/) chat objects from the previous session, so your API key setup carries over unchanged.
 
@@ -47,7 +47,7 @@ Everything runs on the same [`ellmer`](https://ellmer.tidyverse.org/) chat objec
 
 The [**`shinychat`**](https://posit-dev.github.io/shinychat/r/) package provides the chat interface --the streaming text, the message bubbles, the input box-- so you never build them from scratch. The quickest possible start is genuinely one line:
 
-```{r 10.chat-app}
+```{r 2.chat-app}
 #| eval: false
 
 library(shinychat)
@@ -59,7 +59,7 @@ shinychat::chat_app(ellmer::chat_google_gemini()) # <1>
 
 For a real app you compose the pieces yourself: `chat_ui()` in the interface, `chat_append()` in the server. Here is a complete teaching assistant --note how the system prompt does all the personality work, exactly as in the previous session:
 
-```{r 10.shinychat}
+```{r 2.shinychat}
 #| eval: false
 
 library(shiny)
@@ -112,7 +112,7 @@ The safety design deserves attention before the code: **the model never sees you
 
 We'll point it at an old friend --the Spotify archive from session 2:
 
-```{r 10.querychat}
+```{r 2.querychat}
 #| eval: false
 
 library(querychat)
@@ -133,7 +133,7 @@ querychat::querychat_app( # <6>
 )
 ```
 
-6. Like `chat_app()`, `querychat_app()` is the batteries-included version: data table, chat sidebar, live SQL display. For custom layouts there are modular pieces (`querychat_ui()`, `querychat_server()`) that plug into any Shiny app.
+6. Like `chat_app()`, `querychat_app()` is the batteries-included version: data table, chat sidebar, live SQL display. It is built for your own machine: under the hood it launches a Shiny *gadget* that picks its own port, which a hosting platform can't find, so the deployed app fails its start-up health check. For custom layouts, and for anything you deploy, use the modular pieces instead: `QueryChat$new()` plus `qc$sidebar()` and `qc$server()` inside an ordinary `shinyApp()`.
 7. Any ellmer chat works. Translating questions to SQL is easy work --a small, cheap model does it fine.
 8. The `data_description` is your prompt-craft moment: tell the model what a row *means* and what units the columns use. Good descriptions are the difference between "it just works" and confused SQL.
 
@@ -145,10 +145,10 @@ Once it runs, try these --and **watch the SQL it writes** (querychat shows it; a
 
 Get the app: <br><br> {{< downloadthis r4dev-querychat-app.R dname = r4dev-querychat-app label="Download the querychat app" icon=download type=info >}}
 
-Or try it live below --this deployed instance runs on **Claude Sonnet 5** via `ellmer::chat_anthropic()`, with the API key set as a server-side environment variable on Posit Connect Cloud (never in the code, never exposed on this page). Everything else --the SQL-writing, the safety model, the UI-- is exactly what you just read.
+Or try it live below --this deployed instance is built from those modular pieces and runs on **Claude Sonnet 5** via `ellmer::chat_anthropic()`, with the API key set as a server-side environment variable on Posit Connect Cloud (never in the code, never exposed on this page). Everything else --the SQL-writing, the safety model, the UI-- is exactly what you just read.
 
 :::: column-screen-inset
-<iframe src="https://nelsonamayad-r4dev-chat-with-your-data.share.connect.posit.cloud/" style="border: none; width: 100%; height: 700px" frameborder="0">
+<iframe src="https://nelsonamayad-r4dev-chat-with-your-data.share.connect.posit.cloud/" title="Chat with your data: querychat app on the Spotify archive" style="border: none; width: 100%; height: 700px" frameborder="0">
 </iframe>
 ::::
 
@@ -158,7 +158,7 @@ You just watched an LLM write SQL for you --which makes this the right moment to
 
 These chunks run **live in this page** through ggsql's knitr engine --the `r:` prefix lets SQL read data frames straight from the R session:
 
-```{r 10.ggsql-setup}
+```{r 2.ggsql-setup}
 library(ggsql)
 library(tidyverse)
 
@@ -166,7 +166,7 @@ songs <- readr::read_csv(paste0(getwd(), "/spotify_favorites_archive.csv"))
 ```
 
 ```{ggsql}
-#| label: 10.ggsql-bar
+#| label: 2.ggsql-bar
 SELECT artist, AVG(valence) AS mean_valence
 FROM r:songs
 GROUP BY artist
@@ -177,7 +177,7 @@ DRAW bar
 Aggregation in SQL, mapping and geometry in the `VISUALISE` clause: `mean_valence AS x` is exactly `aes(x = mean_valence)` wearing a SQL costume. One more, with color as a third channel:
 
 ```{ggsql}
-#| label: 10.ggsql-scatter
+#| label: 2.ggsql-scatter
 SELECT valence, energy, artist
 FROM r:songs
 VISUALISE valence AS x, energy AS y, artist AS color
@@ -190,7 +190,7 @@ DRAW point
 `ggsql` is an **alpha release** --the syntax may still change, and you will hit rough edges. That is not a reason to avoid it; it is a reason to pin the version in your projects and read the [release notes](https://r.ggsql.org/) when you update. Watching a tool this young is also watching how the R ecosystem evolves in real time.
 :::
 
-Why does ggsql belong in this session? Because of what you saw in Part II: **LLMs are remarkably good at writing SQL.** A model that can answer *"show me energy against valence, colored by artist"* with a complete ggsql query --data selection and chart in one statement-- is a very short step from the querychat app you just ran. The pieces on this page are the ingredients of the next generation of data tools; now you know how each one works alone.
+Why does ggsql belong in this session? Because of what you saw in Part II: **LLMs are remarkably good at writing SQL.** A model that can answer *"show me energy against valence, coloured by artist"* with a complete ggsql query --data selection and chart in one statement-- is a very short step from the querychat app you just ran. The pieces on this page are the ingredients of the next generation of data tools; now you know how each one works alone.
 
 ::: callout-tip
 ## Next: teach the model to answer *only* from real sources

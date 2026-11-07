@@ -2,13 +2,13 @@
 title: Smart reports 🧠
 author: "Nelson Amaya"
 subtitle: "Learn how to create better policy reports and handle bibliography"
-description: "Create parametrised reports and learn to work with references using Zotero."
+description: "Create parameterised reports and learn to work with references using Zotero."
 categories:
   - quarto
   - pdf
   - html
   - word
-  - parametrised reports
+  - parameterised reports
   - zotero
 date: "2022-07-31" 
 date-modified: last-modified
@@ -42,7 +42,7 @@ In this lesson you will generate a batch of reports from a single template and m
 
 Academic and policy writing is in constant demand for seamless integration and management of bibliographic references that change during publication. Quarto supports **Zotero**, a powerful reference management software, to streamline the citation process.
 
-Zotero stands out for its ability to collect, organise, and store bibliographic references from various sources, through a very easy interface. Zotero can easily capture relevant citation information with a single click, thanks to its browser extension. To begin, download and install [Zotero from its official website](https://www.zotero.org/), and to add the browser extension for easy data capture.
+Zotero stands out for its ability to collect, organise, and store bibliographic references from various sources, through a very easy interface. Zotero can easily capture relevant citation information with a single click, thanks to its browser extension. To begin, download and install [Zotero from its official website](https://www.zotero.org/), and add the browser extension for easy data capture.
 
 ::: {.callout-tip appearance="simple"}
 # [Zotero quick start guide](https://www.zotero.org/support/quick_start_guide)
@@ -56,12 +56,11 @@ Before integrating with Quarto, you must export your Zotero library (or a specif
 2.  Go to **"File"** -\> **"Export Library"** and choose the BibTeX format.
 3.  Save the `.bib` file to your project directory or a location accessible to your Quarto document
 
-### Using `.bib.` in Quarto
+### Using `.bib` in Quarto
 
 You can add the bibliography you just exported from Zotero by including it in the YAML header of your document like this, assuming the file with the references was exported with the dull name `references.bib`:
 
-```{r}
-#| eval: false
+```yaml
 bibliography: references.bib
 ```
 
@@ -77,19 +76,16 @@ The reference page in Quarto on [citations and footnotes](https://quarto.org/doc
 
 ### References section and render
 
-At the end of your document, include a Reference section and a {#refs} so the bibliography is automatically included and formatted there. When you render your Quarto document, the citations you've included will be automatically formatted according to the bibliography and citation style you've specified. Quarto supports numerous citation styles, and you can specify a particular style using the csl field in the YAML metadata, pointing to a `.csl` file corresponding to your desired citation format.
+At the end of your document, include a References section and a `::: {#refs}` div so the bibliography is automatically included and formatted there. When you render your Quarto document, the citations you've included will be automatically formatted according to the bibliography and citation style you've specified. Quarto supports numerous citation styles, and you can specify a particular style using the `csl:` field in the YAML metadata, pointing to a `.csl` file corresponding to your desired citation format.
 
-```{r}
-#| eval: false
+````markdown
 # References
 
 ::: {#refs}
 :::
-```
+````
 
-## Work smart, not hard: Parametrised reports with [*Retraction Watch*](https://retractionwatch.com/) data
-
-🛠️ *Under construction* 🛠
+## Work smart, not hard: Parameterised reports with [*Retraction Watch*](https://retractionwatch.com/) data
 
 Ever find yourself in a Groundhog Day of report writing, where every day feels like you're crafting the same report over and over, with a few small tweaks for different audiences? We have all been there.
 
@@ -97,34 +93,33 @@ Ever find yourself in a Groundhog Day of report writing, where every day feels l
 ![Oh no, not repeating the same thing again!](groundhog-day.gif)
 :::
 
-There is a way out of the Sisyphean repetition: **parametrised reports**. No more copy-pasting or manual tweaking. Focus on a report template and then let Quarto do the hard work.
+There is a way out of the Sisyphean repetition: **parameterised reports**. No more copy-pasting or manual tweaking. Focus on a report template and then let Quarto do the hard work.
 
-We will work with an exciting newly-released database: [**Retraction Watch**](https://retractionwatch.com/). They track scientific publications that have had to be retracted because of errors, fraud or other scientific misconduct [@oransky_retraction_2024, @the_economist_2024, @van_noorden_more_2023].
+We will work with an exciting database, opened to everyone in 2023: [**Retraction Watch**](https://retractionwatch.com/). They track scientific publications that have had to be retracted because of errors, fraud or other scientific misconduct [@oransky_retraction_2024; @the_economist_2024; @van_noorden_more_2023].
 
 Before you continue with this section, download the files (`.zip`) needed by clicking the button below:
 
-{{< downloadthis r4dev_retractionwatch.zip dname = retractionwatch label="Download files for RetractionWatch parametrised report (~10 mb)" icon=file-arrow-down-fill type=success >}}
+{{< downloadthis r4dev_retractionwatch.zip dname = retractionwatch label="Download files for RetractionWatch parameterised report (~10 MB)" icon=file-arrow-down-fill type=success >}}
 
 ### Part 1: The template 📜
 <br>
 <br>
 The **Retraction Watch** database is large, so we want to create a country-by-country report of the state of publication retractions. We could build a report for every country, but that would send us down the Groundhog Day path we want to avoid.
 
-You already know how to build a Quarto blog, so we will focus on creating a `.qmd` template that we can reuse for any country, and then parse a list of countries to create as many reports as we want. We want a report that shows how many retractions there are by nationality of authors, and for each country, show why retractions happen and which authors have the most retractions.
+You already know how to build a Quarto blog, so we will focus on creating a `.qmd` template that we can reuse for any country, and then pass a list of countries to create as many reports as we want. We want a report that shows how many retractions there are by nationality of authors, and for each country, show why retractions happen and which authors have the most retractions.
 
-The main trick are parameters in the YAML header: **params**, which stands for **parameters**. Here you can define a list of variables and possible values they can take throughout your document. The **params** object is accessed within the Quarto document through embedded code chunks, and can be used to filter the data, customise plots, among other things. For example, in the context of the **Retraction Watch** country report, we will use parameter named `country` to generate a country-specific analysis, such that each country report only include records from a selected country. You can see the expressions in the code below.
+The main trick is the parameters in the YAML header: **params**, which stands for **parameters**. Here you can define a list of variables and possible values they can take throughout your document. The **params** object is accessed within the Quarto document through embedded code chunks, and can be used to filter the data, customise plots, among other things. For example, in the context of the **Retraction Watch** country report, we will use a parameter named `country` to generate a country-specific analysis, such that each country report only includes records from a selected country. You can see the expressions in the code below.
 
 We can use as many parameters as we want, but to keep it simple, in this example we use only one.
 
 #### Parameters in the YAML
 
-First look at the YAML below. It has a `params` option that defines one variable, `country`, and used one value, in this case, France It also has within the description a quoted **r params\$country**, which embeds the country name in the upper part of the report.
+First look at the YAML below. It has a `params` option that defines one variable, `country`, and gives it one value, in this case France. It also has within the description a quoted **r params\$country**, which embeds the country name in the upper part of the report.
 
-```{r}
-#| eval: false
+```yaml
 title: "RetractionWatch"
 subtitle: "Working hard to hardly work using Quarto parametrised reports"
-description: "This report describes the state of scientific articles that have been retracted, focusing on researchers from `r params$country`"
+description: "This report describes the state of scientific articles that have been retracted, focusing on researchers from `r knitr::inline_expr("params$country")`"
 author: "R4DEV"
 date: last-modified
 params: 
@@ -161,7 +156,7 @@ A Retraction Watch report for France
 
 ::: column-page
 ::: {.callout-note collapse="true"}
-## Compare parametrised reports, side by side
+## Compare parameterised reports, side by side
 
 Note that the only thing that changes in the report is the focus country. The data in the text is consistent.
 
@@ -169,13 +164,13 @@ Note that the only thing that changes in the report is the focus country. The da
 ### France 🇫🇷
 
 ```{=html}
-<iframe src="https://r4dev-retraction-watch-france.netlify.app" style="border: none; width: 100%; height: 400px" frameborder="0">
+<iframe src="https://r4dev-retraction-watch-france.netlify.app" title="Retraction Watch report for France" style="border: none; width: 100%; height: 400px" frameborder="0">
 </iframe>
 ```
 ### India 🇮🇳
 
 ```{=html}
-<iframe src="https://r4dev-retraction-watch-india.netlify.app" style="border: none; width: 100%; height: 400px" frameborder="0">
+<iframe src="https://r4dev-retraction-watch-india.netlify.app" title="Retraction Watch report for India" style="border: none; width: 100%; height: 400px" frameborder="0">
 </iframe>
 ```
 :::
@@ -187,7 +182,7 @@ Note that the only thing that changes in the report is the focus country. The da
 <br>
 Now that we have a template report that works for any country, we create a function that renders the report for any country we want at will: the robot. We use the `quarto` library to make this easier.
 
-First, we create the function `retractionwatch_report` which has only one argument: `country_input`. We then call the `quarto_render()` function and indicate the location of the parametrised report in the input option, name and time-stamp the output, choose which format we want to export the result (in this case, because of the interactive elements, we want HTML), and last but not least, we use the `execute_params` option to list all the parameters in the document, indicating that the variable `country` will take the value from the function.
+First, we create the function `retractionwatch_report` which has only one argument: `country_input`. We then call the `quarto_render()` function and indicate the location of the parameterised report in the input option, name and time-stamp the output, choose which format we want to export the result (in this case, because of the interactive elements, we want HTML), and last but not least, we use the `execute_params` option to list all the parameters in the document, indicating that the variable `country` will take the value from the function.
 
 ```{r}
 #| eval: false
@@ -202,7 +197,7 @@ retractionwatch_report <- function(country_input) {
 
 ```
 
-Now that we have out function, we test it with a new country name. This name will be replaced in the `params` YAML header and will therefore create a report for China:
+Now that we have our function, we test it with a new country name. This name will be replaced in the `params` YAML header and will therefore create a report for China:
 
 ```{r}
 #| eval: false
@@ -210,13 +205,13 @@ Now that we have out function, we test it with a new country name. This name wil
 retractionwatch_report(country_input = "China")
 ```
 
-If the function works as intended, then we only need to provide a list of values for our parameter (i.e. countries), and the function will produce consistent reports for all countries we want. We use a `map()` function over a list of countries and just wait for the amazing result.
+If the function works as intended, then we only need to provide a list of values for our parameter (i.e. countries), and the function will produce consistent reports for all countries we want. We use `walk()`, the side-effect twin of `map()`, over a list of countries and just wait for the amazing result.
 
 ```{r}
 #| eval: false
 # Use a list of countries and map the function to get all reports ####
 list("Colombia","Canada","France","Norway") |>
-  purrr::map(retractionwatch_report)
+  purrr::walk(retractionwatch_report)
 ```
 
 ## Bonus track: Report in multiple formats and other forms of magic
@@ -225,14 +220,13 @@ You can create reports in as many formats as Quarto renders, including Word, Pow
 
 You can also create parts of a report that only appear under [certain conditions](https://quarto.org/docs/authoring/conditional.html), which gives you amazing flexibility. For instance, if you have an interactive map that only works in HTML but you also want the report to be rendered as PDF, you can add the {.content-hidden} option in particular sections of the report.
 
-```{r}
-#| eval: false
+````markdown
 ::: {.content-hidden when-format="html"}
 
 The content will be hidden when you render HTML output
 
 :::
-```
+````
 
 ![That's all (for now)](mic-drop.gif){width="150%"}
 

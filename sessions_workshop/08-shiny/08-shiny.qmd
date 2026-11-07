@@ -32,7 +32,7 @@ citation:
 
 One of the best things about working with R is publishing your work online. The possibilities are endless: blogs, books, articles, games, dashboards can all be published from R. You already know [Quarto](https://quarto.org/) is a great builder of HTML and interactive content.
 
-In these final sessions you will learn how to build apps. Let's get started.
+In this lesson you will learn how to build apps. Let's get started.
 
 ::: {.lesson-info}
 **Level:** Advanced &nbsp;·&nbsp; **Time:** ~90 min &nbsp;·&nbsp; **Prerequisites:** Everything in its right place &nbsp;·&nbsp; **Tools:** shiny, bslib, shinyWidgets, plotly
@@ -68,11 +68,11 @@ Open a free [Shinyapps.io](https://www.shinyapps.io/) account to host your app o
 
 ### 💔 Two apps on infidelity for the price of one
 
-We'll build 2 apps on the same data using different options, just to showcase how versatile Shiny is. We'll use data from a survey carried out in 1969: 601 married adults were asked about infidelity --a difficult topic to inquire because people probably are not super honest about their responses.
+We'll build 2 apps on the same data using different options, just to showcase how versatile Shiny is. We'll use data from a survey carried out in 1969: 601 married adults were asked about infidelity --a difficult topic to inquire about because people probably are not super honest about their responses.
 
 #### App I 🎬: `page_sidebar`
 
-The first app is simple, a bit boring. The **User Interface (UI)** for a shiny dashboard with a sidebar starts with `page_sidebar()` and includes a `sidebar()` where inputs usually go. In the sidebar we include a `selectInput()` function that will filter the data by self-declared level of happiness in the marriage by respondents. Also in the sidebar we include our first output: a reference plot with the levels of happiness of all respondents, that we call `plotOutput("happiness")`. We use a **Boostwatch** theme, just as you use for your blog.
+The first app is simple, a bit boring. The **User Interface (UI)** for a shiny dashboard with a sidebar starts with `page_sidebar()` and includes a `sidebar()` where inputs usually go. In the sidebar we include a `selectInput()` function that will filter the data by self-declared level of happiness in the marriage by respondents. Also in the sidebar we include our first output: a reference plot with the levels of happiness of all respondents, that we call `plotOutput("happiness")`. We use a **Bootswatch** theme, just as you use for your blog.
 
 ::: column-margin
 ![](bored.gif)
@@ -82,7 +82,7 @@ The body of the app is defined directly with a [`card()`](https://rstudio.github
 
 Let's build a very simple sidebar dashboard for some data on cheating. The app will show how many cheating "*incidents*" happened in the sample by gender and age, according to self-declared happiness.
 
-```{r 6.shiny-sidebar}
+```{r 8.shiny-sidebar}
 #| eval: false
 #| code-fold: true
 
@@ -98,7 +98,7 @@ affairs_1969 <- readr::read_csv("https://raw.githubusercontent.com/vincentarelbu
                                   rating==2 ~ "somewhat unhappy", # <2>
                                   rating==3 ~ "average", # <2>
                                   rating==4 ~ "happier than average", # <2>
-                                  rating==5 ~ "very happy")) # <2>
+                                  rating==5 ~ "very happy")) |> # <2>
   dplyr::mutate(happy = fct_reorder(happy, rating), # <2> 
                 cheat = factor(ifelse(affairs==0,"Faithful","Cheater")))  # <2> 
   
@@ -133,12 +133,12 @@ server_affair <- function(input, output) { # <8>
   # Plot without selection
   output$happiness <- renderPlot({ # <9>
     
-    affairs_1969 %>%
+    affairs_1969 |>
       dplyr::count(happy) |>
       ggplot(aes(y=happy,x=n,fill=happy))+
       geom_col()+
       geom_label(aes(label=n), fill="white",color="black",nudge_x = -10)+
-      scale_fill_viridis_d(name = "turbo", direction=1)+
+      scale_fill_viridis_d(option = "turbo", direction=1)+
       labs(x=NULL, y=NULL)+
       theme_classic()+
       theme(legend.position = "none")
@@ -147,8 +147,8 @@ server_affair <- function(input, output) { # <8>
   # Plot with selection
   output$affairs <- renderPlot({  # <10>
     
-    affairs_1969 %>%
-      dplyr::filter(happy==print(input$happy)) |> # <11>
+    affairs_1969 |>
+      dplyr::filter(happy==input$happy) |> # <11>
       dplyr::group_by(gender,age) |>
       dplyr::count(cheat) |>
       ggplot(aes(x=age,y=n,fill=gender))+
@@ -161,7 +161,7 @@ server_affair <- function(input, output) { # <8>
       theme_classic()+
       theme(text=element_text(size=18), legend.position = "none")+
       labs(title = "Respondents by self-declared happiness, by age and gender",
-           subtitle = paste("Among", input$happy, "respondents"), # <12>
+           subtitle = paste("Among", input$happy, "respondents"),
            x="Respondent age",
            y="# respondents")
   })
@@ -175,7 +175,7 @@ shinyApp(ui=ui_affair, server = server_affair)  # <12>
 1.  We first download the data from the GitHub repository
 2.  We code new variables: **happy** using the `case_when()` function, factoring using `fct_reorder()`, and **cheat** to count respondents who cheated and also factor.
 3.  First part we define the `page_sidebar` structure
-4.  We use `p()` to write Markdown text
+4.  We use `p()` to write a paragraph of text (an HTML `<p>` tag)
 5.  First output: `plotOutput`. We call it *happiness*
 6.  We use a `selectInput` object to filter the data in the graph
 7.  Another output as a `plotOutput` and call it *affairs*
@@ -186,7 +186,7 @@ shinyApp(ui=ui_affair, server = server_affair)  # <12>
 12. We combine the UI and server objects we created in the `shinyApp()` function and watch the magic unfold
 
 ::: column-screen-inset-right
-<iframe src="https://nelsonamayad-r4dev-fair-s-affairs-sidebar.share.connect.posit.cloud/" style="border: none; width: 100%; height: 650px" frameborder="0">
+<iframe src="https://nelsonamayad-r4dev-fair-s-affairs-sidebar.share.connect.posit.cloud/" title="Fair's Affairs 1969: sidebar app" style="border: none; width: 100%; height: 650px" frameborder="0">
 
 </iframe>
 :::
@@ -195,23 +195,23 @@ shinyApp(ui=ui_affair, server = server_affair)  # <12>
 
 The second app is fancier, has more elements, more interactivity, and better design principles.
 
-First we start with a webpage layout --a navigation bar defined by `page_navbar` from the **`bslib`** package. We theme the app just as we did the blog using Bootswatch. We can define more element, like foreground and background colors of the colors of buttons.
+First we start with a webpage layout --a navigation bar defined by `page_navbar` from the **`bslib`** package. We theme the app just as we did the blog using Bootswatch. We can define more elements, like foreground and background colours or the colours of buttons.
 
-The UI **ui_affair_alt** has a navigation bar at the top with two tabs: *"Happy cheaters?"* and *"Who cheated?"*. Each tab is defined using the `tabPanel()` function, and has a title, an icon from the **`font-awesome`** library, and [`card()`](https://rstudio.github.io/bslib/articles/cards.html) elements that holds the content of the tab. It also includes a `uiOutput` [`value_box()`](https://rstudio.github.io/bslib/articles/value-boxes.html) that can be clicked to see in full-screen mode. The content of the `value_box()` will be defined in the server. In the tabs, there are different input elements such as `selectInput` and `switchInput` from the [**`shinyWidgets`**](https://shinyapps.dreamrs.fr/shinyWidgets/) package, allowing the user to make selections and toggle switches to customise the displayed data.
+The UI **ui_affair_alt** has a navigation bar at the top with two tabs: *"Happy cheaters?"* and *"Who cheated?"*. Each tab is defined using the `tabPanel()` function, and has a title, an icon from the **`font-awesome`** library, and [`card()`](https://rstudio.github.io/bslib/articles/cards.html) elements that hold the content of the tab. It also includes a `uiOutput` [`value_box()`](https://rstudio.github.io/bslib/articles/value-boxes.html) that can be clicked to see in full-screen mode. The content of the `value_box()` will be defined in the server. In the tabs, there are different input elements such as `selectInput` and `switchInput` from the [**`shinyWidgets`**](https://dreamrs.github.io/shinyWidgets/) package, allowing the user to make selections and toggle switches to customise the displayed data.
 
 Output elements include `girafeOutput`, for interactive plots, a `dataTableOutput` that produces interactive tables, and a simple pair of `plotOutput`.
 
-The server function **server_affair_alt**, defines the logic and calculations for the Shiny app. The `renderGirafe` function generates interactive girafe plots based on the user's selection and filters the data accordingly using dplyr functions such as `filter()`, `group_by()`, and `count()`. Using `girafe` in Shiny gives us additional options using the **`opts_selected()`**, like clicking on parts of the graph that are then filtered into a table because girafe saves the selection in `input$outpuname_selected` for the variable defined in the `data_id`. The `renderDataTable` function creates a data table using the **`DT`** package, and filters the data based on the selected values from the `girafe`. This feature makes `girafe` one of the most powerful packages to work with in Shiny.
+The server function **server_affair_alt**, defines the logic and calculations for the Shiny app. The `renderGirafe` function generates interactive girafe plots based on the user's selection and filters the data accordingly using dplyr functions such as `filter()`, `group_by()`, and `count()`. Using `girafe` in Shiny gives us additional options using the **`opts_selected()`**, like clicking on parts of the graph that are then filtered into a table because girafe saves the selection in `input$<outputId>_selected` (here, `input$affairs_selected`) for the variable defined in the `data_id`. The `renderDataTable` function creates a data table using the **`DT`** package, and filters the data based on the selected values from the `girafe`. This feature makes `girafe` one of the most powerful packages to work with in Shiny.
 
 ::: column-margin
 ![](wow.gif)
 :::
 
-In the second tab we include 2 `renderPlot` that react to the user's button selection. There is a better way of approaching the problem of multiple inputs outputs that interact with one another called **reactivity**, which we will see in the next example.
+In the second tab we include 2 `renderPlot` that react to the user's button selection. There is a better way of approaching the problem of multiple inputs and outputs that interact with one another called **reactivity**, which we will see in the next example.
 
 For now let's see the code and the resulting app:
 
-```{r 6.shinyapp-navbar}
+```{r 8.shinyapp-navbar}
 #| eval: false
 #| code-fold: true
 
@@ -359,7 +359,7 @@ server_affair_alt <- function(input, output) {
       ggiraph::geom_col_interactive()+
       theme_classic()+
       facet_wrap(gender~cheat)+
-      scale_fill_viridis_d("plasma")+
+      scale_fill_viridis_d(option = "plasma")+
       theme(legend.position = "none")+
       labs(title = "Respondents by self-declared happiness, by age and gender",
            subtitle = paste("Among", input$happy, "respondents"),
@@ -374,7 +374,7 @@ server_affair_alt <- function(input, output) {
   output$table <- DT::renderDataTable({
     
    affairs_1969 |>
-      dplyr::filter(happy==input$happy) %>%
+      dplyr::filter(happy==input$happy) |>
       dplyr::group_by(cheat,age) |>
       dplyr::mutate(n=n()) |>
       dplyr::filter(age %in% input$affairs_selected) |>
@@ -408,32 +408,32 @@ server_affair_alt <- function(input, output) {
     
     if (input$children) { 
       
-      affairs_1969 %>%
+      affairs_1969 |>
         dplyr::filter(children=="yes") |>
         dplyr::count(cheat, gender, education) |>
         ggplot(aes(x=education,y=n,fill=cheat))+
         geom_col()+
         geom_label(aes(label=n), fill="black",color="white", vjust=-0.5)+
-        scale_fill_brewer("Set2")+
+        scale_fill_brewer(palette = "Set2")+
         facet_wrap(gender~cheat)+
         theme_classic()+
         theme(legend.position = "none")+
-        labs(title = paste("Among", input$happy, "respondents"),
+        labs(title = "Respondents with children",
              x="Respondent education",
              y="# respondents")
     }
     else { 
-      affairs_1969 %>%
+      affairs_1969 |>
         dplyr::filter(children=="no") |>
         dplyr::count(cheat, gender, education) |>
         ggplot(aes(x=education,y=n,fill=cheat))+
         geom_col()+
         geom_label(aes(label=n), fill="black",color="white", vjust=-0.5)+
         facet_wrap(gender~cheat)+
-        scale_fill_viridis_d("rocket")+
+        scale_fill_viridis_d(option = "rocket")+
         theme_classic()+
         theme(legend.position = "none")+
-        labs(title = paste("Among", input$happy, "respondents"),
+        labs(title = "Respondents without children",
              x="Respondent education",
              y="# respondents")
     }
@@ -444,33 +444,33 @@ server_affair_alt <- function(input, output) {
     
     if (input$children) { 
       
-     affairs_1969 %>%
+     affairs_1969 |>
         dplyr::filter(children=="yes") |>
         dplyr::count(cheat, gender, yearsmarried) |>
         ggplot(aes(x=yearsmarried,y=n, fill=cheat))+
         geom_col()+
         geom_label(aes(label=n), fill="black",color="white", vjust=-0.5)+
         facet_wrap(gender~cheat)+
-        scale_fill_brewer("Set2")+
+        scale_fill_brewer(palette = "Set2")+
         theme_classic()+
         theme(legend.position = "none")+
-        labs(title = paste("Among", input$happy, "respondents"),
+        labs(title = "Respondents with children",
              x="Respondent years of marriage",
              y="# respondents")
       
     }
     else { 
-        affairs_1969 %>%
+        affairs_1969 |>
           dplyr::filter(children=="no") |>
           dplyr::count(cheat, gender, yearsmarried) |>
           ggplot(aes(x=yearsmarried,y=n, fill=cheat))+
           geom_col()+
           geom_label(aes(label=n), fill="black",color="white", vjust=-0.5)+
           facet_wrap(gender~cheat)+
-          scale_fill_viridis_d("rocket")+
+          scale_fill_viridis_d(option = "rocket")+
           theme_classic()+
           theme(legend.position = "none")+
-          labs(title = paste("Among", input$happy, "respondents"),
+          labs(title = "Respondents without children",
              x="Respondent years of marriage",
              y="# respondents")
       }
@@ -484,7 +484,7 @@ shinyApp(ui_affair_alt, server_affair_alt)
 ```
 
 ::: column-screen-inset-right
-<iframe src="https://nelsonamayad-r4dev-fair-s-affairs-navbar.share.connect.posit.cloud/" style="border: none; width: 100%; height: 750px" frameborder="0">
+<iframe src="https://nelsonamayad-r4dev-fair-s-affairs-navbar.share.connect.posit.cloud/" title="Fair's Affairs 1969: navbar app" style="border: none; width: 100%; height: 750px" frameborder="0">
 
 </iframe>
 :::
@@ -495,11 +495,11 @@ Look at the two deployed apps side by side:
 
 ::: {#infidelity .column-screen-inset layout-ncol="2"}
 ```{=html}
-<iframe src="https://nelsonamayad-r4dev-fair-s-affairs-sidebar.share.connect.posit.cloud/" style="border: none; width: 100%; height: 700px" frameborder="0">
+<iframe src="https://nelsonamayad-r4dev-fair-s-affairs-sidebar.share.connect.posit.cloud/" title="Fair's Affairs 1969: sidebar app" style="border: none; width: 100%; height: 700px" frameborder="0">
 </iframe>
 ```
 ```{=html}
-<iframe src="https://nelsonamayad-r4dev-fair-s-affairs-navbar.share.connect.posit.cloud/" style="border: none; width: 100%; height: 700px" frameborder="0">
+<iframe src="https://nelsonamayad-r4dev-fair-s-affairs-navbar.share.connect.posit.cloud/" title="Fair's Affairs 1969: navbar app" style="border: none; width: 100%; height: 700px" frameborder="0">
 </iframe>
 ```
 :::
@@ -519,13 +519,15 @@ To deploy the app you need to register your Shinyapps.io account in RStudio foll
 ::: callout-tip
 ## How do you embed a Shiny app in a website?
 
-The app above is hosted in my Shinyapps.io account and running from the Shiny server there, but can be accessed directly in this site by using the **iframe** HTML.
+The apps above are hosted on Posit Connect Cloud and run on its servers, but can be accessed directly in this site by using the **iframe** HTML.
 
 To embed a deployed ShinyApp in your blog, just place the URL inside of an iframe src outside of a code chunk:
 
 ```         
-<iframe src="YOUR SHINYAPP URL">
+<iframe src="YOUR SHINYAPP URL" title="What the app does"></iframe>
 ```
+
+On Posit Connect Cloud, use the app's **share URL** (it ends in `share.connect.posit.cloud`). The dashboard address that `rsconnect::deployApp()` prints refuses to load inside an iframe, so the embed stays blank.
 :::
 
 ## PART II: Shiny, in all its glory
@@ -540,7 +542,7 @@ The [US Geological Survey](https://earthquake.usgs.gov/earthquakes/feed/v1.0/geo
 
 We wrap the download in a function, `read_quakes()`, rather than running it once at the top of the script. That way the app can call it again whenever the user asks for fresh data.
 
-```{r 7.shiny-quakes-data}
+```{r 8.shiny-quakes-data}
 #| eval: false
 
 library(dplyr)
@@ -582,7 +584,7 @@ Then comes the `sidebar`, where we organise our **inputs**. There are three: a *
 
 Finally, two `nav_panel`s hold our two outputs: a map and a plot. Both are made with **plotly**, so both use `plotlyOutput()`. The IDs we give them here (`"map"`, `"mag_time"`) must match the names we fill in on the server.
 
-```{r 7.shiny-quakes-ui}
+```{r 8.shiny-quakes-ui}
 #| eval: false
 
 library(shiny)
@@ -663,7 +665,7 @@ Notice the chain: **button → `quakes()` → `quakes_shown()` ← selectors**, 
 
 The map itself is a plotly `scattergeo` trace: one marker per earthquake at its longitude/latitude, sized and coloured by magnitude, on a world basemap that plotly draws for us.
 
-```{r 7.shiny-quakes-server}
+```{r 8.shiny-quakes-server}
 #| eval: false
 #| code-fold: true
 
@@ -780,7 +782,7 @@ A great source on improving the look of an app is [*Outstanding User Interfaces 
 
 ### [RevealJS](https://quarto.org/docs/presentations/revealjs/) presentations 🤩
 
-Quarto produces other outputs beyond HTML, Word and PDF. One nice output includes RevealJS presentations, which are easy to do and display results computed in Quarto, so that you can include any object you're learned so far into a presentation directly.
+Quarto produces other outputs beyond HTML, Word and PDF. One nice output includes RevealJS presentations, which are easy to do and display results computed in Quarto, so that you can include any object you've learned so far into a presentation directly.
 
 To create a RevealJS presentation you only need to change the format to `format: revealjs` and become familiar with the structure of these presentations. RevealJS also has themes you can use, check them out [here](https://quarto.org/docs/presentations/revealjs/themes.html).
 

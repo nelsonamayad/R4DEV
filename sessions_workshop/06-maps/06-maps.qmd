@@ -54,7 +54,7 @@ Knowing how to build maps in R is mostly about navigating which packages and fun
 
 Let's start by reviewing the most useful packages and what each one does.
 
-```{r 5.mapping-packages}
+```{r 6.mapping-packages}
 #| echo: false
 library(reactable)
 library(reactablefmtr)
@@ -85,7 +85,7 @@ tibble(
   package_vignette = c(
     "https://r-spatial.github.io/sf/",
     "https://github.com/rspatial/geodata",
-    "https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/",
+    "https://jrnold.github.io/ggthemes/",
     "https://rstudio.github.io/leaflet/",
     "https://r-spatial.github.io/mapview/",
     "https://www.rayshader.com/",
@@ -111,17 +111,17 @@ tibble(
 
 ### 8 billion: A short detour to learn about simple features (sf) {.unnumbered}
 
-The world just hit 8 billion human population in 2022, so before we start looking at mapping in general, we'll start with the easiest build a simple worldmap using the package **`sf`**, which is one of the most powerful geospatial packages available in R.
+The world population passed 8 billion in November 2022, so before we look at mapping in general, we'll start with the easiest thing: a simple world map built with the package **`sf`**, which is one of the most powerful geospatial packages available in R.
 
-Geospatial data comes in many forms, and it's useful to start by looking closely at one of them. There is a handy cheat sheet for this package that you can find [here](https://github.com/rstudio/cheatsheets/blob/main/sf.pdf)
+Geospatial data comes in many forms, and it's useful to start by looking closely at one of them. There is a handy cheat sheet for this package that you can find [here](https://rstudio.github.io/cheatsheets/sf.pdf).
 
-We'll download an sf map of the world using **`rnaturalearth`** package and then map world population. Take a close look at the coordinate system inside the last column in the world_sf map we downloaded. This column geometry is special, as it holds all the coordinates needed to plot define the border of each country, and is a key input of `geom_sf()`.
+We'll download an sf map of the world using **`rnaturalearth`** package and then map world population. Take a close look at the coordinate system inside the last column in the world_sf map we downloaded. This column geometry is special, as it holds all the coordinates needed to draw the border of each country, and is a key input of `geom_sf()`.
 
-```{r 5.sf-intro}
+```{r 6.sf-intro}
 #| message: false
 #| warning: false
 
-library(sf)            # Simple object package
+library(sf)            # Simple features package
 library(rnaturalearth) # Contains a sf world map
 library(ggthemes)      # Gives us themes for maps
 library(tidyverse)     # Our old friends
@@ -145,7 +145,7 @@ world_sf |> # <2>
 
 ```
 
-1.  Let's download the worldmap as a sf file. Look at the file in the Viewer, what is different from other data frames? The **geometry** column
+1.  Let's download the world map as an sf object. Look at the file in the Viewer, what is different from other data frames? The **geometry** column
 2.  Start with the map object
 3.  Exclude Antarctica
 4.  Feed data into ggplot
@@ -159,7 +159,7 @@ The population map can be easily turned into an animation, as you learned in the
 
 After a little wrangling where we use the **`countrycode`** package to join the map and population data, we add a time transition and a little formatting to get this result:
 
-```{r 5.population-animation}
+```{r 6.population-animation}
 #| eval: false
 #| message: false
 #| warning: false
@@ -297,13 +297,13 @@ maddison_girafe
 
 ## PART II: Despair in the US {.unnumbered}
 
-Over the past two decades, over 450 000 american have died from opioid-related overdoses. The reasons are varied and summarised in [*Deaths of Despair*](https://press.princeton.edu/books/hardcover/9780691190785/deaths-of-despair-and-the-future-of-capitalism) by Angus Deaton & Anne Case. [*Empire of Pain: The Secret History of the Sackler Dynasty*](https://www.amazon.com/Empire-Pain-History-Sackler-Dynasty/dp/0385545681) by Patrick Radden Keefe shows the corporate interests behind the abuse of opioids, and chapter one *God's medicine* of [*Pandora's Lab*](https://www.amazon.com/Pandoras-Lab-Seven-Stories-Science/dp/1426217986) by Paul Offit explains how the crisis was produced by a perfect storm of regulatory loopholes, perverse corporate interests and misguided advocacy.
+About 806 000 Americans died from opioid overdoses between 1999 and 2023, according to the [CDC](https://www.cdc.gov/overdose-prevention/about/understanding-the-opioid-overdose-epidemic.html). The reasons are varied and summarised in [*Deaths of Despair*](https://press.princeton.edu/books/hardcover/9780691190785/deaths-of-despair-and-the-future-of-capitalism) by Angus Deaton & Anne Case. [*Empire of Pain: The Secret History of the Sackler Dynasty*](https://www.amazon.com/Empire-Pain-History-Sackler-Dynasty/dp/0385545681) by Patrick Radden Keefe shows the corporate interests behind the abuse of opioids, and chapter one *God's medicine* of [*Pandora's Lab*](https://www.amazon.com/Pandoras-Lab-Seven-Stories-Science/dp/1426217986) by Paul Offit explains how the crisis was produced by a perfect storm of regulatory loopholes, perverse corporate interests and misguided advocacy.
 
 Let us look at this crisis through a geospatial lens.
 
 ### Getting the data from CDC using an API {.unnumbered}
 
-The [Center for Disease Control (CDC)](https://www.cdc.gov/) has data on opioid-related deaths, called VSRR Provisional Drug Overdose Death Counts, and can be found in the US [Data.gov](https://www.data.gov/) portal. The data we are looking for is [here](https://data.cdc.gov/NCHS/VSRR-Provisional-Drug-Overdose-Death-Counts/xkb8-kh2a) and by clicking on the **API** button on the upper-right corner, choosing our format, in this case CSV, and can copy the location of the data for easy import to R.
+The [Centers for Disease Control and Prevention (CDC)](https://www.cdc.gov/) publish data on overdose deaths, called VSRR Provisional Drug Overdose Death Counts, which can be found through the US [Data.gov](https://data.gov/) portal. The data we are looking for is [here](https://data.cdc.gov/National-Center-for-Health-Statistics/VSRR-Provisional-Drug-Overdose-Death-Counts/xkb8-kh2a): click the **API** button in the upper-right corner, choose CSV as the format, and copy the address of the data for easy import into R. One caveat before we map anything: this indicator counts overdose deaths from *all* drugs. Opioids account for roughly three quarters of them in recent years, so read "opioid" below as the crisis's name, not a precise label.
 
 That way we can download it straight into R with `read_csv()` --Socrata portals serve plain CSV, no special package needed[^socrata]. The only trick is the `$limit` parameter: without it, the portal politely hands you just the first 1 000 rows. Then we keep only the data we want and quickly plot it using **`ggplot2`**.
 
@@ -316,7 +316,7 @@ Having trouble downloading the data from the CDC?
 {{< downloadthis cdc_opioid.csv dname = cdc_opioid label="Download CDC data" icon=database-down type=success >}}
 :::
 
-```{r 5.cdc-socrata}
+```{r 6.cdc-socrata}
 library(tidyverse)     # Our old friend
 
 # Get data from CDC portal
@@ -365,7 +365,7 @@ Check out the result. This is a complicated object with an intimidating name: `F
 
 But we don't need to worry, as we don't need to handle this object directly to build maps: we can transform it to our now favourite **sf** object using `st_as_sf()` function, which will give us a nice geometry column we already know how to handle.
 
-```{r 5.usmap}
+```{r 6.usmap}
 library(geodata)
 library(sf)
 library(tidyverse)
@@ -382,7 +382,7 @@ us_state <- sf::st_as_sf(us) # <22>
 
 Now we need only join the data from the **us_state** data frame and the opioid data we had saved before. For this we use our old friend: the `left_join()` function and the pipe. However, before all this magic happens, we find that we have a conflict: 2 packages use the same functions `filter()` and `select()` and we have to choose which one takes precedence. This is easy and fast with the **`conflicted`** package, and we choose **`dplyr`**:
 
-```{r 5.opioid-map}
+```{r 6.opioid-map}
 
 library(sf)
 library(tidyverse)
@@ -395,7 +395,7 @@ conflicted::conflicts_prefer(base::setdiff)
 # Let's first simplify and summarize the opioid data. We'll call the new data frame opioid_states
 opioid_states <- opioid |>
   dplyr::select(state_name,year,month,data_value) |>
-  dplyr::filter(state_name!="United States",month=="December") |>           
+  dplyr::filter(state_name!="United States", year<2023, month=="December") |>           
   dplyr::group_by(state_name) |>
   dplyr::summarize(opioid = sum(data_value)/1000) #Change unit to thousands
 
@@ -413,7 +413,7 @@ Now we can map with **`ggplot2`** using the `geom_sf()` option, which will draw 
 
 First, let's use the `gdtools` package to make sure all girafe graphs use the font we like.
 
-```{r 5-gdtools}
+```{r 6-gdtools}
 library(gdtools)
 
 # Add our favourite font to girafe ####
@@ -423,7 +423,7 @@ gdtools::addGFontHtmlDependency(family = "News Cycle")
 
 Now with the map:
 
-```{r 5.opioid-epidemic}
+```{r 6.opioid-epidemic}
 library(sf)
 library(tidyverse)
 library(conflicted)
@@ -480,47 +480,47 @@ Static maps are great but interactive maps are better. Let's see how to turn the
 
 ### Heavyweight champion: Leaflet {.unnumbered}
 
-The heatmap above made with **`ggplot2`** was a very good visualisation. But we can do better. Leaflet is a great open source tool to build interactive maps. Have a look here on the [basics](https://rstudio.github.io/leaflet/). Leaflet has a different syntax than ggplot, as we add layers over layers using the pipe **`%>%`** instead of the **`+`** sign, similar to **`plotly`**.
+The heatmap above made with **`ggplot2`** was a very good visualisation. But we can do better. Leaflet is a great open source tool to build interactive maps. Have a look here on the [basics](https://rstudio.github.io/leaflet/). Leaflet has a different syntax than ggplot, as we add layers over layers using the pipe **`|>`** instead of the **`+`** sign, similar to **`plotly`**.
 
-To build an interactive map with Leaflet we need to first summarize our data, feed it into a `leaflet()` function and then sprinkle a few leaflet tricks.
+To build an interactive map with Leaflet we need to first summarise our data, feed it into a `leaflet()` function and then sprinkle a few leaflet tricks.
 
-We repeat the process to summarise the data, by state, and join it into a new object **us_leaflet**. We will build a special type of interactive map called [Choropleth map](https://rstudio.github.io/leaflet/choropleths.html), so to get Leaflet to work well, we need to define the *color palette* and *scale* separately, as we will later need to use them inside of the Leaflet pipe.
+We repeat the process to summarise the data, by state, and join it into a new object **us_leaflet**. We will build a special type of interactive map called [Choropleth map](https://rstudio.github.io/leaflet/choropleths.html), so to get Leaflet to work well, we need to define the *colour palette* and *scale* separately, as we will later need to use them inside of the Leaflet pipe.
 
-So we create bins and a `pal` objects that we'll use in a later layer of leaflet:
+So we create bins and a `pal` object that we'll use in a later layer of leaflet:
 
 ::: callout-tip
 ## `leaflet` vignette
 
-Check out the [leaflet cheatsheet](https://ugoproto.github.io/ugo_r_doc/pdf/leaflet-cheat-sheet.pdf)
+Check out the [leaflet cheatsheet](https://rstudio.github.io/cheatsheets/leaflet.pdf)
 :::
 
-```{r 5.opioid-prepare}
+```{r 6.opioid-prepare}
 library(tidyverse)
 library(leaflet)
 
 # Let's first simplify and summarize the opioid data. We'll call the new data frame opioid_leaf
-opioid_leaf <- opioid %>%
-  dplyr::select(state_name,year,month,data_value) %>%
-  dplyr::filter(state_name!="United States",month=="December") %>%             
-  dplyr::group_by(state_name) %>%
+opioid_leaf <- opioid |>
+  dplyr::select(state_name,year,month,data_value) |>
+  dplyr::filter(state_name!="United States", year<2023, month=="December") |>
+  dplyr::group_by(state_name) |>
   dplyr::summarize(opioid = sum(data_value)/1000) #Change unit to thousands
 
 # Join the data to a new sf object
 us_leaflet <- us_state |>
-  dplyr::left_join(opioid_leaf, 
-                   by=c('NAME_1'="state_name")) 
+  dplyr::left_join(opioid_leaf,
+                   by=c('NAME_1'="state_name"))
 
 # Define color palette. It will be broken by bins, and the palette will be Spectral as before
-pal <- leaflet::colorBin(palette = "Spectral", 
-                         domain = us_leaflet$opioid, 
-                         bins = c(0, 5, 10, 15, 20, 30, 40, Inf), 
+pal <- leaflet::colorBin(palette = "Spectral",
+                         domain = us_leaflet$opioid,
+                         bins = c(0, 5, 10, 15, 20, 30, 40, Inf),
                          reverse = TRUE)
 
 ```
 
-With the **sf** object that holds the coordinates and the opioid data, plus the color palette defined, we just feed the data to the command `leaflet()` that starts the pipe.
+With the **sf** object that holds the coordinates and the opioid data, plus the colour palette defined, we just feed the data to the command `leaflet()` that starts the pipe.
 
-As it is a map of the US, we center the map using `setView()` coordinates. This is a dark topic, so we choose a dark background using [provider tiles](https://leaflet-extras.github.io/leaflet-providers/preview/). Finally, the real magic in the map comes from the `addPolygon()` option, which will create a polygon that stands out when interacting with it. Inside of this option we define the colors to depend on the palette we created `pal`, and have that palette be applied over the opioid data. The other important options we include highlights the state when you hover over the mouse using `highlightOptions()`, and `label` to create a tooltip that will show the name of the state and the number of deaths.
+As it is a map of the US, we centre the map using `setView()` coordinates. This is a dark topic, so we choose a dark background using [provider tiles](https://leaflet-extras.github.io/leaflet-providers/preview/). Finally, the real magic in the map comes from the `addPolygons()` option, which will create a polygon that stands out when interacting with it. Inside of this option we define the colours to depend on the palette we created, `pal`, and have that palette be applied over the opioid data. The other important options we include highlight the state when you hover the mouse over it, using `highlightOptions()`, and `label` to create a tooltip that will show the name of the state and the number of deaths.
 
 Now you know how to build an interactive map from scratch. Cool, no?
 
@@ -534,7 +534,7 @@ Leaflet maps in HTML are amazing, but they require *lots* of computation capacit
 ![leaflet](leaflet-opioid.png)
 :::
 
-```{r 5.opioid-choro}
+```{r 6.opioid-choro}
 #| fig.align: center
 #| out-width: "100%"
 #| eval: false
@@ -578,15 +578,15 @@ us_leaflet |>
 
 Leaflet is great but it is heavy and slow. [**mapview**](https://r-spatial.github.io/mapview/) solves both by cutting a few corners.
 
-Let's build the exact same map above in mapview, using the `mapview()` function and tweaking a few options that don't have very intuitive names. For `mapview`, we define the bins using the `cut()` function, and then pipe in the data into the `mapview()` function. The option `zcol` is the one used for the heatmap, and the option `col.regions` is used to determine the color palette. 
+Let's build the exact same map above in mapview, using the `mapview()` function and tweaking a few options that don't have very intuitive names. For `mapview`, we define the bins using the `cut()` function, and then pipe in the data into the `mapview()` function. The option `zcol` is the one used for the heatmap, and the option `col.regions` is used to determine the colour palette. 
 
-These maps are simple, but as they built on top of leaflet, we can use leaflet options to customise the map even more. For instance, we pipe in the `setView()` option from leaflet to center the map in specific coordinates and set a default zoom level. Notice we do this on the map component of the `mapview` and we access it with **`@`**.
+These maps are simple, but as they are built on top of leaflet, we can use leaflet options to customise the map even more. For instance, we pipe in the `setView()` option from leaflet to centre the map on specific coordinates and set a default zoom level. Notice we do this on the map component of the `mapview` and we access it with **`@`**.
 
 ::: column-margin
 ![mapview](mapview-opioid.png)
 :::
 
-```{r 5.mapview}
+```{r 6.mapview}
 #| eval: false
 library(mapview)
 library(leaflet)
@@ -634,7 +634,7 @@ Having trouble downloading the data for California?
 {{< downloadthis california_opioid.csv dname = california_opioid label="Download CDC data" icon=database-down type=success >}}
 :::
 
-```{r 5.us-census-api}
+```{r 6.us-census-api}
 #| include: false
 
 # Tidycensus: the key lives in .Renviron (CENSUS_API_KEY=...), never in code ####
@@ -642,7 +642,7 @@ us_census_api_key <- Sys.getenv("CENSUS_API_KEY")
 
 ```
 
-```{r 5.california-data}
+```{r 6.california-data}
 library(usmap)  
 library(tidycensus)
 library(tidyverse)
@@ -682,11 +682,11 @@ california <- usmapdata::us_map(regions = "counties") |>
 write_csv(opioid_california, paste0(getwd(),"/california_opioid.csv"))
 ``` 
 
-We will create two visualisations that will be connected to one another: a scatter plot and a map. We create each graph independently using the extended geoms from **`ggiraph`** package. The key make the two interact is the data_id, which will show the name of the state when you hover the mouse over each point or county. We reuse a trick from the last session to control the image that is displayed in the visual mark using `ggimage`.
+We will create two visualisations that will be connected to one another: a scatter plot and a map. We create each graph independently using the extended geoms from **`ggiraph`** package. The key to making the two interact is the `data_id`, which highlights the same county in both plots when you hover the mouse over a point or a county. We reuse a trick from the last lesson to control the image that is displayed in the visual mark using `ggimage`.
 
 Finally, we merge both plots using the **`patchwork`** package. We place each plot side by side easily by adding it with the **`+`** operator. Then we include both graphs within `girafe()` and this is the result:
 
-```{r 5.california-ggiraph}
+```{r 6.california-ggiraph}
 library(tidyverse)
 library(ggthemes)
 library(ggiraph)
@@ -733,17 +733,17 @@ ggiraph::girafe(
 
 ## Bonus track: 3D maps with [rayshader](https://www.rayshader.com/index.html)
 
-This final application is just for fun, as 3D visuals are not incredibly informative and are hard to put together. Nevertheless, even just to showcase what R packages can do, we'll give 3D a try using the package **`rayshader`**. We'll also use the **`viridis`** package which is designed with color palettes that are mindful of colorblindness.
+This final application is just for fun, as 3D visuals are not incredibly informative and are hard to put together. Nevertheless, even just to showcase what R packages can do, we'll give 3D a try using the package **`rayshader`**. We'll also use the **`viridis`** package which is designed with colour palettes that are mindful of colour blindness.
 
 ::: callout-tip
 ## rayshader, explained
 
-Check out this [rayshader tutorial](https://www.tylermw.com/3d-ggplots-with-rayshader/)
+Check out this [rayshader tutorial](https://www.tylermw.com/posts/data_visualization/3d-ggplots-with-rayshader.html)
 :::
 
 To start, we'll create a simple 2D heatmap of overdose deaths in California by county, as we did before, and save it. Before we do this, we need to make an adjustment to our data using `st_simplify()` so that the geometries are less complex.
 
-```{r 5.california-ggplot}
+```{r 6.california-ggplot}
 library(tidyverse)
 library(viridis)
 library(sf)
@@ -755,7 +755,7 @@ california_gg <- california_simplified |>
   ggplot(aes(fill=provisional_drug_overdose))+
   geom_sf(aes(geometry = geom))+
   scale_fill_viridis_c(trans = "log10")+
-  labs(title="California overdose deaths, 2015-21",
+  labs(title="California overdose deaths, 2021",
        x=NULL,y=NULL,
        fill="Deaths")+
   theme_bw()+
@@ -769,7 +769,7 @@ Now let's render the plot in 3D using `plot_gg()` function from **`rayshader`**.
 
 You can take snapshots of the rendered visual using `render_snapshot()`, which you can then save to use elsewhere, and `render_movie()` to get a rotating video of the plot.
 
-```{r 5.california.rayshader}
+```{r 6.california.rayshader}
 
 # load the rayshader package
 library(rayshader)
@@ -792,7 +792,7 @@ rayshader::plot_gg(california_gg,
 rayshader::render_snapshot()
 ```
 
-```{r 5.rayshader.movie}
+```{r 6.rayshader.movie}
 #| include: false
 #| eval: false
 

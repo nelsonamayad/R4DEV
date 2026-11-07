@@ -164,30 +164,34 @@ website:
 
     background: primary
 
+# Page options live at the top level, not under `format: html:`, so that the
+# quarto-live pages (`format: live-html`) inherit them too: theme, style.css,
+# toc, code folding/tools, lightbox and hover code annotations.
+theme:
+  light: [journal, brand]
+  dark: [journal, brand]
+respect-user-color-scheme: true
+toc: true
+toc-location: left
+code-fold: show
+code-summary: "Show the code"
+code-tools:
+  toggle: true
+  source: false
+code-link: true
+code-copy: true
+code-annotations: hover
+highlight-style:
+  light: github
+  dark: github-dark
+footnotes-hover: true
+link-external-newwindow: true
+smooth-scroll: true
+lightbox: true
+css: style.css
+
 format:
-  html:
-    theme:
-      light: [journal, brand]
-      dark: [journal, brand]
-    respect-user-color-scheme: true
-    toc: true
-    toc-location: left
-    code-fold: show
-    code-summary: "Show the code"
-    code-tools:
-      toggle: true
-      source: false
-    code-link: true
-    code-copy: true
-    code-annotations: hover
-    highlight-style:
-      light: github
-      dark: github-dark
-    footnotes-hover: true
-    link-external-newwindow: true
-    smooth-scroll: true
-    lightbox: true
-    css: style.css
+  html: default
 
 comments:
   hypothesis: true

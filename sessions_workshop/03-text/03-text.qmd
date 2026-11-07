@@ -38,7 +38,7 @@ webr:
 
 > "*For every complex problem there is an answer that is clear, simple, and wrong.*" <br> --H.L. Mencken
 
-Text analysis is how you convert prose into a numerical analysis. Examples of applications of text analysis are [Google NGrams](https://books.google.com/ngrams) and translators like [DeepL](https://www.deepl.com/en/translator). It is also a building block for AI applications, like the recently released [ChatGPT](https://openai.com/blog/chatgpt/).
+Text analysis is how you convert prose into a numerical analysis. Examples of applications of text analysis are [Google NGrams](https://books.google.com/ngrams) and translators like [DeepL](https://www.deepl.com/en/translator). It is also a building block of large language models like [ChatGPT](https://openai.com/index/chatgpt/), which the [Work with AI](/learn/ai.qmd) track puts to work from R.
 
 In this session we will focus on retrieving, cleaning and visualising text data.
 
@@ -78,7 +78,7 @@ library(pdftools)
 library(tidytext)
 library(tidyverse)
 
-# Read the whole book using PDF tools package #### "/sessions_workshop/03-text/"
+# Read the whole book using the pdftools package ####
 
 the_origins_of_species <- pdftools::pdf_text(paste0(getwd(),"/Darwin-1859 Origin of Species.pdf")) |> # <1>
   stringr::str_squish() # <2>
@@ -86,16 +86,16 @@ the_origins_of_species <- pdftools::pdf_text(paste0(getwd(),"/Darwin-1859 Origin
 ```
 
 1.  Read the file into R with the function `pdf_text()`
-2.  Eliminate all blank spaces in the text
+2.  Collapse repeated whitespace and line breaks into single spaces
 
-### Working with text-as-data: Tokenization, stopwords, stemming {.unnumbered}
+### Working with text-as-data: Tokenisation, stopwords, stemming {.unnumbered}
 
-Before we can actually use the text to analyse it, we need to perform a few operations. The first is to create *tokens*, which is basically the unit of measurement we choose for our text analysis. Token can be words, characters, sentences, paragraphs, n-grams, you name it. To tokenize the book, we'll use a function from the **`tidytext`** package that does all the heavy lifting for us.
+Before we can actually use the text to analyse it, we need to perform a few operations. The first is to create *tokens*, which is basically the unit of measurement we choose for our text analysis. Tokens can be words, characters, sentences, paragraphs, n-grams, you name it. To tokenise the book, we'll use a function from the **`tidytext`** package that does all the heavy lifting for us.
 
 ::: callout-tip
 ## A sliver of regex
 
-regex gives headaches, and the 2nd page of the [stringr cheatsheet](https://posit.co/wp-content/uploads/2022/10/strings-1.pdf) is your ibuprofen. There are a few important operations in regex you should remember:
+regex gives headaches, and the 2nd page of the [stringr cheatsheet](https://rstudio.github.io/cheatsheets/strings.pdf) is your ibuprofen. There are a few important operations in regex you should remember:
 
 **Special metacharacters**
 
@@ -113,13 +113,13 @@ regex gives headaches, and the 2nd page of the [stringr cheatsheet](https://posi
 
 ### Stop! Removing words we don't care much about
 
-We will then extract words from the remaining data that we won't need. These are called **stopwords**, and include a list of articles, prepositions and other words that we are not super interested in analysing. We will remove the words using the `anti_join()` function, which removes any common elements from two databases.
+We will then remove words from the remaining data that we won't need. These are called **stopwords**, and include a list of articles, prepositions and other words that we are not super interested in analysing. We will remove the words using the `anti_join()` function, which keeps only the rows of the first dataset that have no match in the second.
 
 ### Looking for the root and a bit of linguistics
 
-Finally, we will look at the **stem** of the remaining words, as we want to avoid duplicates from plurals and the like. For this we will use the **`SnowballC`** package, which has a handy function to extract the root of words. We also do **lemmatization**, or identifying the dictionary form of the words based on linguistics and grouping them together using the **`textstem`** package.
+Finally, we will look at the **stem** of the remaining words, as we want to avoid duplicates from plurals and the like. For this we will use the **`SnowballC`** package, which has a handy function to extract the root of words. We also do **lemmatisation**, or identifying the dictionary form of the words based on linguistics and grouping them together using the **`textstem`** package.
 
-We won't go into the details, but check the differences between the stem and lemma results below to pick your curiosity:
+We won't go into the details, but check the differences between the stem and lemma results below to pique your curiosity:
 
 ```{r 3.tokens}
 library(pdftools)
@@ -147,11 +147,11 @@ toos_df |>
 
 ```
 
-3.  Make into a database
-4.  Tokenize into words using the `unnest_tokens()` function. We also make the text lower-case.
+3.  Turn the vector of pages into a tibble
+4.  Tokenise into words using the `unnest_tokens()` function. We also make the text lower-case.
 5.  See the list of stopwords in each language
 6.  Remove all the stopwords from the list using `anti_join()`, which removes all words common in both datasets.
-7.  Identify the stem of each word, to avoid counting conjugation duplicates, and lemmatization that uses linguistics to create lemmas, the canonical or dictionary forms of word.
+7.  Identify the stem of each word, to avoid counting conjugation duplicates, and its lemma, which uses linguistics to find the canonical or dictionary form of each word.
 
 Now let's see the result from the cleaning by plotting the frequency of the words that appear the most in the book using **ggplot2** --for words, their stems and also their lemmas. We will start with the original data and, using the pipe, clean it, sort it, slice it and feed it to ggplot. In this case, we want bars/columns to represent the frequency of each word. We'll use the package **`ggpattern`** to style the bars, so we use `geom_col_pattern()` with pattern options, and `geom_label()` to add the numeric frequency of the word next to each bar.
 
@@ -186,7 +186,7 @@ toos_df |>
   coord_flip()+ 
   ylim(c(0,2500))+ 
   labs(x=NULL,y=NULL, 
-       title="Words in The Origins of Species",
+       title="Words in The Origin of Species",
        subtitle = "20 most frequent words in the 1909 edition")+
   theme(legend.position = "none",
         axis.text.y = element_text(size=16))
@@ -221,7 +221,7 @@ toos_df |>
   coord_flip()+ 
   ylim(c(0,2500))+ 
   labs(x=NULL,y=NULL, 
-       title="Stem of words in The Origins of Species",
+       title="Stem of words in The Origin of Species",
        subtitle = "20 most frequent stemmed words in the 1909 edition")+
   theme(legend.position = "none",
         axis.text.y = element_text(size=16))
@@ -257,7 +257,7 @@ toos_df |>
   coord_flip()+ 
   ylim(c(0,2500))+ 
   labs(x=NULL,y=NULL, 
-       title="Lemma of words in The Origins of Species",
+       title="Lemma of words in The Origin of Species",
        subtitle = "20 most frequent lemmatized words in the 1909 edition")+
   theme(legend.position = "none",
         axis.text.y = element_text(size=16))
@@ -269,7 +269,7 @@ toos_df |>
 
 Wordclouds are mostly decorative, they are not very informative. They are the pie charts of text data: There will always be a better way to convey the information, but people like them anyway.
 
-To create a wordcloud, we only need to use one new geometry: `geom_text_wordcloud()`. As arguments we give the label for each word and the weight of the word based on the frequency. we can also change the area in which the wordcloud is created, using the `scale_size_area()` option and a 3-color diverging palette.
+To create a wordcloud, we only need to use one new geometry: `geom_text_wordcloud()`. As arguments we give the label for each word and the weight of the word based on the frequency. We can also change the area in which the wordcloud is created, using the `scale_size_area()` option and a 3-colour diverging palette.
 
 ```{r 3.ggwordcloud}
 library(tidyverse)
@@ -290,11 +290,11 @@ toos_df |>
   theme_minimal()
 ```
 
-8. Use the `geom_text_wordcloud()` geometry to plot the wordcloud very easily, even adding a variable to weight the size by frequency in the text and color it with a palette.
+8. Use the `geom_text_wordcloud()` geometry to plot the wordcloud very easily, even adding a variable to weight the size by frequency in the text and colour it with a palette.
 
 ### Sentiment analysis for ***Infinite Jest*** {.unnumbered}
 
-Words have connotations that can be analysed numerically. Evaluating an opinion or emotion in text can be done using sentiment analysis, which we will do for another american novel: David Foster Wallace's *Infinite Jest*. To do this, we just need to add a database with negative/positive identifiers for words in English and match them with the data from the book.
+Words have connotations that can be analysed numerically. Evaluating an opinion or emotion in text can be done using sentiment analysis, which we will do for an American novel: David Foster Wallace's *Infinite Jest*. To do this, we just need to add a database with negative/positive identifiers for words in English and match them with the data from the book.
 
 We'll use the lexicon **Bing** to start, which gives either a single positive or negative association to a large set of words in English.
 
@@ -311,14 +311,14 @@ With the pipe workflow, we sequence all the steps we did before and join the sen
 ::: callout-tip
 ## **`dplyr`** helper functions
 
-The **`dplyr`** package has some useful functions that regex text without a hassle: you can select variables or filter observations based on text.
+The **`dplyr`** package (through its **`tidyselect`** helpers) has some useful functions that regex column names without a hassle: you can select variables based on their names. To filter *observations* based on text, use `stringr::str_detect()` inside `filter()`.
 
 -   `starts_with`: starts with a prefix (same as regex '\^blah')
--   `ends_with`: ends with a prefix (same as regex 'blah\$')
+-   `ends_with`: ends with a suffix (same as regex 'blah\$')
 -   `contains`: contains a literal string (same as regex 'blah')
 -   `matches`: matches a regular expression (write regex here)
 -   `num_range`: a numerical range like x01, x02, x03 (same as regex 'x\[0-9\]\[0-9\]')
--   `one_of`: variables in character vector
+-   `any_of`/`all_of`: variables named in a character vector (`one_of` is the older, superseded name)
 -   `everything`: all variables. Used for reordering.
 :::
 
@@ -365,7 +365,7 @@ The positive/negative lexicon is not very interesting. There is another one call
 
 [^1]: Saif M. Mohammad and Peter Turney (2013) *Crowdsourcing a Word-Emotion Association Lexicon*. Computational Intelligence, 29(3): 436-465.
 
-Let's repeat the analysis using this lexicon and draw word frequencies by sentiment group, taking into account that words can have multiple sentiments and will be counted multiple times. Using `scale_fill_manual()` we can easily assign a color to each sentiment.
+Let's repeat the analysis using this lexicon and draw word frequencies by sentiment group, taking into account that words can have multiple sentiments and will be counted multiple times. Using `scale_fill_manual()` we can easily assign a colour to each sentiment.
 
 ::: callout-tip
 ## Join us! Merging data with **`dplyr`**
@@ -379,7 +379,7 @@ Merging data between databases using **`dplyr`** is a joy, not a headache. There
 -   `semi_join()` returns only the rows from the left dataset that have a match in the right dataset, discarding observations without a match.
 -   `anti_join()` returns all rows from the left dataset that do not have a match in the right dataset. It essentially removes the rows with matching values in the specified variables, keeping only the observations from the left dataset that have no corresponding match in the right dataset.
 
-You can specify the columns for matching using the **`by`** argument within the chosen join function to specify the columns that should be used for matching. If you want to join based on a single column named "ID", you would write: `by = "ID"`. If you want to match on multiple columns, such as "ID" and "Date", you would write: `by = c("ID", "Date"))`.
+You can specify the columns for matching using the **`by`** argument within the chosen join function to specify the columns that should be used for matching. If you want to join based on a single column named "ID", you would write: `by = "ID"`. If you want to match on multiple columns, such as "ID" and "Date", you would write: `by = c("ID", "Date")`.
 :::
 
 ```{r 3.sentiment-nrc}
@@ -431,16 +431,16 @@ pdftools::pdf_text(paste0(getwd(),"/infinite_jest.pdf")) |> # <19>
 19. Import the text into R, as before.
 20. Collapse repeated whitespace into single spaces.
 21. Turn the character vector into a tibble.
-22. Tokenize into one row per word.
+22. Tokenise into one row per word.
 23. Remove all stopwords using `anti_join()`.
 24. Join the sentiments using `left_join()`. A word can carry several NRC sentiments, so we add `multiple = "all"` to keep every match, not just the first.
 25. Filter out all words without a sentiment matched to them.
 26. Group and summarise the count of words by sentiment.
-27. Notice how you can customise the colors using `scale_fill_manual()`: a named vector of `"value" = "color"` pairs manually matches each sentiment to a color.
+27. Notice how you can customise the colours using `scale_fill_manual()`: a named vector of `"value" = "colour"` pairs manually matches each sentiment to a colour.
 
 ### Rejoinder: Narrative progression in ***Moby Dick*** 🐋
 
-A fun application of sentiment analysis is tracking the frequency of words by sentiment from beginning to end of a novel. We'll use **Moby Dick** as an example, showing with the help of **`girafe`**, how the relative frequency of each sentiment in the Bing lexicon changes throughout the novel between positive and negative words.
+A fun application of sentiment analysis is tracking the frequency of words by sentiment from beginning to end of a novel. We'll use **Moby Dick** as an example, showing with the help of **`ggiraph`** how the relative frequency of each sentiment in the Bing lexicon changes throughout the novel between positive and negative words.
 
 As you can see below, the book grows progressively more negative, as the cumulative word count by sentiment shows.
 
@@ -474,7 +474,7 @@ moby_dick_gg <- moby_dick |>
   dplyr::group_by(chapter) |>
   dplyr::mutate(dif = (cum_sent - lag(cum_sent))) |>
   ggplot(aes(x=chapter))+
-  geom_path_interactive(size = 3,
+  geom_path_interactive(linewidth = 3,
                         aes(y=cum_sent, 
                             data_id = sentiment, 
                             tooltip = sentiment,
@@ -534,7 +534,7 @@ austen_books() |>
 ::: {.callout-note collapse="false"}
 ## Hint
 
-The tokenizer is the very first tidytext function this session taught, and tidytext ships a built-in data frame of English stopwords called `stop_words`.
+The tokeniser is the very first tidytext function this session taught, and tidytext ships a built-in data frame of English stopwords called `stop_words`.
 :::
 ::::
 
@@ -565,7 +565,7 @@ austen_books() |>
 ::::: {.callout-important icon="false" collapse="true"}
 # Intermediate
 
-Words rarely travel alone. Tokenise *Emma* into **bigrams** (pairs of consecutive words), split each pair, drop the pairs where either half is a stopword, and count what remains. Two blanks in the tokenizer call.
+Words rarely travel alone. Tokenise *Emma* into **bigrams** (pairs of consecutive words), split each pair, drop the pairs where either half is a stopword, and count what remains. Two blanks in the tokeniser call.
 
 ```{webr}
 #| exercise: ex_w03_inter
@@ -621,13 +621,13 @@ austen_books() |>
 These need live downloads and your own R session:
 
 -   Install the [`gutenbergr`](https://cran.r-project.org/web/packages/gutenbergr/vignettes/intro.html) package `install.packages("gutenbergr")`, pick a book from the library and download it to R, then carry out whichever sentiment analysis you prefer and plot it.
--   Carry out sentiment analysis for a book of your choice using all sentiment lexicons available in the `get_sentiments()` function: **AFINN**, **NRC**, **Bing** and **loughran**. Describe each result and the differences between them.
+-   Carry out sentiment analysis for a book of your choice using all sentiment lexicons available in the `get_sentiments()` function: **AFINN**, **NRC**, **Bing** and **Loughran**. Describe each result and the differences between them.
 -   Write a function that downloads and cleans the text of any book in Project Gutenberg, and another that does sentiment analysis of any book in Project Gutenberg.
 
 ::: {.callout-tip collapse="true"}
 ## Solution sketch
 
-```{r 2.hw1_gutenbergr}
+```{r 3.hw1_gutenbergr}
 #| eval: false
 #| code-fold: true
 
@@ -642,21 +642,18 @@ gutenbergr::gutenberg_download(gutenberg_id = 34967, mirror = "http://mirrors.xm
                      as_tibble() |>
                      dplyr::rename(word=1),
                    by="word") |>
-  dplyr::left_join(get_sentiments("afinn"), by="word") |>
-  dplyr::group_by(value) |>
-  dplyr::mutate(n = n(),
-                p = n/sum(n),
-                c = case_when(value<0 ~ "Negative",
-                              value==0 ~ "Neutral",
+  dplyr::inner_join(get_sentiments("afinn"), by="word") |>
+  dplyr::count(value) |>
+  dplyr::mutate(c = case_when(value<0 ~ "Negative",
                               value>0 ~ "Positive") |>
                   factor()) |>
-  ggplot(aes(x=value,y=n,color=c))+
+  ggplot(aes(x=value,y=n,fill=c))+
   geom_col(show.legend = FALSE)+
   geom_vline(xintercept = 0)+
   scale_x_continuous(breaks=seq(from=-5,to=5,by=1))+
-  scale_color_brewer(palette = "Set1")+
-  annotate("text",x=-4,y=1000000, label ="Negative", color = "red")+
-  annotate("text",x=4,y=1000000, label ="Positive", color = "blue")+
+  scale_fill_brewer(palette = "Set1")+
+  annotate("text",x=-4,y=Inf, vjust=1.5, label ="Negative", color = "red")+
+  annotate("text",x=4,y=Inf, vjust=1.5, label ="Positive", color = "blue")+
   labs(title = "The Descent of Man (Charles Darwin, 1871)",
        subtitle = "Sentiment analysis",
     x="AFINN lexicon",
@@ -669,8 +666,8 @@ book_sentiments <- function(author_name,book_name) {
   # Extract ID 
   gutenbergr::gutenberg_works() |> 
     dplyr::filter(str_detect(author,author_name), str_detect(title,book_name)) |> 
-    dplyr::select(gutenberg_id) |> 
-    as.numeric() |>
+    dplyr::pull(gutenberg_id) |>
+    head(1) |>
     # Download book
     gutenbergr::gutenberg_download(mirror = "http://mirrors.xmission.com/gutenberg/") |>
     # unnest tokens
@@ -680,24 +677,21 @@ book_sentiments <- function(author_name,book_name) {
                      as_tibble() |>
                      dplyr::rename(word=1),
                    by="word") |>
-    # Join sentiments
-    dplyr::left_join(get_sentiments("afinn"), by="word") |>
-    dplyr::group_by(value) |>
-    dplyr::mutate(n = n(),
-                p = n/sum(n),
-                c = case_when(value<0 ~ "Negative",
-                              value==0 ~ "Neutral",
-                              value>0 ~ "Positive") |>
+    # Join sentiments and count words per sentiment value
+    dplyr::inner_join(get_sentiments("afinn"), by="word") |>
+    dplyr::count(value) |>
+    dplyr::mutate(c = case_when(value<0 ~ "Negative",
+                                value>0 ~ "Positive") |>
                   factor()) |>
     # Plot results
-    ggplot(aes(x=value,y=n,color=c))+
+    ggplot(aes(x=value,y=n,fill=c))+
     geom_col(show.legend = FALSE)+
     geom_vline(xintercept = 0)+
     scale_x_continuous(breaks=seq(from=-5,to=5,by=1))+
-    scale_color_brewer(palette = "Set1")+
-    annotate("text",x=-4,y=1000000, label ="Negative", color = "red")+
-    annotate("text",x=4,y=1000000, label ="Positive", color = "blue")+
-    labs(title = paste0("Sentiment analysis for ",print(book_name)," by ",print(author_name)), 
+    scale_fill_brewer(palette = "Set1")+
+    annotate("text",x=-4,y=Inf, vjust=1.5, label ="Negative", color = "red")+
+    annotate("text",x=4,y=Inf, vjust=1.5, label ="Positive", color = "blue")+
+    labs(title = paste0("Sentiment analysis for ",book_name," by ",author_name), 
            subtitle = "Book from Project Gutenberg",
     x="Sentiment AFINN",
     y= "Word frequency",

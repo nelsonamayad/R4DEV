@@ -1,11 +1,13 @@
-# R4DEV session 10 — chat with your data using querychat
-# Run with: shiny::runApp("shiny/r4dev-querychat")
+# R4DEV · Work with AI, lesson 2 (Chat with your data) — chat with your data using querychat
+# Run it: open this file in RStudio or Positron and press "Run App", or call shiny::runApp("r4dev-querychat-app.R")
+# querychat_app() is for your own machine. To deploy, use the modular API instead:
+# QueryChat$new() + qc$sidebar() + qc$server() inside an ordinary shinyApp().
 # Needs an LLM API key in your .Renviron (default: GEMINI_API_KEY)
 
 library(querychat)
 
-# Shiny runs apps with the app folder as working directory
-songs <- readr::read_csv("../../sessions_workshop/02-plots/spotify_favorites_archive.csv")
+# The Spotify snapshot from Everything in its right place, read straight from the R4DEV repo
+songs <- readr::read_csv("https://raw.githubusercontent.com/nelsonamayad/R4DEV/main/sessions_workshop/02-plots/spotify_favorites_archive.csv")
 
 querychat::querychat_app(
   songs,

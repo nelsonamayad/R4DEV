@@ -79,13 +79,13 @@ Four tools, four philosophies. All of them run the same loop from Part I; they d
 
 ### Claude Code (Anthropic)
 
-[Claude Code](https://claude.com/claude-code) is the tool this very workshop is maintained with[^2]. It began as a **terminal-first** CLI --you type `claude` inside a project folder and converse-- and grew IDE extensions (VS Code, Positron, JetBrains), a desktop app and a web version. Its defining traits:
+[Claude Code](https://claude.com/product/claude-code) is the tool this very workshop is maintained with[^2]. It began as a **terminal-first** CLI --you type `claude` inside a project folder and converse-- and grew IDE extensions (VS Code, Positron, JetBrains), a desktop app and a web version. Its defining traits:
 
-[^2]: Full disclosure, and also a demonstration: large parts of the 2026 modernization of R4DEV --including this session's file moves-- were done by asking an agent, then reviewing its diffs. The reviewing part is not optional. More on that in Part IV.
+[^2]: Full disclosure, and also a demonstration: large parts of the 2026 modernisation of R4DEV --including this session's file moves-- were done by asking an agent, then reviewing its diffs. The reviewing part is not optional. More on that in Part IV.
 
 -   **Terminal-native.** It works wherever a shell works, which includes servers and CI pipelines. For R users this means it happily runs `Rscript`, `quarto render` and `git` --the exact loop you use.
 -   **Project memory** via a `CLAUDE.md` file checked into your repo (more in Part III).
--   **Skills, subagents, hooks and MCP** --the full vocabulary of Part III, most of which Anthropic either invented or popularized.
+-   **Skills, subagents, hooks and MCP** --the full vocabulary of Part III, most of which Anthropic either invented or popularised.
 -   **Permission modes**: by default it asks before editing files or running commands; you can loosen or tighten this per project.
 
 ```bash
@@ -141,7 +141,7 @@ Agentic tools come wrapped in jargon. Here is the working vocabulary, each term 
 
 ### Context window
 
-The model's working memory: everything it can "see" right now --your instructions, the files it has read, the outputs of commands it ran. It is **finite** (hundreds of thousands of tokens, not infinite) and **empties between sessions**. Two consequences you will feel immediately: long sessions degrade as the window fills (harnesses *compact* old context by summarizing it, which loses detail), and a fresh session knows *nothing* about yesterday. Which is why every serious harness invented...
+The model's working memory: everything it can "see" right now --your instructions, the files it has read, the outputs of commands it ran. It is **finite** (hundreds of thousands of tokens, not infinite) and **empties between sessions**. Two consequences you will feel immediately: long sessions degrade as the window fills (harnesses *compact* old context by summarising it, which loses detail), and a fresh session knows *nothing* about yesterday. Which is why every serious harness invented...
 
 ### Memory files: `CLAUDE.md` and `AGENTS.md`
 
@@ -166,20 +166,20 @@ A Quarto website teaching data analysis in R. Published to GitHub Pages.
 - `_freeze/` is committed on purpose; don't delete it.
 ```
 
-Notice what this is: **reproducibility documentation**. The discipline session 1 taught you --projects, relative paths, documented setup-- is precisely what makes a project agent-legible. If a new human collaborator could get productive from your repo alone, so can an agent.
+Notice what this is: **reproducibility documentation**. The discipline [Blogging with Quarto](/sessions_workshop/01-quarto/01-quarto.qmd) taught you --projects, relative paths, documented setup-- is precisely what makes a project agent-legible. If a new human collaborator could get productive from your repo alone, so can an agent.
 
 ### Skills
 
-Memory files load *always*; that doesn't scale to specialized knowledge. A **skill** is a folder containing a `SKILL.md` file of instructions (plus optional scripts and reference documents) that the agent loads **only when the task calls for it**. The harness keeps just each skill's one-line description in context; when your request matches, the agent reads the full folder. This pattern is called *progressive disclosure* --don't show everything, show a menu.
+Memory files load *always*; that doesn't scale to specialised knowledge. A **skill** is a folder containing a `SKILL.md` file of instructions (plus optional scripts and reference documents) that the agent loads **only when the task calls for it**. The harness keeps just each skill's one-line description in context; when your request matches, the agent reads the full folder. This pattern is called *progressive disclosure* --don't show everything, show a menu.
 
 ```
 .claude/skills/
 └── ggplot-house-style/
     ├── SKILL.md          # when to apply, rules, examples
-    └── palette.R         # the actual color definitions
+    └── palette.R         # the actual colour definitions
 ```
 
-A skill like this one could encode *your* plotting standards --fonts, palettes, theme, labeling rules-- so that "make a chart of X" comes back in house style every time, without you re-explaining it. Skills are how you turn a general-purpose agent into *your* specialist, and because they are just folders of text, they are shareable and versionable like everything else in this workshop.
+A skill like this one could encode *your* plotting standards --fonts, palettes, theme, labelling rules-- so that "make a chart of X" comes back in house style every time, without you re-explaining it. Skills are how you turn a general-purpose agent into *your* specialist, and because they are just folders of text, they are shareable and versionable like everything else in this workshop.
 
 ### Tools and MCP
 
@@ -207,7 +207,7 @@ How does this actually change a week of R work? Some patterns that hold up in pr
 
 **Give it a verifiable loop.** Agents are at their best when they can *check their own work*: run `quarto render` and read the error, run `testthat` tests, execute the script and inspect the output. "Fix this so `quarto render` succeeds" is a much better task than "fix this", because the finish line is machine-checkable. Structure requests around a command that says pass or fail.
 
-**Delegate the mechanical, keep the judgment.** Excellent agent tasks: converting base-R code to tidyverse style, adding `alt`-text to every chart in a site, upgrading a deprecated API call across twelve files, writing the regex you have rewritten four times. Bad agent tasks: deciding whether the effect you found is real, choosing what the chart should *say*, judging whether a data source is trustworthy. The model manipulates the code; the analysis remains yours.
+**Delegate the mechanical, keep the judgement.** Excellent agent tasks: converting base-R code to tidyverse style, adding `alt`-text to every chart in a site, upgrading a deprecated API call across twelve files, writing the regex you have rewritten four times. Bad agent tasks: deciding whether the effect you found is real, choosing what the chart should *say*, judging whether a data source is trustworthy. The model manipulates the code; the analysis remains yours.
 
 **Review diffs like you would a colleague's.** The output of an agent session is a set of changes --read them before they become part of your project, exactly as you would with a pull request. This is the answer to the "vibe coding"[^5] worry: code you accept without reading is code you now maintain without understanding. In analysis the stakes are higher than in apps, because wrong code that *runs* produces plausible wrong numbers --the workshop's founding villain.
 
@@ -222,7 +222,7 @@ Agents are learned by working *with* one -- all of this happens on your own mach
 ::: {.callout-note icon="false" collapse="true"}
 # Basic
 
--   Install one CLI agent --[Claude Code](https://claude.com/claude-code) or [Codex](https://openai.com/codex/)-- and run it inside your `MyBlog` project.
+-   Install one CLI agent --[Claude Code](https://claude.com/product/claude-code) or [Codex](https://openai.com/codex/)-- and run it inside your `MyBlog` project.
 -   Before asking for anything, write a `CLAUDE.md` (or `AGENTS.md`) for the project: what it is, how to preview it, one convention, one gotcha. Keep it under 20 lines.
 :::
 

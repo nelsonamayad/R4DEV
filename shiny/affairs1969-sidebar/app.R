@@ -52,7 +52,7 @@ server_affair <- function(input, output) {
       ggplot(aes(y=happy,x=n,fill=happy))+
       geom_col()+
       geom_label(aes(label=n), fill="white",color="black",nudge_x = -10)+
-      scale_fill_viridis_d(name = "turbo", direction=1)+
+      scale_fill_viridis_d(option = "turbo", direction=1)+
       labs(x=NULL, y=NULL)+
       theme_classic()+
       theme(legend.position = "none")
@@ -62,7 +62,7 @@ server_affair <- function(input, output) {
   output$affairs <- renderPlot({
     
     affairs_1969 %>%
-      dplyr::filter(happy==print(input$happy)) %>%
+      dplyr::filter(happy==input$happy) %>%
       dplyr::group_by(gender,age) |>
       dplyr::count(cheat) |>
       ggplot(aes(x=age,y=n,fill=gender))+

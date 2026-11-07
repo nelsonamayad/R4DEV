@@ -1,5 +1,5 @@
-# R4DEV session 10 — minimal chat app with shinychat + ellmer
-# Run with: shiny::runApp("shiny/r4dev-chat")
+# R4DEV · Work with AI, lesson 2 (Chat with your data) — minimal chat app with shinychat + ellmer
+# Run it: open this file in RStudio or Positron and press "Run App", or call shiny::runApp("r4dev-chat-app.R")
 # Needs an LLM API key in your .Renviron (default: GEMINI_API_KEY)
 
 library(shiny)

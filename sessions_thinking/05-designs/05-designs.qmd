@@ -42,11 +42,11 @@ In [Draw your assumptions before drawing your conclusions](/sessions_thinking/04
 
 So how do you ever get to say "causes"? By *design*, in descending order of purity:
 
--   **Randomization.** Flip the coin yourself. Random assignment cuts every incoming arrow to the treatment --no forks left, nothing to adjust. It's the reason A/B tests and clinical trials are the gold standard, and why `sample()` is secretly the most powerful causal tool in R.
--   **Natural experiments and panel designs.** When you can't randomize, hunt for situations where the world almost did: policies applied to some regions and not others (**difference-in-differences**), arbitrary thresholds like exam cutoffs (**regression discontinuity**), lottery-like exposures (**instrumental variables**), the same units observed over and over (**fixed effects**), a lone treated unit rebuilt from a weighted blend of untreated ones (**synthetic control**), and honest adjustment when treatment goes to observably different units (**matching**). Each is a chapter of [*Causal Inference: The Mixtape*](https://mixtape.scunning.com/) and [*The Effect*](https://theeffectbook.net/) --both free, both excellent, both R-based. And every one of them gets its own interactive machine in Part II, right below.
--   **Adjustment with a defended DAG.** The weakest but most common: observational data plus a graph you are willing to draw in public. The graph doesn't make it true --it makes it *criticizable*, which is what science runs on.
+-   **Randomisation.** Flip the coin yourself. Random assignment cuts every incoming arrow to the treatment --no forks left, nothing to adjust. It's the reason A/B tests and clinical trials are the gold standard, and why `sample()` is secretly the most powerful causal tool in R.
+-   **Natural experiments and panel designs.** When you can't randomise, hunt for situations where the world almost did: policies applied to some regions and not others (**difference-in-differences**), arbitrary thresholds like exam cutoffs (**regression discontinuity**), lottery-like exposures (**instrumental variables**), the same units observed over and over (**fixed effects**), a lone treated unit rebuilt from a weighted blend of untreated ones (**synthetic control**), and honest adjustment when treatment goes to observably different units (**matching**). Each is a chapter of [*Causal Inference: The Mixtape*](https://mixtape.scunning.com/) and [*The Effect*](https://theeffectbook.net/) --both free, both excellent, both R-based. And every one of them gets its own interactive machine in Part II, right below.
+-   **Adjustment with a defended DAG.** The weakest but most common: observational data plus a graph you are willing to draw in public. The graph doesn't make it true --it makes it *criticisable*, which is what science runs on.
 
-Randomization deserves its own picture, because it is the only design that *removes* arrows instead of arguing about them --the coin flip owns the treatment, so nothing else can:
+Randomisation deserves its own picture, because it is the only design that *removes* arrows instead of arguing about them --the coin flip owns the treatment, so nothing else can:
 
 ```{ojs}
 //| echo: false
@@ -71,7 +71,7 @@ drawDAG({
 
 ### How to ruin a perfect experiment: post-treatment bias
 
-Randomization guards the front door --but there is a back door you can open yourself, *after* the coin flip did its job. A **post-treatment variable** is anything measured after treatment that treatment itself can affect. Adjust for one, and you can bias a flawless RCT[^posttreat].
+Randomisation guards the front door --but there is a back door you can open yourself, *after* the coin flip did its job. A **post-treatment variable** is anything measured after treatment that treatment itself can affect. Adjust for one, and you can bias a flawless RCT[^posttreat].
 
 [^posttreat]: The definitive paper carries the moral in its title: Montgomery, Nyhan & Torres (2018), ["How Conditioning on Posttreatment Variables Can Ruin Your Experiment and What to Do About It"](https://onlinelibrary.wiley.com/doi/10.1111/ajps.12357). Their audit found the practice in roughly half of the experimental papers in top political-science journals.
 
@@ -123,8 +123,8 @@ lm(earnings ~ training + certificate, data = rct) |>
 2. Motivation is unobserved --the analyst never sees this column.
 3. The post-treatment variable: getting certified takes training *or* motivation. `D → C ← U` --the collider atom, wearing a lanyard.
 4. Earnings: exactly +2 for training, +3 per unit of motivation. The certificate itself pays nothing.
-5. The clean comparison: randomization works, and the estimate lands on the truth, ~2.
-6. "Controlling for qualifications" cuts the estimate to a third of the truth --in a randomized experiment, with an honest analyst, using the most routine line of R imaginable.
+5. The clean comparison: randomisation works, and the estimate lands on the truth, ~2.
+6. "Controlling for qualifications" cuts the estimate to a third of the truth --in a randomised experiment, with an honest analyst, using the most routine line of R imaginable.
 
 Where did the effect go? Conditioning on the certificate opened the collider: among certificate-holders, the *untrained* must be unusually motivated (they got certified without the program's help). Check:
 
@@ -136,7 +136,7 @@ rct |>
 
 1. Among the certified, the control group is the more motivated one --so "comparing like with like" actually compares trained-and-ordinary against untrained-and-driven, and hands part of the training effect to motivation. The same logic biases the certificate-free stratum in the same direction.
 
-You have seen both halves of this before: the certificate is partly a **mediator** (blocking a path the effect travels through) and partly a **collider with the unseen** (opening a path that was shut). Either half alone is enough; real post-treatment variables are usually both. And it is everywhere: the gender wage gap "controlling for occupation" (occupation is post-treatment to discrimination), drug trials that condition on a side effect or analyse "only those who complied", school-effect studies that control for end-of-year test scores. The defense is a question so simple it fits in a code review: **when was this variable measured?** If the answer is "after treatment", it does not go on the right-hand side --randomization bought you a clean estimate of the *total* effect, and adjusting downstream sells it back.
+You have seen both halves of this before: the certificate is partly a **mediator** (blocking a path the effect travels through) and partly a **collider with the unseen** (opening a path that was shut). Either half alone is enough; real post-treatment variables are usually both. And it is everywhere: the gender wage gap "controlling for occupation" (occupation is post-treatment to discrimination), drug trials that condition on a side effect or analyse "only those who complied", school-effect studies that control for end-of-year test scores. The defence is a question so simple it fits in a code review: **when was this variable measured?** If the answer is "after treatment", it does not go on the right-hand side --randomisation bought you a clean estimate of the *total* effect, and adjusting downstream sells it back.
 
 What you may never do is run `lm(y ~ x + everything)` and read causality off the stars. Now you know the three reasons why --the fork you must adjust for and the collider you must not, both from [the previous lesson](/sessions_thinking/04-causal/04-causal.qmd), and the post-treatment trap that smuggles a collider into your own experiment-- and you can simulate all of them from scratch.
 
@@ -146,7 +146,7 @@ Reading about natural experiments is one thing; *feeling* where they break is an
 
 Here is the trick, and it is Hernán's motto run in reverse: every design in this gallery works **because of an arrow that isn't there**. Parallel trends is a missing arrow. Exclusion is a missing arrow. The red slider on each machine *draws the forbidden arrow into existence* --you will see it appear on the DAG-- and the readout tiles show the estimate drifting away from the truth as you do[^gallery].
 
-[^gallery]: This gallery is a love letter to two masters of the genre: Nick Huntington-Klein's [animated causal graphs](https://nickchk.com/causalgraphs.html), which showed how each design *moves*, and Kristoffer Magnusson's [interactive visualizations](https://rpsychologist.com/viz/), which set the bar for how one should *look*. The interactives are written in Observable JS inside this very `.qmd` --the same `{ojs}` engine as the toggles in [session 5 of the workshop](/sessions_workshop/05-animate/05-animate.qmd), no server required.
+[^gallery]: This gallery is a love letter to two masters of the genre: Nick Huntington-Klein's [animated causal graphs](https://nickchk.com/causalgraphs.html), which showed how each design *moves*, and Kristoffer Magnusson's [interactive visualisations](https://rpsychologist.com/viz/), which set the bar for how one should *look*. The interactives are written in Observable JS inside this very `.qmd` --the same `{ojs}` engine as the toggles in [session 5 of the workshop](/sessions_workshop/05-animate/05-animate.qmd), no server required.
 
 ```{=html}
 <style>
@@ -222,7 +222,7 @@ drawDAG = ({id, w = 340, h = 170, nodes, edges}) => {
 ::: panel-tabset
 ### 📈 DiD
 
-A job-training program arrives in one region at $t = 6$ and never reaches its neighbor. Comparing the regions *after* the program is confounded (they differ for a hundred reasons); comparing the treated region *before vs after* is confounded too (things trend over time anyway). DiD's move: compare the **changes** --how much the treated region moved, minus how much the control moved.
+A job-training program arrives in one region at $t = 6$ and never reaches its neighbour. Comparing the regions *after* the program is confounded (they differ for a hundred reasons); comparing the treated region *before vs after* is confounded too (things trend over time anyway). DiD's move: compare the **changes** --how much the treated region moved, minus how much the control moved.
 
 That subtraction is only an effect under one assumption: absent treatment, both regions would have moved **in parallel**. Level differences are fine --the arrow $G \to Y$ can exist. What must *not* exist is an arrow from group to *trend*. Drag the red slider and draw it.
 
@@ -466,7 +466,7 @@ Plot.plot({
 
 ### 🎲 IV
 
-You want the effect of $X$ on $Y$, but an unobserved $U$ pushes on both --you can't adjust for what you can't see, so OLS is doomed. The IV escape: find a variable $Z$ that (1) genuinely moves $X$ --**relevance**, the thick arrow-- and (2) touches $Y$ *through $X$ only* --**exclusion**, the missing arrow. A lottery, a draft number, distance to the nearest college. Then whatever wiggle $Z$ induces in $Y$ must have traveled *via* $X$, and the ratio of the two wiggles is the causal effect --confounding and all.
+You want the effect of $X$ on $Y$, but an unobserved $U$ pushes on both --you can't adjust for what you can't see, so OLS is doomed. The IV escape: find a variable $Z$ that (1) genuinely moves $X$ --**relevance**, the thick arrow-- and (2) touches $Y$ *through $X$ only* --**exclusion**, the missing arrow. A lottery, a draft number, distance to the nearest college. Then whatever wiggle $Z$ induces in $Y$ must have travelled *via* $X$, and the ratio of the two wiggles is the causal effect --confounding and all.
 
 The true effect below is fixed at **2**, and both estimators run 120 times on fresh samples, so you can see not just where each one *lands* but how much it *scatters*.
 
@@ -597,9 +597,9 @@ ivEsts = {
 
 ### 🎯 Matching
 
-Treated units are simply *different*: a training program enrolls the already-motivated, a new drug goes to the sickest. Comparing raw group means is hopeless. **Matching**'s move: for every treated unit, find the untreated unit that looks *most like it* on the observables, and compare each pair[^match]. The plot below draws every match as a thin line --treated points paired with their nearest control on $x$, unmatched controls fading into the background.
+Treated units are simply *different*: a training program enrols the already-motivated, a new drug goes to the sickest. Comparing raw group means is hopeless. **Matching**'s move: for every treated unit, find the untreated unit that looks *most like it* on the observables, and compare each pair[^match]. The plot below draws every match as a thin line --treated points paired with their nearest control on $x$, unmatched controls fading into the background.
 
-[^match]: The visual is a direct homage to Nick Huntington-Klein's [matching animation](https://nickchk.com/causalgraphs.html#matching-on-a-variable); the theory is the Mixtape's [matching and subclassification chapter](https://mixtape.scunning.com/05-matching_and_subclassification). In real work, don't hand-roll nearest neighbors like this machine does --use [`MatchIt`](https://kosukeimai.github.io/MatchIt/), which also handles propensity scores, calipers and diagnostics.
+[^match]: The visual is a direct homage to Nick Huntington-Klein's [matching animation](https://nickchk.com/causalgraphs.html#matching-on-a-variable); the theory is the Mixtape's [matching and subclassification chapter](https://mixtape-1ed.netlify.app/05-matching_and_subclassification). In real work, don't hand-roll nearest neighbours like this machine does --use [`MatchIt`](https://kosukeimai.github.io/MatchIt/), which also handles propensity scores, calipers and diagnostics.
 
 The identifying assumption even has "assumption" in its name: **selection on observables**. Treatment may depend on $x$ as strongly as it likes --you can see $x$, so you can match on it. What must *not* exist is an arrow from anything **unobserved** into both treatment and outcome. That is not a technique; it is a claim about the world. Drag the red slider and make it false.
 
@@ -722,7 +722,7 @@ Plot.plot({
 
 Follow the *same* units over time --five firms, ten quarters each-- and something wonderful happens: every confounder that **doesn't change** within a unit (management quality, location, culture) gets absorbed by the unit's own average. That is the **fixed-effects** (within) estimator[^fe]: subtract each unit's means and only within-unit movement remains.
 
-[^fe]: The Mixtape's [panel data chapter](https://mixtape.scunning.com/08-panel_data) covers the theory; in R the modern tool is [`fixest`](https://lrberge.github.io/fixest/) --`feols(y ~ x | unit)` and you're done. The demeaning toggle below is Nick Huntington-Klein's [fixed-effects animation](https://nickchk.com/causalgraphs.html) rebuilt as a switch.
+[^fe]: The Mixtape's [panel data chapter](https://mixtape-1ed.netlify.app/08-panel_data) covers the theory; in R the modern tool is [`fixest`](https://lrberge.github.io/fixest/) --`feols(y ~ x | unit)` and you're done. The demeaning toggle below is Nick Huntington-Klein's [fixed-effects animation](https://nickchk.com/causalgraphs.html) rebuilt as a switch.
 
 Below, each firm's baseline is *negatively* related to its typical $x$ --so the pooled cloud can slope one way while the truth inside every firm goes the other. Flip the toggle to perform the FE move yourself, and then remember its blind spot: a confounder that **moves over time** within a unit survives demeaning untouched.
 
@@ -865,7 +865,7 @@ feEst = {
 
 One state passes a policy; no other single state resembles it. **Synthetic control**'s move --born with California's Prop 99 tobacco study[^synth]-- is to *build* the missing control: find non-negative weights, summing to one, that make a blend of untreated "donor" units track the treated unit's **pre-policy** path as closely as possible. If the blend shadowed the treated unit for years before the policy, its path *after* the policy is a credible counterfactual --and the gap between the lines is the effect.
 
-[^synth]: Abadie, Diamond & Hainmueller's California study is the canonical application; the Mixtape's [synthetic control chapter](https://mixtape.scunning.com/10-synthetic_control) walks it end to end. In R: [`tidysynth`](https://github.com/edunford/tidysynth) (tidy interface) or the original `Synth`. The machine below solves for the weights live --projected gradient descent on the simplex, right in your browser-- every time you move a slider.
+[^synth]: Abadie, Diamond & Hainmueller's California study is the canonical application; the Mixtape's [synthetic control chapter](https://mixtape-1ed.netlify.app/10-synthetic_control) walks it end to end. In R: [`tidysynth`](https://github.com/edunford/tidysynth) (tidy interface) or the original `Synth`. The machine below solves for the weights live --projected gradient descent on the simplex, right in your browser-- every time you move a slider.
 
 The assumption: the treated unit lives **inside the donor pool's span** --it must be *interpolated*, never extrapolated. The audit is built in: the **pre-policy fit**. Drag the red slider to make the treated unit move like no donor does, and watch the pre-fit RMSE tile confess before the estimate lies.
 
@@ -1022,7 +1022,7 @@ scFit = {
 }
 ```
 
-**Try this.** With the violation at 0, the dashed synthetic line shadows the treated unit for ten periods, then the paths split at the policy line by exactly the effect you dialed in --and check the weights under the tiles: the optimizer found the recipe (and gave most donors *zero*). Drag the true effect around; the pre-period fit never moves, because the effect hasn't happened yet. Now the red slider: the treated unit grows a personality no blend of donors can imitate. The pre-fit RMSE tile turns red *first* --synthetic control is unusual among these six designs in that its key assumption leaves fingerprints in plain sight. An analyst who reports the gap while hiding a bad pre-fit isn't unlucky; they're lying with a chart.
+**Try this.** With the violation at 0, the dashed synthetic line shadows the treated unit for ten periods, then the paths split at the policy line by exactly the effect you dialled in --and check the weights under the tiles: the optimizer found the recipe (and gave most donors *zero*). Drag the true effect around; the pre-period fit never moves, because the effect hasn't happened yet. Now the red slider: the treated unit grows a personality no blend of donors can imitate. The pre-fit RMSE tile turns red *first* --synthetic control is unusual among these six designs in that its key assumption leaves fingerprints in plain sight. An analyst who reports the gap while hiding a bad pre-fit isn't unlucky; they're lying with a chart.
 :::
 
 Six designs, one lesson --the same lesson as the fork and the collider, at higher stakes: **the estimate is only as good as the arrows you assumed away**, and the data can never fully audit them for you. Draw your assumptions before drawing your conclusions.
@@ -1051,7 +1051,7 @@ Basic and Intermediate are simulations you can write in a few lines of R; Advanc
 -   Reverse-engineer the DiD machine: with the differential trend at $d$, the bias settles at almost exactly $5d$. Why 5? (Hint: treatment starts at $t=6$ of 10 periods --compare the average pre-period to the average post-period.) Then rebuild the whole machine in R with `tibble()` + `lm(y ~ group * post)` and confirm.
 -   Set the IV machine to strength 0.1 and confounding 2. Between confidently-biased OLS and wildly-scattered IV, which would you rather see published, and what would you demand from the authors either way? (This is not rhetorical --"weak instruments" is a named disease with named tests.)
 -   In the matching machine, set selection on the unobservable to 0.8: naive and matched are now *both* wrong --are they wrong in the same direction, and why? (Read it off the DAG.) Then simulate the same world in R and match properly with [`MatchIt`](https://kosukeimai.github.io/MatchIt/) --does `method = "nearest"` agree with the machine?
--   The synthetic-control machine's pre-fit RMSE is a placebo test you can run *before* believing anything. Crank the uniqueness slider slowly: at what RMSE would you personally refuse to report the estimate? Defend your threshold, then read how the real method picks donors and predictors in the [Mixtape chapter](https://mixtape.scunning.com/10-synthetic_control).
+-   The synthetic-control machine's pre-fit RMSE is a placebo test you can run *before* believing anything. Crank the uniqueness slider slowly: at what RMSE would you personally refuse to report the estimate? Defend your threshold, then read how the real method picks donors and predictors in the [Mixtape chapter](https://mixtape-1ed.netlify.app/10-synthetic_control).
 :::
 
 ## Key takeaways

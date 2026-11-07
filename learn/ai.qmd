@@ -1,7 +1,7 @@
 ---
 title: "Work with AI"
 subtitle: "Use large language models as programmable tools for extraction, analysis, retrieval, and application development"
-description: "The AI · LLMs track: four lessons plus a live capstone, from calling an LLM as a function to a deployed retrieval-augmented chatbot."
+description: "The Work with AI track: four lessons plus a live capstone, from calling an LLM as a function to a deployed retrieval-augmented chatbot."
 date: "2026-07-04"
 date-modified: last-modified
 toc: true

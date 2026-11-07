@@ -40,9 +40,9 @@ citation:
 
 The [previous session](/sessions_thinking/03-regression/03-regression.qmd) ended on a warning: a regression coefficient describes an *association*. But the questions worth money and lives are about **intervention**: what happens to sales *if* we cut the price? To health *if* we take the drug? Association answers "what do I see?"; causation answers "what if I act?" --and no formula converts one into the other[^1].
 
-[^1]: This is Judea Pearl's "ladder of causation", from [*The Book of Why*](http://bayes.cs.ucla.edu/WHY/) --the best non-technical entry to this whole subject.
+[^1]: This is Judea Pearl's "ladder of causation", from [*The Book of Why*](https://bayes.cs.ucla.edu/WHY/) --the best non-technical entry to this whole subject.
 
-[^hernan]: It is the subtitle of Hernán's free HarvardX course [*Causal Diagrams: Draw Your Assumptions Before Your Conclusions*](https://www.edx.org/learn/data-analysis/harvard-university-causal-diagrams-draw-your-assumptions-before-your-conclusions), and the working philosophy of the book he co-wrote with James Robins, [*Causal Inference: What If*](https://miguelhernan.org/whatif) --free, rigorous, and the standard reference once you outgrow this session.
+[^hernan]: It is the subtitle of Hernán's free HarvardX course [*Causal Diagrams: Draw Your Assumptions Before Your Conclusions*](https://www.edx.org/learn/data-analysis/harvard-university-causal-diagrams-draw-your-assumptions-before-your-conclusions), and the working philosophy of the book he co-wrote with James Robins, [*Causal Inference: What If*](https://miguelhernan.org/whatifbook) --free, rigorous, and the standard reference once you outgrow this session.
 
 What *does* convert one into the other is an ingredient statistics cannot supply: **your assumptions about how the world works**. This session's title is Miguel Hernán's motto[^hernan], and it is the whole method in one sentence. The modern discipline is to draw those assumptions as a graph --a **DAG** (directed acyclic graph): variables as nodes, arrows meaning "causes", no cycles allowed. Once drawn, the graph tells you --mechanically-- which variables you must adjust for and, just as important, which ones you must **leave alone**.
 
