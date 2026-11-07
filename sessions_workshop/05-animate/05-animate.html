@@ -80,19 +80,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-38657194d1c30378fa75d534d26568ab.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-a9fd7636a0121265c406fb04c3bba8e4.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-38657194d1c30378fa75d534d26568ab.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-73e373f4a43393be879eaa7f5bec20f5.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-7866983ca643604dcd4b1790e1c86039.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-73e373f4a43393be879eaa7f5bec20f5.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-38b5f4fe42bbed99db7c38154f53ea48.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-dark-05ee19f90ada4fec87197611c2da017c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../site_libs/bootstrap/bootstrap-38b5f4fe42bbed99db7c38154f53ea48.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-f247766226bcc895e77c705a5b584f22.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-fd704f46ef880e09e0b4cd7807fb6275.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-f247766226bcc895e77c705a5b584f22.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script src="../../site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
 <link href="../../site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
 <link href="../../site_libs/quarto-contrib/fontawesome6-1.2.0/all.min.css" rel="stylesheet">
 <link href="../../site_libs/quarto-contrib/fontawesome6-1.2.0/latex-fontsize.css" rel="stylesheet">
 <link href="../../site_libs/quarto-contrib/downloadthis-1.9.1/downloadthis.css" rel="stylesheet">
+<script src="../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -146,6 +149,7 @@ cookieconsent.run({
 });
 </script> 
   
+<style>html{ scroll-behavior: smooth; }</style>
 <script async="" src="https://hypothes.is/embed.js"></script>
 <script>
   window.document.addEventListener("DOMContentLoaded", function (_event) {
@@ -195,6 +199,7 @@ window.Quarto = {
 };
 </script>
 
+<link rel="stylesheet" href="../../style.css">
 <meta property="og:title" content="R4DEV">
 <meta property="og:description" content="Data workshop created by Nelson Amaya D.">
 <meta property="og:image" content="https://nelsonamayad.github.io/R4DEV/sessions_workshop/05-animate/homer.gif">
@@ -206,7 +211,7 @@ window.Quarto = {
 <meta name="twitter:card" content="summary">
 </head>
 
-<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+<body class="floating nav-fixed slimcontent quarto-light"><script id="quarto-html-before-body" type="application/javascript">
     const toggleBodyColorMode = (bsSheetEl) => {
       const mode = bsSheetEl.getAttribute("data-mode");
       const bodyEl = window.document.querySelector("body");
@@ -349,7 +354,8 @@ window.Quarto = {
       }
     };
     const authorPrefersDark = false;
-    const darkModeDefault = authorPrefersDark;
+    const queryPrefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    const darkModeDefault = queryPrefersDark.matches;
       document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
       document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
     let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
@@ -362,6 +368,14 @@ window.Quarto = {
       toggleGiscusIfUsed(toAlternate, darkModeDefault);
       window.dispatchEvent(new Event('resize'));
     };
+    queryPrefersDark.addEventListener("change", e => {
+      if(window.localStorage.getItem("quarto-color-scheme") !== null)
+        return;
+      const alternate = e.matches
+      toggleColorMode(alternate);
+      localAlternateSentinel = e.matches ? 'alternate' : 'default'; // this is used alongside local storage!
+      toggleGiscusIfUsed(alternate, darkModeDefault);
+    });
     // Switch to dark mode if need be
     if (hasAlternateSentinel()) {
       toggleColorMode(true);
@@ -571,9 +585,38 @@ window.Quarto = {
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#you-will-learn-to" id="toc-you-will-learn-to" class="nav-link active" data-scroll-target="#you-will-learn-to">You will learn to</a></li>
+  <li><a href="#part-i-cherry-tree-blossoms" id="toc-part-i-cherry-tree-blossoms" class="nav-link" data-scroll-target="#part-i-cherry-tree-blossoms">PART I: Cherry tree blossoms</a>
+  <ul class="collapse">
+  <li><a href="#sakura" id="toc-sakura" class="nav-link" data-scroll-target="#sakura">Sakura</a></li>
+  <li><a href="#sakura-animated" id="toc-sakura-animated" class="nav-link" data-scroll-target="#sakura-animated">Sakura animated</a></li>
+  </ul></li>
+  <li><a href="#part-ii-covid-19-co2-emissions" id="toc-part-ii-covid-19-co2-emissions" class="nav-link" data-scroll-target="#part-ii-covid-19-co2-emissions">PART II: COVID-19 &amp; CO2 emissions</a>
+  <ul class="collapse">
+  <li><a href="#covid-19-data-from-owid" id="toc-covid-19-data-from-owid" class="nav-link" data-scroll-target="#covid-19-data-from-owid">COVID-19 data from OWID</a></li>
+  <li><a href="#covid-19-a-grim-movie" id="toc-covid-19-a-grim-movie" class="nav-link" data-scroll-target="#covid-19-a-grim-movie">COVID-19, a grim movie</a></li>
+  <li><a href="#co2-emissions" id="toc-co2-emissions" class="nav-link" data-scroll-target="#co2-emissions">CO2 emissions</a></li>
+  </ul></li>
+  <li><a href="#bonus-track-correlation-causation-and-why-data-never-speaks-for-itself" id="toc-bonus-track-correlation-causation-and-why-data-never-speaks-for-itself" class="nav-link" data-scroll-target="#bonus-track-correlation-causation-and-why-data-never-speaks-for-itself">Bonus track: Correlation, causation –and why data never speaks for itself</a>
+  <ul class="collapse">
+  <li><a href="#animate-to-understand-causal-inference" id="toc-animate-to-understand-causal-inference" class="nav-link" data-scroll-target="#animate-to-understand-causal-inference">Animate to understand: Causal inference</a></li>
+  <li><a href="#a-spurious-correlation-is-born-collider-bias" id="toc-a-spurious-correlation-is-born-collider-bias" class="nav-link" data-scroll-target="#a-spurious-correlation-is-born-collider-bias">A spurious correlation is born: Collider bias</a></li>
+  <li><a href="#the-mixtape-example-beauty-talent-and-the-movies" id="toc-the-mixtape-example-beauty-talent-and-the-movies" class="nav-link" data-scroll-target="#the-mixtape-example-beauty-talent-and-the-movies">The Mixtape example: beauty, talent, and the movies</a></li>
+  <li><a href="#touch-it-three-graphs-one-toggle" id="toc-touch-it-three-graphs-one-toggle" class="nav-link" data-scroll-target="#touch-it-three-graphs-one-toggle">Touch it: three graphs, one toggle</a></li>
+  </ul></li>
+  <li><a href="#practice-5-make-it-move" id="toc-practice-5-make-it-move" class="nav-link" data-scroll-target="#practice-5-make-it-move">🏗 Practice 5: Make it move</a></li>
+  <li><a href="#key-takeaways" id="toc-key-takeaways" class="nav-link" data-scroll-target="#key-takeaways">Key takeaways</a></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
     </div>
 <!-- main -->
 <main class="content page-columns page-full" id="quarto-document-content">
@@ -581,7 +624,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Making data move 🚶</h1>
+<div class="quarto-title-block"><div><h1 class="title">Making data move 🚶</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li></ul></div></div>
 <p class="subtitle lead">Learn to build animations from static graphs</p>
   <div class="quarto-categories">
     <div class="quarto-category">gganimate</div>
@@ -619,7 +662,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">October 6, 2026</p>
+      <p class="date-modified">November 7, 2026</p>
     </div>
   </div>
     
@@ -647,14 +690,14 @@ window.Quarto = {
 </section>
 <section id="part-i-cherry-tree-blossoms" class="level2 unnumbered page-columns page-full">
 <h2 class="unnumbered anchored" data-anchor-id="part-i-cherry-tree-blossoms">PART I: Cherry tree blossoms</h2>
-<p>People in Kyoto have been keeping track of the day the cherry trees blossom since the year 812. You can find the <a href="http://atmenv.envi.osakafu-u.ac.jp/aono/kyophenotemp4/">data here</a>.</p>
+<p>People in Kyoto have been keeping track of the day the cherry trees blossom since the year 812. The series was compiled by Yasuyuki Aono, and Our World in Data <a href="https://ourworldindata.org/grapher/date-of-the-peak-cherry-tree-blossom-in-kyoto">charts and serves it here</a>.</p>
 <section id="sakura" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="sakura">Sakura</h3>
-<p>Let’s first plot it and add a smoothing LOESS curve. We’ll use <strong><code>ggimages</code></strong> to change the point to an image of a cherry blossom and <strong><code>ggpp</code></strong> to add a plot inside of another plot that focuses attention on one part, with the <code>geom_plot()</code> function. This way we can focus attention on a particular part of the graph.</p>
-<p>Notice that during the XX century the cherries started to blossom way earlier than they did for over a millennium.</p>
+<p>Let’s first plot it and add a smoothing LOESS curve. We’ll use <strong><code>ggimage</code></strong> to change the point to an image of a cherry blossom and <strong><code>ggpp</code></strong> to add a plot inside of another plot that focuses attention on one part, with the <code>geom_plot()</code> function. This way we can focus attention on a particular part of the graph.</p>
+<p>Notice that during the 20th century the cherries started to blossom way earlier than they did for over a millennium.</p>
 
 <div class="no-row-height column-margin column-container"><div class="">
-<p><a href="#dnldts8511" onclick="fetch('data:image/jpeg;base64,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').then(res => res.blob()).then(blob => {
+<p><a href="#dnldts12835" onclick="fetch('data:image/jpeg;base64,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').then(res => res.blob()).then(blob => {
       const downloadURL = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       document.body.appendChild(a);
@@ -662,21 +705,23 @@ window.Quarto = {
       a.download = 'sakura.jpg'; a.click();
       window.URL.revokeObjectURL(downloadURL);
       document.body.removeChild(a);
-        });"><button class="btn btn-success downloadthis  " id="dnldts8511"><i class="bi bi-flower3"></i> Download sakura.jpg </button></a></p>
+        });"><button class="btn btn-success downloadthis  " id="dnldts12835"><i class="bi bi-flower3"></i> Download sakura.jpg </button></a></p>
 </div></div><div class="cell">
+<details open="" class="code-fold">
+<summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-1"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-1-1"><a href="#annotated-cell-1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="annotated-cell-1-2"><a href="#annotated-cell-1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggimage)</span>
 <span id="annotated-cell-1-3"><a href="#annotated-cell-1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggpp)</span>
 <span id="annotated-cell-1-4"><a href="#annotated-cell-1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
 <span id="annotated-cell-1-5"><a href="#annotated-cell-1-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="annotated-cell-1-6"><a href="#annotated-cell-1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># First we upload the data and create a date variable ####</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-1-7" class="code-annotation-target"><a href="#annotated-cell-1-7" aria-hidden="true" tabindex="-1"></a>sakura_data <span class="ot">&lt;-</span> readxl<span class="sc">::</span><span class="fu">read_excel</span>(<span class="fu">paste0</span>(<span class="fu">getwd</span>(),<span class="st">"/KyotoFullFlower7.xlsx"</span>), <span class="at">skip =</span> <span class="dv">25</span>) <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-1-8" class="code-annotation-target"><a href="#annotated-cell-1-8" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">drop_na</span>() <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="3" onclick="event.preventDefault();">3</a><span id="annotated-cell-1-9" class="code-annotation-target"><a href="#annotated-cell-1-9" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="st">"year"</span><span class="ot">=</span><span class="dv">1</span>,<span class="st">"blossom"</span><span class="ot">=</span><span class="dv">2</span>) <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="4" onclick="event.preventDefault();">4</a><span id="annotated-cell-1-10" class="code-annotation-target"><a href="#annotated-cell-1-10" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">year =</span> lubridate<span class="sc">::</span><span class="fu">make_date</span>(year))</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="1">1</button><span id="annotated-cell-1-7" class="code-annotation-target"><a href="#annotated-cell-1-7" aria-hidden="true" tabindex="-1"></a>sakura_data <span class="ot">&lt;-</span> readxl<span class="sc">::</span><span class="fu">read_excel</span>(<span class="fu">paste0</span>(<span class="fu">getwd</span>(),<span class="st">"/KyotoFullFlower7.xlsx"</span>), <span class="at">skip =</span> <span class="dv">25</span>) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="2">2</button><span id="annotated-cell-1-8" class="code-annotation-target"><a href="#annotated-cell-1-8" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">drop_na</span>() <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="3">3</button><span id="annotated-cell-1-9" class="code-annotation-target"><a href="#annotated-cell-1-9" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="st">"year"</span><span class="ot">=</span><span class="dv">1</span>,<span class="st">"blossom"</span><span class="ot">=</span><span class="dv">2</span>) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="4">4</button><span id="annotated-cell-1-10" class="code-annotation-target"><a href="#annotated-cell-1-10" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">year =</span> lubridate<span class="sc">::</span><span class="fu">make_date</span>(year))</span>
 <span id="annotated-cell-1-11"><a href="#annotated-cell-1-11" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="annotated-cell-1-12"><a href="#annotated-cell-1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Now we create a plot for only the XX century.  ####</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="5" onclick="event.preventDefault();">5</a><span id="annotated-cell-1-13" class="code-annotation-target"><a href="#annotated-cell-1-13" aria-hidden="true" tabindex="-1"></a>sakura_xx <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x=</span>lubridate<span class="sc">::</span><span class="fu">as_date</span>(<span class="st">"1800-01-01"</span>), <span class="at">y=</span><span class="dv">60</span>,</span>
+<span id="annotated-cell-1-12"><a href="#annotated-cell-1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Now we create a plot for only the 20th century ####</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="5">5</button><span id="annotated-cell-1-13" class="code-annotation-target"><a href="#annotated-cell-1-13" aria-hidden="true" tabindex="-1"></a>sakura_xx <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x=</span>lubridate<span class="sc">::</span><span class="fu">as_date</span>(<span class="st">"1800-01-01"</span>), <span class="at">y=</span><span class="dv">60</span>,</span>
 <span id="annotated-cell-1-14"><a href="#annotated-cell-1-14" aria-hidden="true" tabindex="-1"></a>                    <span class="co"># I save the plot as a list</span></span>
 <span id="annotated-cell-1-15"><a href="#annotated-cell-1-15" aria-hidden="true" tabindex="-1"></a>                    <span class="at">plot =</span> <span class="fu">list</span>(sakura_data <span class="sc">|&gt;</span></span>
 <span id="annotated-cell-1-16"><a href="#annotated-cell-1-16" aria-hidden="true" tabindex="-1"></a>                                  dplyr<span class="sc">::</span><span class="fu">filter</span>(year<span class="sc">&gt;</span><span class="dv">1900</span>) <span class="sc">|&gt;</span></span>
@@ -694,17 +739,17 @@ window.Quarto = {
 <span id="annotated-cell-1-28"><a href="#annotated-cell-1-28" aria-hidden="true" tabindex="-1"></a></span>
 <span id="annotated-cell-1-29"><a href="#annotated-cell-1-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Now I create the plot ####</span></span>
 <span id="annotated-cell-1-30"><a href="#annotated-cell-1-30" aria-hidden="true" tabindex="-1"></a>sakura <span class="ot">&lt;-</span> sakura_data <span class="sc">|&gt;</span> </span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="6" onclick="event.preventDefault();">6</a><span id="annotated-cell-1-31" class="code-annotation-target"><a href="#annotated-cell-1-31" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">sakura =</span> <span class="fu">paste0</span>(<span class="fu">getwd</span>(),<span class="st">"/sakura.jpg"</span>)) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="6">6</button><span id="annotated-cell-1-31" class="code-annotation-target"><a href="#annotated-cell-1-31" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">sakura =</span> <span class="fu">paste0</span>(<span class="fu">getwd</span>(),<span class="st">"/sakura.jpg"</span>)) <span class="sc">|&gt;</span></span>
 <span id="annotated-cell-1-32"><a href="#annotated-cell-1-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>year, <span class="at">y=</span>blossom))<span class="sc">+</span> </span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="7" onclick="event.preventDefault();">7</a><span id="annotated-cell-1-33" class="code-annotation-target"><a href="#annotated-cell-1-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_plot</span>(<span class="at">data =</span> sakura_xx, <span class="fu">aes</span>(x,y,<span class="at">label=</span>plot))<span class="sc">+</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="8" onclick="event.preventDefault();">8</a><span id="annotated-cell-1-34" class="code-annotation-target"><a href="#annotated-cell-1-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="at">geom=</span><span class="st">"rect"</span>, <span class="at">xmin=</span>lubridate<span class="sc">::</span><span class="fu">as_date</span>(<span class="st">"1900-01-01"</span>), <span class="at">xmax=</span>lubridate<span class="sc">::</span><span class="fu">as_date</span>(<span class="st">"2022-01-01"</span>),</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="7">7</button><span id="annotated-cell-1-33" class="code-annotation-target"><a href="#annotated-cell-1-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_plot</span>(<span class="at">data =</span> sakura_xx, <span class="fu">aes</span>(x,y,<span class="at">label=</span>plot))<span class="sc">+</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="8">8</button><span id="annotated-cell-1-34" class="code-annotation-target"><a href="#annotated-cell-1-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="at">geom=</span><span class="st">"rect"</span>, <span class="at">xmin=</span>lubridate<span class="sc">::</span><span class="fu">as_date</span>(<span class="st">"1900-01-01"</span>), <span class="at">xmax=</span>lubridate<span class="sc">::</span><span class="fu">as_date</span>(<span class="st">"2022-01-01"</span>),</span>
 <span id="annotated-cell-1-35"><a href="#annotated-cell-1-35" aria-hidden="true" tabindex="-1"></a>           <span class="at">ymin=</span><span class="dv">82</span>,<span class="at">ymax=</span><span class="dv">110</span>,</span>
 <span id="annotated-cell-1-36"><a href="#annotated-cell-1-36" aria-hidden="true" tabindex="-1"></a>           <span class="at">linetype=</span><span class="st">"dotted"</span>, <span class="at">fill=</span><span class="st">"grey80"</span>, <span class="at">color=</span><span class="st">"black"</span>)<span class="sc">+</span></span>
 <span id="annotated-cell-1-37"><a href="#annotated-cell-1-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="at">geom=</span><span class="st">"rect"</span>, <span class="at">xmin=</span>lubridate<span class="sc">::</span><span class="fu">as_date</span>(<span class="st">"1300-01-01"</span>), <span class="at">xmax=</span>lubridate<span class="sc">::</span><span class="fu">as_date</span>(<span class="st">"1800-01-01"</span>),</span>
 <span id="annotated-cell-1-38"><a href="#annotated-cell-1-38" aria-hidden="true" tabindex="-1"></a>           <span class="at">ymin=</span><span class="dv">60</span>,<span class="at">ymax=</span><span class="dv">90</span>,</span>
 <span id="annotated-cell-1-39"><a href="#annotated-cell-1-39" aria-hidden="true" tabindex="-1"></a>           <span class="at">linetype=</span><span class="st">"dotted"</span>, <span class="at">fill=</span><span class="cn">NULL</span>, <span class="at">color=</span><span class="st">"black"</span>)<span class="sc">+</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="9" onclick="event.preventDefault();">9</a><span id="annotated-cell-1-40" class="code-annotation-target"><a href="#annotated-cell-1-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_image</span>(<span class="fu">aes</span>(<span class="at">image=</span>sakura), <span class="at">size=</span><span class="fl">0.02</span>)<span class="sc">+</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="10" onclick="event.preventDefault();">10</a><span id="annotated-cell-1-41" class="code-annotation-target"><a href="#annotated-cell-1-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method=</span><span class="st">"loess"</span>, <span class="at">color=</span><span class="st">"pink"</span>)<span class="sc">+</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="9">9</button><span id="annotated-cell-1-40" class="code-annotation-target"><a href="#annotated-cell-1-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_image</span>(<span class="fu">aes</span>(<span class="at">image=</span>sakura), <span class="at">size=</span><span class="fl">0.02</span>)<span class="sc">+</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="10">10</button><span id="annotated-cell-1-41" class="code-annotation-target"><a href="#annotated-cell-1-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method=</span><span class="st">"loess"</span>, <span class="at">color=</span><span class="st">"pink"</span>)<span class="sc">+</span></span>
 <span id="annotated-cell-1-42"><a href="#annotated-cell-1-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="fu">c</span>(<span class="dv">60</span>,<span class="dv">130</span>))<span class="sc">+</span></span>
 <span id="annotated-cell-1-43"><a href="#annotated-cell-1-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_date</span>(<span class="at">date_breaks =</span> <span class="st">"50 years"</span>, <span class="at">date_labels =</span> <span class="st">"%Y"</span>)<span class="sc">+</span></span>
 <span id="annotated-cell-1-44"><a href="#annotated-cell-1-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y=</span><span class="st">"Days to blossom from January 1st"</span>,</span>
@@ -714,8 +759,9 @@ window.Quarto = {
 <span id="annotated-cell-1-48"><a href="#annotated-cell-1-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle=</span><span class="dv">90</span>))</span>
 <span id="annotated-cell-1-49"><a href="#annotated-cell-1-49" aria-hidden="true" tabindex="-1"></a></span>
 <span id="annotated-cell-1-50"><a href="#annotated-cell-1-50" aria-hidden="true" tabindex="-1"></a>sakura</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-annotation">
-<dl class="code-annotation-container-grid">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-1" data-target-annotation="1">1</dt>
 <dd>
 <span data-code-cell="annotated-cell-1" data-code-lines="7" data-code-annotation="1">Load the data from the Excel file; <code>skip = 25</code> jumps over the metadata rows before the actual table starts</span>
@@ -738,7 +784,7 @@ window.Quarto = {
 </dd>
 <dt data-target-cell="annotated-cell-1" data-target-annotation="6">6</dt>
 <dd>
-<span data-code-cell="annotated-cell-1" data-code-lines="31" data-code-annotation="6">To use <strong><code>ggimages</code></strong> we need to create a variable with the location of the image file in our directory. The image can vary per observation.</span>
+<span data-code-cell="annotated-cell-1" data-code-lines="31" data-code-annotation="6">To use <strong><code>ggimage</code></strong> we need to create a variable with the location of the image file in our directory. The image can vary per observation.</span>
 </dd>
 <dt data-target-cell="annotated-cell-1" data-target-annotation="7">7</dt>
 <dd>
@@ -761,7 +807,7 @@ window.Quarto = {
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="05-animate_files/figure-html/sakura-figures-1.png" class="img-fluid figure-img" width="672"></p>
+<p><a href="05-animate_files/figure-html/sakura-figures-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="A thousand years of cherry tree blossoms in Kyoto"><img src="05-animate_files/figure-html/sakura-figures-1.png" class="img-fluid figure-img" width="672" alt="A thousand years of cherry tree blossoms in Kyoto"></a></p>
 <figcaption>A thousand years of cherry tree blossoms in Kyoto</figcaption>
 </figure>
 </div>
@@ -784,29 +830,32 @@ window.Quarto = {
 <section id="sakura-animated" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="sakura-animated">Sakura animated</h3>
 <p>To introduce animation with <strong><code>gganimate</code></strong> package, let’s drop the inference from the smooth curve and add two lines of code to the ggplot: <code>transition_time()</code>, which will create one frame per year in the data, and <code>shadow_mark()</code>, which will keep old values once they are shown.</p>
-<p>What do these functions mean? How do they work? How do you export the animations?</p>
+<p>What do these functions mean? How do they work? How do you export the animations? The annotations below answer the first two. For the third, <code>anim_save()</code> writes the animation to a GIF file, which is how the one further down was made.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-2"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-2-1"><a href="#annotated-cell-2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="annotated-cell-2-2"><a href="#annotated-cell-2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
 <span id="annotated-cell-2-3"><a href="#annotated-cell-2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggimage)</span>
 <span id="annotated-cell-2-4"><a href="#annotated-cell-2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gganimate)</span>
 <span id="annotated-cell-2-5"><a href="#annotated-cell-2-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="annotated-cell-2-6"><a href="#annotated-cell-2-6" aria-hidden="true" tabindex="-1"></a>sakura_anim <span class="ot">&lt;-</span> sakura_data <span class="sc">|&gt;</span> </span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="11" onclick="event.preventDefault();">11</a><span id="annotated-cell-2-7" class="code-annotation-target"><a href="#annotated-cell-2-7" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">sakura =</span> <span class="fu">paste0</span>(<span class="fu">getwd</span>(), <span class="st">"/sakura.jpg"</span>)) <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="12" onclick="event.preventDefault();">12</a><span id="annotated-cell-2-8" class="code-annotation-target"><a href="#annotated-cell-2-8" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">y=</span>lubridate<span class="sc">::</span><span class="fu">year</span>(year)) <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="13" onclick="event.preventDefault();">13</a><span id="annotated-cell-2-9" class="code-annotation-target"><a href="#annotated-cell-2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>year, <span class="at">y=</span>blossom))<span class="sc">+</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="11">11</button><span id="annotated-cell-2-7" class="code-annotation-target"><a href="#annotated-cell-2-7" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">sakura =</span> <span class="fu">paste0</span>(<span class="fu">getwd</span>(), <span class="st">"/sakura.jpg"</span>)) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="12">12</button><span id="annotated-cell-2-8" class="code-annotation-target"><a href="#annotated-cell-2-8" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">y=</span>lubridate<span class="sc">::</span><span class="fu">year</span>(year)) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="13">13</button><span id="annotated-cell-2-9" class="code-annotation-target"><a href="#annotated-cell-2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>year, <span class="at">y=</span>blossom))<span class="sc">+</span></span>
 <span id="annotated-cell-2-10"><a href="#annotated-cell-2-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_image</span>(<span class="fu">aes</span>(<span class="at">image=</span>sakura), <span class="at">size=</span><span class="fl">0.02</span>)<span class="sc">+</span></span>
 <span id="annotated-cell-2-11"><a href="#annotated-cell-2-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="fu">c</span>(<span class="dv">80</span>,<span class="dv">130</span>))<span class="sc">+</span></span>
 <span id="annotated-cell-2-12"><a href="#annotated-cell-2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_date</span>(<span class="at">date_breaks =</span> <span class="st">"10 years"</span>, <span class="at">date_labels =</span> <span class="st">"%Y"</span>)<span class="sc">+</span></span>
 <span id="annotated-cell-2-13"><a href="#annotated-cell-2-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y=</span><span class="st">"Days to blossom from January 1st"</span>,</span>
 <span id="annotated-cell-2-14"><a href="#annotated-cell-2-14" aria-hidden="true" tabindex="-1"></a>       <span class="at">x=</span><span class="cn">NULL</span>,</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="14" onclick="event.preventDefault();">14</a><span id="annotated-cell-2-15" class="code-annotation-target"><a href="#annotated-cell-2-15" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Year {frame_time}"</span>)<span class="sc">+</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="14">14</button><span id="annotated-cell-2-15" class="code-annotation-target"><a href="#annotated-cell-2-15" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Year {frame_time}"</span>)<span class="sc">+</span></span>
 <span id="annotated-cell-2-16"><a href="#annotated-cell-2-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()<span class="sc">+</span> </span>
 <span id="annotated-cell-2-17"><a href="#annotated-cell-2-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_blank</span>())<span class="sc">+</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="15" onclick="event.preventDefault();">15</a><span id="annotated-cell-2-18" class="code-annotation-target"><a href="#annotated-cell-2-18" aria-hidden="true" tabindex="-1"></a>  gganimate<span class="sc">::</span><span class="fu">transition_time</span>(<span class="fu">as.integer</span>(y))<span class="sc">+</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="16" onclick="event.preventDefault();">16</a><span id="annotated-cell-2-19" class="code-annotation-target"><a href="#annotated-cell-2-19" aria-hidden="true" tabindex="-1"></a>  gganimate<span class="sc">::</span><span class="fu">shadow_mark</span>()</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="15">15</button><span id="annotated-cell-2-18" class="code-annotation-target"><a href="#annotated-cell-2-18" aria-hidden="true" tabindex="-1"></a>  gganimate<span class="sc">::</span><span class="fu">transition_time</span>(<span class="fu">as.integer</span>(y))<span class="sc">+</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="16">16</button><span id="annotated-cell-2-19" class="code-annotation-target"><a href="#annotated-cell-2-19" aria-hidden="true" tabindex="-1"></a>  gganimate<span class="sc">::</span><span class="fu">shadow_mark</span>()</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-annotation">
-<dl class="code-annotation-container-grid">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-2" data-target-annotation="11">11</dt>
 <dd>
 <span data-code-cell="annotated-cell-2" data-code-lines="7" data-code-annotation="11">We create a variable that indicates where the image we plan to use as a point is stored</span>
@@ -821,7 +870,7 @@ window.Quarto = {
 </dd>
 <dt data-target-cell="annotated-cell-2" data-target-annotation="14">14</dt>
 <dd>
-<span data-code-cell="annotated-cell-2" data-code-lines="15" data-code-annotation="14">We use the <code>{frame_time}</code> option within the brackets so the animation saves the year for each frame</span>
+<span data-code-cell="annotated-cell-2" data-code-lines="15" data-code-annotation="14">We put <code>{frame_time}</code> inside the subtitle’s curly brackets, so each frame shows its own year</span>
 </dd>
 <dt data-target-cell="annotated-cell-2" data-target-annotation="15">15</dt>
 <dd>
@@ -839,14 +888,14 @@ window.Quarto = {
 <div class="no-row-height column-margin column-container"><div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="05-animate_files/figure-html/sakura-1.png" class="img-fluid figure-img" width="672"></p>
+<p><a href="05-animate_files/figure-html/sakura-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Hey, plots in the margins!"><img src="05-animate_files/figure-html/sakura-1.png" class="img-fluid figure-img" width="672" alt="Hey, plots in the margins!"></a></p>
 <figcaption>Hey, plots in the margins!</figcaption>
 </figure>
 </div>
 </div></div></div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="cherry-blossoms.gif" class="img-fluid figure-img"></p>
+<p><a href="cherry-blossoms.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Cherry blossoms"><img src="cherry-blossoms.gif" class="img-fluid figure-img" alt="Cherry blossoms"></a></p>
 <figcaption>Cherry blossoms</figcaption>
 </figure>
 </div>
@@ -865,23 +914,28 @@ window.Quarto = {
 </div>
 </section>
 </section>
-<section id="part-ii-covid-19-c02-emissions" class="level2 unnumbered page-columns page-full">
-<h2 class="unnumbered anchored" data-anchor-id="part-ii-covid-19-c02-emissions">PART II: COVID-19 &amp; C02 emissions</h2>
-<p>Now let’s turn to another topics. First we’ll create an animation at what has happened over the past few years with the COVID-19 pandemic, then we’ll turn to pollution.</p>
+<section id="part-ii-covid-19-co2-emissions" class="level2 unnumbered page-columns page-full">
+<h2 class="unnumbered anchored" data-anchor-id="part-ii-covid-19-co2-emissions">PART II: COVID-19 &amp; CO2 emissions</h2>
+<p>Now let’s turn to other topics. First we’ll create an animation of what happened during the first two years of the COVID-19 pandemic, then we’ll turn to pollution.</p>
 <section id="covid-19-data-from-owid" class="level3">
 <h3 class="anchored" data-anchor-id="covid-19-data-from-owid">COVID-19 data from OWID</h3>
 <p>First, we’re going to use the data from the <a href="https://github.com/owid/covid-19-data/tree/master/public/data">COVID-19 repository from Our World in Data</a> available in GitHub.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>owid_covid <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">"https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 </div>
 </section>
 <section id="covid-19-a-grim-movie" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="covid-19-a-grim-movie">COVID-19, a grim movie</h3>
 <p>Now we’re going to paint a grim picture: The evolution of COVID-19 related deaths per million inhabitants, in each of our countries, in 2020 and 2021.</p>
-<p>We will first create ggplot objects for each year using a simple loop and store them in a list. Then we’ll add a few simple <strong><code>gganimate</code></strong> parameters and voila, animation done. The key parameter is the one that defines the transition between different moments <code>transition_time()</code> where we add our time variable. The rest is just decoration to smooth the change between one state and the next one, showing each new state while keeping the old ones, and define how each state is introduced.</p>
+<p>We will first create ggplot objects for each year using a simple loop and store them in a list. Then we’ll add a few simple <strong><code>gganimate</code></strong> parameters and voilà, animation done. The key parameter is the one that defines the transition between different moments <code>transition_time()</code> where we add our time variable. The rest is just decoration to smooth the change between one state and the next one, showing each new state while keeping the old ones, and define how each state is introduced.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate) <span class="co"># Useful for handling dates</span></span>
@@ -895,7 +949,7 @@ window.Quarto = {
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="fu">c</span>(<span class="dv">2020</span><span class="sc">:</span><span class="dv">2021</span>)) {</span>
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a> <span class="co"># Step 1:  Create plot for each year </span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a> covid_plot[[<span class="fu">paste0</span>(<span class="st">"year_"</span>,i)]] <span class="ot">&lt;-</span> owid_covid <span class="sc">%&gt;%</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a> covid_plot[[<span class="fu">paste0</span>(<span class="st">"year_"</span>,i)]] <span class="ot">&lt;-</span> owid_covid <span class="sc">|&gt;</span></span>
 <span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Format date</span></span>
 <span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">date =</span> lubridate<span class="sc">::</span><span class="fu">as_date</span>(date),</span>
 <span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>                <span class="at">n =</span> <span class="fu">row_number</span>(),</span>
@@ -905,7 +959,7 @@ window.Quarto = {
 <span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>date,<span class="at">y=</span>total_deaths_per_million,<span class="at">color=</span>location))<span class="sc">+</span></span>
 <span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha=</span><span class="fl">0.7</span>)<span class="sc">+</span></span>
 <span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> i,</span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>       <span class="co"># Notice the bracket term, which will show the frame rate for the animation we define below</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>       <span class="co"># Notice the bracket term, which will show the month of each frame of the animation we define below</span></span>
 <span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Month: {frame_time}"</span>,</span>
 <span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>       <span class="at">x=</span><span class="cn">NULL</span>,</span>
 <span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>       <span class="at">y=</span><span class="cn">NULL</span>)<span class="sc">+</span></span>
@@ -929,6 +983,7 @@ window.Quarto = {
 <span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Enter options for each new state/time</span></span>
 <span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>  gganimate<span class="sc">::</span><span class="fu">enter_fade</span>()</span>
 <span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 </div>
 <div class="column-screen-right quarto-layout-panel" data-layout-ncol="2">
 <div class="quarto-layout-row">
@@ -936,7 +991,7 @@ window.Quarto = {
 <div id="fig-2020" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-2020-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="covid_anim_2020.gif" class="img-fluid figure-img">
+<a href="covid_anim_2020.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;1: 2020"><img src="covid_anim_2020.gif" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-2020-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;1: 2020
@@ -948,7 +1003,7 @@ Figure&nbsp;1: 2020
 <div id="fig-2021" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-2021-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="covid_anim_2021.gif" class="img-fluid figure-img">
+<a href="covid_anim_2021.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;2: 2021"><img src="covid_anim_2021.gif" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-2021-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;2: 2021
@@ -962,9 +1017,11 @@ Figure&nbsp;2: 2021
 </section>
 <section id="co2-emissions" class="level3">
 <h3 class="anchored" data-anchor-id="co2-emissions">CO2 emissions</h3>
-<p>We find the repository from the <a href="https://github.com/owid/owid-datasets/tree/master/datasets/Annual%20share%20of%20CO2%20emissions%20OWID%20based%20on%20GCP%2C%202017">Our World in Data</a> and import the data.</p>
-<p>Now we use the package <strong><code>treemapify</code></strong> to build a treemap of the distribution of emissions through time using the <code>geom_treemap()</code> geometry. We place the the <code>inferno</code> option for the fill in the <strong><code>viridis</code></strong> package and done.</p>
+<p>We find the <a href="https://github.com/owid/owid-datasets/tree/master/datasets/Annual%20share%20of%20CO2%20emissions%20(OWID%20based%20on%20GCP%2C%202017)">repository in Our World in Data’s GitHub</a> and import the data.</p>
+<p>Now we use the package <strong><code>treemapify</code></strong> to build a treemap of the distribution of emissions through time using the <code>geom_treemap()</code> geometry. We place the <code>inferno</code> option for the fill in the <strong><code>viridis</code></strong> package and done.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(treemapify)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janitor)</span>
@@ -985,18 +1042,19 @@ Figure&nbsp;2: 2021
 <span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">place =</span> <span class="st">"centre"</span>,</span>
 <span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">grow =</span> <span class="cn">TRUE</span>)<span class="sc">+</span></span>
 <span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>(<span class="at">option =</span> <span class="st">"inferno"</span>, <span class="at">name =</span> <span class="st">"CO2 emissions (% total)"</span>)<span class="sc">+</span></span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"{closest_state}"</span>, <span class="at">caption =</span> <span class="st">"Source: OWID based on GPC 2017"</span>)<span class="sc">+</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"{closest_state}"</span>, <span class="at">caption =</span> <span class="st">"Source: OWID based on GCP 2017"</span>)<span class="sc">+</span></span>
 <span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"top"</span>)<span class="sc">+</span></span>
 <span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>  gganimate<span class="sc">::</span><span class="fu">transition_states</span>(<span class="fu">as.integer</span>(year))<span class="sc">+</span></span>
 <span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ease_aes</span>(<span class="st">"linear"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 </div>
-<div id="fig-c02" class="quarto-float quarto-figure quarto-figure-center anchored">
+<div id="fig-co2" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-c02-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="co2_anim.gif" class="img-fluid figure-img">
+<div aria-describedby="fig-co2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="co2_anim.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;3: CO2 emissions since 1900"><img src="co2_anim.gif" class="img-fluid figure-img"></a>
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-c02-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3: C02 Emissions in the XX century
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-co2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: CO2 emissions since 1900
 </figcaption>
 </figure>
 </div>
@@ -1004,29 +1062,33 @@ Figure&nbsp;3: C02 Emissions in the XX century
 </section>
 <section id="bonus-track-correlation-causation-and-why-data-never-speaks-for-itself" class="level2 unnumbered page-columns page-full">
 <h2 class="unnumbered anchored" data-anchor-id="bonus-track-correlation-causation-and-why-data-never-speaks-for-itself">Bonus track: Correlation, causation –and why data never speaks for itself</h2>
-<p><em>“While correlation does not imply causation, causation does imply correlation”</em> wrote Daniel Kahneman in his latest book <a href="https://www.amazon.com/Noise-Flaw-Human-Judgment/dp/B08LNYM39M/ref=sr_1_1?keywords=daniel+kahneman+noise&amp;qid=1668962412&amp;sr=8-1"><strong>Noise</strong></a>. Mr Kahneman, I’m afraid you are wrong. By a mile. Let’s see why.</p>
-<p>We only need to prove that a causal relationship might not reflect a correlation. This is surprisingly easy to do, conceptually and statistically. Let’s first see a simple simulation and then look at a nice example from Scott Cunningham’s <a href="https://mixtape.scunning.com/"><em>Causal Inference: The Mixtape”</em></a>.</p>
-<p>The simple setup below shows two random variables <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> that represent 10 000 independent tosses of a fair coin. Now let’s build another variable <span class="math inline">\(Z\)</span> that takes the value of 1 when <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> both land the same result, heads of tails. This means that <span class="math inline">\(Z\)</span> is, by definition, causally dependent on both <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, as when both variables are equal, <span class="math inline">\(Z\)</span> is “turned on”.</p>
+<p><em>“While correlation does not imply causation, causation does imply correlation”</em> wrote Daniel Kahneman in his last book, <a href="https://www.amazon.com/Noise-Flaw-Human-Judgment/dp/B08LNYM39M"><strong>Noise</strong></a>. Mr Kahneman, I’m afraid you are wrong. By a mile. Let’s see why.</p>
+<p>We only need to prove that a causal relationship might not reflect a correlation. This is surprisingly easy to do, conceptually and statistically. Let’s first see a simple simulation and then look at a nice example from Scott Cunningham’s <a href="https://mixtape.scunning.com/"><em>Causal Inference: The Mixtape</em></a>.</p>
+<p>The simple setup below shows two random variables <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> that represent 10 000 independent tosses of a fair coin. Now let’s build another variable <span class="math inline">\(Z\)</span> that takes the value of 1 when <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> both land the same result, heads or tails. This means that <span class="math inline">\(Z\)</span> is, by definition, causally dependent on both <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, as when both variables are equal, <span class="math inline">\(Z\)</span> is “turned on”.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span><span class="fl">1e4</span>),<span class="dv">1</span>,<span class="fl">0.5</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span><span class="fl">1e4</span>),<span class="dv">1</span>,<span class="fl">0.5</span>)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>Z <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(X<span class="sc">==</span>Y,<span class="dv">1</span>,<span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 </div>
 <p>Now what do you think is the correlation between <span class="math inline">\(X\)</span> and <span class="math inline">\(Z\)</span>? and what about the correlation between <span class="math inline">\(Y\)</span> and <span class="math inline">\(Z\)</span>? Let’s calculate them both:</p>
 <div class="cell">
 <div class="cell-output-display">
-<div class="tabwid"><style>.cl-012bb927{table-layout:auto;}.cl-9f1c1ce9{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-6477613b{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-a1958ec5{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-205c961f{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-b17086d4{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3531841f{background-color:rgba(0, 255, 255, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-92c6019c{background-color:rgba(0, 255, 255, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-9ea74bb7{background-color:rgba(255, 165, 0, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-f52c4b58{background-color:rgba(255, 165, 0, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-6f7d166b{background-color:rgba(255, 165, 0, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-f9f54f1e{background-color:rgba(255, 165, 0, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table data-quarto-disable-processing="true" class="cl-012bb927"><thead><tr style="overflow-wrap:break-word;"><th class="cl-205c961f"><p class="cl-6477613b"><span class="cl-9f1c1ce9">correlations</span></p></th><th class="cl-b17086d4"><p class="cl-a1958ec5"><span class="cl-9f1c1ce9">values</span></p></th></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td class="cl-3531841f"><p class="cl-6477613b"><span class="cl-9f1c1ce9">Between X and Y</span></p></td><td class="cl-92c6019c"><p class="cl-a1958ec5"><span class="cl-9f1c1ce9">-0.002607624</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-9ea74bb7"><p class="cl-6477613b"><span class="cl-9f1c1ce9">Between X and Z</span></p></td><td class="cl-f52c4b58"><p class="cl-a1958ec5"><span class="cl-9f1c1ce9">-0.003805220</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-6f7d166b"><p class="cl-6477613b"><span class="cl-9f1c1ce9">Between Y and Z</span></p></td><td class="cl-f9f54f1e"><p class="cl-a1958ec5"><span class="cl-9f1c1ce9">-0.002009901</span></p></td></tr></tbody></table></div>
+<div class="tabwid"><style>.cl-012bb927{table-layout:auto;}.cl-9f1c1ce9{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-6477613b{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-a1958ec5{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-205c961f{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-b17086d4{background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3531841f{background-color:rgba(0, 255, 255, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-92c6019c{background-color:rgba(0, 255, 255, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-9ea74bb7{background-color:rgba(255, 165, 0, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-f52c4b58{background-color:rgba(255, 165, 0, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-6f7d166b{background-color:rgba(255, 165, 0, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-f9f54f1e{background-color:rgba(255, 165, 0, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table data-quarto-disable-processing="true" class="cl-012bb927"><thead><tr style="overflow-wrap:break-word;"><th class="cl-205c961f"><p class="cl-6477613b"><span class="cl-9f1c1ce9">correlations</span></p></th><th class="cl-b17086d4"><p class="cl-a1958ec5"><span class="cl-9f1c1ce9">values</span></p></th></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td class="cl-3531841f"><p class="cl-6477613b"><span class="cl-9f1c1ce9">Between X and Y</span></p></td><td class="cl-92c6019c"><p class="cl-a1958ec5"><span class="cl-9f1c1ce9">0.006811003</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-9ea74bb7"><p class="cl-6477613b"><span class="cl-9f1c1ce9">Between X and Z</span></p></td><td class="cl-f52c4b58"><p class="cl-a1958ec5"><span class="cl-9f1c1ce9">0.002628644</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-6f7d166b"><p class="cl-6477613b"><span class="cl-9f1c1ce9">Between Y and Z</span></p></td><td class="cl-f9f54f1e"><p class="cl-a1958ec5"><span class="cl-9f1c1ce9">-0.004217792</span></p></td></tr></tbody></table></div>
 <p>No, causation does not imply correlation</p>
 </div>
 </div>
 <p>How the hell are these correlations bordering 0 if these variables are actually causally determined? Aren’t these correlations supposed to be high, close to 1 or -1? What is going on?</p>
 <p>Run the code again. Make the samples bigger. This is not a fluke.</p>
-<p>Well, it turns out that this is a case of a <strong><em>collider</em></strong>, and one of the many reasons why you cannot ignore causal inference theory.</p>
+<p>Here is the trick: knowing <span class="math inline">\(X\)</span> alone tells you nothing about <span class="math inline">\(Z\)</span>, because <span class="math inline">\(Z\)</span> only switches on when <span class="math inline">\(X\)</span> <em>and</em> <span class="math inline">\(Y\)</span> agree, and <span class="math inline">\(Y\)</span> is a fair coin either way. The causal effect is real, but it lives in the <em>combination</em> of the two causes, and a correlation, a single straight-line summary of one pair, cannot see it.</p>
+<p><span class="math inline">\(Z\)</span> is also a <strong><em>collider</em></strong>: two arrows point into it. Condition on it (look only at the tosses where <span class="math inline">\(Z = 1\)</span>) and <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, independent coins, suddenly become perfectly correlated. That is one of the many reasons why you cannot ignore causal inference theory.</p>
 
 <div class="no-row-height column-margin column-container"><div class="">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="snatch-dags.png" class="img-fluid figure-img"></p>
+<p><a href="snatch-dags.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="‘You like DAGs?’ - Mickey, Snatch (2000)"><img src="snatch-dags.png" class="img-fluid figure-img" alt="‘You like DAGs?’ - Mickey, Snatch (2000)"></a></p>
 <figcaption>‘You like DAGs?’ - Mickey, Snatch (2000)</figcaption>
 </figure>
 </div>
@@ -1034,24 +1096,27 @@ Figure&nbsp;3: C02 Emissions in the XX century
 <h3 class="anchored" data-anchor-id="animate-to-understand-causal-inference">Animate to understand: Causal inference</h3>
 <p>The tool for thinking about these traps is the <strong>DAG</strong> –a <em>directed acyclic graph</em> where arrows mean “causes”. Our coin-toss example looks like this: two arrows pointing <em>into</em> Z make it a <strong>collider</strong>, and conditioning on a collider opens a spurious path between its parents. Drawing the graph takes four lines with <strong><code>ggdag</code></strong>:</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dagitty)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggdag)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dagify</span>(</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  W <span class="sc">~</span> Y,</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  W <span class="sc">~</span> Z,</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">coords =</span> <span class="fu">list</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="at">Y =</span> <span class="dv">2</span>, <span class="at">Z =</span> <span class="dv">1</span>, <span class="at">W =</span> <span class="fl">1.5</span>),</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">y =</span> <span class="fu">c</span>(<span class="at">Y =</span> <span class="dv">1</span>, <span class="at">Z =</span> <span class="dv">1</span>, <span class="at">W =</span> <span class="dv">2</span>))</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  Z <span class="sc">~</span> X,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  Z <span class="sc">~</span> Y,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">coords =</span> <span class="fu">list</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="at">X =</span> <span class="dv">1</span>, <span class="at">Y =</span> <span class="dv">2</span>, <span class="at">Z =</span> <span class="fl">1.5</span>),</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">y =</span> <span class="fu">c</span>(<span class="at">X =</span> <span class="dv">1</span>, <span class="at">Y =</span> <span class="dv">1</span>, <span class="at">Z =</span> <span class="dv">2</span>))</span>
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">xend =</span> xend, <span class="at">yend =</span> yend)) <span class="sc">+</span></span>
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_dag_edges</span>() <span class="sc">+</span></span>
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_dag_point</span>(<span class="at">color =</span> <span class="st">"grey80"</span>, <span class="at">size =</span> <span class="dv">10</span>) <span class="sc">+</span></span>
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_dag_text</span>() <span class="sc">+</span></span>
 <span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="05-animate_files/figure-html/collider-dag-1.png" class="img-fluid figure-img" width="672"></p>
+<p><a href="05-animate_files/figure-html/collider-dag-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8"><img src="05-animate_files/figure-html/collider-dag-1.png" class="img-fluid figure-img" width="672"></a></p>
 </figure>
 </div>
 </div>
@@ -1060,6 +1125,8 @@ Figure&nbsp;3: C02 Emissions in the XX century
 <section id="a-spurious-correlation-is-born-collider-bias" class="level3">
 <h3 class="anchored" data-anchor-id="a-spurious-correlation-is-born-collider-bias">A spurious correlation is born: Collider bias</h3>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gganimate)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggthemes)</span>
@@ -1067,44 +1134,46 @@ Figure&nbsp;3: C02 Emissions in the XX century
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Create collider ####</span></span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>collider_data <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">X =</span> <span class="fu">rnorm</span>(<span class="dv">200</span>)<span class="sc">+</span><span class="dv">1</span>,</span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>                        <span class="at">Y =</span> <span class="fu">rnorm</span>(<span class="dv">200</span>)<span class="sc">+</span><span class="dv">1</span>,</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>                        <span class="at">time=</span><span class="st">"1"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">C =</span> <span class="fu">ifelse</span>((X <span class="sc">+</span> Y <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">200</span>)<span class="sc">/</span><span class="dv">2</span>)<span class="sc">&gt;</span><span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">0</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(C) <span class="sc">%&gt;%</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">mean_X=</span><span class="fu">mean</span>(X),<span class="at">mean_Y=</span><span class="fu">mean</span>(Y)) <span class="sc">%&gt;%</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">ungroup</span>() </span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="co">#dplyr::mutate(Y_hat = predict(lm(Y~X,data=collider_data)))</span></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(collider_data<span class="sc">$</span>X,collider_data<span class="sc">$</span>Y)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>                        <span class="at">time=</span><span class="st">"1"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">C =</span> <span class="fu">ifelse</span>((X <span class="sc">+</span> Y <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">200</span>)<span class="sc">/</span><span class="dv">2</span>)<span class="sc">&gt;</span><span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">0</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(C) <span class="sc">|&gt;</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">mean_X=</span><span class="fu">mean</span>(X),<span class="at">mean_Y=</span><span class="fu">mean</span>(Y)) <span class="sc">|&gt;</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">ungroup</span>()</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(collider_data<span class="sc">$</span>X,collider_data<span class="sc">$</span>Y)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.1034141</code></pre>
+<pre><code>[1] -0.003676297</code></pre>
 </div>
+<details open="" class="code-fold">
+<summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate correlations ####</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>collider_before_cor <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">"1. Start with raw data, ignoring C. Correlation between X and Y: "</span>,<span class="fu">round</span>(<span class="fu">cor</span>(collider_data<span class="sc">$</span>X,collider_data<span class="sc">$</span>Y),<span class="dv">3</span>),<span class="at">sep=</span><span class="st">''</span>)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>collider_after_cor <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">"7. Analyze what's left! Correlation between X and Y controlling for C: "</span>,<span class="fu">round</span>(<span class="fu">cor</span>(collider_data<span class="sc">$</span>X<span class="sc">-</span>collider_data<span class="sc">$</span>mean_X,collider_data<span class="sc">$</span>Y<span class="sc">-</span>collider_data<span class="sc">$</span>mean_Y),<span class="dv">3</span>),<span class="at">sep=</span><span class="st">''</span>)</span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Add animation steps: 2 (demean X), 3 (demean X and Y) and 4 (label)</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Stack seven copies of the data, one per step of the animation ####</span></span>
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>collider_full <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">bind_rows</span>(</span>
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Step 1: Raw data only</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  collider_data <span class="sc">%&gt;%</span> </span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  collider_data <span class="sc">|&gt;</span></span>
 <span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">mean_X=</span><span class="cn">NA</span>,<span class="at">mean_Y=</span><span class="cn">NA</span>,<span class="at">C=</span><span class="dv">0</span>,<span class="at">time=</span>collider_before_cor),</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Step 2: Raw data only</span></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  collider_data <span class="sc">%&gt;%</span> </span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Step 2: Colour the points by C</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  collider_data <span class="sc">|&gt;</span></span>
 <span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">mean_X=</span><span class="cn">NA</span>,<span class="at">mean_Y=</span><span class="cn">NA</span>,<span class="at">time=</span><span class="st">'2. Separate data by the values of C.'</span>),</span>
 <span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Step 3: Add x-lines</span></span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  collider_data <span class="sc">%&gt;%</span> </span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  collider_data <span class="sc">|&gt;</span></span>
 <span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">mean_Y=</span><span class="cn">NA</span>,<span class="at">time=</span><span class="st">'3. Figure out what differences in X are explained by C'</span>),</span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Step 4: X de-meaned </span></span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>  collider_data <span class="sc">%&gt;%</span> </span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Step 4: X de-meaned</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>  collider_data <span class="sc">|&gt;</span></span>
 <span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">X =</span> X <span class="sc">-</span> mean_X,<span class="at">mean_X=</span><span class="dv">0</span>,<span class="at">mean_Y=</span><span class="cn">NA</span>,<span class="at">time=</span><span class="st">"4. Remove differences in X explained by C"</span>),</span>
 <span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Step 5: Remove X lines, add Y</span></span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>  collider_data <span class="sc">%&gt;%</span> </span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>  collider_data <span class="sc">|&gt;</span></span>
 <span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">X =</span> X <span class="sc">-</span> mean_X,<span class="at">mean_X=</span><span class="cn">NA</span>,<span class="at">time=</span><span class="st">"5. Figure out what differences in Y are explained by C"</span>),</span>
 <span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Step 6: Y de-meaned</span></span>
-<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>  collider_data <span class="sc">%&gt;%</span> </span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>  collider_data <span class="sc">|&gt;</span></span>
 <span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">X =</span> X <span class="sc">-</span> mean_X,<span class="at">Y =</span> Y <span class="sc">-</span> mean_Y,<span class="at">mean_X=</span><span class="cn">NA</span>,<span class="at">mean_Y=</span><span class="dv">0</span>,<span class="at">time=</span><span class="st">"6. Remove differences in Y explained by C"</span>),</span>
 <span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Step 7: Raw demeaned data only</span></span>
-<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>  collider_data <span class="sc">%&gt;%</span> </span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>  collider_data <span class="sc">|&gt;</span></span>
 <span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">X =</span> X <span class="sc">-</span> mean_X,<span class="at">Y =</span> Y <span class="sc">-</span> mean_Y,<span class="at">mean_X=</span><span class="cn">NA</span>,<span class="at">mean_Y=</span><span class="cn">NA</span>,<span class="at">time=</span>collider_after_cor)) <span class="sc">|&gt;</span></span>
 <span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">C =</span> <span class="fu">factor</span>(C))</span>
 <span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a></span>
@@ -1125,14 +1194,15 @@ Figure&nbsp;3: C02 Emissions in the XX century
 <span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a>  gganimate<span class="sc">::</span><span class="fu">ease_aes</span>(<span class="st">'sine-in-out'</span>)<span class="sc">+</span></span>
 <span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a>  gganimate<span class="sc">::</span><span class="fu">exit_fade</span>()<span class="sc">+</span></span>
 <span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a>  gganimate<span class="sc">::</span><span class="fu">enter_fade</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 </div>
 <div id="fig-collider" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-collider-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="collider.gif" class="img-fluid figure-img" style="width:75.0%">
+<a href="collider.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-9" title="Figure&nbsp;4: Collider bias, or how a spurious correlation is born"><img src="collider.gif" class="img-fluid figure-img" style="width:75.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-collider-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4: Collider bias, or how a spurious correlations is born
+Figure&nbsp;4: Collider bias, or how a spurious correlation is born
 </figcaption>
 </figure>
 </div>
@@ -1158,7 +1228,7 @@ Figure&nbsp;4: Collider bias, or how a spurious correlations is born
 <span id="annotated-cell-10-8"><a href="#annotated-cell-10-8" aria-hidden="true" tabindex="-1"></a>nobels    <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n) <span class="sc">+</span> <span class="fl">2.5</span> <span class="sc">*</span> wealth</span>
 <span id="annotated-cell-10-9"><a href="#annotated-cell-10-9" aria-hidden="true" tabindex="-1"></a>conf <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
 <span id="annotated-cell-10-10"><a href="#annotated-cell-10-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> chocolate, <span class="at">y =</span> nobels, <span class="at">group =</span> <span class="fu">ifelse</span>(wealth <span class="sc">==</span> <span class="dv">1</span>, <span class="st">"Rich"</span>, <span class="st">"Poor"</span>),</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-10" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-10-11" class="code-annotation-target"><a href="#annotated-cell-10-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">x_adj =</span> <span class="fu">resid</span>(<span class="fu">lm</span>(chocolate <span class="sc">~</span> wealth)),</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-10" data-target-annotation="1">1</button><span id="annotated-cell-10-11" class="code-annotation-target"><a href="#annotated-cell-10-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">x_adj =</span> <span class="fu">resid</span>(<span class="fu">lm</span>(chocolate <span class="sc">~</span> wealth)),</span>
 <span id="annotated-cell-10-12"><a href="#annotated-cell-10-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">y_adj =</span> <span class="fu">resid</span>(<span class="fu">lm</span>(nobels <span class="sc">~</span> wealth))</span>
 <span id="annotated-cell-10-13"><a href="#annotated-cell-10-13" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="annotated-cell-10-14"><a href="#annotated-cell-10-14" aria-hidden="true" tabindex="-1"></a></span>
@@ -1178,13 +1248,13 @@ Figure&nbsp;4: Collider bias, or how a spurious correlations is born
 <span id="annotated-cell-10-28"><a href="#annotated-cell-10-28" aria-hidden="true" tabindex="-1"></a>star   <span class="ot">&lt;-</span> (beauty <span class="sc">+</span> talent <span class="sc">+</span> <span class="fu">rnorm</span>(n) <span class="sc">/</span> <span class="dv">4</span>) <span class="sc">&gt;</span> <span class="fl">1.2</span></span>
 <span id="annotated-cell-10-29"><a href="#annotated-cell-10-29" aria-hidden="true" tabindex="-1"></a>coll <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> beauty, <span class="at">y =</span> talent, <span class="at">group =</span> <span class="fu">ifelse</span>(star, <span class="st">"Movie star"</span>, <span class="st">"The rest of us"</span>))</span>
 <span id="annotated-cell-10-30"><a href="#annotated-cell-10-30" aria-hidden="true" tabindex="-1"></a></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-10" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-10-31" class="code-annotation-target"><a href="#annotated-cell-10-31" aria-hidden="true" tabindex="-1"></a><span class="fu">ojs_define</span>(<span class="at">conf_r =</span> conf, <span class="at">med_r =</span> med, <span class="at">coll_r =</span> coll)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-10" data-target-annotation="2">2</button><span id="annotated-cell-10-31" class="code-annotation-target"><a href="#annotated-cell-10-31" aria-hidden="true" tabindex="-1"></a><span class="fu">ojs_define</span>(<span class="at">conf_r =</span> conf, <span class="at">med_r =</span> med, <span class="at">coll_r =</span> coll)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-annotation">
-<dl class="code-annotation-container-grid">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-10" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-10" data-code-lines="11,12" data-code-annotation="1">“Adjusting” here is done the honest way, by <strong>residualizing</strong>: we keep only the part of each variable that the third variable does <em>not</em> explain. This is exactly what the step-by-step demeaning animation above does, and exactly what multiple regression does for you silently.</span>
+<span data-code-cell="annotated-cell-10" data-code-lines="11,12" data-code-annotation="1">“Adjusting” here is done the honest way, by <strong>residualising</strong>: we keep only the part of each variable that the third variable does <em>not</em> explain. This is exactly what the step-by-step demeaning animation above does, and exactly what multiple regression does for you silently.</span>
 </dd>
 <dt data-target-cell="annotated-cell-10" data-target-annotation="2">2</dt>
 <dd>
@@ -1194,20 +1264,23 @@ Figure&nbsp;4: Collider bias, or how a spurious correlations is born
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb9" data-startfrom="590" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 589;"><span id="cb9-590"><a href="#cb9-590" aria-hidden="true" tabindex="-1"></a>fitSlope <span class="op">=</span> (data) <span class="kw">=&gt;</span> {</span>
-<span id="cb9-591"><a href="#cb9-591" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> mx <span class="op">=</span> d3<span class="op">.</span><span class="fu">mean</span>(data<span class="op">,</span> d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">x</span>)<span class="op">,</span> my <span class="op">=</span> d3<span class="op">.</span><span class="fu">mean</span>(data<span class="op">,</span> d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">y</span>)<span class="op">;</span></span>
-<span id="cb9-592"><a href="#cb9-592" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> d3<span class="op">.</span><span class="fu">sum</span>(data<span class="op">,</span> d <span class="kw">=&gt;</span> (d<span class="op">.</span><span class="at">x</span> <span class="op">-</span> mx) <span class="op">*</span> (d<span class="op">.</span><span class="at">y</span> <span class="op">-</span> my)) <span class="op">/</span> d3<span class="op">.</span><span class="fu">sum</span>(data<span class="op">,</span> d <span class="kw">=&gt;</span> (d<span class="op">.</span><span class="at">x</span> <span class="op">-</span> mx) <span class="op">**</span> <span class="dv">2</span>)<span class="op">;</span></span>
-<span id="cb9-593"><a href="#cb9-593" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb9-594"><a href="#cb9-594" aria-hidden="true" tabindex="-1"></a>causalPlot <span class="op">=</span> (data<span class="op">,</span> xlab<span class="op">,</span> ylab<span class="op">,</span> colors) <span class="kw">=&gt;</span> Plot<span class="op">.</span><span class="fu">plot</span>({</span>
-<span id="cb9-595"><a href="#cb9-595" aria-hidden="true" tabindex="-1"></a>  <span class="dt">height</span><span class="op">:</span> <span class="dv">380</span><span class="op">,</span></span>
-<span id="cb9-596"><a href="#cb9-596" aria-hidden="true" tabindex="-1"></a>  <span class="dt">color</span><span class="op">:</span> {<span class="dt">legend</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span> <span class="dt">range</span><span class="op">:</span> colors}<span class="op">,</span></span>
-<span id="cb9-597"><a href="#cb9-597" aria-hidden="true" tabindex="-1"></a>  <span class="dt">x</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> xlab}<span class="op">,</span></span>
-<span id="cb9-598"><a href="#cb9-598" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> ylab}<span class="op">,</span></span>
-<span id="cb9-599"><a href="#cb9-599" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marks</span><span class="op">:</span> [</span>
-<span id="cb9-600"><a href="#cb9-600" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">dot</span>(data<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"x"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"y"</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"group"</span><span class="op">,</span> <span class="dt">opacity</span><span class="op">:</span> <span class="fl">0.65</span><span class="op">,</span> <span class="dt">r</span><span class="op">:</span> <span class="fl">3.5</span>})<span class="op">,</span></span>
-<span id="cb9-601"><a href="#cb9-601" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">linearRegressionY</span>(data<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"x"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"y"</span><span class="op">,</span> <span class="dt">stroke</span><span class="op">:</span> <span class="st">"#F75431"</span><span class="op">,</span> <span class="dt">strokeWidth</span><span class="op">:</span> <span class="dv">3</span>})</span>
-<span id="cb9-602"><a href="#cb9-602" aria-hidden="true" tabindex="-1"></a>  ]</span>
-<span id="cb9-603"><a href="#cb9-603" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<details class="code-fold hidden">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb9" data-startfrom="591" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 590;"><span id="cb9-591"><a href="#cb9-591" aria-hidden="true" tabindex="-1"></a>fitSlope <span class="op">=</span> (data) <span class="kw">=&gt;</span> {</span>
+<span id="cb9-592"><a href="#cb9-592" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> mx <span class="op">=</span> d3<span class="op">.</span><span class="fu">mean</span>(data<span class="op">,</span> d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">x</span>)<span class="op">,</span> my <span class="op">=</span> d3<span class="op">.</span><span class="fu">mean</span>(data<span class="op">,</span> d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">y</span>)<span class="op">;</span></span>
+<span id="cb9-593"><a href="#cb9-593" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> d3<span class="op">.</span><span class="fu">sum</span>(data<span class="op">,</span> d <span class="kw">=&gt;</span> (d<span class="op">.</span><span class="at">x</span> <span class="op">-</span> mx) <span class="op">*</span> (d<span class="op">.</span><span class="at">y</span> <span class="op">-</span> my)) <span class="op">/</span> d3<span class="op">.</span><span class="fu">sum</span>(data<span class="op">,</span> d <span class="kw">=&gt;</span> (d<span class="op">.</span><span class="at">x</span> <span class="op">-</span> mx) <span class="op">**</span> <span class="dv">2</span>)<span class="op">;</span></span>
+<span id="cb9-594"><a href="#cb9-594" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-595"><a href="#cb9-595" aria-hidden="true" tabindex="-1"></a>causalPlot <span class="op">=</span> (data<span class="op">,</span> xlab<span class="op">,</span> ylab<span class="op">,</span> colors) <span class="kw">=&gt;</span> Plot<span class="op">.</span><span class="fu">plot</span>({</span>
+<span id="cb9-596"><a href="#cb9-596" aria-hidden="true" tabindex="-1"></a>  <span class="dt">height</span><span class="op">:</span> <span class="dv">380</span><span class="op">,</span></span>
+<span id="cb9-597"><a href="#cb9-597" aria-hidden="true" tabindex="-1"></a>  <span class="dt">color</span><span class="op">:</span> {<span class="dt">legend</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span> <span class="dt">range</span><span class="op">:</span> colors}<span class="op">,</span></span>
+<span id="cb9-598"><a href="#cb9-598" aria-hidden="true" tabindex="-1"></a>  <span class="dt">x</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> xlab}<span class="op">,</span></span>
+<span id="cb9-599"><a href="#cb9-599" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> ylab}<span class="op">,</span></span>
+<span id="cb9-600"><a href="#cb9-600" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marks</span><span class="op">:</span> [</span>
+<span id="cb9-601"><a href="#cb9-601" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">dot</span>(data<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"x"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"y"</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"group"</span><span class="op">,</span> <span class="dt">opacity</span><span class="op">:</span> <span class="fl">0.65</span><span class="op">,</span> <span class="dt">r</span><span class="op">:</span> <span class="fl">3.5</span>})<span class="op">,</span></span>
+<span id="cb9-602"><a href="#cb9-602" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">linearRegressionY</span>(data<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"x"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"y"</span><span class="op">,</span> <span class="dt">stroke</span><span class="op">:</span> <span class="st">"#F75431"</span><span class="op">,</span> <span class="dt">strokeWidth</span><span class="op">:</span> <span class="dv">3</span>})</span>
+<span id="cb9-603"><a href="#cb9-603" aria-hidden="true" tabindex="-1"></a>  ]</span>
+<span id="cb9-604"><a href="#cb9-604" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-display">
 <div>
 <div id="ojs-cell-1-1" data-nodetype="declaration">
@@ -1229,9 +1302,12 @@ Figure&nbsp;4: Collider bias, or how a spurious correlations is born
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
 <p>Wealthy countries eat more chocolate <em>and</em> win more Nobel prizes –there is <strong>no arrow</strong> between chocolate and Nobels. Adjusting for wealth is the <em>right</em> move here: it should make the slope vanish.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb10" data-startfrom="614" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 613;"><span id="cb10-614"><a href="#cb10-614" aria-hidden="true" tabindex="-1"></a>viewof adj_conf <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">toggle</span>({<span class="dt">label</span><span class="op">:</span> <span class="st">"Adjust for wealth (Z)"</span>})</span>
-<span id="cb10-615"><a href="#cb10-615" aria-hidden="true" tabindex="-1"></a>conf_data <span class="op">=</span> <span class="fu">transpose</span>(conf_r)<span class="op">.</span><span class="fu">map</span>(d <span class="kw">=&gt;</span> ({<span class="dt">x</span><span class="op">:</span> adj_conf <span class="op">?</span> d<span class="op">.</span><span class="at">x_adj</span> <span class="op">:</span> d<span class="op">.</span><span class="at">x</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> adj_conf <span class="op">?</span> d<span class="op">.</span><span class="at">y_adj</span> <span class="op">:</span> d<span class="op">.</span><span class="at">y</span><span class="op">,</span> <span class="dt">group</span><span class="op">:</span> d<span class="op">.</span><span class="at">group</span>}))</span>
-<span id="cb10-616"><a href="#cb10-616" aria-hidden="true" tabindex="-1"></a><span class="fu">md</span><span class="vs">`DAG: **Chocolate ← Wealth → Nobels**. Slope of the orange line: **</span><span class="sc">${</span><span class="fu">fitSlope</span>(conf_data)<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">2</span>)<span class="sc">}</span><span class="vs">** </span><span class="sc">${</span>adj_conf <span class="op">?</span> <span class="st">"— adjusted: the illusion is gone."</span> <span class="op">:</span> <span class="st">"— unadjusted: chocolate 'causes' Nobel prizes?"</span><span class="sc">}</span><span class="vs">`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<details class="code-fold hidden">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb10" data-startfrom="615" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 614;"><span id="cb10-615"><a href="#cb10-615" aria-hidden="true" tabindex="-1"></a>viewof adj_conf <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">toggle</span>({<span class="dt">label</span><span class="op">:</span> <span class="st">"Adjust for wealth (Z)"</span>})</span>
+<span id="cb10-616"><a href="#cb10-616" aria-hidden="true" tabindex="-1"></a>conf_data <span class="op">=</span> <span class="fu">transpose</span>(conf_r)<span class="op">.</span><span class="fu">map</span>(d <span class="kw">=&gt;</span> ({<span class="dt">x</span><span class="op">:</span> adj_conf <span class="op">?</span> d<span class="op">.</span><span class="at">x_adj</span> <span class="op">:</span> d<span class="op">.</span><span class="at">x</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> adj_conf <span class="op">?</span> d<span class="op">.</span><span class="at">y_adj</span> <span class="op">:</span> d<span class="op">.</span><span class="at">y</span><span class="op">,</span> <span class="dt">group</span><span class="op">:</span> d<span class="op">.</span><span class="at">group</span>}))</span>
+<span id="cb10-617"><a href="#cb10-617" aria-hidden="true" tabindex="-1"></a><span class="fu">md</span><span class="vs">`DAG: **Chocolate ← Wealth → Nobels**. Slope of the orange line: **</span><span class="sc">${</span><span class="fu">fitSlope</span>(conf_data)<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">2</span>)<span class="sc">}</span><span class="vs">** </span><span class="sc">${</span>adj_conf <span class="op">?</span> <span class="st">"— adjusted: the illusion is gone."</span> <span class="op">:</span> <span class="st">"— unadjusted: chocolate 'causes' Nobel prizes?"</span><span class="sc">}</span><span class="vs">`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-display">
 <div>
 <div id="ojs-cell-2-1" data-nodetype="declaration">
@@ -1253,7 +1329,10 @@ Figure&nbsp;4: Collider bias, or how a spurious correlations is born
 </div>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb11" data-startfrom="617" data-source-offset="-390"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 616;"><span id="cb11-617"><a href="#cb11-617" aria-hidden="true" tabindex="-1"></a><span class="fu">causalPlot</span>(conf_data<span class="op">,</span> <span class="st">"Chocolate consumption"</span><span class="op">,</span> <span class="st">"Nobel prizes"</span><span class="op">,</span> [<span class="st">"#8c6bb1"</span><span class="op">,</span> <span class="st">"#226F7F"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<details class="code-fold hidden">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb11" data-startfrom="618" data-source-offset="-390"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 617;"><span id="cb11-618"><a href="#cb11-618" aria-hidden="true" tabindex="-1"></a><span class="fu">causalPlot</span>(conf_data<span class="op">,</span> <span class="st">"Chocolate consumption"</span><span class="op">,</span> <span class="st">"Nobel prizes"</span><span class="op">,</span> [<span class="st">"#8c6bb1"</span><span class="op">,</span> <span class="st">"#226F7F"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-display">
 <div>
 <div id="ojs-cell-2-4" data-nodetype="expression">
@@ -1266,9 +1345,12 @@ Figure&nbsp;4: Collider bias, or how a spurious correlations is born
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
 <p>Education raises skill, and skill raises wages –the effect of education is <strong>real</strong>, and it flows <em>through</em> skill. Adjusting for the mediator is the <em>wrong</em> move if you want the total effect: it destroys the very thing you are measuring.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb12" data-startfrom="626" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 625;"><span id="cb12-626"><a href="#cb12-626" aria-hidden="true" tabindex="-1"></a>viewof adj_med <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">toggle</span>({<span class="dt">label</span><span class="op">:</span> <span class="st">"Adjust for skill (M)"</span>})</span>
-<span id="cb12-627"><a href="#cb12-627" aria-hidden="true" tabindex="-1"></a>med_data <span class="op">=</span> <span class="fu">transpose</span>(med_r)<span class="op">.</span><span class="fu">map</span>(d <span class="kw">=&gt;</span> ({<span class="dt">x</span><span class="op">:</span> adj_med <span class="op">?</span> d<span class="op">.</span><span class="at">x_adj</span> <span class="op">:</span> d<span class="op">.</span><span class="at">x</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> adj_med <span class="op">?</span> d<span class="op">.</span><span class="at">y_adj</span> <span class="op">:</span> d<span class="op">.</span><span class="at">y</span><span class="op">,</span> <span class="dt">group</span><span class="op">:</span> d<span class="op">.</span><span class="at">group</span>}))</span>
-<span id="cb12-628"><a href="#cb12-628" aria-hidden="true" tabindex="-1"></a><span class="fu">md</span><span class="vs">`DAG: **Education → Skill → Wages**. Slope of the orange line: **</span><span class="sc">${</span><span class="fu">fitSlope</span>(med_data)<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">2</span>)<span class="sc">}</span><span class="vs">** </span><span class="sc">${</span>adj_med <span class="op">?</span> <span class="st">"— adjusted: you just erased a real effect."</span> <span class="op">:</span> <span class="st">"— unadjusted: the true total effect."</span><span class="sc">}</span><span class="vs">`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<details class="code-fold hidden">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb12" data-startfrom="627" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 626;"><span id="cb12-627"><a href="#cb12-627" aria-hidden="true" tabindex="-1"></a>viewof adj_med <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">toggle</span>({<span class="dt">label</span><span class="op">:</span> <span class="st">"Adjust for skill (M)"</span>})</span>
+<span id="cb12-628"><a href="#cb12-628" aria-hidden="true" tabindex="-1"></a>med_data <span class="op">=</span> <span class="fu">transpose</span>(med_r)<span class="op">.</span><span class="fu">map</span>(d <span class="kw">=&gt;</span> ({<span class="dt">x</span><span class="op">:</span> adj_med <span class="op">?</span> d<span class="op">.</span><span class="at">x_adj</span> <span class="op">:</span> d<span class="op">.</span><span class="at">x</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> adj_med <span class="op">?</span> d<span class="op">.</span><span class="at">y_adj</span> <span class="op">:</span> d<span class="op">.</span><span class="at">y</span><span class="op">,</span> <span class="dt">group</span><span class="op">:</span> d<span class="op">.</span><span class="at">group</span>}))</span>
+<span id="cb12-629"><a href="#cb12-629" aria-hidden="true" tabindex="-1"></a><span class="fu">md</span><span class="vs">`DAG: **Education → Skill → Wages**. Slope of the orange line: **</span><span class="sc">${</span><span class="fu">fitSlope</span>(med_data)<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">2</span>)<span class="sc">}</span><span class="vs">** </span><span class="sc">${</span>adj_med <span class="op">?</span> <span class="st">"— adjusted: you just erased a real effect."</span> <span class="op">:</span> <span class="st">"— unadjusted: the true total effect."</span><span class="sc">}</span><span class="vs">`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-display">
 <div>
 <div id="ojs-cell-3-1" data-nodetype="declaration">
@@ -1290,7 +1372,10 @@ Figure&nbsp;4: Collider bias, or how a spurious correlations is born
 </div>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb13" data-startfrom="629" data-source-offset="-379"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 628;"><span id="cb13-629"><a href="#cb13-629" aria-hidden="true" tabindex="-1"></a><span class="fu">causalPlot</span>(med_data<span class="op">,</span> <span class="st">"Education"</span><span class="op">,</span> <span class="st">"Wages"</span><span class="op">,</span> [<span class="st">"#41ab5d"</span><span class="op">,</span> <span class="st">"#226F7F"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<details class="code-fold hidden">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb13" data-startfrom="630" data-source-offset="-379"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 629;"><span id="cb13-630"><a href="#cb13-630" aria-hidden="true" tabindex="-1"></a><span class="fu">causalPlot</span>(med_data<span class="op">,</span> <span class="st">"Education"</span><span class="op">,</span> <span class="st">"Wages"</span><span class="op">,</span> [<span class="st">"#41ab5d"</span><span class="op">,</span> <span class="st">"#226F7F"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-display">
 <div>
 <div id="ojs-cell-3-4" data-nodetype="expression">
@@ -1303,9 +1388,12 @@ Figure&nbsp;4: Collider bias, or how a spurious correlations is born
 <div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
 <p>Beauty and talent are <strong>independent</strong> –but only people with plenty of at least one become movie stars. Restricting to stars <em>is</em> adjusting for a collider: it should invent a negative slope that exists nowhere in the population.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb14" data-startfrom="638" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 637;"><span id="cb14-638"><a href="#cb14-638" aria-hidden="true" tabindex="-1"></a>viewof only_stars <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">toggle</span>({<span class="dt">label</span><span class="op">:</span> <span class="st">"Look only at movie stars (condition on C)"</span>})</span>
-<span id="cb14-639"><a href="#cb14-639" aria-hidden="true" tabindex="-1"></a>coll_data <span class="op">=</span> <span class="fu">transpose</span>(coll_r)<span class="op">.</span><span class="fu">filter</span>(d <span class="kw">=&gt;</span> only_stars <span class="op">?</span> d<span class="op">.</span><span class="at">group</span> <span class="op">===</span> <span class="st">"Movie star"</span> <span class="op">:</span> <span class="kw">true</span>)</span>
-<span id="cb14-640"><a href="#cb14-640" aria-hidden="true" tabindex="-1"></a><span class="fu">md</span><span class="vs">`DAG: **Beauty → Stardom ← Talent**. Slope of the orange line: **</span><span class="sc">${</span><span class="fu">fitSlope</span>(coll_data)<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">2</span>)<span class="sc">}</span><span class="vs">** </span><span class="sc">${</span>only_stars <span class="op">?</span> <span class="st">"— among stars only: a correlation born from selection."</span> <span class="op">:</span> <span class="st">"— everyone: no relationship, as designed."</span><span class="sc">}</span><span class="vs">`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<details class="code-fold hidden">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb14" data-startfrom="639" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 638;"><span id="cb14-639"><a href="#cb14-639" aria-hidden="true" tabindex="-1"></a>viewof only_stars <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">toggle</span>({<span class="dt">label</span><span class="op">:</span> <span class="st">"Look only at movie stars (condition on C)"</span>})</span>
+<span id="cb14-640"><a href="#cb14-640" aria-hidden="true" tabindex="-1"></a>coll_data <span class="op">=</span> <span class="fu">transpose</span>(coll_r)<span class="op">.</span><span class="fu">filter</span>(d <span class="kw">=&gt;</span> only_stars <span class="op">?</span> d<span class="op">.</span><span class="at">group</span> <span class="op">===</span> <span class="st">"Movie star"</span> <span class="op">:</span> <span class="kw">true</span>)</span>
+<span id="cb14-641"><a href="#cb14-641" aria-hidden="true" tabindex="-1"></a><span class="fu">md</span><span class="vs">`DAG: **Beauty → Stardom ← Talent**. Slope of the orange line: **</span><span class="sc">${</span><span class="fu">fitSlope</span>(coll_data)<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">2</span>)<span class="sc">}</span><span class="vs">** </span><span class="sc">${</span>only_stars <span class="op">?</span> <span class="st">"— among stars only: a correlation born from selection."</span> <span class="op">:</span> <span class="st">"— everyone: no relationship, as designed."</span><span class="sc">}</span><span class="vs">`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-display">
 <div>
 <div id="ojs-cell-4-1" data-nodetype="declaration">
@@ -1327,7 +1415,10 @@ Figure&nbsp;4: Collider bias, or how a spurious correlations is born
 </div>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb15" data-startfrom="641" data-source-offset="-399"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 640;"><span id="cb15-641"><a href="#cb15-641" aria-hidden="true" tabindex="-1"></a><span class="fu">causalPlot</span>(coll_data<span class="op">,</span> <span class="st">"Beauty"</span><span class="op">,</span> <span class="st">"Talent"</span><span class="op">,</span> [<span class="st">"#F75431"</span><span class="op">,</span> <span class="st">"#999999"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<details class="code-fold hidden">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb15" data-startfrom="642" data-source-offset="-399"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 641;"><span id="cb15-642"><a href="#cb15-642" aria-hidden="true" tabindex="-1"></a><span class="fu">causalPlot</span>(coll_data<span class="op">,</span> <span class="st">"Beauty"</span><span class="op">,</span> <span class="st">"Talent"</span><span class="op">,</span> [<span class="st">"#F75431"</span><span class="op">,</span> <span class="st">"#999999"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-display">
 <div>
 <div id="ojs-cell-4-4" data-nodetype="expression">
@@ -1353,19 +1444,19 @@ Figure&nbsp;4: Collider bias, or how a spurious correlations is born
 <ul>
 <li><a href="https://dags.andrewheiss.com/"><strong>The DAG Almanac</strong></a> by Andrew Heiss –interactive confounders, mediators and colliders, with the do-calculus behind them (and it’s built with Quarto, like this site).</li>
 <li><a href="https://rpsychologist.com/descriptive-adjustment/"><strong>Understanding adjustment</strong></a> by Kristoffer Magnusson –the most beautiful interactive explanation of what “controlling for” really does.</li>
-<li><em>The Mixtape</em> <a href="https://mixtape.scunning.com/03-directed_acyclical_graphs">chapter on DAGs</a>, free online.</li>
-<li>Play more: this repo ships two little Shiny simulators, live below –or run them yourself with <code>shiny::runApp("shiny/collider")</code> / <code>shiny::runApp("shiny/r4dev-ovb")</code>.</li>
+<li><em>The Mixtape</em> <a href="https://mixtape-1ed.netlify.app/03-directed_acyclical_graphs">chapter on DAGs</a>, free online.</li>
+<li>Play more: this repo ships two little Shiny simulators, live below –or run them yourself with <code>shiny::runApp("shiny/r4dev-collider")</code> / <code>shiny::runApp("shiny/r4dev-ovb")</code>.</li>
 </ul>
 </div>
 </div>
 <div id="collider-ovb" class="column-screen-inset quarto-layout-panel" data-layout-ncol="2">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
-<iframe src="https://nelsonamayad-r4dev-collider.share.connect.posit.cloud/" style="border: none; width: 100%; height: 900px" frameborder="0">
+<iframe src="https://nelsonamayad-r4dev-collider.share.connect.posit.cloud/" title="Collider bias simulator (Shiny app)" style="border: none; width: 100%; height: 900px" frameborder="0">
 </iframe>
 </div>
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
-<iframe src="https://nelsonamayad-r4dev-ovb.share.connect.posit.cloud/" style="border: none; width: 100%; height: 900px" frameborder="0">
+<iframe src="https://nelsonamayad-r4dev-ovb.share.connect.posit.cloud/" title="Omitted variable bias simulator (Shiny app)" style="border: none; width: 100%; height: 900px" frameborder="0">
 </iframe>
 </div>
 </div>
@@ -1531,8 +1622,8 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWUsImV4ZXJjaXNlIjoiZXhfdzA1X2ludGVyIn0s
 <p>Rendering real animations needs gganimate and your own R session:</p>
 <ul>
 <li>Make an animation of any data we’ve used so far, save it as a .gif and share it with the group.</li>
-<li>Choose one <a href="https://github.com/NickCH-K/causalgraphs">causal graph from Nick Huntington Klein’s GitHub page</a>, replicate it, and describe it.</li>
-<li>In the three-toggle explainer above, the mediator tab erases a <em>real</em> effect when you adjust. Simulate a fourth structure –a chain with a confounder on top (<strong>Z → X, Z → Y, X → M → Y</strong>)– and decide: which variables do you adjust for to recover the true effect of X on Y? Verify with <code>lm()</code></li>
+<li>Choose one <a href="https://github.com/NickCH-K/causalgraphs">causal graph from Nick Huntington-Klein’s GitHub page</a>, replicate it, and describe it.</li>
+<li>In the three-toggle explainer above, the mediator tab erases a <em>real</em> effect when you adjust. Simulate a fourth structure –a chain with a confounder on top (<strong>Z → X, Z → Y, X → M → Y</strong>)– and decide: which variables do you adjust for to recover the true effect of X on Y? Verify with <code>lm()</code>.</li>
 </ul>
 </div>
 </div>
@@ -1547,7 +1638,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWUsImV4ZXJjaXNlIjoiZXhfdzA1X2ludGVyIn0s
 <li>What a chart shows moving together is not, by itself, evidence that one causes the other.</li>
 </ul>
 <div class="continue-learning">
-<p><a href="../../sessions_workshop/03-text/03-text.html">← Previous: Data from words</a></p>
+<p><a href="../../sessions_workshop/04-topics/04-topics.html">← Previous: What books are about</a></p>
 <p><a href="../../learn/build-with-r.html">Track overview: Build with R →</a></p>
 <p><a href="../../sessions_workshop/06-maps/06-maps.html">Next: Mapping despair in the USA →</a></p>
 </div>
@@ -1677,6 +1768,57 @@ window._ojs.runtime.interpretFromScriptTags();
       });
       clipboardModal.on('success', onCopySuccess);
     }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
         var filterRegex = new RegExp("https:\/\/nelsonamayad\.github\.io\/R4DEV\/");
@@ -1693,6 +1835,11 @@ window._ojs.runtime.interpretFromScriptTags();
           if (link.dataset.originalHref !== undefined) {
             link.href = link.dataset.originalHref;
           }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
         }
       }
     function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
@@ -1947,25 +2094,64 @@ window._ojs.runtime.interpretFromScriptTags();
           }
         };
       }
-        // Attach click handler to the DT
-        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
-        for (const annoteDlNode of annoteDls) {
-          annoteDlNode.addEventListener('click', (event) => {
-            const clickedEl = event.target;
-            if (clickedEl !== selectedAnnoteEl) {
-              unselectCodeLines();
-              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
-              if (activeEl) {
-                activeEl.classList.remove('code-annotation-active');
-              }
-              selectCodeLines(clickedEl);
-              clickedEl.classList.add('code-annotation-active');
-            } else {
-              // Unselect the line
-              unselectCodeLines();
-              clickedEl.classList.remove('code-annotation-active');
+        const annoteTargets = window.document.querySelectorAll('.code-annotation-anchor');
+        for (let i=0; i<annoteTargets.length; i++) {
+          const annoteTarget = annoteTargets[i];
+          const targetCell = annoteTarget.getAttribute("data-target-cell");
+          const targetAnnotation = annoteTarget.getAttribute("data-target-annotation");
+          const contentFn = () => {
+            const content = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+            if (content) {
+              const tipContent = content.cloneNode(true);
+              tipContent.classList.add("code-annotation-tip-content");
+              return tipContent.outerHTML;
             }
-          });
+          }
+          const config = {
+            allowHTML: true,
+            content: contentFn,
+            onShow: (instance) => {
+              selectCodeLines(instance.reference);
+              instance.reference.classList.add('code-annotation-active');
+              window.tippy.hideAll();
+            },
+            onHide: (instance) => {
+              unselectCodeLines();
+              instance.reference.classList.remove('code-annotation-active');
+            },
+            maxWidth: 300,
+            delay: [50, 0],
+            duration: [200, 0],
+            offset: [5, 10],
+            arrow: true,
+            appendTo: function(el) {
+              return el.parentElement.parentElement.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'quarto',
+            placement: 'right',
+            popperOptions: {
+              modifiers: [
+              {
+                name: 'flip',
+                options: {
+                  flipVariations: false, // true by default
+                  allowedAutoPlacements: ['right'],
+                  fallbackPlacements: ['right', 'top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left'],
+                },
+              },
+              {
+                name: 'preventOverflow',
+                options: {
+                  mainAxis: false,
+                  altAxis: false
+                }
+              }
+              ]        
+            }      
+          };
+          window.tippy(annoteTarget, config); 
         }
     const findCites = (el) => {
       const parentEl = el.parentElement;
@@ -2020,8 +2206,41 @@ window._ojs.runtime.interpretFromScriptTags();
 </div>
   </div>
 </footer>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 
 
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

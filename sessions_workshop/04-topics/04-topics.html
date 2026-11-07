@@ -80,18 +80,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-38657194d1c30378fa75d534d26568ab.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-a9fd7636a0121265c406fb04c3bba8e4.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-38657194d1c30378fa75d534d26568ab.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-73e373f4a43393be879eaa7f5bec20f5.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-7866983ca643604dcd4b1790e1c86039.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-73e373f4a43393be879eaa7f5bec20f5.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-38b5f4fe42bbed99db7c38154f53ea48.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-dark-05ee19f90ada4fec87197611c2da017c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../site_libs/bootstrap/bootstrap-38b5f4fe42bbed99db7c38154f53ea48.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-f247766226bcc895e77c705a5b584f22.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-fd704f46ef880e09e0b4cd7807fb6275.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-f247766226bcc895e77c705a5b584f22.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script src="../../site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
 <link href="../../site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
 <link href="../../site_libs/quarto-contrib/fontawesome6-1.2.0/all.min.css" rel="stylesheet">
 <link href="../../site_libs/quarto-contrib/fontawesome6-1.2.0/latex-fontsize.css" rel="stylesheet">
+<script src="../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -145,6 +148,7 @@ cookieconsent.run({
 });
 </script> 
   
+<style>html{ scroll-behavior: smooth; }</style>
 <script async="" src="https://hypothes.is/embed.js"></script>
 <script>
   window.document.addEventListener("DOMContentLoaded", function (_event) {
@@ -187,6 +191,7 @@ window.Quarto = {
 };
 </script>
 
+<link rel="stylesheet" href="../../style.css">
 <meta property="og:title" content="R4DEV">
 <meta property="og:description" content="Data workshop created by Nelson Amaya D.">
 <meta property="og:image" content="https://nelsonamayad.github.io/R4DEV/sessions_workshop/04-topics/elliot-reads.gif">
@@ -198,7 +203,7 @@ window.Quarto = {
 <meta name="twitter:card" content="summary">
 </head>
 
-<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+<body class="floating nav-fixed slimcontent quarto-light"><script id="quarto-html-before-body" type="application/javascript">
     const toggleBodyColorMode = (bsSheetEl) => {
       const mode = bsSheetEl.getAttribute("data-mode");
       const bodyEl = window.document.querySelector("body");
@@ -341,7 +346,8 @@ window.Quarto = {
       }
     };
     const authorPrefersDark = false;
-    const darkModeDefault = authorPrefersDark;
+    const queryPrefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    const darkModeDefault = queryPrefersDark.matches;
       document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
       document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
     let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
@@ -354,6 +360,14 @@ window.Quarto = {
       toggleGiscusIfUsed(toAlternate, darkModeDefault);
       window.dispatchEvent(new Event('resize'));
     };
+    queryPrefersDark.addEventListener("change", e => {
+      if(window.localStorage.getItem("quarto-color-scheme") !== null)
+        return;
+      const alternate = e.matches
+      toggleColorMode(alternate);
+      localAlternateSentinel = e.matches ? 'alternate' : 'default'; // this is used alongside local storage!
+      toggleGiscusIfUsed(alternate, darkModeDefault);
+    });
     // Switch to dark mode if need be
     if (hasAlternateSentinel()) {
       toggleColorMode(true);
@@ -563,9 +577,29 @@ window.Quarto = {
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#you-will-learn-to" id="toc-you-will-learn-to" class="nav-link active" data-scroll-target="#you-will-learn-to">You will learn to</a></li>
+  <li><a href="#part-i-book-shuffle-using-topic-modelling2" id="toc-part-i-book-shuffle-using-topic-modelling2" class="nav-link" data-scroll-target="#part-i-book-shuffle-using-topic-modelling2">PART I: Book shuffle using topic modelling</a>
+  <ul class="collapse">
+  <li><a href="#choosing-which-books-to-shuffle" id="toc-choosing-which-books-to-shuffle" class="nav-link" data-scroll-target="#choosing-which-books-to-shuffle">Choosing which books to shuffle</a></li>
+  <li><a href="#shuffling-breaking-books-apart" id="toc-shuffling-breaking-books-apart" class="nav-link" data-scroll-target="#shuffling-breaking-books-apart">Shuffling, breaking books apart</a></li>
+  <li><a href="#what-chapter-belongs-to-which-book-lda-all-at-once-approach3" id="toc-what-chapter-belongs-to-which-book-lda-all-at-once-approach3" class="nav-link" data-scroll-target="#what-chapter-belongs-to-which-book-lda-all-at-once-approach3">What chapter belongs to which book? <em>LDA</em> all-at-once approach</a></li>
+  <li><a href="#working-with-word-topic-beta-and-topic-book-gamma-probabilities" id="toc-working-with-word-topic-beta-and-topic-book-gamma-probabilities" class="nav-link" data-scroll-target="#working-with-word-topic-beta-and-topic-book-gamma-probabilities">Working with word-topic (<span class="math inline">\(\beta\)</span>) and topic-book (<span class="math inline">\(\gamma\)</span>) probabilities</a></li>
+  <li><a href="#did-it-work" id="toc-did-it-work" class="nav-link" data-scroll-target="#did-it-work">Did it work?</a></li>
+  </ul></li>
+  <li><a href="#bonus-track-networks-of-n-grams-in-the-work-of-david-hume" id="toc-bonus-track-networks-of-n-grams-in-the-work-of-david-hume" class="nav-link" data-scroll-target="#bonus-track-networks-of-n-grams-in-the-work-of-david-hume">Bonus track: Networks of n-grams in the work of David Hume</a></li>
+  <li><a href="#practice-4-shuffle-the-shelf" id="toc-practice-4-shuffle-the-shelf" class="nav-link" data-scroll-target="#practice-4-shuffle-the-shelf">🏗 Practice 4: Shuffle the shelf</a></li>
+  <li><a href="#key-takeaways" id="toc-key-takeaways" class="nav-link" data-scroll-target="#key-takeaways">Key takeaways</a></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
     </div>
 <!-- main -->
 <main class="content page-columns page-full" id="quarto-document-content">
@@ -573,7 +607,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">What books are about 📖</h1>
+<div class="quarto-title-block"><div><h1 class="title">What books are about 📖</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li></ul></div></div>
 <p class="subtitle lead">Learn how topic modelling and word networks find structure in text nobody labelled</p>
   <div class="quarto-categories">
     <div class="quarto-category">text</div>
@@ -611,7 +645,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">October 6, 2026</p>
+      <p class="date-modified">November 7, 2026</p>
     </div>
   </div>
     
@@ -666,6 +700,8 @@ window.Quarto = {
 </div>
 </div>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-1"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-1-1"><a href="#annotated-cell-1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Download books ####</span></span>
 <span id="annotated-cell-1-2"><a href="#annotated-cell-1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gutenbergr)</span>
 <span id="annotated-cell-1-3"><a href="#annotated-cell-1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidytext)</span>
@@ -675,7 +711,7 @@ window.Quarto = {
 <span id="annotated-cell-1-7"><a href="#annotated-cell-1-7" aria-hidden="true" tabindex="-1"></a>pg_all <span class="ot">&lt;-</span> gutenbergr<span class="sc">::</span>gutenberg_metadata</span>
 <span id="annotated-cell-1-8"><a href="#annotated-cell-1-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="annotated-cell-1-9"><a href="#annotated-cell-1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Books to break down with names and IDs ####</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-1-10" class="code-annotation-target"><a href="#annotated-cell-1-10" aria-hidden="true" tabindex="-1"></a>shuffle_titles <span class="ot">&lt;-</span> <span class="fu">tribble</span>(<span class="sc">~</span>title,<span class="sc">~</span>gutenberg_id,</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="1">1</button><span id="annotated-cell-1-10" class="code-annotation-target"><a href="#annotated-cell-1-10" aria-hidden="true" tabindex="-1"></a>shuffle_titles <span class="ot">&lt;-</span> <span class="fu">tribble</span>(<span class="sc">~</span>title,<span class="sc">~</span>gutenberg_id,</span>
 <span id="annotated-cell-1-11"><a href="#annotated-cell-1-11" aria-hidden="true" tabindex="-1"></a>            <span class="st">"The Art of War"</span>, <span class="dv">17405</span>,</span>
 <span id="annotated-cell-1-12"><a href="#annotated-cell-1-12" aria-hidden="true" tabindex="-1"></a>            <span class="st">"The Prince"</span>, <span class="dv">26253</span>,</span>
 <span id="annotated-cell-1-13"><a href="#annotated-cell-1-13" aria-hidden="true" tabindex="-1"></a>            <span class="st">"On Liberty"</span>, <span class="dv">34901</span>,</span>
@@ -685,14 +721,15 @@ window.Quarto = {
 <span id="annotated-cell-1-17"><a href="#annotated-cell-1-17" aria-hidden="true" tabindex="-1"></a>            )</span>
 <span id="annotated-cell-1-18"><a href="#annotated-cell-1-18" aria-hidden="true" tabindex="-1"></a></span>
 <span id="annotated-cell-1-19"><a href="#annotated-cell-1-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Download the books ####</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-1-20" class="code-annotation-target"><a href="#annotated-cell-1-20" aria-hidden="true" tabindex="-1"></a>shuffle_books <span class="ot">&lt;-</span> gutenbergr<span class="sc">::</span><span class="fu">gutenberg_works</span>(gutenberg_id <span class="sc">%in%</span> shuffle_titles<span class="sc">$</span>gutenberg_id) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="2">2</button><span id="annotated-cell-1-20" class="code-annotation-target"><a href="#annotated-cell-1-20" aria-hidden="true" tabindex="-1"></a>shuffle_books <span class="ot">&lt;-</span> gutenbergr<span class="sc">::</span><span class="fu">gutenberg_works</span>(gutenberg_id <span class="sc">%in%</span> shuffle_titles<span class="sc">$</span>gutenberg_id) <span class="sc">|&gt;</span></span>
 <span id="annotated-cell-1-21"><a href="#annotated-cell-1-21" aria-hidden="true" tabindex="-1"></a>  gutenbergr<span class="sc">::</span><span class="fu">gutenberg_download</span>(<span class="at">meta_fields =</span> <span class="st">"title"</span>,  <span class="at">mirror =</span> <span class="st">"https://gutenberg.pglaf.org/"</span>)</span>
 <span id="annotated-cell-1-22"><a href="#annotated-cell-1-22" aria-hidden="true" tabindex="-1"></a></span>
 <span id="annotated-cell-1-23"><a href="#annotated-cell-1-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Make sure all books were downloaded ####</span></span>
 <span id="annotated-cell-1-24"><a href="#annotated-cell-1-24" aria-hidden="true" tabindex="-1"></a>shuffle_books <span class="sc">|&gt;</span></span>
 <span id="annotated-cell-1-25"><a href="#annotated-cell-1-25" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">distinct</span>(title) </span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-annotation">
-<dl class="code-annotation-container-grid">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-1" data-target-annotation="1">1</dt>
 <dd>
 <span data-code-cell="annotated-cell-1" data-code-lines="10,11,12,13,14,15,16" data-code-annotation="1">Create a <code>tribble</code> with the Gutenberg ID for each book</span>
@@ -714,12 +751,14 @@ window.Quarto = {
 5 On Liberty                </code></pre>
 </div>
 </div>
-<p>Alternatively, you can read the plain text files for each book, as the <code>gutenbergr</code> mirrors might not work using the <code>readLines</code> function:</p>
+<p>Gutenberg mirrors come and go, so here is a sturdier route that this page itself uses when it renders: read each book’s plain-text file straight from Project Gutenberg with <code>readLines()</code>. It overwrites <code>shuffle_books</code> from the chunk above.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add URL for plan text for each book ####</span></span>
+<details open="" class="code-fold">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add URL for the plain text of each book ####</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>shuffle_titles_url <span class="ot">&lt;-</span> <span class="fu">tribble</span>(<span class="sc">~</span>title,<span class="sc">~</span>gutenberg_id, <span class="sc">~</span>url,</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>            <span class="st">"The Art of War"</span>, <span class="dv">17405</span>,<span class="st">"https://www.gutenberg.org/cache/epub/132/pg132.txt"</span>,</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>            <span class="st">"The Prince"</span>, <span class="dv">26253</span>,<span class="st">"https://www.gutenberg.org/cache/epub/57037/pg57037.txt"</span>,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>            <span class="st">"The Art of War"</span>, <span class="dv">132</span>,<span class="st">"https://www.gutenberg.org/cache/epub/132/pg132.txt"</span>,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>            <span class="st">"The Prince"</span>, <span class="dv">57037</span>,<span class="st">"https://www.gutenberg.org/cache/epub/57037/pg57037.txt"</span>,</span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>            <span class="st">"On Liberty"</span>, <span class="dv">34901</span>,<span class="st">"https://www.gutenberg.org/cache/epub/34901/pg34901.txt"</span>,</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Pride and Prejudice"</span>,<span class="dv">1342</span>,<span class="st">"https://www.gutenberg.org/cache/epub/1342/pg1342.txt"</span>,</span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>            <span class="st">"War and Peace"</span>,<span class="dv">2600</span>,<span class="st">"https://www.gutenberg.org/cache/epub/2600/pg2600.txt"</span>,</span>
@@ -730,31 +769,35 @@ window.Quarto = {
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>shuffle_books <span class="ot">&lt;-</span> shuffle_titles_url <span class="sc">|&gt;</span></span>
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">text =</span> <span class="fu">map</span>(url, <span class="sc">~</span><span class="fu">readLines</span>(.x, <span class="at">warn =</span> <span class="cn">FALSE</span>))) <span class="sc">|&gt;</span> </span>
 <span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">unnest</span>(text) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 </div>
 </section>
 <section id="shuffling-breaking-books-apart" class="level3">
 <h3 class="anchored" data-anchor-id="shuffling-breaking-books-apart">Shuffling, breaking books apart</h3>
 <p>Now we carry out the shuffling: we identify book chapters and create a chapter indicator for each book. We then use it to break the books apart, and then break the chapters apart into words which we will model.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-3"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-3-1"><a href="#annotated-cell-3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidytext)</span>
 <span id="annotated-cell-3-2"><a href="#annotated-cell-3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="annotated-cell-3-3"><a href="#annotated-cell-3-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="annotated-cell-3-4"><a href="#annotated-cell-3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># shuffle the books</span></span>
 <span id="annotated-cell-3-5"><a href="#annotated-cell-3-5" aria-hidden="true" tabindex="-1"></a>break_chapters <span class="ot">&lt;-</span> shuffle_books <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="3" onclick="event.preventDefault();">3</a><span id="annotated-cell-3-6" class="code-annotation-target"><a href="#annotated-cell-3-6" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(title) <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="4" onclick="event.preventDefault();">4</a><span id="annotated-cell-3-7" class="code-annotation-target"><a href="#annotated-cell-3-7" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">chapter =</span> <span class="fu">cumsum</span>(<span class="fu">str_detect</span>(text, <span class="fu">regex</span>(<span class="st">"^chapter "</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>)))) <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="5" onclick="event.preventDefault();">5</a><span id="annotated-cell-3-8" class="code-annotation-target"><a href="#annotated-cell-3-8" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">ungroup</span>() <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="6" onclick="event.preventDefault();">6</a><span id="annotated-cell-3-9" class="code-annotation-target"><a href="#annotated-cell-3-9" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(chapter <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="7" onclick="event.preventDefault();">7</a><span id="annotated-cell-3-10" class="code-annotation-target"><a href="#annotated-cell-3-10" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">unite</span>(document, title, chapter)</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="3">3</button><span id="annotated-cell-3-6" class="code-annotation-target"><a href="#annotated-cell-3-6" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(title) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="4">4</button><span id="annotated-cell-3-7" class="code-annotation-target"><a href="#annotated-cell-3-7" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">chapter =</span> <span class="fu">cumsum</span>(<span class="fu">str_detect</span>(text, <span class="fu">regex</span>(<span class="st">"^chapter "</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>)))) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="5">5</button><span id="annotated-cell-3-8" class="code-annotation-target"><a href="#annotated-cell-3-8" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">ungroup</span>() <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="6">6</button><span id="annotated-cell-3-9" class="code-annotation-target"><a href="#annotated-cell-3-9" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(chapter <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="7">7</button><span id="annotated-cell-3-10" class="code-annotation-target"><a href="#annotated-cell-3-10" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">unite</span>(document, title, chapter)</span>
 <span id="annotated-cell-3-11"><a href="#annotated-cell-3-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="annotated-cell-3-12"><a href="#annotated-cell-3-12" aria-hidden="true" tabindex="-1"></a><span class="co"># split into words</span></span>
 <span id="annotated-cell-3-13"><a href="#annotated-cell-3-13" aria-hidden="true" tabindex="-1"></a>chapter_word <span class="ot">&lt;-</span> break_chapters <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="8" onclick="event.preventDefault();">8</a><span id="annotated-cell-3-14" class="code-annotation-target"><a href="#annotated-cell-3-14" aria-hidden="true" tabindex="-1"></a>  tidytext<span class="sc">::</span><span class="fu">unnest_tokens</span>(word, text) <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="9" onclick="event.preventDefault();">9</a><span id="annotated-cell-3-15" class="code-annotation-target"><a href="#annotated-cell-3-15" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">anti_join</span>(stopwords<span class="sc">::</span><span class="fu">stopwords</span>(<span class="st">"en"</span>, <span class="st">"snowball"</span>) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="8">8</button><span id="annotated-cell-3-14" class="code-annotation-target"><a href="#annotated-cell-3-14" aria-hidden="true" tabindex="-1"></a>  tidytext<span class="sc">::</span><span class="fu">unnest_tokens</span>(word, text) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="9">9</button><span id="annotated-cell-3-15" class="code-annotation-target"><a href="#annotated-cell-3-15" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">anti_join</span>(stopwords<span class="sc">::</span><span class="fu">stopwords</span>(<span class="st">"en"</span>, <span class="st">"snowball"</span>) <span class="sc">|&gt;</span></span>
 <span id="annotated-cell-3-16"><a href="#annotated-cell-3-16" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">as_tibble</span>(), <span class="at">by=</span><span class="fu">c</span>(<span class="st">"word"</span><span class="ot">=</span><span class="st">"value"</span>)) <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="10" onclick="event.preventDefault();">10</a><span id="annotated-cell-3-17" class="code-annotation-target"><a href="#annotated-cell-3-17" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">count</span>(document, word, <span class="at">sort =</span> <span class="cn">TRUE</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="10">10</button><span id="annotated-cell-3-17" class="code-annotation-target"><a href="#annotated-cell-3-17" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">count</span>(document, word, <span class="at">sort =</span> <span class="cn">TRUE</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-annotation">
-<dl class="code-annotation-container-grid">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-3" data-target-annotation="3">3</dt>
 <dd>
 <span data-code-cell="annotated-cell-3" data-code-lines="6" data-code-annotation="3">Group by title</span>
@@ -798,7 +841,7 @@ window.Quarto = {
 <p>LDA estimates two key probabilities: <strong>Word-Topic</strong> (<span class="math inline">\(\beta\)</span>) and <strong>Document-Topic</strong> (<span class="math inline">\(\gamma\)</span>). That is, it finds the mixture of words that is associated with each topic, and the mixture of topics that describes each document.</p>
 <p>What is a topic? In LDA, topics are <strong>latent variables</strong>, variables we can’t observe, that capture the underlying theme or meaning of a set of words in a text. In LDA, a document is modelled as a mixture of latent topics, where each topic is a probability distribution over the words in the vocabulary. Topics are probability distributions of terms.</p>
 <p>For instance, in news articles, a topic might represent the probability distribution over words such as <em>politics</em>, <em>government</em>, <em>sports</em> or <em>election</em>. In a scientific publication, topics might represent the probability distribution over words such as <em>science</em>, <em>research</em> and <em>technology</em>.</p>
-<p>Topics are inferred by the LDA model, and the number of topics is usually specified by the modeler before training the model. LDA will group words together in the corpus, creating topics based on the co-occurrence of words in the documents. These inferred topics can be used for different downstream tasks such as document classification, which is what we’ll do.</p>
+<p>Topics are inferred by the LDA model, and the number of topics is usually specified by the modeller before training the model. LDA will group words together in the corpus, creating topics based on the co-occurrence of words in the documents. These inferred topics can be used for different downstream tasks such as document classification, which is what we’ll do.</p>
 <div class="cell" data-layout-align="default">
 <div class="cell-output-display">
 <div>
@@ -815,25 +858,28 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<p>Before estimating our model, we need to transform the data we tokenized into a <em>Document Term Matrix</em>, which is needed as an input for the function that actually estimates the model. This is easy enough using the <code>cast_dtm()</code> function.</p>
+<p>Before estimating our model, we need to transform the data we tokenised into a <em>Document Term Matrix</em>, which is needed as an input for the function that actually estimates the model. This is easy enough using the <code>cast_dtm()</code> function.</p>
 <p>Then we estimate our model. We use <span class="math inline">\(k = 6\)</span> because we have 6 books, and run the model with the <code>LDA()</code> function from <strong><code>topicmodels</code></strong>:</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-4"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-4-1"><a href="#annotated-cell-4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidytext)</span>
 <span id="annotated-cell-4-2"><a href="#annotated-cell-4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="annotated-cell-4-3"><a href="#annotated-cell-4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(topicmodels)</span>
 <span id="annotated-cell-4-4"><a href="#annotated-cell-4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scales)</span>
 <span id="annotated-cell-4-5"><a href="#annotated-cell-4-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="annotated-cell-4-6"><a href="#annotated-cell-4-6" aria-hidden="true" tabindex="-1"></a>shuffle_dtm <span class="ot">&lt;-</span> chapter_word <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="11" onclick="event.preventDefault();">11</a><span id="annotated-cell-4-7" class="code-annotation-target"><a href="#annotated-cell-4-7" aria-hidden="true" tabindex="-1"></a>  tidytext<span class="sc">::</span><span class="fu">cast_dtm</span>(document, word, n)</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="11">11</button><span id="annotated-cell-4-7" class="code-annotation-target"><a href="#annotated-cell-4-7" aria-hidden="true" tabindex="-1"></a>  tidytext<span class="sc">::</span><span class="fu">cast_dtm</span>(document, word, n)</span>
 <span id="annotated-cell-4-8"><a href="#annotated-cell-4-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="annotated-cell-4-9"><a href="#annotated-cell-4-9" aria-hidden="true" tabindex="-1"></a><span class="co"># estimate LDA</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="12" onclick="event.preventDefault();">12</a><span id="annotated-cell-4-10" class="code-annotation-target"><a href="#annotated-cell-4-10" aria-hidden="true" tabindex="-1"></a>shuffle_lda <span class="ot">&lt;-</span> topicmodels<span class="sc">::</span><span class="fu">LDA</span>(shuffle_dtm,</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="12">12</button><span id="annotated-cell-4-10" class="code-annotation-target"><a href="#annotated-cell-4-10" aria-hidden="true" tabindex="-1"></a>shuffle_lda <span class="ot">&lt;-</span> topicmodels<span class="sc">::</span><span class="fu">LDA</span>(shuffle_dtm,</span>
 <span id="annotated-cell-4-11"><a href="#annotated-cell-4-11" aria-hidden="true" tabindex="-1"></a>                                <span class="co"># As many topics as books, but we can include more if we wanted to</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="13" onclick="event.preventDefault();">13</a><span id="annotated-cell-4-12" class="code-annotation-target"><a href="#annotated-cell-4-12" aria-hidden="true" tabindex="-1"></a>                                <span class="at">k =</span> <span class="fu">length</span>(<span class="fu">unique</span>(shuffle_titles<span class="sc">$</span>gutenberg_id)),</span>
-<span id="annotated-cell-4-13"><a href="#annotated-cell-4-13" aria-hidden="true" tabindex="-1"></a>                                <span class="co"># For reproduciblity </span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="14" onclick="event.preventDefault();">14</a><span id="annotated-cell-4-14" class="code-annotation-target"><a href="#annotated-cell-4-14" aria-hidden="true" tabindex="-1"></a>                                <span class="at">control =</span> <span class="fu">list</span>(<span class="at">seed =</span> <span class="dv">1234</span>))</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="13">13</button><span id="annotated-cell-4-12" class="code-annotation-target"><a href="#annotated-cell-4-12" aria-hidden="true" tabindex="-1"></a>                                <span class="at">k =</span> <span class="fu">length</span>(<span class="fu">unique</span>(shuffle_titles<span class="sc">$</span>gutenberg_id)),</span>
+<span id="annotated-cell-4-13"><a href="#annotated-cell-4-13" aria-hidden="true" tabindex="-1"></a>                                <span class="co"># For reproducibility</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="14">14</button><span id="annotated-cell-4-14" class="code-annotation-target"><a href="#annotated-cell-4-14" aria-hidden="true" tabindex="-1"></a>                                <span class="at">control =</span> <span class="fu">list</span>(<span class="at">seed =</span> <span class="dv">1234</span>))</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-annotation">
-<dl class="code-annotation-container-grid">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-4" data-target-annotation="11">11</dt>
 <dd>
 <span data-code-cell="annotated-cell-4" data-code-lines="7" data-code-annotation="11">Create a document-term matrix from the chapter_word data frame using the <code>cast_dtm()</code> function. Look at the result</span>
@@ -853,8 +899,10 @@ window.Quarto = {
 </dl>
 </div>
 </div>
-<p>Let’s look at the words with the highest probabilities to below to each of the 6 topics. There are clearly some words from each book that are more salient in some topics. Let’s get serious and use all the model results.</p>
+<p>Let’s look at the words with the highest probabilities to belong to each of the 6 topics. There are clearly some words from each book that are more salient in some topics. Let’s get serious and use all the model results.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-5"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-5-1"><a href="#annotated-cell-5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidytext)</span>
 <span id="annotated-cell-5-2"><a href="#annotated-cell-5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="annotated-cell-5-3"><a href="#annotated-cell-5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(topicmodels)</span>
@@ -862,7 +910,7 @@ window.Quarto = {
 <span id="annotated-cell-5-5"><a href="#annotated-cell-5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom)</span>
 <span id="annotated-cell-5-6"><a href="#annotated-cell-5-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="annotated-cell-5-7"><a href="#annotated-cell-5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="15" onclick="event.preventDefault();">15</a><span id="annotated-cell-5-8" class="code-annotation-target"><a href="#annotated-cell-5-8" aria-hidden="true" tabindex="-1"></a>broom<span class="sc">::</span><span class="fu">tidy</span>(shuffle_lda, <span class="at">matrix =</span> <span class="st">"beta"</span>) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="15">15</button><span id="annotated-cell-5-8" class="code-annotation-target"><a href="#annotated-cell-5-8" aria-hidden="true" tabindex="-1"></a>broom<span class="sc">::</span><span class="fu">tidy</span>(shuffle_lda, <span class="at">matrix =</span> <span class="st">"beta"</span>) <span class="sc">|&gt;</span></span>
 <span id="annotated-cell-5-9"><a href="#annotated-cell-5-9" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(topic) <span class="sc">|&gt;</span></span>
 <span id="annotated-cell-5-10"><a href="#annotated-cell-5-10" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">slice_max</span>(<span class="at">order_by =</span> beta, <span class="at">n =</span> <span class="dv">15</span>) <span class="sc">|&gt;</span></span>
 <span id="annotated-cell-5-11"><a href="#annotated-cell-5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span> term <span class="sc">|&gt;</span> <span class="fu">reorder</span>(beta), <span class="at">y=</span> beta, <span class="at">fill=</span>topic)) <span class="sc">+</span></span>
@@ -872,8 +920,9 @@ window.Quarto = {
 <span id="annotated-cell-5-15"><a href="#annotated-cell-5-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>topic, <span class="at">scales =</span> <span class="st">"free"</span>) <span class="sc">+</span></span>
 <span id="annotated-cell-5-16"><a href="#annotated-cell-5-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="fu">expression</span>(beta))<span class="sc">+</span></span>
 <span id="annotated-cell-5-17"><a href="#annotated-cell-5-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-annotation">
-<dl class="code-annotation-container-grid">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-5" data-target-annotation="15">15</dt>
 <dd>
 <span data-code-cell="annotated-cell-5" data-code-lines="8" data-code-annotation="15">Extract the <span class="math inline">\(\beta\)</span> probabilities from the model, word-topic probabilities.</span>
@@ -883,7 +932,7 @@ window.Quarto = {
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="04-topics_files/figure-html/4.shuffle-check-topics-1.png" class="img-fluid figure-img" width="672"></p>
+<p><a href="04-topics_files/figure-html/4.shuffle-check-topics-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="04-topics_files/figure-html/4.shuffle-check-topics-1.png" class="img-fluid figure-img" width="672"></a></p>
 </figure>
 </div>
 </div>
@@ -891,32 +940,36 @@ window.Quarto = {
 </section>
 <section id="working-with-word-topic-beta-and-topic-book-gamma-probabilities" class="level3">
 <h3 class="anchored" data-anchor-id="working-with-word-topic-beta-and-topic-book-gamma-probabilities">Working with word-topic (<span class="math inline">\(\beta\)</span>) and topic-book (<span class="math inline">\(\gamma\)</span>) probabilities</h3>
-<p><span class="math inline">\(\beta\)</span> controls the distribution of words <em>within</em> a topic. It is a Dirichlet prior on the per-topic word distributions. In other words, it represents the probability of a specific word being present in a topic. A higher beta value will result in a more diverse set of words within a topic, while a lower beta value will lead to a more focused set of words.</p>
-<p><span class="math inline">\(\gamma\)</span> controls the distribution of topics <em>within</em> a document. It is a Dirichlet prior on the per-document topic distributions. It governs the probability of a specific topic being present in a document. A higher gamma value will result in a more diverse set of topics within a document, while a lower gamma value will lead to a more focused set of topics.</p>
+<p><span class="math inline">\(\beta\)</span> describes the distribution of words <em>within</em> a topic: for every topic, the probability that each word in the vocabulary is drawn from it. A topic is nothing more than this list of probabilities, so reading its highest-<span class="math inline">\(\beta\)</span> words is how you put a name to it.</p>
+<p><span class="math inline">\(\gamma\)</span> describes the distribution of topics <em>within</em> a document: for every chapter, the share of its words the model attributes to each topic. A chapter with <span class="math inline">\(\gamma = 0.95\)</span> for topic 3 is almost entirely “about” topic 3.</p>
+<p>Both are estimated from the data, and each sits on top of a Dirichlet prior that sets how concentrated the distributions are allowed to be: a flatter prior allows more diverse topics and documents, a sharper one more focused ones. In <code>topicmodels::LDA()</code> the document-side prior is the <code>alpha</code> parameter, which the model estimates for you by default.</p>
 <p>We extract model results in tidy format using the <strong><code>broom</code></strong> package <code>tidy()</code> function, which extracts model results in our favourite format. Let’s look in detail at model results for both key parameters.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-6"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-6-1"><a href="#annotated-cell-6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidytext)</span>
 <span id="annotated-cell-6-2"><a href="#annotated-cell-6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="annotated-cell-6-3"><a href="#annotated-cell-6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(topicmodels)</span>
 <span id="annotated-cell-6-4"><a href="#annotated-cell-6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scales)</span>
 <span id="annotated-cell-6-5"><a href="#annotated-cell-6-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="annotated-cell-6-6"><a href="#annotated-cell-6-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Beta ####</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="16" onclick="event.preventDefault();">16</a><span id="annotated-cell-6-7" class="code-annotation-target"><a href="#annotated-cell-6-7" aria-hidden="true" tabindex="-1"></a>words_beta <span class="ot">&lt;-</span> broom<span class="sc">::</span><span class="fu">tidy</span>(shuffle_lda, <span class="at">matrix =</span> <span class="st">"beta"</span>)</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="16">16</button><span id="annotated-cell-6-7" class="code-annotation-target"><a href="#annotated-cell-6-7" aria-hidden="true" tabindex="-1"></a>words_beta <span class="ot">&lt;-</span> broom<span class="sc">::</span><span class="fu">tidy</span>(shuffle_lda, <span class="at">matrix =</span> <span class="st">"beta"</span>)</span>
 <span id="annotated-cell-6-8"><a href="#annotated-cell-6-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="annotated-cell-6-9"><a href="#annotated-cell-6-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Gamma ####</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="17" onclick="event.preventDefault();">17</a><span id="annotated-cell-6-10" class="code-annotation-target"><a href="#annotated-cell-6-10" aria-hidden="true" tabindex="-1"></a>chapters_gamma <span class="ot">&lt;-</span> broom<span class="sc">::</span><span class="fu">tidy</span>(shuffle_lda, <span class="at">matrix =</span> <span class="st">"gamma"</span>)</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="17">17</button><span id="annotated-cell-6-10" class="code-annotation-target"><a href="#annotated-cell-6-10" aria-hidden="true" tabindex="-1"></a>chapters_gamma <span class="ot">&lt;-</span> broom<span class="sc">::</span><span class="fu">tidy</span>(shuffle_lda, <span class="at">matrix =</span> <span class="st">"gamma"</span>)</span>
 <span id="annotated-cell-6-11"><a href="#annotated-cell-6-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="annotated-cell-6-12"><a href="#annotated-cell-6-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot</span></span>
 <span id="annotated-cell-6-13"><a href="#annotated-cell-6-13" aria-hidden="true" tabindex="-1"></a>broom<span class="sc">::</span><span class="fu">tidy</span>(shuffle_lda, <span class="at">matrix =</span> <span class="st">"gamma"</span>) <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="18" onclick="event.preventDefault();">18</a><span id="annotated-cell-6-14" class="code-annotation-target"><a href="#annotated-cell-6-14" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">separate</span>(document, <span class="fu">c</span>(<span class="st">"title"</span>, <span class="st">"chapter"</span>), <span class="at">sep =</span> <span class="st">"_"</span>, <span class="at">convert =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
-<span id="annotated-cell-6-15"><a href="#annotated-cell-6-15" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">title =</span> <span class="fu">reorder</span>(title, gamma <span class="sc">*</span> topic)) <span class="sc">%&gt;%</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="18">18</button><span id="annotated-cell-6-14" class="code-annotation-target"><a href="#annotated-cell-6-14" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">separate</span>(document, <span class="fu">c</span>(<span class="st">"title"</span>, <span class="st">"chapter"</span>), <span class="at">sep =</span> <span class="st">"_"</span>, <span class="at">convert =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="annotated-cell-6-15"><a href="#annotated-cell-6-15" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">title =</span> <span class="fu">reorder</span>(title, gamma <span class="sc">*</span> topic)) <span class="sc">|&gt;</span></span>
 <span id="annotated-cell-6-16"><a href="#annotated-cell-6-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="fu">factor</span>(topic), gamma, <span class="at">color=</span>title)) <span class="sc">+</span></span>
 <span id="annotated-cell-6-17"><a href="#annotated-cell-6-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
 <span id="annotated-cell-6-18"><a href="#annotated-cell-6-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>title) <span class="sc">+</span></span>
 <span id="annotated-cell-6-19"><a href="#annotated-cell-6-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"topic"</span>, <span class="at">y =</span> <span class="fu">expression</span>(gamma))<span class="sc">+</span></span>
 <span id="annotated-cell-6-20"><a href="#annotated-cell-6-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-annotation">
-<dl class="code-annotation-container-grid">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-6" data-target-annotation="16">16</dt>
 <dd>
 <span data-code-cell="annotated-cell-6" data-code-lines="7" data-code-annotation="16"><span class="math inline">\(\beta\)</span> probabilities: Word within a Topic</span>
@@ -934,7 +987,7 @@ window.Quarto = {
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="04-topics_files/figure-html/4.shuffle-beta-gamma-1.png" class="img-fluid figure-img" width="672"></p>
+<p><a href="04-topics_files/figure-html/4.shuffle-beta-gamma-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="04-topics_files/figure-html/4.shuffle-beta-gamma-1.png" class="img-fluid figure-img" width="672"></a></p>
 </figure>
 </div>
 </div>
@@ -948,6 +1001,8 @@ window.Quarto = {
 <p>Now the picture is clearer. Some books, the shortest and distinct from the others, were for the most part correctly classified.</p>
 <p>To get better results from this approach we need to delve deeper into the tuning parameters of the model or try an entirely different text-data approach.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-7"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-7-1"><a href="#annotated-cell-7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidytext)</span>
 <span id="annotated-cell-7-2"><a href="#annotated-cell-7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="annotated-cell-7-3"><a href="#annotated-cell-7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(topicmodels)</span>
@@ -955,36 +1010,36 @@ window.Quarto = {
 <span id="annotated-cell-7-5"><a href="#annotated-cell-7-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="annotated-cell-7-6"><a href="#annotated-cell-7-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Save chapter classifications ####</span></span>
 <span id="annotated-cell-7-7"><a href="#annotated-cell-7-7" aria-hidden="true" tabindex="-1"></a>chapter_classifications <span class="ot">&lt;-</span> broom<span class="sc">::</span><span class="fu">tidy</span>(shuffle_lda, <span class="at">matrix =</span> <span class="st">"gamma"</span>) <span class="sc">|&gt;</span></span>
-<span id="annotated-cell-7-8"><a href="#annotated-cell-7-8" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">separate</span>(document, <span class="fu">c</span>(<span class="st">"title"</span>, <span class="st">"chapter"</span>), <span class="at">sep =</span> <span class="st">"_"</span>, <span class="at">convert =</span> <span class="cn">TRUE</span>)  <span class="sc">%&gt;%</span></span>
-<span id="annotated-cell-7-9"><a href="#annotated-cell-7-9" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(title, chapter) <span class="sc">%&gt;%</span></span>
-<span id="annotated-cell-7-10"><a href="#annotated-cell-7-10" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">slice_max</span>(gamma) <span class="sc">%&gt;%</span></span>
+<span id="annotated-cell-7-8"><a href="#annotated-cell-7-8" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">separate</span>(document, <span class="fu">c</span>(<span class="st">"title"</span>, <span class="st">"chapter"</span>), <span class="at">sep =</span> <span class="st">"_"</span>, <span class="at">convert =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="annotated-cell-7-9"><a href="#annotated-cell-7-9" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(title, chapter) <span class="sc">|&gt;</span></span>
+<span id="annotated-cell-7-10"><a href="#annotated-cell-7-10" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">slice_max</span>(gamma) <span class="sc">|&gt;</span></span>
 <span id="annotated-cell-7-11"><a href="#annotated-cell-7-11" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">ungroup</span>()</span>
 <span id="annotated-cell-7-12"><a href="#annotated-cell-7-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="annotated-cell-7-13"><a href="#annotated-cell-7-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Save most likely topics for each book ####</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="19" onclick="event.preventDefault();">19</a><span id="annotated-cell-7-14" class="code-annotation-target"><a href="#annotated-cell-7-14" aria-hidden="true" tabindex="-1"></a>book_topics <span class="ot">&lt;-</span> chapter_classifications <span class="sc">%&gt;%</span></span>
-<span id="annotated-cell-7-15"><a href="#annotated-cell-7-15" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">count</span>(title, topic) <span class="sc">%&gt;%</span></span>
-<span id="annotated-cell-7-16"><a href="#annotated-cell-7-16" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(title) <span class="sc">%&gt;%</span></span>
-<span id="annotated-cell-7-17"><a href="#annotated-cell-7-17" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">slice_max</span>(n, <span class="at">n =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
-<span id="annotated-cell-7-18"><a href="#annotated-cell-7-18" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="19">19</button><span id="annotated-cell-7-14" class="code-annotation-target"><a href="#annotated-cell-7-14" aria-hidden="true" tabindex="-1"></a>book_topics <span class="ot">&lt;-</span> chapter_classifications <span class="sc">|&gt;</span></span>
+<span id="annotated-cell-7-15"><a href="#annotated-cell-7-15" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">count</span>(title, topic) <span class="sc">|&gt;</span></span>
+<span id="annotated-cell-7-16"><a href="#annotated-cell-7-16" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(title) <span class="sc">|&gt;</span></span>
+<span id="annotated-cell-7-17"><a href="#annotated-cell-7-17" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">slice_max</span>(n, <span class="at">n =</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="annotated-cell-7-18"><a href="#annotated-cell-7-18" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">ungroup</span>() <span class="sc">|&gt;</span></span>
 <span id="annotated-cell-7-19"><a href="#annotated-cell-7-19" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">transmute</span>(<span class="at">consensus =</span> title, topic)</span>
 <span id="annotated-cell-7-20"><a href="#annotated-cell-7-20" aria-hidden="true" tabindex="-1"></a></span>
 <span id="annotated-cell-7-21"><a href="#annotated-cell-7-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Join the results ####</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="20" onclick="event.preventDefault();">20</a><span id="annotated-cell-7-22" class="code-annotation-target"><a href="#annotated-cell-7-22" aria-hidden="true" tabindex="-1"></a>chapter_classifications <span class="sc">%&gt;%</span></span>
-<span id="annotated-cell-7-23"><a href="#annotated-cell-7-23" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">left_join</span>(book_topics, <span class="at">by =</span> <span class="st">"topic"</span>) <span class="sc">%&gt;%</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="20">20</button><span id="annotated-cell-7-22" class="code-annotation-target"><a href="#annotated-cell-7-22" aria-hidden="true" tabindex="-1"></a>chapter_classifications <span class="sc">|&gt;</span></span>
+<span id="annotated-cell-7-23"><a href="#annotated-cell-7-23" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">left_join</span>(book_topics, <span class="at">by =</span> <span class="st">"topic"</span>) <span class="sc">|&gt;</span></span>
 <span id="annotated-cell-7-24"><a href="#annotated-cell-7-24" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(title <span class="sc">!=</span> consensus)</span>
 <span id="annotated-cell-7-25"><a href="#annotated-cell-7-25" aria-hidden="true" tabindex="-1"></a></span>
 <span id="annotated-cell-7-26"><a href="#annotated-cell-7-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Add Document Term Matrix data to results and join book classifications ####</span></span>
 <span id="annotated-cell-7-27"><a href="#annotated-cell-7-27" aria-hidden="true" tabindex="-1"></a>assignments <span class="ot">&lt;-</span> broom<span class="sc">::</span><span class="fu">augment</span>(shuffle_lda, <span class="at">data =</span> shuffle_dtm) <span class="sc">|&gt;</span></span>
 <span id="annotated-cell-7-28"><a href="#annotated-cell-7-28" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">separate</span>(document, <span class="fu">c</span>(<span class="st">"title"</span>, <span class="st">"chapter"</span>), </span>
-<span id="annotated-cell-7-29"><a href="#annotated-cell-7-29" aria-hidden="true" tabindex="-1"></a>           <span class="at">sep =</span> <span class="st">"_"</span>, <span class="at">convert =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="annotated-cell-7-29"><a href="#annotated-cell-7-29" aria-hidden="true" tabindex="-1"></a>           <span class="at">sep =</span> <span class="st">"_"</span>, <span class="at">convert =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
 <span id="annotated-cell-7-30"><a href="#annotated-cell-7-30" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">left_join</span>(book_topics, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">".topic"</span> <span class="ot">=</span> <span class="st">"topic"</span>))</span>
 <span id="annotated-cell-7-31"><a href="#annotated-cell-7-31" aria-hidden="true" tabindex="-1"></a></span>
 <span id="annotated-cell-7-32"><a href="#annotated-cell-7-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualise the result ####</span></span>
-<span id="annotated-cell-7-33"><a href="#annotated-cell-7-33" aria-hidden="true" tabindex="-1"></a>assignments <span class="sc">%&gt;%</span></span>
-<span id="annotated-cell-7-34"><a href="#annotated-cell-7-34" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">count</span>(title, consensus, <span class="at">wt =</span> count) <span class="sc">%&gt;%</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="21" onclick="event.preventDefault();">21</a><span id="annotated-cell-7-35" class="code-annotation-target"><a href="#annotated-cell-7-35" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">c</span>(title, consensus), <span class="sc">~</span><span class="fu">str_wrap</span>(., <span class="dv">20</span>))) <span class="sc">%&gt;%</span></span>
-<span id="annotated-cell-7-36"><a href="#annotated-cell-7-36" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(title) <span class="sc">%&gt;%</span></span>
-<span id="annotated-cell-7-37"><a href="#annotated-cell-7-37" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">percent =</span> n <span class="sc">/</span> <span class="fu">sum</span>(n)) <span class="sc">%&gt;%</span></span>
+<span id="annotated-cell-7-33"><a href="#annotated-cell-7-33" aria-hidden="true" tabindex="-1"></a>assignments <span class="sc">|&gt;</span></span>
+<span id="annotated-cell-7-34"><a href="#annotated-cell-7-34" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">count</span>(title, consensus, <span class="at">wt =</span> count) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="21">21</button><span id="annotated-cell-7-35" class="code-annotation-target"><a href="#annotated-cell-7-35" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">c</span>(title, consensus), <span class="sc">~</span><span class="fu">str_wrap</span>(., <span class="dv">20</span>))) <span class="sc">|&gt;</span></span>
+<span id="annotated-cell-7-36"><a href="#annotated-cell-7-36" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(title) <span class="sc">|&gt;</span></span>
+<span id="annotated-cell-7-37"><a href="#annotated-cell-7-37" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">percent =</span> n <span class="sc">/</span> <span class="fu">sum</span>(n)) <span class="sc">|&gt;</span></span>
 <span id="annotated-cell-7-38"><a href="#annotated-cell-7-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(consensus, title, <span class="at">fill =</span> percent)) <span class="sc">+</span></span>
 <span id="annotated-cell-7-39"><a href="#annotated-cell-7-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>() <span class="sc">+</span></span>
 <span id="annotated-cell-7-40"><a href="#annotated-cell-7-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">palette =</span> <span class="st">"Spectral"</span>, <span class="at">direction=</span><span class="dv">1</span>,<span class="at">label =</span> <span class="fu">percent_format</span>()) <span class="sc">+</span></span>
@@ -994,8 +1049,9 @@ window.Quarto = {
 <span id="annotated-cell-7-44"><a href="#annotated-cell-7-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Book words were assigned to"</span>,</span>
 <span id="annotated-cell-7-45"><a href="#annotated-cell-7-45" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Book words came from"</span>,</span>
 <span id="annotated-cell-7-46"><a href="#annotated-cell-7-46" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill =</span> <span class="st">"% of assignments"</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-annotation">
-<dl class="code-annotation-container-grid">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-7" data-target-annotation="19">19</dt>
 <dd>
 <span data-code-cell="annotated-cell-7" data-code-lines="14,15,16,17,18,19" data-code-annotation="19">Save the most-likely result as a consensus variable</span>
@@ -1013,25 +1069,25 @@ window.Quarto = {
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="04-topics_files/figure-html/4.shuffle-results-1.png" class="img-fluid figure-img" width="672"></p>
+<p><a href="04-topics_files/figure-html/4.shuffle-results-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="04-topics_files/figure-html/4.shuffle-results-1.png" class="img-fluid figure-img" width="672"></a></p>
 </figure>
 </div>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 158 × 5
-   title      chapter topic gamma consensus     
-   &lt;chr&gt;        &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;         
- 1 On Liberty       1     5 0.957 The Art of War
- 2 On Liberty       2     5 0.971 The Art of War
- 3 On Liberty       3     5 0.975 The Art of War
- 4 On Liberty       4     5 0.975 The Art of War
- 5 On Liberty       5     5 0.994 The Art of War
- 6 On Liberty       6     5 1.000 The Art of War
- 7 On Liberty       7     5 0.992 The Art of War
- 8 On Liberty       8     5 1.000 The Art of War
- 9 On Liberty       9     5 1.000 The Art of War
-10 On Liberty      10     5 1.000 The Art of War
-# ℹ 148 more rows</code></pre>
+<pre><code># A tibble: 237 × 5
+   title      chapter topic gamma consensus 
+   &lt;chr&gt;        &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;     
+ 1 On Liberty       1     5 0.955 The Prince
+ 2 On Liberty       2     5 0.629 The Prince
+ 3 On Liberty       3     5 0.974 The Prince
+ 4 On Liberty       4     5 0.607 The Prince
+ 5 On Liberty       5     5 0.993 The Prince
+ 6 On Liberty       6     5 1.000 The Prince
+ 7 On Liberty       7     5 1.000 The Prince
+ 8 On Liberty       8     5 1.000 The Prince
+ 9 On Liberty       9     5 1.000 The Prince
+10 On Liberty      10     5 1.000 The Prince
+# ℹ 227 more rows</code></pre>
 </div>
 </div>
 <div class="cell page-columns page-full">
@@ -1039,7 +1095,7 @@ window.Quarto = {
 <div class="no-row-height column-margin column-container"><div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="04-topics_files/figure-html/4.shuffle-rayshader-1.png" class="img-fluid figure-img" width="672"></p>
+<p><a href="04-topics_files/figure-html/4.shuffle-rayshader-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="(You’ll learn how to do this later)"><img src="04-topics_files/figure-html/4.shuffle-rayshader-1.png" class="img-fluid figure-img" width="672" alt="(You’ll learn how to do this later)"></a></p>
 <figcaption>(You’ll learn how to do this later)</figcaption>
 </figure>
 </div>
@@ -1049,8 +1105,8 @@ window.Quarto = {
 <section id="bonus-track-networks-of-n-grams-in-the-work-of-david-hume" class="level2">
 <h2 class="anchored" data-anchor-id="bonus-track-networks-of-n-grams-in-the-work-of-david-hume">Bonus track: Networks of n-grams in the work of David Hume</h2>
 <p>There are many types of relational analysis you can do with text. An interesting one is how expressions, measured as <em>n-grams</em> (adjacent words), are related to one another using networks. We’ll use David Hume’s <em>An Enquiry Concerning Human Understanding</em> to illustrate, which we will import from <a href="https://www.gutenberg.org/">Project Gutenberg</a>.</p>
-<p>We will tokenize differently using the <code>n-grams</code> output option in the <code>unnest_tokens()</code> function. We need to decide how many adjacent words will be tokenized, so for ease we will do pairs of words.</p>
-<p>After we tokenize and count, we need to turn each pair of words into a network, which is easy using the <strong><code>igraph</code></strong> package and then well use the <strong><code>ggraph</code></strong> package to visualise it. Networks are made of nodes and edges, and in this case an n-gram of two words means two nodes are connected to each other by an edge. Using the <code>graph_from_data_frame()</code> function, we can turn a tibble made of pairs of words into a network.</p>
+<p>We will tokenise differently, using the <code>token = "ngrams"</code> option of the <code>unnest_tokens()</code> function. We need to decide how many adjacent words go in each token, so for ease we will do pairs of words.</p>
+<p>After we tokenize and count, we need to turn each pair of words into a network, which is easy using the <strong><code>igraph</code></strong> package and then we’ll use the <strong><code>ggraph</code></strong> package to visualise it. Networks are made of nodes and edges, and in this case an n-gram of two words means two nodes are connected to each other by an edge. Using the <code>graph_from_data_frame()</code> function, we can turn a tibble made of pairs of words into a network.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1064,9 +1120,11 @@ window.Quarto = {
 <p>Take a look at the vignette for this package <a href="https://ggraph.data-imaginist.com/">here</a></p>
 </div>
 </div>
-<p>Look at the code below that shows all the steps, from tokenizing to plotting the network. Notice the changes in <strong><code>ggraph</code></strong>, like the <a href="https://cran.r-project.org/web/packages/ggraph/vignettes/Layouts.html">layout</a> (an algorithm that places nodes in the graph according to their properties) and the geoms –for both edges and nodes.</p>
+<p>Look at the code below that shows all the steps, from tokenising to plotting the network. Notice the changes in <strong><code>ggraph</code></strong>, like the <a href="https://ggraph.data-imaginist.com/articles/Layouts.html">layout</a> (an algorithm that places nodes in the graph according to their properties) and the geoms –for both edges and nodes.</p>
 <p>But also look at the results. The n-grams show relationships between key concepts in this important work on epistemology, like natural events, or how reasoning is connected to observation, the mind and matter.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-8"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-8-1"><a href="#annotated-cell-8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggraph)     <span class="co"># ggplot2 tools for networks</span></span>
 <span id="annotated-cell-8-2"><a href="#annotated-cell-8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidygraph)  <span class="co"># Tidy objects for networks</span></span>
 <span id="annotated-cell-8-3"><a href="#annotated-cell-8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(igraph)     <span class="co"># the workhorse for network analysis in R</span></span>
@@ -1078,27 +1136,28 @@ window.Quarto = {
 <span id="annotated-cell-8-9"><a href="#annotated-cell-8-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="annotated-cell-8-10"><a href="#annotated-cell-8-10" aria-hidden="true" tabindex="-1"></a>gutenbergr<span class="sc">::</span><span class="fu">gutenberg_download</span>(<span class="at">gutenberg_id =</span> <span class="dv">9662</span>, <span class="at">mirror =</span> <span class="st">"http://mirrors.xmission.com/gutenberg/"</span>) <span class="sc">|&gt;</span></span>
 <span id="annotated-cell-8-11"><a href="#annotated-cell-8-11" aria-hidden="true" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">as_tibble</span>() <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="22" onclick="event.preventDefault();">22</a><span id="annotated-cell-8-12" class="code-annotation-target"><a href="#annotated-cell-8-12" aria-hidden="true" tabindex="-1"></a>  tidytext<span class="sc">::</span><span class="fu">unnest_tokens</span>(</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="22">22</button><span id="annotated-cell-8-12" class="code-annotation-target"><a href="#annotated-cell-8-12" aria-hidden="true" tabindex="-1"></a>  tidytext<span class="sc">::</span><span class="fu">unnest_tokens</span>(</span>
 <span id="annotated-cell-8-13"><a href="#annotated-cell-8-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">input =</span> <span class="st">"text"</span>,</span>
 <span id="annotated-cell-8-14"><a href="#annotated-cell-8-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">output =</span> <span class="st">"ngrams"</span>,</span>
 <span id="annotated-cell-8-15"><a href="#annotated-cell-8-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">n=</span><span class="dv">2</span>,</span>
 <span id="annotated-cell-8-16"><a href="#annotated-cell-8-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">token =</span> <span class="st">"ngrams"</span>,</span>
 <span id="annotated-cell-8-17"><a href="#annotated-cell-8-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">to_lower =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="23" onclick="event.preventDefault();">23</a><span id="annotated-cell-8-18" class="code-annotation-target"><a href="#annotated-cell-8-18" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">separate</span>(ngrams, <span class="at">into =</span> <span class="fu">rep</span>(<span class="fu">paste0</span>(<span class="st">"word_"</span>,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>), <span class="at">sep =</span> <span class="st">" "</span>)) <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="24" onclick="event.preventDefault();">24</a><span id="annotated-cell-8-19" class="code-annotation-target"><a href="#annotated-cell-8-19" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="sc">!</span>word_1 <span class="sc">%in%</span> stopwords<span class="sc">::</span><span class="fu">stopwords</span>(<span class="at">language =</span> <span class="st">"en"</span>),</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="23">23</button><span id="annotated-cell-8-18" class="code-annotation-target"><a href="#annotated-cell-8-18" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">separate</span>(ngrams, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"word_1"</span>, <span class="st">"word_2"</span>), <span class="at">sep =</span> <span class="st">" "</span>) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="24">24</button><span id="annotated-cell-8-19" class="code-annotation-target"><a href="#annotated-cell-8-19" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="sc">!</span>word_1 <span class="sc">%in%</span> stopwords<span class="sc">::</span><span class="fu">stopwords</span>(<span class="at">language =</span> <span class="st">"en"</span>),</span>
 <span id="annotated-cell-8-20"><a href="#annotated-cell-8-20" aria-hidden="true" tabindex="-1"></a>                <span class="sc">!</span>word_2 <span class="sc">%in%</span> stopwords<span class="sc">::</span><span class="fu">stopwords</span>(<span class="at">language =</span> <span class="st">"en"</span>)) <span class="sc">|&gt;</span></span>
 <span id="annotated-cell-8-21"><a href="#annotated-cell-8-21" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="fu">nchar</span>(word_1) <span class="sc">&gt;</span> <span class="dv">1</span>,<span class="fu">nchar</span>(word_2) <span class="sc">&gt;</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="25" onclick="event.preventDefault();">25</a><span id="annotated-cell-8-22" class="code-annotation-target"><a href="#annotated-cell-8-22" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">count</span>(word_1,word_2,<span class="at">sort =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="25">25</button><span id="annotated-cell-8-22" class="code-annotation-target"><a href="#annotated-cell-8-22" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">count</span>(word_1,word_2,<span class="at">sort =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
 <span id="annotated-cell-8-23"><a href="#annotated-cell-8-23" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">slice_max</span>(<span class="at">order_by =</span> n, <span class="at">n=</span><span class="dv">50</span>) <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="26" onclick="event.preventDefault();">26</a><span id="annotated-cell-8-24" class="code-annotation-target"><a href="#annotated-cell-8-24" aria-hidden="true" tabindex="-1"></a>  igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>() <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="27" onclick="event.preventDefault();">27</a><span id="annotated-cell-8-25" class="code-annotation-target"><a href="#annotated-cell-8-25" aria-hidden="true" tabindex="-1"></a>  ggraph<span class="sc">::</span><span class="fu">ggraph</span>(<span class="at">layout=</span><span class="st">"fr"</span>)<span class="sc">+</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="28" onclick="event.preventDefault();">28</a><span id="annotated-cell-8-26" class="code-annotation-target"><a href="#annotated-cell-8-26" aria-hidden="true" tabindex="-1"></a>  ggraph<span class="sc">::</span><span class="fu">geom_edge_arc</span>(<span class="fu">aes</span>(<span class="at">edge_color=</span>n), <span class="at">edge_width =</span> <span class="dv">2</span>)<span class="sc">+</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="29" onclick="event.preventDefault();">29</a><span id="annotated-cell-8-27" class="code-annotation-target"><a href="#annotated-cell-8-27" aria-hidden="true" tabindex="-1"></a>  ggraph<span class="sc">::</span><span class="fu">geom_node_point</span>(<span class="at">shape=</span><span class="dv">1</span>)<span class="sc">+</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="26">26</button><span id="annotated-cell-8-24" class="code-annotation-target"><a href="#annotated-cell-8-24" aria-hidden="true" tabindex="-1"></a>  igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>() <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="27">27</button><span id="annotated-cell-8-25" class="code-annotation-target"><a href="#annotated-cell-8-25" aria-hidden="true" tabindex="-1"></a>  ggraph<span class="sc">::</span><span class="fu">ggraph</span>(<span class="at">layout=</span><span class="st">"fr"</span>)<span class="sc">+</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="28">28</button><span id="annotated-cell-8-26" class="code-annotation-target"><a href="#annotated-cell-8-26" aria-hidden="true" tabindex="-1"></a>  ggraph<span class="sc">::</span><span class="fu">geom_edge_arc</span>(<span class="fu">aes</span>(<span class="at">edge_color=</span>n), <span class="at">edge_width =</span> <span class="dv">2</span>)<span class="sc">+</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="29">29</button><span id="annotated-cell-8-27" class="code-annotation-target"><a href="#annotated-cell-8-27" aria-hidden="true" tabindex="-1"></a>  ggraph<span class="sc">::</span><span class="fu">geom_node_point</span>(<span class="at">shape=</span><span class="dv">1</span>)<span class="sc">+</span></span>
 <span id="annotated-cell-8-28"><a href="#annotated-cell-8-28" aria-hidden="true" tabindex="-1"></a>  ggraph<span class="sc">::</span><span class="fu">geom_node_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> name), <span class="at">vjust =</span> <span class="dv">1</span>, <span class="at">hjust =</span> <span class="dv">1</span>,  <span class="at">check_overlap =</span> <span class="cn">TRUE</span>)<span class="sc">+</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="30" onclick="event.preventDefault();">30</a><span id="annotated-cell-8-29" class="code-annotation-target"><a href="#annotated-cell-8-29" aria-hidden="true" tabindex="-1"></a>  ggraph<span class="sc">::</span><span class="fu">scale_edge_color_distiller</span>(<span class="at">palette=</span><span class="st">"Spectral"</span>)<span class="sc">+</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="30">30</button><span id="annotated-cell-8-29" class="code-annotation-target"><a href="#annotated-cell-8-29" aria-hidden="true" tabindex="-1"></a>  ggraph<span class="sc">::</span><span class="fu">scale_edge_color_distiller</span>(<span class="at">palette=</span><span class="st">"Spectral"</span>)<span class="sc">+</span></span>
 <span id="annotated-cell-8-30"><a href="#annotated-cell-8-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_graph</span>()</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-annotation">
-<dl class="code-annotation-container-grid">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-8" data-target-annotation="22">22</dt>
 <dd>
 <span data-code-cell="annotated-cell-8" data-code-lines="12,13,14,15,16,17" data-code-annotation="22">We now create n-grams of length 2, all combinations of 2 consecutive words</span>
@@ -1129,18 +1188,18 @@ window.Quarto = {
 </dd>
 <dt data-target-cell="annotated-cell-8" data-target-annotation="29">29</dt>
 <dd>
-<span data-code-cell="annotated-cell-8" data-code-lines="27,28" data-code-annotation="29">Graph the nodes and labels them</span>
+<span data-code-cell="annotated-cell-8" data-code-lines="27,28" data-code-annotation="29">Graph the nodes and label them</span>
 </dd>
 <dt data-target-cell="annotated-cell-8" data-target-annotation="30">30</dt>
 <dd>
-<span data-code-cell="annotated-cell-8" data-code-lines="29,30" data-code-annotation="30">Clean up with theme made for networks and put a color scale on the connections</span>
+<span data-code-cell="annotated-cell-8" data-code-lines="29,30" data-code-annotation="30">Clean up with a theme made for networks and put a colour scale on the connections</span>
 </dd>
 </dl>
 </div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="04-topics_files/figure-html/4.networks-1.png" class="img-fluid figure-img" width="672"></p>
+<p><a href="04-topics_files/figure-html/4.networks-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img src="04-topics_files/figure-html/4.networks-1.png" class="img-fluid figure-img" width="672"></a></p>
 </figure>
 </div>
 </div>
@@ -1461,6 +1520,57 @@ window._ojs.runtime.interpretFromScriptTags();
       });
       clipboardModal.on('success', onCopySuccess);
     }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
         var filterRegex = new RegExp("https:\/\/nelsonamayad\.github\.io\/R4DEV\/");
@@ -1477,6 +1587,11 @@ window._ojs.runtime.interpretFromScriptTags();
           if (link.dataset.originalHref !== undefined) {
             link.href = link.dataset.originalHref;
           }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
         }
       }
     function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
@@ -1731,25 +1846,64 @@ window._ojs.runtime.interpretFromScriptTags();
           }
         };
       }
-        // Attach click handler to the DT
-        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
-        for (const annoteDlNode of annoteDls) {
-          annoteDlNode.addEventListener('click', (event) => {
-            const clickedEl = event.target;
-            if (clickedEl !== selectedAnnoteEl) {
-              unselectCodeLines();
-              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
-              if (activeEl) {
-                activeEl.classList.remove('code-annotation-active');
-              }
-              selectCodeLines(clickedEl);
-              clickedEl.classList.add('code-annotation-active');
-            } else {
-              // Unselect the line
-              unselectCodeLines();
-              clickedEl.classList.remove('code-annotation-active');
+        const annoteTargets = window.document.querySelectorAll('.code-annotation-anchor');
+        for (let i=0; i<annoteTargets.length; i++) {
+          const annoteTarget = annoteTargets[i];
+          const targetCell = annoteTarget.getAttribute("data-target-cell");
+          const targetAnnotation = annoteTarget.getAttribute("data-target-annotation");
+          const contentFn = () => {
+            const content = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+            if (content) {
+              const tipContent = content.cloneNode(true);
+              tipContent.classList.add("code-annotation-tip-content");
+              return tipContent.outerHTML;
             }
-          });
+          }
+          const config = {
+            allowHTML: true,
+            content: contentFn,
+            onShow: (instance) => {
+              selectCodeLines(instance.reference);
+              instance.reference.classList.add('code-annotation-active');
+              window.tippy.hideAll();
+            },
+            onHide: (instance) => {
+              unselectCodeLines();
+              instance.reference.classList.remove('code-annotation-active');
+            },
+            maxWidth: 300,
+            delay: [50, 0],
+            duration: [200, 0],
+            offset: [5, 10],
+            arrow: true,
+            appendTo: function(el) {
+              return el.parentElement.parentElement.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'quarto',
+            placement: 'right',
+            popperOptions: {
+              modifiers: [
+              {
+                name: 'flip',
+                options: {
+                  flipVariations: false, // true by default
+                  allowedAutoPlacements: ['right'],
+                  fallbackPlacements: ['right', 'top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left'],
+                },
+              },
+              {
+                name: 'preventOverflow',
+                options: {
+                  mainAxis: false,
+                  altAxis: false
+                }
+              }
+              ]        
+            }      
+          };
+          window.tippy(annoteTarget, config); 
         }
     const findCites = (el) => {
       const parentEl = el.parentElement;
@@ -1804,8 +1958,41 @@ window._ojs.runtime.interpretFromScriptTags();
 </div>
   </div>
 </footer>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 
 
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

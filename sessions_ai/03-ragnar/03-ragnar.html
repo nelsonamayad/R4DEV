@@ -80,14 +80,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-38657194d1c30378fa75d534d26568ab.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-a9fd7636a0121265c406fb04c3bba8e4.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-38657194d1c30378fa75d534d26568ab.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-73e373f4a43393be879eaa7f5bec20f5.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-7866983ca643604dcd4b1790e1c86039.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-73e373f4a43393be879eaa7f5bec20f5.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-38b5f4fe42bbed99db7c38154f53ea48.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-dark-05ee19f90ada4fec87197611c2da017c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../site_libs/bootstrap/bootstrap-38b5f4fe42bbed99db7c38154f53ea48.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-f247766226bcc895e77c705a5b584f22.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-fd704f46ef880e09e0b4cd7807fb6275.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-f247766226bcc895e77c705a5b584f22.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script src="../../site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
 <link href="../../site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
 <link href="../../site_libs/quarto-contrib/fontawesome6-1.2.0/all.min.css" rel="stylesheet">
@@ -145,6 +145,7 @@ cookieconsent.run({
 });
 </script> 
   
+<style>html{ scroll-behavior: smooth; }</style>
 <script async="" src="https://hypothes.is/embed.js"></script>
 <script>
   window.document.addEventListener("DOMContentLoaded", function (_event) {
@@ -155,6 +156,7 @@ cookieconsent.run({
 <link href="../../site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
 
 
+<link rel="stylesheet" href="../../style.css">
 <meta property="og:title" content="R4DEV">
 <meta property="og:description" content="Data workshop created by Nelson Amaya D.">
 <meta property="og:image" content="https://nelsonamayad.github.io/R4DEV/sessions_ai/03-ragnar/ragnar.png">
@@ -170,7 +172,7 @@ cookieconsent.run({
 <meta name="twitter:image-width" content="506">
 </head>
 
-<body class="nav-fixed fullcontent quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+<body class="floating nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
     const toggleBodyColorMode = (bsSheetEl) => {
       const mode = bsSheetEl.getAttribute("data-mode");
       const bodyEl = window.document.querySelector("body");
@@ -313,7 +315,8 @@ cookieconsent.run({
       }
     };
     const authorPrefersDark = false;
-    const darkModeDefault = authorPrefersDark;
+    const queryPrefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    const darkModeDefault = queryPrefersDark.matches;
       document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
       document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
     let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
@@ -326,6 +329,14 @@ cookieconsent.run({
       toggleGiscusIfUsed(toAlternate, darkModeDefault);
       window.dispatchEvent(new Event('resize'));
     };
+    queryPrefersDark.addEventListener("change", e => {
+      if(window.localStorage.getItem("quarto-color-scheme") !== null)
+        return;
+      const alternate = e.matches
+      toggleColorMode(alternate);
+      localAlternateSentinel = e.matches ? 'alternate' : 'default'; // this is used alongside local storage!
+      toggleGiscusIfUsed(alternate, darkModeDefault);
+    });
     // Switch to dark mode if need be
     if (hasAlternateSentinel()) {
       toggleColorMode(true);
@@ -535,15 +546,36 @@ cookieconsent.run({
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#you-will-learn-to" id="toc-you-will-learn-to" class="nav-link active" data-scroll-target="#you-will-learn-to">You will learn to</a></li>
+  <li><a href="#part-i-why-retrieval-not-memory" id="toc-part-i-why-retrieval-not-memory" class="nav-link" data-scroll-target="#part-i-why-retrieval-not-memory">PART I: Why retrieval, not memory</a></li>
+  <li><a href="#part-ii-read-turning-a-page-into-markdown" id="toc-part-ii-read-turning-a-page-into-markdown" class="nav-link" data-scroll-target="#part-ii-read-turning-a-page-into-markdown">PART II: Read – turning a page into markdown</a></li>
+  <li><a href="#part-iii-chunk-splitting-for-retrieval" id="toc-part-iii-chunk-splitting-for-retrieval" class="nav-link" data-scroll-target="#part-iii-chunk-splitting-for-retrieval">PART III: Chunk – splitting for retrieval</a></li>
+  <li><a href="#part-iv-embed-turning-text-into-vectors-for-free" id="toc-part-iv-embed-turning-text-into-vectors-for-free" class="nav-link" data-scroll-target="#part-iv-embed-turning-text-into-vectors-for-free">PART IV: Embed – turning text into vectors for free</a></li>
+  <li><a href="#part-v-store-a-duckdb-backed-knowledge-base" id="toc-part-v-store-a-duckdb-backed-knowledge-base" class="nav-link" data-scroll-target="#part-v-store-a-duckdb-backed-knowledge-base">PART V: Store – a DuckDB-backed knowledge base</a></li>
+  <li><a href="#part-vi-retrieve-two-ways-to-search" id="toc-part-vi-retrieve-two-ways-to-search" class="nav-link" data-scroll-target="#part-vi-retrieve-two-ways-to-search">PART VI: Retrieve – two ways to search</a></li>
+  <li><a href="#part-vii-give-the-model-the-tool" id="toc-part-vii-give-the-model-the-tool" class="nav-link" data-scroll-target="#part-vii-give-the-model-the-tool">PART VII: Give the model the tool</a></li>
+  <li><a href="#capstone-ask-r4dev" id="toc-capstone-ask-r4dev" class="nav-link" data-scroll-target="#capstone-ask-r4dev">Capstone: Ask R4DEV, rebuilt</a></li>
+  <li><a href="#practice-3-retrieve-something-real" id="toc-practice-3-retrieve-something-real" class="nav-link" data-scroll-target="#practice-3-retrieve-something-real">🏗 Practice 3: Retrieve something real</a></li>
+  <li><a href="#key-takeaways" id="toc-key-takeaways" class="nav-link" data-scroll-target="#key-takeaways">Key takeaways</a></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Grounded in truth 🧭</h1>
+<div class="quarto-title-block"><div><h1 class="title">Grounded in truth 🧭</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li></ul></div></div>
 <p class="subtitle lead">A deep dive into retrieval-augmented generation with ragnar</p>
   <div class="quarto-categories">
     <div class="quarto-category">RAG</div>
@@ -581,7 +613,7 @@ cookieconsent.run({
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">October 6, 2026</p>
+      <p class="date-modified">November 7, 2026</p>
     </div>
   </div>
     
@@ -595,15 +627,9 @@ cookieconsent.run({
 <blockquote class="blockquote">
 <p><em>“It is a capital mistake to theorize before one has data.”</em> <br>–Arthur Conan Doyle, <em>A Scandal in Bohemia</em></p>
 </blockquote>
-<section id="part-i-why-retrieval-not-memory" class="level2">
-<h2 class="anchored" data-anchor-id="part-i-why-retrieval-not-memory">PART I: Why retrieval, not memory</h2>
-<p><a href="../../sessions_ai/01-llm/01-llm.html">Talking to machines</a> ended on an uncomfortable result: asked to judge song mood from titles alone, the model answered fluently and confidently – and its answers had <em>zero</em> correlation with the songs’ actual audio valence. The model wasn’t malfunctioning. It was doing exactly what you asked, articulately, from a question the input couldn’t actually answer.</p>
-<p><strong>Retrieval-augmented generation (RAG)</strong> is the fix for a related but distinct problem: instead of asking a model to answer from what it memorized during training (which might be outdated, wrong, or simply not about <em>your</em> content), you first <strong>retrieve</strong> the actual relevant text from a real source, then hand the model that text and ask it to answer <em>from it</em>. The model stops guessing and starts reading.</p>
-<p><a href="https://ragnar.tidyverse.org/"><strong><code>ragnar</code></strong></a> is a tidyverse-style toolkit that does the unglamorous half of RAG well: turning real documents into a searchable store. It has one function for each stage of the pipeline, and –true to form for this workshop– we’ll train it on <strong>R4DEV’s own published site</strong>, the same trick ragnar’s own homepage example plays on the <em>R for Data Science</em> book.</p>
 <div class="lesson-info">
 <p><strong>Level:</strong> Advanced &nbsp;·&nbsp; <strong>Time:</strong> ~60 min &nbsp;·&nbsp; <strong>Prerequisites:</strong> Talking to machines &nbsp;·&nbsp; <strong>Tools:</strong> ragnar, ellmer, DuckDB</p>
 </div>
-</section>
 <section id="you-will-learn-to" class="level2">
 <h2 class="anchored" data-anchor-id="you-will-learn-to">You will learn to</h2>
 <ul>
@@ -613,6 +639,12 @@ cookieconsent.run({
 <li>Register a retrieval store as a tool an LLM can call on its own.</li>
 <li>See the whole pipeline running live in the “Ask R4DEV” capstone at the end of this lesson.</li>
 </ul>
+</section>
+<section id="part-i-why-retrieval-not-memory" class="level2">
+<h2 class="anchored" data-anchor-id="part-i-why-retrieval-not-memory">PART I: Why retrieval, not memory</h2>
+<p><a href="../../sessions_ai/01-llm/01-llm.html">Talking to machines</a> ended on an uncomfortable result: asked to judge song mood from titles alone, the model answered fluently and confidently – and its answers had <em>zero</em> correlation with the songs’ actual audio valence. The model wasn’t malfunctioning. It was doing exactly what you asked, articulately, from a question the input couldn’t actually answer.</p>
+<p><strong>Retrieval-augmented generation (RAG)</strong> is the fix for a related but distinct problem: instead of asking a model to answer from what it memorised during training (which might be outdated, wrong, or simply not about <em>your</em> content), you first <strong>retrieve</strong> the actual relevant text from a real source, then hand the model that text and ask it to answer <em>from it</em>. The model stops guessing and starts reading.</p>
+<p><a href="https://ragnar.tidyverse.org/"><strong><code>ragnar</code></strong></a> is a tidyverse-style toolkit that does the unglamorous half of RAG well: turning real documents into a searchable store. It has one function for each stage of the pipeline, and –true to form for this workshop– we’ll train it on <strong>R4DEV’s own published site</strong>, the same trick ragnar’s own homepage example plays on the <em>R for Data Science</em> book.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -631,14 +663,17 @@ cookieconsent.run({
 <h2 class="anchored" data-anchor-id="part-ii-read-turning-a-page-into-markdown">PART II: Read – turning a page into markdown</h2>
 <p>The web is HTML: navigation bars, footers, cookie banners, ads. None of that belongs in a knowledge base. <code>read_as_markdown()</code> fetches a URL and extracts just the article content (by default it keeps <code>&lt;main&gt;</code> and discards <code>&lt;nav&gt;</code>), returning clean markdown.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-1"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-1-1"><a href="#annotated-cell-1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ragnar)</span>
 <span id="annotated-cell-1-2"><a href="#annotated-cell-1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="annotated-cell-1-3"><a href="#annotated-cell-1-3" aria-hidden="true" tabindex="-1"></a>page <span class="ot">&lt;-</span> <span class="st">"https://nelsonamayad.github.io/R4DEV/sessions_workshop/02-plots/02-plots.html"</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-1-4" class="code-annotation-target"><a href="#annotated-cell-1-4" aria-hidden="true" tabindex="-1"></a>md <span class="ot">&lt;-</span> <span class="fu">read_as_markdown</span>(page)</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="1">1</button><span id="annotated-cell-1-4" class="code-annotation-target"><a href="#annotated-cell-1-4" aria-hidden="true" tabindex="-1"></a>md <span class="ot">&lt;-</span> <span class="fu">read_as_markdown</span>(page)</span>
 <span id="annotated-cell-1-5"><a href="#annotated-cell-1-5" aria-hidden="true" tabindex="-1"></a></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-1-6" class="code-annotation-target"><a href="#annotated-cell-1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">substr</span>(md, <span class="dv">1</span>, <span class="dv">400</span>))</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="2">2</button><span id="annotated-cell-1-6" class="code-annotation-target"><a href="#annotated-cell-1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">substr</span>(md, <span class="dv">1</span>, <span class="dv">400</span>))</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-annotation">
-<dl class="code-annotation-container-grid">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-1" data-target-annotation="1">1</dt>
 <dd>
 <span data-code-cell="annotated-cell-1" data-code-lines="4" data-code-annotation="1">One URL in, one markdown string out. Works on local files too, not just URLs.</span>
@@ -675,12 +710,15 @@ Aut</code></pre>
 </div>
 <p>To index more than one page, <code>ragnar_find_links()</code> crawls a page for its own internal links –the same instinct as session 7’s scraping, aimed at an entire site instead of one page:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-2"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="3" onclick="event.preventDefault();">3</a><span id="annotated-cell-2-1" class="code-annotation-target"><a href="#annotated-cell-2-1" aria-hidden="true" tabindex="-1"></a>links <span class="ot">&lt;-</span> <span class="fu">ragnar_find_links</span>(page)</span>
+<details open="" class="code-fold">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-2"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><button class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="3">3</button><span id="annotated-cell-2-1" class="code-annotation-target"><a href="#annotated-cell-2-1" aria-hidden="true" tabindex="-1"></a>links <span class="ot">&lt;-</span> <span class="fu">ragnar_find_links</span>(page)</span>
 <span id="annotated-cell-2-2"><a href="#annotated-cell-2-2" aria-hidden="true" tabindex="-1"></a></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="4" onclick="event.preventDefault();">4</a><span id="annotated-cell-2-3" class="code-annotation-target"><a href="#annotated-cell-2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(links)</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="4">4</button><span id="annotated-cell-2-3" class="code-annotation-target"><a href="#annotated-cell-2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(links)</span>
 <span id="annotated-cell-2-4"><a href="#annotated-cell-2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(links, <span class="dv">6</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-annotation">
-<dl class="code-annotation-container-grid">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-2" data-target-annotation="3">3</dt>
 <dd>
 <span data-code-cell="annotated-cell-2" data-code-lines="1" data-code-annotation="3">Starting from the plots session, find every link it points to.</span>
@@ -692,7 +730,7 @@ Aut</code></pre>
 </dl>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 45
+<pre><code>[1] 47
 [1] "http://davidgohel.github.io/ggiraph"                                        
 [2] "http://rcharlie.net/sentify"                                                
 [3] "https://cran.r-project.org/web/packages/esquisse/vignettes/get-started.html"
@@ -706,13 +744,16 @@ Aut</code></pre>
 <h2 class="anchored" data-anchor-id="part-iii-chunk-splitting-for-retrieval">PART III: Chunk – splitting for retrieval</h2>
 <p>An LLM’s context window is finite, and stuffing an entire session into one prompt wastes it on irrelevant paragraphs. <code>markdown_chunk()</code> splits a document into overlapping, retrievable pieces, trying to respect paragraph and heading boundaries rather than cutting mid-sentence.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-3"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><a class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="5" onclick="event.preventDefault();">5</a><span id="annotated-cell-3-1" class="code-annotation-target"><a href="#annotated-cell-3-1" aria-hidden="true" tabindex="-1"></a>chunks <span class="ot">&lt;-</span> <span class="fu">markdown_chunk</span>(md)</span>
+<details open="" class="code-fold">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-3"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><button class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="5">5</button><span id="annotated-cell-3-1" class="code-annotation-target"><a href="#annotated-cell-3-1" aria-hidden="true" tabindex="-1"></a>chunks <span class="ot">&lt;-</span> <span class="fu">markdown_chunk</span>(md)</span>
 <span id="annotated-cell-3-2"><a href="#annotated-cell-3-2" aria-hidden="true" tabindex="-1"></a></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="6" onclick="event.preventDefault();">6</a><span id="annotated-cell-3-3" class="code-annotation-target"><a href="#annotated-cell-3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(chunks)</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="6">6</button><span id="annotated-cell-3-3" class="code-annotation-target"><a href="#annotated-cell-3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(chunks)</span>
 <span id="annotated-cell-3-4"><a href="#annotated-cell-3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(chunks)</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="7" onclick="event.preventDefault();">7</a><span id="annotated-cell-3-5" class="code-annotation-target"><a href="#annotated-cell-3-5" aria-hidden="true" tabindex="-1"></a>chunks[<span class="dv">10</span>, <span class="fu">c</span>(<span class="st">"context"</span>, <span class="st">"text"</span>)]</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="7">7</button><span id="annotated-cell-3-5" class="code-annotation-target"><a href="#annotated-cell-3-5" aria-hidden="true" tabindex="-1"></a>chunks[<span class="dv">10</span>, <span class="fu">c</span>(<span class="st">"context"</span>, <span class="st">"text"</span>)]</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-annotation">
-<dl class="code-annotation-container-grid">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-3" data-target-annotation="5">5</dt>
 <dd>
 <span data-code-cell="annotated-cell-3" data-code-lines="1" data-code-annotation="5"><code>target_size</code> (default 1600 characters) and <code>target_overlap</code> (default 50%) control chunk granularity –smaller chunks retrieve more precisely but lose surrounding context.</span>
@@ -746,13 +787,16 @@ Aut</code></pre>
 <p>An <strong>embedding</strong> turns text into a vector of numbers positioned so that similar meanings land near each other in space – “leaflet” and “interactive map” end up close together even though they don’t share a single letter. This is what makes <em>semantic</em> search possible, as opposed to matching exact keywords.</p>
 <p><code>ragnar</code> speaks to embedding providers the same way <code>ellmer</code> speaks to chat providers: <code>embed_openai()</code>, <code>embed_google_gemini()</code>, <code>embed_azure_openai()</code>, <code>embed_bedrock()</code>… one function per provider, same interface. We will use <strong><code>embed_ollama()</code></strong>, which runs a model entirely on your own machine via <a href="https://ollama.com/">Ollama</a> –no API key, no quota, no cost, ever. Install Ollama, pull an embedding model once (<code>ollama pull embeddinggemma</code>), and you have a private, free embedding service running on <code>localhost</code>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-4"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><a class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="8" onclick="event.preventDefault();">8</a><span id="annotated-cell-4-1" class="code-annotation-target"><a href="#annotated-cell-4-1" aria-hidden="true" tabindex="-1"></a>embed_fn <span class="ot">&lt;-</span> ragnar<span class="sc">::</span><span class="fu">embed_ollama</span>(<span class="at">model =</span> <span class="st">"embeddinggemma"</span>)</span>
+<details open="" class="code-fold">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-4"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><button class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="8">8</button><span id="annotated-cell-4-1" class="code-annotation-target"><a href="#annotated-cell-4-1" aria-hidden="true" tabindex="-1"></a>embed_fn <span class="ot">&lt;-</span> ragnar<span class="sc">::</span><span class="fu">embed_ollama</span>(<span class="at">model =</span> <span class="st">"embeddinggemma"</span>)</span>
 <span id="annotated-cell-4-2"><a href="#annotated-cell-4-2" aria-hidden="true" tabindex="-1"></a></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="9" onclick="event.preventDefault();">9</a><span id="annotated-cell-4-3" class="code-annotation-target"><a href="#annotated-cell-4-3" aria-hidden="true" tabindex="-1"></a>vec <span class="ot">&lt;-</span> <span class="fu">embed_fn</span>(<span class="st">"How do I make an interactive map?"</span>)</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="10" onclick="event.preventDefault();">10</a><span id="annotated-cell-4-4" class="code-annotation-target"><a href="#annotated-cell-4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(vec)</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="9">9</button><span id="annotated-cell-4-3" class="code-annotation-target"><a href="#annotated-cell-4-3" aria-hidden="true" tabindex="-1"></a>vec <span class="ot">&lt;-</span> <span class="fu">embed_fn</span>(<span class="st">"How do I make an interactive map?"</span>)</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="10">10</button><span id="annotated-cell-4-4" class="code-annotation-target"><a href="#annotated-cell-4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(vec)</span>
 <span id="annotated-cell-4-5"><a href="#annotated-cell-4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(vec[<span class="dv">1</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>], <span class="dv">3</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-annotation">
-<dl class="code-annotation-container-grid">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-4" data-target-annotation="8">8</dt>
 <dd>
 <span data-code-cell="annotated-cell-4" data-code-lines="1" data-code-annotation="8"><code>embed_ollama()</code> talks to Ollama’s local API at <code>http://localhost:11434</code> by default.</span>
@@ -790,18 +834,21 @@ Aut</code></pre>
 <h2 class="anchored" data-anchor-id="part-v-store-a-duckdb-backed-knowledge-base">PART V: Store – a DuckDB-backed knowledge base</h2>
 <p>Reading, chunking and embedding one page by hand is instructive; indexing a whole site by hand is tedious. <code>ragnar_store_create()</code> opens a DuckDB file (or <code>:memory:</code>) configured to hold chunks and their vectors, and <code>ragnar_store_ingest()</code> does read + chunk + embed + insert + index in one call, for as many pages as you give it.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-5"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-5-1"><a href="#annotated-cell-5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Keep the site to its own session pages, skip everything external</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="11" onclick="event.preventDefault();">11</a><span id="annotated-cell-5-2" class="code-annotation-target"><a href="#annotated-cell-5-2" aria-hidden="true" tabindex="-1"></a>session_links <span class="ot">&lt;-</span> links[<span class="fu">grepl</span>(<span class="st">"sessions_(workshop|tools)/.*</span><span class="sc">\\</span><span class="st">.html$"</span>, links)]</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="11">11</button><span id="annotated-cell-5-2" class="code-annotation-target"><a href="#annotated-cell-5-2" aria-hidden="true" tabindex="-1"></a>session_links <span class="ot">&lt;-</span> links[<span class="fu">grepl</span>(<span class="st">"sessions_(workshop|ai|thinking|tools)/.*</span><span class="sc">\\</span><span class="st">.html$"</span>, links)]</span>
 <span id="annotated-cell-5-3"><a href="#annotated-cell-5-3" aria-hidden="true" tabindex="-1"></a></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="12" onclick="event.preventDefault();">12</a><span id="annotated-cell-5-4" class="code-annotation-target"><a href="#annotated-cell-5-4" aria-hidden="true" tabindex="-1"></a>store <span class="ot">&lt;-</span> <span class="fu">ragnar_store_create</span>(</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="12">12</button><span id="annotated-cell-5-4" class="code-annotation-target"><a href="#annotated-cell-5-4" aria-hidden="true" tabindex="-1"></a>store <span class="ot">&lt;-</span> <span class="fu">ragnar_store_create</span>(</span>
 <span id="annotated-cell-5-5"><a href="#annotated-cell-5-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"r4dev_ragnar.duckdb"</span>,</span>
 <span id="annotated-cell-5-6"><a href="#annotated-cell-5-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">embed =</span> ragnar<span class="sc">::</span><span class="fu">embed_ollama</span>(<span class="at">model =</span> <span class="st">"embeddinggemma"</span>),</span>
 <span id="annotated-cell-5-7"><a href="#annotated-cell-5-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">title =</span> <span class="st">"R4DEV workshop content"</span></span>
 <span id="annotated-cell-5-8"><a href="#annotated-cell-5-8" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="annotated-cell-5-9"><a href="#annotated-cell-5-9" aria-hidden="true" tabindex="-1"></a></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="13" onclick="event.preventDefault();">13</a><span id="annotated-cell-5-10" class="code-annotation-target"><a href="#annotated-cell-5-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ragnar_store_ingest</span>(store, session_links, <span class="at">build_index =</span> <span class="cn">TRUE</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="13">13</button><span id="annotated-cell-5-10" class="code-annotation-target"><a href="#annotated-cell-5-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ragnar_store_ingest</span>(store, session_links, <span class="at">build_index =</span> <span class="cn">TRUE</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-annotation">
-<dl class="code-annotation-container-grid">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-5" data-target-annotation="11">11</dt>
 <dd>
 <span data-code-cell="annotated-cell-5" data-code-lines="2" data-code-annotation="11">Filter the crawl down to R4DEV’s own session pages –no point indexing CRAN or GitHub in <em>our</em> knowledge base.</span>
@@ -817,6 +864,7 @@ Aut</code></pre>
 </dl>
 </div>
 </div>
+<p>The output below was captured in July 2026, when the site still lived on Netlify and had fewer lessons –the lesson paths in it have moved since.</p>
 <pre><code>#&gt; Launching 2 parallel workers.
 #&gt; ℹ ingested: https://r4dev.netlify.app/index.html
 #&gt; ℹ ingested: https://r4dev.netlify.app/sessions_workshop/02-plots/02-plots.html
@@ -833,20 +881,23 @@ Aut</code></pre>
 <p>A store speaks two retrieval languages, and they disagree often enough to be worth knowing both:</p>
 <ul>
 <li><strong><code>ragnar_retrieve_vss()</code></strong> – vector similarity search. Finds chunks whose <em>meaning</em> is close to the query, even with no shared words. Needs an embedding of the query itself, computed the same way the chunks were.</li>
-<li><strong><code>ragnar_retrieve_bm25()</code></strong> – classic keyword ranking (the same algorithm the <code>ggsql</code>/DuckDB FTS work in <a href="../../sessions_ai/02-llm-apps/02-llm-apps.html">Chat with your data</a> used). Finds chunks that share the query’s actual words. Needs no embedding step at all.</li>
+<li><strong><code>ragnar_retrieve_bm25()</code></strong> – classic keyword ranking, the algorithm behind most search engines before embeddings, run here by DuckDB’s full-text-search extension. Finds chunks that share the query’s actual words. Needs no embedding step at all.</li>
 </ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-7"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><a class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="14" onclick="event.preventDefault();">14</a><span id="annotated-cell-7-1" class="code-annotation-target"><a href="#annotated-cell-7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ragnar_retrieve_vss</span>(store, <span class="st">"how do I show information on hover"</span>, <span class="at">top_k =</span> <span class="dv">3</span>)</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="15" onclick="event.preventDefault();">15</a><span id="annotated-cell-7-2" class="code-annotation-target"><a href="#annotated-cell-7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ragnar_retrieve_bm25</span>(store, <span class="st">"girafe tooltip"</span>, <span class="at">top_k =</span> <span class="dv">3</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<details open="" class="code-fold">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-7"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><button class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="14">14</button><span id="annotated-cell-7-1" class="code-annotation-target"><a href="#annotated-cell-7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ragnar_retrieve_vss</span>(store, <span class="st">"how do I show information on hover"</span>, <span class="at">top_k =</span> <span class="dv">3</span>)</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="15">15</button><span id="annotated-cell-7-2" class="code-annotation-target"><a href="#annotated-cell-7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ragnar_retrieve_bm25</span>(store, <span class="st">"girafe tooltip"</span>, <span class="at">top_k =</span> <span class="dv">3</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-annotation">
-<dl class="code-annotation-container-grid">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-7" data-target-annotation="14">14</dt>
 <dd>
 <span data-code-cell="annotated-cell-7" data-code-lines="1" data-code-annotation="14">A semantic query with no exact keyword overlap (“hover”, “information” –neither session actually uses those words) –VSS still lands on <code>02-plots</code>, which is genuinely where R4DEV’s <code>ggiraph</code> tooltip content lives.</span>
 </dd>
 <dt data-target-cell="annotated-cell-7" data-target-annotation="15">15</dt>
 <dd>
-<span data-code-cell="annotated-cell-7" data-code-lines="2" data-code-annotation="15">The exact term “tooltip” pulls in <code>05-maps</code> too –it reuses the same <code>ggiraph</code> trick from session 2. Notice both methods can agree; the honest lesson isn’t “VSS always wins,” it’s that they fail in <em>different</em> ways –VSS on vocabulary mismatch, BM25 on paraphrase.</span>
+<span data-code-cell="annotated-cell-7" data-code-lines="2" data-code-annotation="15">The exact term “tooltip” pulls in the maps lesson too (then numbered <code>05-maps</code>) –it reuses the same <code>ggiraph</code> trick from session 2. Notice both methods can agree; the honest lesson isn’t “VSS always wins,” it’s that they fail in <em>different</em> ways –VSS on vocabulary mismatch, BM25 on paraphrase.</span>
 </dd>
 </dl>
 </div>
@@ -880,17 +931,20 @@ Aut</code></pre>
 <h2 class="anchored" data-anchor-id="part-vii-give-the-model-the-tool">PART VII: Give the model the tool</h2>
 <p><a href="../../sessions_ai/01-llm/01-llm.html">Talking to machines</a> taught tool calling by hand: write a function, describe it, register it, let the model decide when to call it. <code>ragnar_register_tool_retrieve()</code> does exactly that for retrieval in one line –the model gets to decide <em>when</em> it needs to search, instead of your code always searching before every message.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-9"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-9-1"><a href="#annotated-cell-9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ellmer)</span>
 <span id="annotated-cell-9-2"><a href="#annotated-cell-9-2" aria-hidden="true" tabindex="-1"></a></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="16" onclick="event.preventDefault();">16</a><span id="annotated-cell-9-3" class="code-annotation-target"><a href="#annotated-cell-9-3" aria-hidden="true" tabindex="-1"></a>chat <span class="ot">&lt;-</span> ellmer<span class="sc">::</span><span class="fu">chat_anthropic</span>()</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="17" onclick="event.preventDefault();">17</a><span id="annotated-cell-9-4" class="code-annotation-target"><a href="#annotated-cell-9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ragnar_register_tool_retrieve</span>(</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="16">16</button><span id="annotated-cell-9-3" class="code-annotation-target"><a href="#annotated-cell-9-3" aria-hidden="true" tabindex="-1"></a>chat <span class="ot">&lt;-</span> ellmer<span class="sc">::</span><span class="fu">chat_anthropic</span>()</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="17">17</button><span id="annotated-cell-9-4" class="code-annotation-target"><a href="#annotated-cell-9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ragnar_register_tool_retrieve</span>(</span>
 <span id="annotated-cell-9-5"><a href="#annotated-cell-9-5" aria-hidden="true" tabindex="-1"></a>  chat, store,</span>
 <span id="annotated-cell-9-6"><a href="#annotated-cell-9-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">store_description =</span> <span class="st">"R4DEV workshop session content"</span></span>
 <span id="annotated-cell-9-7"><a href="#annotated-cell-9-7" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="annotated-cell-9-8"><a href="#annotated-cell-9-8" aria-hidden="true" tabindex="-1"></a></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="18" onclick="event.preventDefault();">18</a><span id="annotated-cell-9-9" class="code-annotation-target"><a href="#annotated-cell-9-9" aria-hidden="true" tabindex="-1"></a>chat<span class="sc">$</span><span class="fu">chat</span>(<span class="st">"What R package does this workshop use for structured data extraction from LLMs?"</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="18">18</button><span id="annotated-cell-9-9" class="code-annotation-target"><a href="#annotated-cell-9-9" aria-hidden="true" tabindex="-1"></a>chat<span class="sc">$</span><span class="fu">chat</span>(<span class="st">"What R package does this workshop use for structured data extraction from LLMs?"</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-annotation">
-<dl class="code-annotation-container-grid">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-9" data-target-annotation="16">16</dt>
 <dd>
 <span data-code-cell="annotated-cell-9" data-code-lines="3" data-code-annotation="16">Any ellmer chat works –Anthropic here, but <code>chat_google_gemini()</code> or <code>chat_openai()</code> are equally valid.</span>
@@ -928,8 +982,8 @@ Aut</code></pre>
 </section>
 <section id="capstone-ask-r4dev" class="level2">
 <h2 class="anchored" data-anchor-id="capstone-ask-r4dev">Capstone: Ask R4DEV, rebuilt</h2>
-<p>This is the deployed, always-on version of everything above: a chatbot that answers questions about R4DEV using only real, retrieved excerpts from the 13 other sessions. It’s built with <code>ragnar</code>’s own ingestion pipeline (a real improvement over an earlier hand-rolled version of this app, which chunked by regex-splitting on markdown headings instead of <code>markdown_chunk()</code>’s semantic boundaries).</p>
-<iframe src="https://nelsonamayad-r4dev-ragnar.share.connect.posit.cloud/" style="border: none; width: 100%; height: 650px" frameborder="0">
+<p>This is the deployed, always-on version of everything above: a chatbot that answers questions about R4DEV using only real, retrieved excerpts from the rest of this site’s lessons and pages. It’s built with <code>ragnar</code>’s own ingestion pipeline (a real improvement over an earlier hand-rolled version of this app, which chunked by regex-splitting on markdown headings instead of <code>markdown_chunk()</code>’s semantic boundaries).</p>
+<iframe src="https://nelsonamayad-r4dev-ragnar.share.connect.posit.cloud/" title="Ask R4DEV: retrieval-augmented chatbot" style="border: none; width: 100%; height: 650px" frameborder="0">
 </iframe>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -960,7 +1014,7 @@ Aut</code></pre>
 </div>
 <div id="callout-7" class="callout-7-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Retrieve the best chunk for the question <em>“how do I color regions of a map by a value?”</em> – already embedded as a vector below. Two blanks: the dot product at the heart of cosine similarity, and the verb that ranks the results.</p>
+<p>Retrieve the best chunk for the question <em>“how do I colour regions of a map by a value?”</em> – already embedded as a vector below. Two blanks: the dot product at the heart of cosine similarity, and the verb that ranks the results.</p>
 <div class="cell" data-exercise="ex_a03_basic">
 <div>
 <div id="webr-1" class="exercise-cell">
@@ -1041,7 +1095,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWUsImV4ZXJjaXNlIjoiZXhfYTAzX2Jhc2ljIn0s
 <ul>
 <li>Crawl a small documentation site you use often (a package’s <code>pkgdown</code> site is a good target) and build a store from its first 5-10 pages.</li>
 <li>Retrieve with <code>ragnar_retrieve_bm25()</code> for a question you already know the answer to. Does it find the right page?</li>
-<li>Take three questions about R4DEV and compare <code>ragnar_retrieve_vss()</code> against <code>ragnar_retrieve_bm25()</code> for each. Which query type (conceptual vs.&nbsp;keyword-heavy) favors which method?</li>
+<li>Take three questions about R4DEV and compare <code>ragnar_retrieve_vss()</code> against <code>ragnar_retrieve_bm25()</code> for each. Which query type (conceptual vs.&nbsp;keyword-heavy) favours which method?</li>
 <li>Change <code>markdown_chunk()</code>’s <code>target_size</code> to something much smaller (e.g.&nbsp;400) and re-inspect the store. What happens to retrieval quality on a broad question versus a specific one?</li>
 </ul>
 </div>
@@ -1206,6 +1260,57 @@ window._ojs.runtime.interpretFromScriptTags();
       });
       clipboardModal.on('success', onCopySuccess);
     }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
         var filterRegex = new RegExp("https:\/\/nelsonamayad\.github\.io\/R4DEV\/");
@@ -1222,6 +1327,11 @@ window._ojs.runtime.interpretFromScriptTags();
           if (link.dataset.originalHref !== undefined) {
             link.href = link.dataset.originalHref;
           }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
         }
       }
     function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
@@ -1476,25 +1586,64 @@ window._ojs.runtime.interpretFromScriptTags();
           }
         };
       }
-        // Attach click handler to the DT
-        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
-        for (const annoteDlNode of annoteDls) {
-          annoteDlNode.addEventListener('click', (event) => {
-            const clickedEl = event.target;
-            if (clickedEl !== selectedAnnoteEl) {
-              unselectCodeLines();
-              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
-              if (activeEl) {
-                activeEl.classList.remove('code-annotation-active');
-              }
-              selectCodeLines(clickedEl);
-              clickedEl.classList.add('code-annotation-active');
-            } else {
-              // Unselect the line
-              unselectCodeLines();
-              clickedEl.classList.remove('code-annotation-active');
+        const annoteTargets = window.document.querySelectorAll('.code-annotation-anchor');
+        for (let i=0; i<annoteTargets.length; i++) {
+          const annoteTarget = annoteTargets[i];
+          const targetCell = annoteTarget.getAttribute("data-target-cell");
+          const targetAnnotation = annoteTarget.getAttribute("data-target-annotation");
+          const contentFn = () => {
+            const content = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+            if (content) {
+              const tipContent = content.cloneNode(true);
+              tipContent.classList.add("code-annotation-tip-content");
+              return tipContent.outerHTML;
             }
-          });
+          }
+          const config = {
+            allowHTML: true,
+            content: contentFn,
+            onShow: (instance) => {
+              selectCodeLines(instance.reference);
+              instance.reference.classList.add('code-annotation-active');
+              window.tippy.hideAll();
+            },
+            onHide: (instance) => {
+              unselectCodeLines();
+              instance.reference.classList.remove('code-annotation-active');
+            },
+            maxWidth: 300,
+            delay: [50, 0],
+            duration: [200, 0],
+            offset: [5, 10],
+            arrow: true,
+            appendTo: function(el) {
+              return el.parentElement.parentElement.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'quarto',
+            placement: 'right',
+            popperOptions: {
+              modifiers: [
+              {
+                name: 'flip',
+                options: {
+                  flipVariations: false, // true by default
+                  allowedAutoPlacements: ['right'],
+                  fallbackPlacements: ['right', 'top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left'],
+                },
+              },
+              {
+                name: 'preventOverflow',
+                options: {
+                  mainAxis: false,
+                  altAxis: false
+                }
+              }
+              ]        
+            }      
+          };
+          window.tippy(annoteTarget, config); 
         }
     const findCites = (el) => {
       const parentEl = el.parentElement;
@@ -1553,4 +1702,5 @@ window._ojs.runtime.interpretFromScriptTags();
 
 
 
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

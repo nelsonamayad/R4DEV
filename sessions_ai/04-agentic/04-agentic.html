@@ -615,7 +615,7 @@ cookieconsent.run({
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">October 5, 2026</p>
+      <p class="date-modified">November 7, 2026</p>
     </div>
   </div>
     
@@ -683,11 +683,11 @@ cookieconsent.run({
 <p>Four tools, four philosophies. All of them run the same loop from Part I; they differ in <em>where</em> they live and <em>how much</em> they let the agent do unsupervised.</p>
 <section id="claude-code-anthropic" class="level3">
 <h3 class="anchored" data-anchor-id="claude-code-anthropic">Claude Code (Anthropic)</h3>
-<p><a href="https://claude.com/claude-code">Claude Code</a> is the tool this very workshop is maintained with<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. It began as a <strong>terminal-first</strong> CLI –you type <code>claude</code> inside a project folder and converse– and grew IDE extensions (VS Code, Positron, JetBrains), a desktop app and a web version. Its defining traits:</p>
+<p><a href="https://claude.com/product/claude-code">Claude Code</a> is the tool this very workshop is maintained with<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. It began as a <strong>terminal-first</strong> CLI –you type <code>claude</code> inside a project folder and converse– and grew IDE extensions (VS Code, Positron, JetBrains), a desktop app and a web version. Its defining traits:</p>
 <ul>
 <li><strong>Terminal-native.</strong> It works wherever a shell works, which includes servers and CI pipelines. For R users this means it happily runs <code>Rscript</code>, <code>quarto render</code> and <code>git</code> –the exact loop you use.</li>
 <li><strong>Project memory</strong> via a <code>CLAUDE.md</code> file checked into your repo (more in Part III).</li>
-<li><strong>Skills, subagents, hooks and MCP</strong> –the full vocabulary of Part III, most of which Anthropic either invented or popularized.</li>
+<li><strong>Skills, subagents, hooks and MCP</strong> –the full vocabulary of Part III, most of which Anthropic either invented or popularised.</li>
 <li><strong>Permission modes</strong>: by default it asks before editing files or running commands; you can loosen or tighten this per project.</li>
 </ul>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-2"><pre class="sourceCode bash code-annotation-code code-with-copy code-annotated"><code class="sourceCode bash"><span id="annotated-cell-2-1"><a href="#annotated-cell-2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> my-quarto-project</span>
@@ -804,7 +804,7 @@ cookieconsent.run({
 <p>Agentic tools come wrapped in jargon. Here is the working vocabulary, each term connected to something you already know from this workshop.</p>
 <section id="context-window" class="level3">
 <h3 class="anchored" data-anchor-id="context-window">Context window</h3>
-<p>The model’s working memory: everything it can “see” right now –your instructions, the files it has read, the outputs of commands it ran. It is <strong>finite</strong> (hundreds of thousands of tokens, not infinite) and <strong>empties between sessions</strong>. Two consequences you will feel immediately: long sessions degrade as the window fills (harnesses <em>compact</em> old context by summarizing it, which loses detail), and a fresh session knows <em>nothing</em> about yesterday. Which is why every serious harness invented…</p>
+<p>The model’s working memory: everything it can “see” right now –your instructions, the files it has read, the outputs of commands it ran. It is <strong>finite</strong> (hundreds of thousands of tokens, not infinite) and <strong>empties between sessions</strong>. Two consequences you will feel immediately: long sessions degrade as the window fills (harnesses <em>compact</em> old context by summarising it, which loses detail), and a fresh session knows <em>nothing</em> about yesterday. Which is why every serious harness invented…</p>
 </section>
 <section id="memory-files-claude.md-and-agents.md" class="level3">
 <h3 class="anchored" data-anchor-id="memory-files-claude.md-and-agents.md">Memory files: <code>CLAUDE.md</code> and <code>AGENTS.md</code></h3>
@@ -825,16 +825,16 @@ cookieconsent.run({
 <span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="fu">## Gotchas</span></span>
 <span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`_freeze/`</span> is committed on purpose; don't delete it.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Notice what this is: <strong>reproducibility documentation</strong>. The discipline session 1 taught you –projects, relative paths, documented setup– is precisely what makes a project agent-legible. If a new human collaborator could get productive from your repo alone, so can an agent.</p>
+<p>Notice what this is: <strong>reproducibility documentation</strong>. The discipline <a href="../../sessions_workshop/01-quarto/01-quarto.html">Blogging with Quarto</a> taught you –projects, relative paths, documented setup– is precisely what makes a project agent-legible. If a new human collaborator could get productive from your repo alone, so can an agent.</p>
 </section>
 <section id="skills" class="level3">
 <h3 class="anchored" data-anchor-id="skills">Skills</h3>
-<p>Memory files load <em>always</em>; that doesn’t scale to specialized knowledge. A <strong>skill</strong> is a folder containing a <code>SKILL.md</code> file of instructions (plus optional scripts and reference documents) that the agent loads <strong>only when the task calls for it</strong>. The harness keeps just each skill’s one-line description in context; when your request matches, the agent reads the full folder. This pattern is called <em>progressive disclosure</em> –don’t show everything, show a menu.</p>
+<p>Memory files load <em>always</em>; that doesn’t scale to specialised knowledge. A <strong>skill</strong> is a folder containing a <code>SKILL.md</code> file of instructions (plus optional scripts and reference documents) that the agent loads <strong>only when the task calls for it</strong>. The harness keeps just each skill’s one-line description in context; when your request matches, the agent reads the full folder. This pattern is called <em>progressive disclosure</em> –don’t show everything, show a menu.</p>
 <pre><code>.claude/skills/
 └── ggplot-house-style/
     ├── SKILL.md          # when to apply, rules, examples
-    └── palette.R         # the actual color definitions</code></pre>
-<p>A skill like this one could encode <em>your</em> plotting standards –fonts, palettes, theme, labeling rules– so that “make a chart of X” comes back in house style every time, without you re-explaining it. Skills are how you turn a general-purpose agent into <em>your</em> specialist, and because they are just folders of text, they are shareable and versionable like everything else in this workshop.</p>
+    └── palette.R         # the actual colour definitions</code></pre>
+<p>A skill like this one could encode <em>your</em> plotting standards –fonts, palettes, theme, labelling rules– so that “make a chart of X” comes back in house style every time, without you re-explaining it. Skills are how you turn a general-purpose agent into <em>your</em> specialist, and because they are just folders of text, they are shareable and versionable like everything else in this workshop.</p>
 </section>
 <section id="tools-and-mcp" class="level3">
 <h3 class="anchored" data-anchor-id="tools-and-mcp">Tools and MCP</h3>
@@ -866,7 +866,7 @@ cookieconsent.run({
 <h2 class="anchored" data-anchor-id="part-iv-working-with-an-agent-on-data-analysis">PART IV: Working with an agent on data analysis</h2>
 <p>How does this actually change a week of R work? Some patterns that hold up in practice:</p>
 <p><strong>Give it a verifiable loop.</strong> Agents are at their best when they can <em>check their own work</em>: run <code>quarto render</code> and read the error, run <code>testthat</code> tests, execute the script and inspect the output. “Fix this so <code>quarto render</code> succeeds” is a much better task than “fix this”, because the finish line is machine-checkable. Structure requests around a command that says pass or fail.</p>
-<p><strong>Delegate the mechanical, keep the judgment.</strong> Excellent agent tasks: converting base-R code to tidyverse style, adding <code>alt</code>-text to every chart in a site, upgrading a deprecated API call across twelve files, writing the regex you have rewritten four times. Bad agent tasks: deciding whether the effect you found is real, choosing what the chart should <em>say</em>, judging whether a data source is trustworthy. The model manipulates the code; the analysis remains yours.</p>
+<p><strong>Delegate the mechanical, keep the judgement.</strong> Excellent agent tasks: converting base-R code to tidyverse style, adding <code>alt</code>-text to every chart in a site, upgrading a deprecated API call across twelve files, writing the regex you have rewritten four times. Bad agent tasks: deciding whether the effect you found is real, choosing what the chart should <em>say</em>, judging whether a data source is trustworthy. The model manipulates the code; the analysis remains yours.</p>
 <p><strong>Review diffs like you would a colleague’s.</strong> The output of an agent session is a set of changes –read them before they become part of your project, exactly as you would with a pull request. This is the answer to the “vibe coding”<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> worry: code you accept without reading is code you now maintain without understanding. In analysis the stakes are higher than in apps, because wrong code that <em>runs</em> produces plausible wrong numbers –the workshop’s founding villain.</p>
 <p><strong>Reproducibility is non-negotiable.</strong> The agent may <em>write</em> your pipeline, but the pipeline must still run without the agent: <code>quarto render</code> from a fresh clone, data pulled from documented sources, seeds set. An analysis that only works because a model babysits it is not reproducible –it’s a séance.</p>
 </section>
@@ -886,7 +886,7 @@ cookieconsent.run({
 <div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <ul>
-<li>Install one CLI agent –<a href="https://claude.com/claude-code">Claude Code</a> or <a href="https://openai.com/codex/">Codex</a>– and run it inside your <code>MyBlog</code> project.</li>
+<li>Install one CLI agent –<a href="https://claude.com/product/claude-code">Claude Code</a> or <a href="https://openai.com/codex/">Codex</a>– and run it inside your <code>MyBlog</code> project.</li>
 <li>Before asking for anything, write a <code>CLAUDE.md</code> (or <code>AGENTS.md</code>) for the project: what it is, how to preview it, one convention, one gotcha. Keep it under 20 lines.</li>
 </ul>
 </div>
@@ -956,7 +956,7 @@ cookieconsent.run({
 
 <ol>
 <li id="fn1"><p>You will also see <em>agent scaffold</em> or <em>agent runtime</em>. The distinction matters: when an agent does something silly, the fix is sometimes a better model, but at least as often a better harness –clearer instructions, better tools, tighter permissions.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>Full disclosure, and also a demonstration: large parts of the 2026 modernization of R4DEV –including this session’s file moves– were done by asking an agent, then reviewing its diffs. The reviewing part is not optional. More on that in Part IV.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Full disclosure, and also a demonstration: large parts of the 2026 modernisation of R4DEV –including this session’s file moves– were done by asking an agent, then reviewing its diffs. The reviewing part is not optional. More on that in Part IV.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn3"><p><em>Prompt injection</em>: hiding instructions inside content the agent will read –an email, a web page, a data file– so the <em>content</em> starts steering the agent instead of you. There is no complete fix yet; the mitigations are exactly the permission boundaries discussed in Part III.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn4"><p>The R connection is direct: <code>ellmer</code> can consume MCP servers, and Posit publishes MCP servers that let agents inspect a running R session. The tools you build and the tools agents use are converging on the same plug.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn5"><p>Coined in 2025 for the practice of accepting AI-generated code on vibes –it seems to work– without reading it. Fun for a throwaway prototype. For analysis whose numbers someone will act on: no.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>

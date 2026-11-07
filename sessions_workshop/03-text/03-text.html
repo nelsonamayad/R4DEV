@@ -80,18 +80,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-38657194d1c30378fa75d534d26568ab.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-a9fd7636a0121265c406fb04c3bba8e4.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-38657194d1c30378fa75d534d26568ab.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-73e373f4a43393be879eaa7f5bec20f5.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-7866983ca643604dcd4b1790e1c86039.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-73e373f4a43393be879eaa7f5bec20f5.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-38b5f4fe42bbed99db7c38154f53ea48.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-dark-05ee19f90ada4fec87197611c2da017c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../site_libs/bootstrap/bootstrap-38b5f4fe42bbed99db7c38154f53ea48.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-f247766226bcc895e77c705a5b584f22.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-fd704f46ef880e09e0b4cd7807fb6275.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-f247766226bcc895e77c705a5b584f22.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script src="../../site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
 <link href="../../site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
 <link href="../../site_libs/quarto-contrib/fontawesome6-1.2.0/all.min.css" rel="stylesheet">
 <link href="../../site_libs/quarto-contrib/fontawesome6-1.2.0/latex-fontsize.css" rel="stylesheet">
+<script src="../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -145,6 +148,7 @@ cookieconsent.run({
 });
 </script> 
   
+<style>html{ scroll-behavior: smooth; }</style>
 <script async="" src="https://hypothes.is/embed.js"></script>
 <script>
   window.document.addEventListener("DOMContentLoaded", function (_event) {
@@ -163,14 +167,15 @@ cookieconsent.run({
 
 <script src="../../site_libs/girafe-binding-0.9.6/girafe.js"></script>
 
-<link href="../../site_libs/liberation-sans-0.5.1/css/liberation-sans.css" rel="stylesheet">
+<link href="../../site_libs/liberation-sans-0.5.2/css/liberation-sans.css" rel="stylesheet">
 
-<link href="../../site_libs/liberation-serif-0.5.1/css/liberation-serif.css" rel="stylesheet">
+<link href="../../site_libs/liberation-serif-0.5.2/css/liberation-serif.css" rel="stylesheet">
 
-<link href="../../site_libs/liberation-mono-0.5.1/css/liberation-mono.css" rel="stylesheet">
+<link href="../../site_libs/liberation-mono-0.5.2/css/liberation-mono.css" rel="stylesheet">
 
 
 
+<link rel="stylesheet" href="../../style.css">
 <meta property="og:title" content="R4DEV">
 <meta property="og:description" content="Data workshop created by Nelson Amaya D.">
 <meta property="og:image" content="https://nelsonamayad.github.io/R4DEV/sessions_workshop/03-text/darwin.gif">
@@ -182,7 +187,7 @@ cookieconsent.run({
 <meta name="twitter:card" content="summary">
 </head>
 
-<body class="nav-fixed fullcontent quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+<body class="floating nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
     const toggleBodyColorMode = (bsSheetEl) => {
       const mode = bsSheetEl.getAttribute("data-mode");
       const bodyEl = window.document.querySelector("body");
@@ -325,7 +330,8 @@ cookieconsent.run({
       }
     };
     const authorPrefersDark = false;
-    const darkModeDefault = authorPrefersDark;
+    const queryPrefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    const darkModeDefault = queryPrefersDark.matches;
       document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
       document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
     let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
@@ -338,6 +344,14 @@ cookieconsent.run({
       toggleGiscusIfUsed(toAlternate, darkModeDefault);
       window.dispatchEvent(new Event('resize'));
     };
+    queryPrefersDark.addEventListener("change", e => {
+      if(window.localStorage.getItem("quarto-color-scheme") !== null)
+        return;
+      const alternate = e.matches
+      toggleColorMode(alternate);
+      localAlternateSentinel = e.matches ? 'alternate' : 'default'; // this is used alongside local storage!
+      toggleGiscusIfUsed(alternate, darkModeDefault);
+    });
     // Switch to dark mode if need be
     if (hasAlternateSentinel()) {
       toggleColorMode(true);
@@ -547,15 +561,38 @@ cookieconsent.run({
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#you-will-learn-to" id="toc-you-will-learn-to" class="nav-link active" data-scroll-target="#you-will-learn-to">You will learn to</a></li>
+  <li><a href="#part-i-text-to-data" id="toc-part-i-text-to-data" class="nav-link" data-scroll-target="#part-i-text-to-data">PART I: Text to data</a>
+  <ul class="collapse">
+  <li><a href="#breaking-down-the-origin-of-species" id="toc-breaking-down-the-origin-of-species" class="nav-link" data-scroll-target="#breaking-down-the-origin-of-species">Breaking down <em>“The Origin of Species”</em></a></li>
+  <li><a href="#working-with-text-as-data-tokenisation-stopwords-stemming" id="toc-working-with-text-as-data-tokenisation-stopwords-stemming" class="nav-link" data-scroll-target="#working-with-text-as-data-tokenisation-stopwords-stemming">Working with text-as-data: Tokenisation, stopwords, stemming</a></li>
+  <li><a href="#stop-removing-words-we-dont-care-much-about" id="toc-stop-removing-words-we-dont-care-much-about" class="nav-link" data-scroll-target="#stop-removing-words-we-dont-care-much-about">Stop! Removing words we don’t care much about</a></li>
+  <li><a href="#looking-for-the-root-and-a-bit-of-linguistics" id="toc-looking-for-the-root-and-a-bit-of-linguistics" class="nav-link" data-scroll-target="#looking-for-the-root-and-a-bit-of-linguistics">Looking for the root and a bit of linguistics</a></li>
+  <li><a href="#wordclouds-with-ggwordcloud" id="toc-wordclouds-with-ggwordcloud" class="nav-link" data-scroll-target="#wordclouds-with-ggwordcloud">Wordclouds with <strong><code>ggwordcloud</code></strong></a></li>
+  <li><a href="#sentiment-analysis-for-infinite-jest" id="toc-sentiment-analysis-for-infinite-jest" class="nav-link" data-scroll-target="#sentiment-analysis-for-infinite-jest">Sentiment analysis for <strong><em>Infinite Jest</em></strong></a></li>
+  <li><a href="#rejoinder-narrative-progression-in-moby-dick" id="toc-rejoinder-narrative-progression-in-moby-dick" class="nav-link" data-scroll-target="#rejoinder-narrative-progression-in-moby-dick">Rejoinder: Narrative progression in <strong><em>Moby Dick</em></strong> 🐋</a></li>
+  </ul></li>
+  <li><a href="#practice-3-project-gutenberg" id="toc-practice-3-project-gutenberg" class="nav-link" data-scroll-target="#practice-3-project-gutenberg">🏗 Practice 3: Project Gutenberg</a></li>
+  <li><a href="#key-takeaways" id="toc-key-takeaways" class="nav-link" data-scroll-target="#key-takeaways">Key takeaways</a></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Data from words 📚</h1>
+<div class="quarto-title-block"><div><h1 class="title">Data from words 📚</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li></ul></div></div>
 <p class="subtitle lead">Learn how to transform information stored in text as data you can analyse and visualise</p>
   <div class="quarto-categories">
     <div class="quarto-category">text</div>
@@ -593,7 +630,7 @@ cookieconsent.run({
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">October 6, 2026</p>
+      <p class="date-modified">November 7, 2026</p>
     </div>
   </div>
     
@@ -607,7 +644,7 @@ cookieconsent.run({
 <blockquote class="blockquote">
 <p>“<em>For every complex problem there is an answer that is clear, simple, and wrong.</em>” <br> –H.L. Mencken</p>
 </blockquote>
-<p>Text analysis is how you convert prose into a numerical analysis. Examples of applications of text analysis are <a href="https://books.google.com/ngrams">Google NGrams</a> and translators like <a href="https://www.deepl.com/en/translator">DeepL</a>. It is also a building block for AI applications, like the recently released <a href="https://openai.com/blog/chatgpt/">ChatGPT</a>.</p>
+<p>Text analysis is how you convert prose into a numerical analysis. Examples of applications of text analysis are <a href="https://books.google.com/ngrams">Google NGrams</a> and translators like <a href="https://www.deepl.com/en/translator">DeepL</a>. It is also a building block of large language models like <a href="https://openai.com/index/chatgpt/">ChatGPT</a>, which the <a href="../../learn/ai.html">Work with AI</a> track puts to work from R.</p>
 <p>In this session we will focus on retrieving, cleaning and visualising text data.</p>
 <div class="lesson-info">
 <p><strong>Level:</strong> Intermediate &nbsp;·&nbsp; <strong>Time:</strong> ~60 min &nbsp;·&nbsp; <strong>Prerequisites:</strong> Everything in its right place &nbsp;·&nbsp; <strong>Tools:</strong> tidytext, stringr, dplyr, ggwordcloud, pdftools</p>
@@ -644,31 +681,34 @@ cookieconsent.run({
 </div>
 </div>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-1"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-1-1"><a href="#annotated-cell-1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pdftools)</span>
 <span id="annotated-cell-1-2"><a href="#annotated-cell-1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidytext)</span>
 <span id="annotated-cell-1-3"><a href="#annotated-cell-1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="annotated-cell-1-4"><a href="#annotated-cell-1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-1-5"><a href="#annotated-cell-1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Read the whole book using PDF tools package #### "/sessions_workshop/03-text/"</span></span>
+<span id="annotated-cell-1-5"><a href="#annotated-cell-1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Read the whole book using the pdftools package ####</span></span>
 <span id="annotated-cell-1-6"><a href="#annotated-cell-1-6" aria-hidden="true" tabindex="-1"></a></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-1-7" class="code-annotation-target"><a href="#annotated-cell-1-7" aria-hidden="true" tabindex="-1"></a>the_origins_of_species <span class="ot">&lt;-</span> pdftools<span class="sc">::</span><span class="fu">pdf_text</span>(<span class="fu">paste0</span>(<span class="fu">getwd</span>(),<span class="st">"/Darwin-1859 Origin of Species.pdf"</span>)) <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-1-8" class="code-annotation-target"><a href="#annotated-cell-1-8" aria-hidden="true" tabindex="-1"></a>  stringr<span class="sc">::</span><span class="fu">str_squish</span>()</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="1">1</button><span id="annotated-cell-1-7" class="code-annotation-target"><a href="#annotated-cell-1-7" aria-hidden="true" tabindex="-1"></a>the_origins_of_species <span class="ot">&lt;-</span> pdftools<span class="sc">::</span><span class="fu">pdf_text</span>(<span class="fu">paste0</span>(<span class="fu">getwd</span>(),<span class="st">"/Darwin-1859 Origin of Species.pdf"</span>)) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="2">2</button><span id="annotated-cell-1-8" class="code-annotation-target"><a href="#annotated-cell-1-8" aria-hidden="true" tabindex="-1"></a>  stringr<span class="sc">::</span><span class="fu">str_squish</span>()</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-annotation">
-<dl class="code-annotation-container-grid">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-1" data-target-annotation="1">1</dt>
 <dd>
 <span data-code-cell="annotated-cell-1" data-code-lines="7" data-code-annotation="1">Read the file into R with the function <code>pdf_text()</code></span>
 </dd>
 <dt data-target-cell="annotated-cell-1" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-1" data-code-lines="8" data-code-annotation="2">Eliminate all blank spaces in the text</span>
+<span data-code-cell="annotated-cell-1" data-code-lines="8" data-code-annotation="2">Collapse repeated whitespace and line breaks into single spaces</span>
 </dd>
 </dl>
 </div>
 </div>
 </section>
-<section id="working-with-text-as-data-tokenization-stopwords-stemming" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="working-with-text-as-data-tokenization-stopwords-stemming">Working with text-as-data: Tokenization, stopwords, stemming</h3>
-<p>Before we can actually use the text to analyse it, we need to perform a few operations. The first is to create <em>tokens</em>, which is basically the unit of measurement we choose for our text analysis. Token can be words, characters, sentences, paragraphs, n-grams, you name it. To tokenize the book, we’ll use a function from the <strong><code>tidytext</code></strong> package that does all the heavy lifting for us.</p>
+<section id="working-with-text-as-data-tokenisation-stopwords-stemming" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="working-with-text-as-data-tokenisation-stopwords-stemming">Working with text-as-data: Tokenisation, stopwords, stemming</h3>
+<p>Before we can actually use the text to analyse it, we need to perform a few operations. The first is to create <em>tokens</em>, which is basically the unit of measurement we choose for our text analysis. Tokens can be words, characters, sentences, paragraphs, n-grams, you name it. To tokenise the book, we’ll use a function from the <strong><code>tidytext</code></strong> package that does all the heavy lifting for us.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -679,7 +719,7 @@ cookieconsent.run({
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>regex gives headaches, and the 2nd page of the <a href="https://posit.co/wp-content/uploads/2022/10/strings-1.pdf">stringr cheatsheet</a> is your ibuprofen. There are a few important operations in regex you should remember:</p>
+<p>regex gives headaches, and the 2nd page of the <a href="https://rstudio.github.io/cheatsheets/strings.pdf">stringr cheatsheet</a> is your ibuprofen. There are a few important operations in regex you should remember:</p>
 <p><strong>Special metacharacters</strong></p>
 <ul>
 <li><code>\.</code> Represents a period. To match a period, type <code>\\.</code></li>
@@ -698,13 +738,15 @@ cookieconsent.run({
 </section>
 <section id="stop-removing-words-we-dont-care-much-about" class="level3">
 <h3 class="anchored" data-anchor-id="stop-removing-words-we-dont-care-much-about">Stop! Removing words we don’t care much about</h3>
-<p>We will then extract words from the remaining data that we won’t need. These are called <strong>stopwords</strong>, and include a list of articles, prepositions and other words that we are not super interested in analysing. We will remove the words using the <code>anti_join()</code> function, which removes any common elements from two databases.</p>
+<p>We will then remove words from the remaining data that we won’t need. These are called <strong>stopwords</strong>, and include a list of articles, prepositions and other words that we are not super interested in analysing. We will remove the words using the <code>anti_join()</code> function, which keeps only the rows of the first dataset that have no match in the second.</p>
 </section>
 <section id="looking-for-the-root-and-a-bit-of-linguistics" class="level3">
 <h3 class="anchored" data-anchor-id="looking-for-the-root-and-a-bit-of-linguistics">Looking for the root and a bit of linguistics</h3>
-<p>Finally, we will look at the <strong>stem</strong> of the remaining words, as we want to avoid duplicates from plurals and the like. For this we will use the <strong><code>SnowballC</code></strong> package, which has a handy function to extract the root of words. We also do <strong>lemmatization</strong>, or identifying the dictionary form of the words based on linguistics and grouping them together using the <strong><code>textstem</code></strong> package.</p>
-<p>We won’t go into the details, but check the differences between the stem and lemma results below to pick your curiosity:</p>
+<p>Finally, we will look at the <strong>stem</strong> of the remaining words, as we want to avoid duplicates from plurals and the like. For this we will use the <strong><code>SnowballC</code></strong> package, which has a handy function to extract the root of words. We also do <strong>lemmatisation</strong>, or identifying the dictionary form of the words based on linguistics and grouping them together using the <strong><code>textstem</code></strong> package.</p>
+<p>We won’t go into the details, but check the differences between the stem and lemma results below to pique your curiosity:</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-2"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-2-1"><a href="#annotated-cell-2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pdftools)</span>
 <span id="annotated-cell-2-2"><a href="#annotated-cell-2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidytext)</span>
 <span id="annotated-cell-2-3"><a href="#annotated-cell-2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
@@ -714,28 +756,29 @@ cookieconsent.run({
 <span id="annotated-cell-2-7"><a href="#annotated-cell-2-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="annotated-cell-2-8"><a href="#annotated-cell-2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Tokenization - Turn all text into a data frame of words ####</span></span>
 <span id="annotated-cell-2-9"><a href="#annotated-cell-2-9" aria-hidden="true" tabindex="-1"></a>toos_df <span class="ot">&lt;-</span> the_origins_of_species <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="3" onclick="event.preventDefault();">3</a><span id="annotated-cell-2-10" class="code-annotation-target"><a href="#annotated-cell-2-10" aria-hidden="true" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">as_tibble</span>() <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="4" onclick="event.preventDefault();">4</a><span id="annotated-cell-2-11" class="code-annotation-target"><a href="#annotated-cell-2-11" aria-hidden="true" tabindex="-1"></a>  tidytext<span class="sc">::</span><span class="fu">unnest_tokens</span>(<span class="at">input =</span> <span class="st">"value"</span>, <span class="at">output =</span> <span class="st">"word"</span>, <span class="at">token =</span> <span class="st">"words"</span>, <span class="at">to_lower =</span> <span class="cn">TRUE</span>)</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="3">3</button><span id="annotated-cell-2-10" class="code-annotation-target"><a href="#annotated-cell-2-10" aria-hidden="true" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">as_tibble</span>() <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="4">4</button><span id="annotated-cell-2-11" class="code-annotation-target"><a href="#annotated-cell-2-11" aria-hidden="true" tabindex="-1"></a>  tidytext<span class="sc">::</span><span class="fu">unnest_tokens</span>(<span class="at">input =</span> <span class="st">"value"</span>, <span class="at">output =</span> <span class="st">"word"</span>, <span class="at">token =</span> <span class="st">"words"</span>, <span class="at">to_lower =</span> <span class="cn">TRUE</span>)</span>
 <span id="annotated-cell-2-12"><a href="#annotated-cell-2-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="annotated-cell-2-13"><a href="#annotated-cell-2-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Stopwords - Remove them with anti_join ####</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="5" onclick="event.preventDefault();">5</a><span id="annotated-cell-2-14" class="code-annotation-target"><a href="#annotated-cell-2-14" aria-hidden="true" tabindex="-1"></a>stopwords<span class="sc">::</span><span class="fu">stopwords</span>(<span class="at">language =</span> <span class="st">"en"</span>)</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="5">5</button><span id="annotated-cell-2-14" class="code-annotation-target"><a href="#annotated-cell-2-14" aria-hidden="true" tabindex="-1"></a>stopwords<span class="sc">::</span><span class="fu">stopwords</span>(<span class="at">language =</span> <span class="st">"en"</span>)</span>
 <span id="annotated-cell-2-15"><a href="#annotated-cell-2-15" aria-hidden="true" tabindex="-1"></a></span>
 <span id="annotated-cell-2-16"><a href="#annotated-cell-2-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Now let's remove all the stop words from our data and stem the text ####</span></span>
 <span id="annotated-cell-2-17"><a href="#annotated-cell-2-17" aria-hidden="true" tabindex="-1"></a>toos_df <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="6" onclick="event.preventDefault();">6</a><span id="annotated-cell-2-18" class="code-annotation-target"><a href="#annotated-cell-2-18" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">anti_join</span>(stopwords<span class="sc">::</span><span class="fu">stopwords</span>(<span class="at">language =</span> <span class="st">"en"</span>) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="6">6</button><span id="annotated-cell-2-18" class="code-annotation-target"><a href="#annotated-cell-2-18" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">anti_join</span>(stopwords<span class="sc">::</span><span class="fu">stopwords</span>(<span class="at">language =</span> <span class="st">"en"</span>) <span class="sc">|&gt;</span></span>
 <span id="annotated-cell-2-19"><a href="#annotated-cell-2-19" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">as_tibble</span>(),</span>
 <span id="annotated-cell-2-20"><a href="#annotated-cell-2-20" aria-hidden="true" tabindex="-1"></a>                   <span class="at">by=</span><span class="fu">c</span>(<span class="st">"word"</span><span class="ot">=</span><span class="st">"value"</span>)) <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="7" onclick="event.preventDefault();">7</a><span id="annotated-cell-2-21" class="code-annotation-target"><a href="#annotated-cell-2-21" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">stem =</span> SnowballC<span class="sc">::</span><span class="fu">wordStem</span>(word),</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="7">7</button><span id="annotated-cell-2-21" class="code-annotation-target"><a href="#annotated-cell-2-21" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">stem =</span> SnowballC<span class="sc">::</span><span class="fu">wordStem</span>(word),</span>
 <span id="annotated-cell-2-22"><a href="#annotated-cell-2-22" aria-hidden="true" tabindex="-1"></a>                <span class="at">lemma =</span> textstem<span class="sc">::</span><span class="fu">lemmatize_words</span>(word))</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-annotation">
-<dl class="code-annotation-container-grid">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-2" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-cell="annotated-cell-2" data-code-lines="10" data-code-annotation="3">Make into a database</span>
+<span data-code-cell="annotated-cell-2" data-code-lines="10" data-code-annotation="3">Turn the vector of pages into a tibble</span>
 </dd>
 <dt data-target-cell="annotated-cell-2" data-target-annotation="4">4</dt>
 <dd>
-<span data-code-cell="annotated-cell-2" data-code-lines="11" data-code-annotation="4">Tokenize into words using the <code>unnest_tokens()</code> function. We also make the text lower-case.</span>
+<span data-code-cell="annotated-cell-2" data-code-lines="11" data-code-annotation="4">Tokenise into words using the <code>unnest_tokens()</code> function. We also make the text lower-case.</span>
 </dd>
 <dt data-target-cell="annotated-cell-2" data-target-annotation="5">5</dt>
 <dd>
@@ -747,7 +790,7 @@ cookieconsent.run({
 </dd>
 <dt data-target-cell="annotated-cell-2" data-target-annotation="7">7</dt>
 <dd>
-<span data-code-cell="annotated-cell-2" data-code-lines="21,22" data-code-annotation="7">Identify the stem of each word, to avoid counting conjugation duplicates, and lemmatization that uses linguistics to create lemmas, the canonical or dictionary forms of word.</span>
+<span data-code-cell="annotated-cell-2" data-code-lines="21,22" data-code-annotation="7">Identify the stem of each word, to avoid counting conjugation duplicates, and its lemma, which uses linguistics to find the canonical or dictionary form of each word.</span>
 </dd>
 </dl>
 </div>
@@ -813,7 +856,7 @@ cookieconsent.run({
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="03-text_files/figure-html/3.freq-word-1.png" class="img-fluid figure-img" width="672"></p>
+<p><a href="03-text_files/figure-html/3.freq-word-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="03-text_files/figure-html/3.freq-word-1.png" class="img-fluid figure-img" width="672"></a></p>
 </figure>
 </div>
 </div>
@@ -824,7 +867,7 @@ cookieconsent.run({
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="03-text_files/figure-html/3.freq-stem-1.png" class="img-fluid figure-img" width="672"></p>
+<p><a href="03-text_files/figure-html/3.freq-stem-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="03-text_files/figure-html/3.freq-stem-1.png" class="img-fluid figure-img" width="672"></a></p>
 </figure>
 </div>
 </div>
@@ -835,7 +878,7 @@ cookieconsent.run({
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="03-text_files/figure-html/3.freq-lemma-1.png" class="img-fluid figure-img" width="672"></p>
+<p><a href="03-text_files/figure-html/3.freq-lemma-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="03-text_files/figure-html/3.freq-lemma-1.png" class="img-fluid figure-img" width="672"></a></p>
 </figure>
 </div>
 </div>
@@ -847,8 +890,10 @@ cookieconsent.run({
 <section id="wordclouds-with-ggwordcloud" class="level3">
 <h3 class="anchored" data-anchor-id="wordclouds-with-ggwordcloud">Wordclouds with <a href="https://lepennec.github.io/ggwordcloud/index.html"><strong><code>ggwordcloud</code></strong></a></h3>
 <p>Wordclouds are mostly decorative, they are not very informative. They are the pie charts of text data: There will always be a better way to convey the information, but people like them anyway.</p>
-<p>To create a wordcloud, we only need to use one new geometry: <code>geom_text_wordcloud()</code>. As arguments we give the label for each word and the weight of the word based on the frequency. we can also change the area in which the wordcloud is created, using the <code>scale_size_area()</code> option and a 3-color diverging palette.</p>
+<p>To create a wordcloud, we only need to use one new geometry: <code>geom_text_wordcloud()</code>. As arguments we give the label for each word and the weight of the word based on the frequency. We can also change the area in which the wordcloud is created, using the <code>scale_size_area()</code> option and a 3-colour diverging palette.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-3"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-3-1"><a href="#annotated-cell-3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="annotated-cell-3-2"><a href="#annotated-cell-3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggwordcloud)</span>
 <span id="annotated-cell-3-3"><a href="#annotated-cell-3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span>
@@ -861,22 +906,23 @@ cookieconsent.run({
 <span id="annotated-cell-3-10"><a href="#annotated-cell-3-10" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">distinct</span>(word, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> </span>
 <span id="annotated-cell-3-11"><a href="#annotated-cell-3-11" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">slice_max</span>(<span class="at">order_by=</span>word_count, <span class="at">n =</span> <span class="dv">100</span>) <span class="sc">|&gt;</span></span>
 <span id="annotated-cell-3-12"><a href="#annotated-cell-3-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>()<span class="sc">+</span> </span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="8" onclick="event.preventDefault();">8</a><span id="annotated-cell-3-13" class="code-annotation-target"><a href="#annotated-cell-3-13" aria-hidden="true" tabindex="-1"></a>  ggwordcloud<span class="sc">::</span><span class="fu">geom_text_wordcloud</span>(<span class="fu">aes</span>(<span class="at">label =</span> word, <span class="at">size =</span> word_count, <span class="at">color=</span>word_count)) <span class="sc">+</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="8">8</button><span id="annotated-cell-3-13" class="code-annotation-target"><a href="#annotated-cell-3-13" aria-hidden="true" tabindex="-1"></a>  ggwordcloud<span class="sc">::</span><span class="fu">geom_text_wordcloud</span>(<span class="fu">aes</span>(<span class="at">label =</span> word, <span class="at">size =</span> word_count, <span class="at">color=</span>word_count)) <span class="sc">+</span></span>
 <span id="annotated-cell-3-14"><a href="#annotated-cell-3-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_size_area</span>(<span class="at">max_size =</span> <span class="dv">17</span>) <span class="sc">+</span></span>
 <span id="annotated-cell-3-15"><a href="#annotated-cell-3-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_distiller</span>(<span class="at">palette=</span><span class="st">"RdYlGn"</span>, <span class="at">direction=</span><span class="sc">-</span><span class="dv">1</span>)<span class="sc">+</span></span>
 <span id="annotated-cell-3-16"><a href="#annotated-cell-3-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-annotation">
-<dl class="code-annotation-container-grid">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-3" data-target-annotation="8">8</dt>
 <dd>
-<span data-code-cell="annotated-cell-3" data-code-lines="13,14" data-code-annotation="8">Use the <code>geom_text_wordcloud()</code> geometry to plot the wordcloud very easily, even adding a variable to weight the size by frequency in the text and color it with a palette.</span>
+<span data-code-cell="annotated-cell-3" data-code-lines="13,14" data-code-annotation="8">Use the <code>geom_text_wordcloud()</code> geometry to plot the wordcloud very easily, even adding a variable to weight the size by frequency in the text and colour it with a palette.</span>
 </dd>
 </dl>
 </div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="03-text_files/figure-html/3.ggwordcloud-1.png" class="img-fluid figure-img" width="672"></p>
+<p><a href="03-text_files/figure-html/3.ggwordcloud-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="03-text_files/figure-html/3.ggwordcloud-1.png" class="img-fluid figure-img" width="672"></a></p>
 </figure>
 </div>
 </div>
@@ -884,14 +930,17 @@ cookieconsent.run({
 </section>
 <section id="sentiment-analysis-for-infinite-jest" class="level3 unnumbered">
 <h3 class="unnumbered anchored" data-anchor-id="sentiment-analysis-for-infinite-jest">Sentiment analysis for <strong><em>Infinite Jest</em></strong></h3>
-<p>Words have connotations that can be analysed numerically. Evaluating an opinion or emotion in text can be done using sentiment analysis, which we will do for another american novel: David Foster Wallace’s <em>Infinite Jest</em>. To do this, we just need to add a database with negative/positive identifiers for words in English and match them with the data from the book.</p>
+<p>Words have connotations that can be analysed numerically. Evaluating an opinion or emotion in text can be done using sentiment analysis, which we will do for an American novel: David Foster Wallace’s <em>Infinite Jest</em>. To do this, we just need to add a database with negative/positive identifiers for words in English and match them with the data from the book.</p>
 <p>We’ll use the lexicon <strong>Bing</strong> to start, which gives either a single positive or negative association to a large set of words in English.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(textdata)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidytext)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Look at the list of words and +/- sentiment ####</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>tidytext<span class="sc">::</span><span class="fu">get_sentiments</span>(<span class="st">"bing"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6,786 × 2
    word        sentiment
@@ -920,45 +969,48 @@ cookieconsent.run({
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The <strong><code>dplyr</code></strong> package has some useful functions that regex text without a hassle: you can select variables or filter observations based on text.</p>
+<p>The <strong><code>dplyr</code></strong> package (through its <strong><code>tidyselect</code></strong> helpers) has some useful functions that regex column names without a hassle: you can select variables based on their names. To filter <em>observations</em> based on text, use <code>stringr::str_detect()</code> inside <code>filter()</code>.</p>
 <ul>
 <li><code>starts_with</code>: starts with a prefix (same as regex ‘^blah’)</li>
-<li><code>ends_with</code>: ends with a prefix (same as regex ‘blah$’)</li>
+<li><code>ends_with</code>: ends with a suffix (same as regex ‘blah$’)</li>
 <li><code>contains</code>: contains a literal string (same as regex ‘blah’)</li>
 <li><code>matches</code>: matches a regular expression (write regex here)</li>
 <li><code>num_range</code>: a numerical range like x01, x02, x03 (same as regex ‘x[0-9][0-9]’)</li>
-<li><code>one_of</code>: variables in character vector</li>
+<li><code>any_of</code>/<code>all_of</code>: variables named in a character vector (<code>one_of</code> is the older, superseded name)</li>
 <li><code>everything</code>: all variables. Used for reordering.</li>
 </ul>
 </div>
 </div>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-5"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-5-1"><a href="#annotated-cell-5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(textdata)</span>
 <span id="annotated-cell-5-2"><a href="#annotated-cell-5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span>
 <span id="annotated-cell-5-3"><a href="#annotated-cell-5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="annotated-cell-5-4"><a href="#annotated-cell-5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidytext)</span>
 <span id="annotated-cell-5-5"><a href="#annotated-cell-5-5" aria-hidden="true" tabindex="-1"></a></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="9" onclick="event.preventDefault();">9</a><span id="annotated-cell-5-6" class="code-annotation-target"><a href="#annotated-cell-5-6" aria-hidden="true" tabindex="-1"></a>pdftools<span class="sc">::</span><span class="fu">pdf_text</span>(<span class="fu">paste0</span>(<span class="fu">getwd</span>(),<span class="st">"/infinite_jest.pdf"</span>)) <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="10" onclick="event.preventDefault();">10</a><span id="annotated-cell-5-7" class="code-annotation-target"><a href="#annotated-cell-5-7" aria-hidden="true" tabindex="-1"></a>  stringr<span class="sc">::</span><span class="fu">str_squish</span>() <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="11" onclick="event.preventDefault();">11</a><span id="annotated-cell-5-8" class="code-annotation-target"><a href="#annotated-cell-5-8" aria-hidden="true" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">as_tibble</span>() <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="12" onclick="event.preventDefault();">12</a><span id="annotated-cell-5-9" class="code-annotation-target"><a href="#annotated-cell-5-9" aria-hidden="true" tabindex="-1"></a>  tidytext<span class="sc">::</span><span class="fu">unnest_tokens</span>(<span class="at">input =</span> <span class="st">"value"</span>, <span class="at">output =</span> <span class="st">"word"</span>, <span class="at">token =</span> <span class="st">"words"</span>) <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="13" onclick="event.preventDefault();">13</a><span id="annotated-cell-5-10" class="code-annotation-target"><a href="#annotated-cell-5-10" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">anti_join</span>(stopwords<span class="sc">::</span><span class="fu">stopwords</span>(<span class="at">language =</span> <span class="st">"en"</span>) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="9">9</button><span id="annotated-cell-5-6" class="code-annotation-target"><a href="#annotated-cell-5-6" aria-hidden="true" tabindex="-1"></a>pdftools<span class="sc">::</span><span class="fu">pdf_text</span>(<span class="fu">paste0</span>(<span class="fu">getwd</span>(),<span class="st">"/infinite_jest.pdf"</span>)) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="10">10</button><span id="annotated-cell-5-7" class="code-annotation-target"><a href="#annotated-cell-5-7" aria-hidden="true" tabindex="-1"></a>  stringr<span class="sc">::</span><span class="fu">str_squish</span>() <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="11">11</button><span id="annotated-cell-5-8" class="code-annotation-target"><a href="#annotated-cell-5-8" aria-hidden="true" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">as_tibble</span>() <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="12">12</button><span id="annotated-cell-5-9" class="code-annotation-target"><a href="#annotated-cell-5-9" aria-hidden="true" tabindex="-1"></a>  tidytext<span class="sc">::</span><span class="fu">unnest_tokens</span>(<span class="at">input =</span> <span class="st">"value"</span>, <span class="at">output =</span> <span class="st">"word"</span>, <span class="at">token =</span> <span class="st">"words"</span>) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="13">13</button><span id="annotated-cell-5-10" class="code-annotation-target"><a href="#annotated-cell-5-10" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">anti_join</span>(stopwords<span class="sc">::</span><span class="fu">stopwords</span>(<span class="at">language =</span> <span class="st">"en"</span>) <span class="sc">|&gt;</span></span>
 <span id="annotated-cell-5-11"><a href="#annotated-cell-5-11" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">as_tibble</span>(), <span class="at">by=</span><span class="fu">c</span>(<span class="st">"word"</span><span class="ot">=</span><span class="st">"value"</span>)) <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="14" onclick="event.preventDefault();">14</a><span id="annotated-cell-5-12" class="code-annotation-target"><a href="#annotated-cell-5-12" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">left_join</span>(<span class="fu">get_sentiments</span>(<span class="st">"bing"</span>),</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="14">14</button><span id="annotated-cell-5-12" class="code-annotation-target"><a href="#annotated-cell-5-12" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">left_join</span>(<span class="fu">get_sentiments</span>(<span class="st">"bing"</span>),</span>
 <span id="annotated-cell-5-13"><a href="#annotated-cell-5-13" aria-hidden="true" tabindex="-1"></a>                   <span class="at">by=</span><span class="fu">c</span>(<span class="st">"word"</span>)) <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="15" onclick="event.preventDefault();">15</a><span id="annotated-cell-5-14" class="code-annotation-target"><a href="#annotated-cell-5-14" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(sentiment)) <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="16" onclick="event.preventDefault();">16</a><span id="annotated-cell-5-15" class="code-annotation-target"><a href="#annotated-cell-5-15" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(sentiment) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="15">15</button><span id="annotated-cell-5-14" class="code-annotation-target"><a href="#annotated-cell-5-14" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(sentiment)) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="16">16</button><span id="annotated-cell-5-15" class="code-annotation-target"><a href="#annotated-cell-5-15" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(sentiment) <span class="sc">|&gt;</span></span>
 <span id="annotated-cell-5-16"><a href="#annotated-cell-5-16" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(<span class="at">sentiment_count =</span> <span class="fu">n</span>()) <span class="sc">|&gt;</span></span>
 <span id="annotated-cell-5-17"><a href="#annotated-cell-5-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Plot</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="17" onclick="event.preventDefault();">17</a><span id="annotated-cell-5-18" class="code-annotation-target"><a href="#annotated-cell-5-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>sentiment,<span class="at">y=</span>sentiment_count,<span class="at">fill=</span>sentiment))<span class="sc">+</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="17">17</button><span id="annotated-cell-5-18" class="code-annotation-target"><a href="#annotated-cell-5-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>sentiment,<span class="at">y=</span>sentiment_count,<span class="at">fill=</span>sentiment))<span class="sc">+</span></span>
 <span id="annotated-cell-5-19"><a href="#annotated-cell-5-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">show.legend =</span> <span class="cn">FALSE</span>)<span class="sc">+</span></span>
 <span id="annotated-cell-5-20"><a href="#annotated-cell-5-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>()<span class="sc">+</span></span>
 <span id="annotated-cell-5-21"><a href="#annotated-cell-5-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="cn">NULL</span>,<span class="at">y=</span><span class="st">"Word count"</span>,</span>
 <span id="annotated-cell-5-22"><a href="#annotated-cell-5-22" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Infinite Jest by David Foster Wallace"</span>, </span>
 <span id="annotated-cell-5-23"><a href="#annotated-cell-5-23" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Text analysis using Bing"</span>)<span class="sc">+</span></span>
 <span id="annotated-cell-5-24"><a href="#annotated-cell-5-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"blue"</span>,<span class="st">"red"</span>))</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-annotation">
-<dl class="code-annotation-container-grid">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-5" data-target-annotation="9">9</dt>
 <dd>
 <span data-code-cell="annotated-cell-5" data-code-lines="6" data-code-annotation="9">Import the book into R with <code>pdf_text()</code>, which returns one character string per page.</span>
@@ -1000,13 +1052,13 @@ cookieconsent.run({
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="03-text_files/figure-html/3.sentiment-1.png" class="img-fluid figure-img" width="672"></p>
+<p><a href="03-text_files/figure-html/3.sentiment-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img src="03-text_files/figure-html/3.sentiment-1.png" class="img-fluid figure-img" width="672"></a></p>
 </figure>
 </div>
 </div>
 </div>
 <p>The positive/negative lexicon is not very interesting. There is another one called <strong>NRC</strong><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> which is more nuanced.</p>
-<p>Let’s repeat the analysis using this lexicon and draw word frequencies by sentiment group, taking into account that words can have multiple sentiments and will be counted multiple times. Using <code>scale_fill_manual()</code> we can easily assign a color to each sentiment.</p>
+<p>Let’s repeat the analysis using this lexicon and draw word frequencies by sentiment group, taking into account that words can have multiple sentiments and will be counted multiple times. Using <code>scale_fill_manual()</code> we can easily assign a colour to each sentiment.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1026,29 +1078,31 @@ cookieconsent.run({
 <li><code>semi_join()</code> returns only the rows from the left dataset that have a match in the right dataset, discarding observations without a match.</li>
 <li><code>anti_join()</code> returns all rows from the left dataset that do not have a match in the right dataset. It essentially removes the rows with matching values in the specified variables, keeping only the observations from the left dataset that have no corresponding match in the right dataset.</li>
 </ul>
-<p>You can specify the columns for matching using the <strong><code>by</code></strong> argument within the chosen join function to specify the columns that should be used for matching. If you want to join based on a single column named “ID”, you would write: <code>by = "ID"</code>. If you want to match on multiple columns, such as “ID” and “Date”, you would write: <code>by = c("ID", "Date"))</code>.</p>
+<p>You can specify the columns for matching using the <strong><code>by</code></strong> argument within the chosen join function to specify the columns that should be used for matching. If you want to join based on a single column named “ID”, you would write: <code>by = "ID"</code>. If you want to match on multiple columns, such as “ID” and “Date”, you would write: <code>by = c("ID", "Date")</code>.</p>
 </div>
 </div>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-6"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-6-1"><a href="#annotated-cell-6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(textdata)</span>
 <span id="annotated-cell-6-2"><a href="#annotated-cell-6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span>
 <span id="annotated-cell-6-3"><a href="#annotated-cell-6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="annotated-cell-6-4"><a href="#annotated-cell-6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidytext)</span>
 <span id="annotated-cell-6-5"><a href="#annotated-cell-6-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="annotated-cell-6-6"><a href="#annotated-cell-6-6" aria-hidden="true" tabindex="-1"></a><span class="co"># NRC lexicon ####</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="18" onclick="event.preventDefault();">18</a><span id="annotated-cell-6-7" class="code-annotation-target"><a href="#annotated-cell-6-7" aria-hidden="true" tabindex="-1"></a>nrc <span class="ot">&lt;-</span> tidytext<span class="sc">::</span><span class="fu">get_sentiments</span>(<span class="st">"nrc"</span>)</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="18">18</button><span id="annotated-cell-6-7" class="code-annotation-target"><a href="#annotated-cell-6-7" aria-hidden="true" tabindex="-1"></a>nrc <span class="ot">&lt;-</span> tidytext<span class="sc">::</span><span class="fu">get_sentiments</span>(<span class="st">"nrc"</span>)</span>
 <span id="annotated-cell-6-8"><a href="#annotated-cell-6-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="annotated-cell-6-9"><a href="#annotated-cell-6-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Import book ####</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="19" onclick="event.preventDefault();">19</a><span id="annotated-cell-6-10" class="code-annotation-target"><a href="#annotated-cell-6-10" aria-hidden="true" tabindex="-1"></a>pdftools<span class="sc">::</span><span class="fu">pdf_text</span>(<span class="fu">paste0</span>(<span class="fu">getwd</span>(),<span class="st">"/infinite_jest.pdf"</span>)) <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="20" onclick="event.preventDefault();">20</a><span id="annotated-cell-6-11" class="code-annotation-target"><a href="#annotated-cell-6-11" aria-hidden="true" tabindex="-1"></a>  stringr<span class="sc">::</span><span class="fu">str_squish</span>() <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="21" onclick="event.preventDefault();">21</a><span id="annotated-cell-6-12" class="code-annotation-target"><a href="#annotated-cell-6-12" aria-hidden="true" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">as_tibble</span>() <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="22" onclick="event.preventDefault();">22</a><span id="annotated-cell-6-13" class="code-annotation-target"><a href="#annotated-cell-6-13" aria-hidden="true" tabindex="-1"></a>  tidytext<span class="sc">::</span><span class="fu">unnest_tokens</span>(<span class="at">input =</span> <span class="st">"value"</span>, <span class="at">output =</span> <span class="st">"text"</span>, <span class="at">token =</span> <span class="st">"words"</span>) <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="23" onclick="event.preventDefault();">23</a><span id="annotated-cell-6-14" class="code-annotation-target"><a href="#annotated-cell-6-14" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">anti_join</span>(stopwords<span class="sc">::</span><span class="fu">stopwords</span>(<span class="at">language =</span> <span class="st">"en"</span>) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="19">19</button><span id="annotated-cell-6-10" class="code-annotation-target"><a href="#annotated-cell-6-10" aria-hidden="true" tabindex="-1"></a>pdftools<span class="sc">::</span><span class="fu">pdf_text</span>(<span class="fu">paste0</span>(<span class="fu">getwd</span>(),<span class="st">"/infinite_jest.pdf"</span>)) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="20">20</button><span id="annotated-cell-6-11" class="code-annotation-target"><a href="#annotated-cell-6-11" aria-hidden="true" tabindex="-1"></a>  stringr<span class="sc">::</span><span class="fu">str_squish</span>() <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="21">21</button><span id="annotated-cell-6-12" class="code-annotation-target"><a href="#annotated-cell-6-12" aria-hidden="true" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">as_tibble</span>() <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="22">22</button><span id="annotated-cell-6-13" class="code-annotation-target"><a href="#annotated-cell-6-13" aria-hidden="true" tabindex="-1"></a>  tidytext<span class="sc">::</span><span class="fu">unnest_tokens</span>(<span class="at">input =</span> <span class="st">"value"</span>, <span class="at">output =</span> <span class="st">"text"</span>, <span class="at">token =</span> <span class="st">"words"</span>) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="23">23</button><span id="annotated-cell-6-14" class="code-annotation-target"><a href="#annotated-cell-6-14" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">anti_join</span>(stopwords<span class="sc">::</span><span class="fu">stopwords</span>(<span class="at">language =</span> <span class="st">"en"</span>) <span class="sc">|&gt;</span></span>
 <span id="annotated-cell-6-15"><a href="#annotated-cell-6-15" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">as_tibble</span>(), <span class="at">by=</span><span class="fu">c</span>(<span class="st">"text"</span><span class="ot">=</span><span class="st">"value"</span>)) <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="24" onclick="event.preventDefault();">24</a><span id="annotated-cell-6-16" class="code-annotation-target"><a href="#annotated-cell-6-16" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">left_join</span>(nrc,</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="24">24</button><span id="annotated-cell-6-16" class="code-annotation-target"><a href="#annotated-cell-6-16" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">left_join</span>(nrc,</span>
 <span id="annotated-cell-6-17"><a href="#annotated-cell-6-17" aria-hidden="true" tabindex="-1"></a>                   <span class="at">by=</span><span class="fu">c</span>(<span class="st">"text"</span><span class="ot">=</span><span class="st">"word"</span>), <span class="at">multiple=</span><span class="st">"all"</span>) <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="25" onclick="event.preventDefault();">25</a><span id="annotated-cell-6-18" class="code-annotation-target"><a href="#annotated-cell-6-18" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(sentiment)) <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="26" onclick="event.preventDefault();">26</a><span id="annotated-cell-6-19" class="code-annotation-target"><a href="#annotated-cell-6-19" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(sentiment) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="25">25</button><span id="annotated-cell-6-18" class="code-annotation-target"><a href="#annotated-cell-6-18" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(sentiment)) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="26">26</button><span id="annotated-cell-6-19" class="code-annotation-target"><a href="#annotated-cell-6-19" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(sentiment) <span class="sc">|&gt;</span></span>
 <span id="annotated-cell-6-20"><a href="#annotated-cell-6-20" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarize</span>(<span class="at">sentiment_count =</span> <span class="fu">n</span>()) <span class="sc">|&gt;</span></span>
 <span id="annotated-cell-6-21"><a href="#annotated-cell-6-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Plot</span></span>
 <span id="annotated-cell-6-22"><a href="#annotated-cell-6-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span><span class="fu">reorder</span>(sentiment, sentiment_count), <span class="at">y=</span>sentiment_count,<span class="at">fill=</span>sentiment))<span class="sc">+</span></span>
@@ -1058,7 +1112,7 @@ cookieconsent.run({
 <span id="annotated-cell-6-26"><a href="#annotated-cell-6-26" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Infinite Jest by David Foster Wallace"</span>, </span>
 <span id="annotated-cell-6-27"><a href="#annotated-cell-6-27" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Text analysis using NRC lexicon"</span>)<span class="sc">+</span></span>
 <span id="annotated-cell-6-28"><a href="#annotated-cell-6-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)<span class="sc">+</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="27" onclick="event.preventDefault();">27</a><span id="annotated-cell-6-29" class="code-annotation-target"><a href="#annotated-cell-6-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values=</span><span class="fu">c</span>(</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="27">27</button><span id="annotated-cell-6-29" class="code-annotation-target"><a href="#annotated-cell-6-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values=</span><span class="fu">c</span>(</span>
 <span id="annotated-cell-6-30"><a href="#annotated-cell-6-30" aria-hidden="true" tabindex="-1"></a>    <span class="st">"positive"</span><span class="ot">=</span><span class="st">"forestgreen"</span>,</span>
 <span id="annotated-cell-6-31"><a href="#annotated-cell-6-31" aria-hidden="true" tabindex="-1"></a>    <span class="st">"negative"</span><span class="ot">=</span><span class="st">"orangered"</span>,</span>
 <span id="annotated-cell-6-32"><a href="#annotated-cell-6-32" aria-hidden="true" tabindex="-1"></a>    <span class="st">"trust"</span><span class="ot">=</span><span class="st">"royalblue"</span>,</span>
@@ -1070,8 +1124,9 @@ cookieconsent.run({
 <span id="annotated-cell-6-38"><a href="#annotated-cell-6-38" aria-hidden="true" tabindex="-1"></a>    <span class="st">"disgust"</span><span class="ot">=</span><span class="st">"brown"</span>,</span>
 <span id="annotated-cell-6-39"><a href="#annotated-cell-6-39" aria-hidden="true" tabindex="-1"></a>    <span class="st">"surprise"</span><span class="ot">=</span><span class="st">"cyan"</span>)</span>
 <span id="annotated-cell-6-40"><a href="#annotated-cell-6-40" aria-hidden="true" tabindex="-1"></a>    )</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-annotation">
-<dl class="code-annotation-container-grid">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-6" data-target-annotation="18">18</dt>
 <dd>
 <span data-code-cell="annotated-cell-6" data-code-lines="7" data-code-annotation="18">Retrieve the NRC sentiment lexicon with <code>get_sentiments()</code>. Unlike Bing’s positive/negative pair, NRC maps words to ten sentiment categories.</span>
@@ -1090,7 +1145,7 @@ cookieconsent.run({
 </dd>
 <dt data-target-cell="annotated-cell-6" data-target-annotation="22">22</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="13" data-code-annotation="22">Tokenize into one row per word.</span>
+<span data-code-cell="annotated-cell-6" data-code-lines="13" data-code-annotation="22">Tokenise into one row per word.</span>
 </dd>
 <dt data-target-cell="annotated-cell-6" data-target-annotation="23">23</dt>
 <dd>
@@ -1110,14 +1165,14 @@ cookieconsent.run({
 </dd>
 <dt data-target-cell="annotated-cell-6" data-target-annotation="27">27</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="29,30,31,32,33,34,35,36,37,38,39,40" data-code-annotation="27">Notice how you can customise the colors using <code>scale_fill_manual()</code>: a named vector of <code>"value" = "color"</code> pairs manually matches each sentiment to a color.</span>
+<span data-code-cell="annotated-cell-6" data-code-lines="29,30,31,32,33,34,35,36,37,38,39,40" data-code-annotation="27">Notice how you can customise the colours using <code>scale_fill_manual()</code>: a named vector of <code>"value" = "colour"</code> pairs manually matches each sentiment to a colour.</span>
 </dd>
 </dl>
 </div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="03-text_files/figure-html/3.sentiment-nrc-1.png" class="img-fluid figure-img" width="672"></p>
+<p><a href="03-text_files/figure-html/3.sentiment-nrc-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img src="03-text_files/figure-html/3.sentiment-nrc-1.png" class="img-fluid figure-img" width="672"></a></p>
 </figure>
 </div>
 </div>
@@ -1125,9 +1180,11 @@ cookieconsent.run({
 </section>
 <section id="rejoinder-narrative-progression-in-moby-dick" class="level3">
 <h3 class="anchored" data-anchor-id="rejoinder-narrative-progression-in-moby-dick">Rejoinder: Narrative progression in <strong><em>Moby Dick</em></strong> 🐋</h3>
-<p>A fun application of sentiment analysis is tracking the frequency of words by sentiment from beginning to end of a novel. We’ll use <strong>Moby Dick</strong> as an example, showing with the help of <strong><code>girafe</code></strong>, how the relative frequency of each sentiment in the Bing lexicon changes throughout the novel between positive and negative words.</p>
+<p>A fun application of sentiment analysis is tracking the frequency of words by sentiment from beginning to end of a novel. We’ll use <strong>Moby Dick</strong> as an example, showing with the help of <strong><code>ggiraph</code></strong> how the relative frequency of each sentiment in the Bing lexicon changes throughout the novel between positive and negative words.</p>
 <p>As you can see below, the book grows progressively more negative, as the cumulative word count by sentiment shows.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gutenbergr)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidytext)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
@@ -1157,7 +1214,7 @@ cookieconsent.run({
 <span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(chapter) <span class="sc">|&gt;</span></span>
 <span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">dif =</span> (cum_sent <span class="sc">-</span> <span class="fu">lag</span>(cum_sent))) <span class="sc">|&gt;</span></span>
 <span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>chapter))<span class="sc">+</span></span>
-<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_path_interactive</span>(<span class="at">size =</span> <span class="dv">3</span>,</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_path_interactive</span>(<span class="at">linewidth =</span> <span class="dv">3</span>,</span>
 <span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">aes</span>(<span class="at">y=</span>cum_sent, </span>
 <span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>                            <span class="at">data_id =</span> sentiment, </span>
 <span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>                            <span class="at">tooltip =</span> sentiment,</span>
@@ -1184,9 +1241,10 @@ cookieconsent.run({
 <span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a>         <span class="fu">opts_zoom</span>(<span class="at">max=</span><span class="dv">4</span>)</span>
 <span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a>       )</span>
 <span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
-<div class="girafe html-widget html-fill-item" id="htmlwidget-a4a3cde3727cd01a9f82" style="width:100%;height:464px;"></div>
-<script type="application/json" data-for="htmlwidget-a4a3cde3727cd01a9f82">{"x":{"html":"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' class='ggiraph-svg' role='graphics-document' id='svg_871f90f873579365' viewBox='0 0 504 360'>\n <defs id='svg_871f90f873579365_defs'>\n  <clipPath id='svg_871f90f873579365_c1'>\n   <rect x='0' y='0' width='504' height='360'/>\n  <\/clipPath>\n  <clipPath id='svg_871f90f873579365_c2'>\n   <rect x='42.58' y='44.68' width='455.94' height='284.44'/>\n  <\/clipPath>\n <\/defs>\n <g id='svg_871f90f873579365_rootg' class='ggiraph-svg-rootg'>\n  <g clip-path='url(#svg_871f90f873579365_c1)'>\n   <rect x='0' y='0' width='504' height='360' fill='#FFFFFF' fill-opacity='1' stroke='#FFFFFF' stroke-opacity='1' stroke-width='0.75' stroke-linejoin='round' stroke-linecap='round' class='ggiraph-svg-bg'/>\n   <rect x='0' y='0' width='504' height='360' fill='#FFFFFF' fill-opacity='1' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='round'/>\n  <\/g>\n  <g clip-path='url(#svg_871f90f873579365_c2)'>\n   <rect x='42.58' y='44.68' width='455.94' height='284.44' fill='#FFFFFF' fill-opacity='1' stroke='none'/>\n   <polyline id='svg_871f90f873579365_e1' points='434.05,107.89 437.07,107.86' fill='none' stroke='#228B22' stroke-opacity='1' stroke-width='6.4' stroke-linejoin='round' stroke-linecap='butt' data-id='positive' title='positive'/>\n   <rect id='svg_871f90f873579365_e2' x='63.31' y='288.26' width='2.72' height='1.05' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='33'/>\n   <rect id='svg_871f90f873579365_e3' x='66.34' y='288.99' width='2.72' height='0.32' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='10'/>\n   <rect id='svg_871f90f873579365_e4' x='69.36' y='289.31' width='2.72' height='1.5' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-47'/>\n   <rect id='svg_871f90f873579365_e5' x='72.39' y='289.31' width='2.72' height='2.13' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-67'/>\n   <rect id='svg_871f90f873579365_e6' x='75.42' y='289.31' width='2.72' height='1.56' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-49'/>\n   <rect id='svg_871f90f873579365_e7' x='78.45' y='289.31' width='2.72' height='1.21' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-38'/>\n   <rect id='svg_871f90f873579365_e8' x='81.47' y='289.31' width='2.72' height='2.1' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-66'/>\n   <rect id='svg_871f90f873579365_e9' x='84.5' y='289.31' width='2.72' height='1.4' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-44'/>\n   <rect id='svg_871f90f873579365_e10' x='87.53' y='289.31' width='2.72' height='4.08' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-128'/>\n   <rect id='svg_871f90f873579365_e11' x='90.56' y='289.31' width='2.72' height='3.89' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-122'/>\n   <rect id='svg_871f90f873579365_e12' x='93.59' y='289.31' width='2.72' height='3.57' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-112'/>\n   <rect id='svg_871f90f873579365_e13' x='96.61' y='289.31' width='2.72' height='3.95' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-124'/>\n   <rect id='svg_871f90f873579365_e14' x='99.64' y='289.31' width='2.72' height='3.25' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-102'/>\n   <rect id='svg_871f90f873579365_e15' x='102.67' y='289.31' width='2.72' height='3.31' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-104'/>\n   <rect id='svg_871f90f873579365_e16' x='105.7' y='289.31' width='2.72' height='2.99' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-94'/>\n   <rect id='svg_871f90f873579365_e17' x='108.72' y='289.31' width='2.72' height='2.77' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-87'/>\n   <rect id='svg_871f90f873579365_e18' x='111.75' y='289.31' width='2.72' height='3.98' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-125'/>\n   <rect id='svg_871f90f873579365_e19' x='114.78' y='289.31' width='2.72' height='4.01' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-126'/>\n   <rect id='svg_871f90f873579365_e20' x='117.81' y='289.31' width='2.72' height='4.49' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-141'/>\n   <rect id='svg_871f90f873579365_e21' x='120.83' y='289.31' width='2.72' height='4.14' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-130'/>\n   <rect id='svg_871f90f873579365_e22' x='123.86' y='289.31' width='2.72' height='4.17' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-131'/>\n   <rect id='svg_871f90f873579365_e23' x='126.89' y='289.31' width='2.72' height='3.89' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-122'/>\n   <rect id='svg_871f90f873579365_e24' x='129.92' y='289.31' width='2.72' height='4.27' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-134'/>\n   <rect id='svg_871f90f873579365_e25' x='132.94' y='289.31' width='2.72' height='3.38' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-106'/>\n   <rect id='svg_871f90f873579365_e26' x='135.97' y='289.31' width='2.72' height='3.09' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-97'/>\n   <rect id='svg_871f90f873579365_e27' x='139' y='289.31' width='2.72' height='2.93' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-92'/>\n   <rect id='svg_871f90f873579365_e28' x='142.03' y='289.31' width='2.72' height='2.74' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-86'/>\n   <rect id='svg_871f90f873579365_e29' x='145.06' y='289.31' width='2.72' height='2.67' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-84'/>\n   <rect id='svg_871f90f873579365_e30' x='148.08' y='289.31' width='2.72' height='3.18' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-100'/>\n   <rect id='svg_871f90f873579365_e31' x='151.11' y='289.31' width='2.72' height='3.25' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-102'/>\n   <rect id='svg_871f90f873579365_e32' x='154.14' y='289.31' width='2.72' height='3.28' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-103'/>\n   <rect id='svg_871f90f873579365_e33' x='157.17' y='289.31' width='2.72' height='3.28' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-103'/>\n   <rect id='svg_871f90f873579365_e34' x='160.19' y='289.31' width='2.72' height='1.88' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-59'/>\n   <rect id='svg_871f90f873579365_e35' x='163.22' y='289.31' width='2.72' height='1.56' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-49'/>\n   <rect id='svg_871f90f873579365_e36' x='166.25' y='289.31' width='2.72' height='1.46' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-46'/>\n   <rect id='svg_871f90f873579365_e37' x='169.28' y='289.31' width='2.72' height='1.37' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-43'/>\n   <rect id='svg_871f90f873579365_e38' x='172.3' y='289.31' width='2.72' height='2.87' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-90'/>\n   <rect id='svg_871f90f873579365_e39' x='175.33' y='289.31' width='2.72' height='2.99' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-94'/>\n   <rect id='svg_871f90f873579365_e40' x='178.36' y='289.31' width='2.72' height='3.47' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-109'/>\n   <rect id='svg_871f90f873579365_e41' x='181.39' y='289.31' width='2.72' height='3.34' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-105'/>\n   <rect id='svg_871f90f873579365_e42' x='184.42' y='289.31' width='2.72' height='3.5' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-110'/>\n   <rect id='svg_871f90f873579365_e43' x='187.44' y='289.31' width='2.72' height='6.91' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-217'/>\n   <rect id='svg_871f90f873579365_e44' x='190.47' y='289.31' width='2.72' height='7.93' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-249'/>\n   <rect id='svg_871f90f873579365_e45' x='193.5' y='289.31' width='2.72' height='7.93' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-249'/>\n   <rect id='svg_871f90f873579365_e46' x='196.53' y='289.31' width='2.72' height='8.73' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-274'/>\n   <rect id='svg_871f90f873579365_e47' x='199.55' y='289.31' width='2.72' height='9.43' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-296'/>\n   <rect id='svg_871f90f873579365_e48' x='202.58' y='289.31' width='2.72' height='9.49' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-298'/>\n   <rect id='svg_871f90f873579365_e49' x='205.61' y='289.31' width='2.72' height='9.81' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-308'/>\n   <rect id='svg_871f90f873579365_e50' x='208.64' y='289.31' width='2.72' height='9.97' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-313'/>\n   <rect id='svg_871f90f873579365_e51' x='211.66' y='289.31' width='2.72' height='9.9' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-311'/>\n   <rect id='svg_871f90f873579365_e52' x='214.69' y='289.31' width='2.72' height='9.94' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-312'/>\n   <rect id='svg_871f90f873579365_e53' x='217.72' y='289.31' width='2.72' height='10.48' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-329'/>\n   <rect id='svg_871f90f873579365_e54' x='220.75' y='289.31' width='2.72' height='10.54' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-331'/>\n   <rect id='svg_871f90f873579365_e55' x='223.77' y='289.31' width='2.72' height='10.13' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-318'/>\n   <rect id='svg_871f90f873579365_e56' x='226.8' y='289.31' width='2.72' height='13.02' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-409'/>\n   <rect id='svg_871f90f873579365_e57' x='229.83' y='289.31' width='2.72' height='11.85' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-372'/>\n   <rect id='svg_871f90f873579365_e58' x='232.86' y='289.31' width='2.72' height='11.88' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-373'/>\n   <rect id='svg_871f90f873579365_e59' x='235.89' y='289.31' width='2.72' height='10.95' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-344'/>\n   <rect id='svg_871f90f873579365_e60' x='238.91' y='289.31' width='2.72' height='11.11' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-349'/>\n   <rect id='svg_871f90f873579365_e61' x='241.94' y='289.31' width='2.72' height='11.15' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-350'/>\n   <rect id='svg_871f90f873579365_e62' x='244.97' y='289.31' width='2.72' height='11.08' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-348'/>\n   <rect id='svg_871f90f873579365_e63' x='248' y='289.31' width='2.72' height='11.18' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-351'/>\n   <rect id='svg_871f90f873579365_e64' x='251.02' y='289.31' width='2.72' height='11.5' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-361'/>\n   <rect id='svg_871f90f873579365_e65' x='254.05' y='289.31' width='2.72' height='11.62' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-365'/>\n   <rect id='svg_871f90f873579365_e66' x='257.08' y='289.31' width='2.72' height='11.56' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-363'/>\n   <rect id='svg_871f90f873579365_e67' x='260.11' y='289.31' width='2.72' height='11.66' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-366'/>\n   <rect id='svg_871f90f873579365_e68' x='263.13' y='289.31' width='2.72' height='11.27' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-354'/>\n   <rect id='svg_871f90f873579365_e69' x='266.16' y='289.31' width='2.72' height='11.62' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-365'/>\n   <rect id='svg_871f90f873579365_e70' x='269.19' y='289.31' width='2.72' height='11.18' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-351'/>\n   <rect id='svg_871f90f873579365_e71' x='272.22' y='289.31' width='2.72' height='10.25' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-322'/>\n   <rect id='svg_871f90f873579365_e72' x='275.25' y='289.31' width='2.72' height='10.67' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-335'/>\n   <rect id='svg_871f90f873579365_e73' x='278.27' y='289.31' width='2.72' height='10.64' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-334'/>\n   <rect id='svg_871f90f873579365_e74' x='281.3' y='289.31' width='2.72' height='12.74' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-400'/>\n   <rect id='svg_871f90f873579365_e75' x='284.33' y='289.31' width='2.72' height='13.44' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-422'/>\n   <rect id='svg_871f90f873579365_e76' x='287.36' y='289.31' width='2.72' height='14.2' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-446'/>\n   <rect id='svg_871f90f873579365_e77' x='290.38' y='289.31' width='2.72' height='14.3' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-449'/>\n   <rect id='svg_871f90f873579365_e78' x='293.41' y='289.31' width='2.72' height='13.82' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-434'/>\n   <rect id='svg_871f90f873579365_e79' x='296.44' y='289.31' width='2.72' height='13.69' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-430'/>\n   <rect id='svg_871f90f873579365_e80' x='299.47' y='289.31' width='2.72' height='13.15' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-413'/>\n   <rect id='svg_871f90f873579365_e81' x='302.49' y='289.31' width='2.72' height='12.48' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-392'/>\n   <rect id='svg_871f90f873579365_e82' x='305.52' y='289.31' width='2.72' height='12.2' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-383'/>\n   <rect id='svg_871f90f873579365_e83' x='308.55' y='289.31' width='2.72' height='12.1' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-380'/>\n   <rect id='svg_871f90f873579365_e84' x='311.58' y='289.31' width='2.72' height='14.68' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-461'/>\n   <rect id='svg_871f90f873579365_e85' x='314.6' y='289.31' width='2.72' height='14.17' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-445'/>\n   <rect id='svg_871f90f873579365_e86' x='317.63' y='289.31' width='2.72' height='14.23' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-447'/>\n   <rect id='svg_871f90f873579365_e87' x='320.66' y='289.31' width='2.72' height='13.92' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-437'/>\n   <rect id='svg_871f90f873579365_e88' x='323.69' y='289.31' width='2.72' height='13.85' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-435'/>\n   <rect id='svg_871f90f873579365_e89' x='326.72' y='289.31' width='2.72' height='13.28' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-417'/>\n   <rect id='svg_871f90f873579365_e90' x='329.74' y='289.31' width='2.72' height='14.27' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-448'/>\n   <rect id='svg_871f90f873579365_e91' x='332.77' y='289.31' width='2.72' height='14.27' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-448'/>\n   <rect id='svg_871f90f873579365_e92' x='335.8' y='289.31' width='2.72' height='14.74' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-463'/>\n   <rect id='svg_871f90f873579365_e93' x='338.83' y='289.31' width='2.72' height='14.58' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-458'/>\n   <rect id='svg_871f90f873579365_e94' x='341.85' y='289.31' width='2.72' height='15' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-471'/>\n   <rect id='svg_871f90f873579365_e95' x='344.88' y='289.31' width='2.72' height='15.16' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-476'/>\n   <rect id='svg_871f90f873579365_e96' x='347.91' y='289.31' width='2.72' height='15.51' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-487'/>\n   <rect id='svg_871f90f873579365_e97' x='350.94' y='289.31' width='2.72' height='14.87' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-467'/>\n   <rect id='svg_871f90f873579365_e98' x='353.96' y='289.31' width='2.72' height='14.68' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-461'/>\n   <rect id='svg_871f90f873579365_e99' x='356.99' y='289.31' width='2.72' height='15.29' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-480'/>\n   <rect id='svg_871f90f873579365_e100' x='360.02' y='289.31' width='2.72' height='15.41' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-484'/>\n   <rect id='svg_871f90f873579365_e101' x='363.05' y='289.31' width='2.72' height='14.81' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-465'/>\n   <rect id='svg_871f90f873579365_e102' x='366.08' y='289.31' width='2.72' height='14.52' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-456'/>\n   <rect id='svg_871f90f873579365_e103' x='369.1' y='289.31' width='2.72' height='14.84' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-466'/>\n   <rect id='svg_871f90f873579365_e104' x='372.13' y='289.31' width='2.72' height='13.6' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-427'/>\n   <rect id='svg_871f90f873579365_e105' x='375.16' y='289.31' width='2.72' height='13.28' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-417'/>\n   <rect id='svg_871f90f873579365_e106' x='378.19' y='289.31' width='2.72' height='13.12' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-412'/>\n   <rect id='svg_871f90f873579365_e107' x='381.21' y='289.31' width='2.72' height='13.18' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-414'/>\n   <rect id='svg_871f90f873579365_e108' x='384.24' y='289.31' width='2.72' height='13.06' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-410'/>\n   <rect id='svg_871f90f873579365_e109' x='387.27' y='289.31' width='2.72' height='13.76' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-432'/>\n   <rect id='svg_871f90f873579365_e110' x='390.3' y='289.31' width='2.72' height='13.6' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-427'/>\n   <rect id='svg_871f90f873579365_e111' x='393.32' y='289.31' width='2.72' height='13.5' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-424'/>\n   <rect id='svg_871f90f873579365_e112' x='396.35' y='289.31' width='2.72' height='14.04' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-441'/>\n   <rect id='svg_871f90f873579365_e113' x='399.38' y='289.31' width='2.72' height='15.89' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-499'/>\n   <rect id='svg_871f90f873579365_e114' x='402.41' y='289.31' width='2.72' height='15.99' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-502'/>\n   <rect id='svg_871f90f873579365_e115' x='405.43' y='289.31' width='2.72' height='16.85' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-529'/>\n   <rect id='svg_871f90f873579365_e116' x='408.46' y='289.31' width='2.72' height='17.58' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-552'/>\n   <rect id='svg_871f90f873579365_e117' x='411.49' y='289.31' width='2.72' height='17.26' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-542'/>\n   <rect id='svg_871f90f873579365_e118' x='414.52' y='289.31' width='2.72' height='16.97' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-533'/>\n   <rect id='svg_871f90f873579365_e119' x='417.55' y='289.31' width='2.72' height='17.13' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-538'/>\n   <rect id='svg_871f90f873579365_e120' x='420.57' y='289.31' width='2.72' height='17.39' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-546'/>\n   <rect id='svg_871f90f873579365_e121' x='423.6' y='289.31' width='2.72' height='17.8' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-559'/>\n   <rect id='svg_871f90f873579365_e122' x='426.63' y='289.31' width='2.72' height='18.66' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-586'/>\n   <rect id='svg_871f90f873579365_e123' x='429.66' y='289.31' width='2.72' height='18.85' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-592'/>\n   <rect id='svg_871f90f873579365_e124' x='432.68' y='289.31' width='2.72' height='18.69' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-587'/>\n   <rect id='svg_871f90f873579365_e125' x='438.74' y='289.31' width='2.72' height='19.49' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-612'/>\n   <rect id='svg_871f90f873579365_e126' x='441.77' y='289.31' width='2.72' height='19.33' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-607'/>\n   <rect id='svg_871f90f873579365_e127' x='444.79' y='289.31' width='2.72' height='20.51' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-644'/>\n   <rect id='svg_871f90f873579365_e128' x='447.82' y='289.31' width='2.72' height='21.08' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-662'/>\n   <rect id='svg_871f90f873579365_e129' x='450.85' y='289.31' width='2.72' height='21.21' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-666'/>\n   <rect id='svg_871f90f873579365_e130' x='453.88' y='289.31' width='2.72' height='21.53' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-676'/>\n   <rect id='svg_871f90f873579365_e131' x='456.91' y='289.31' width='2.72' height='21.88' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-687'/>\n   <rect id='svg_871f90f873579365_e132' x='459.93' y='289.31' width='2.72' height='22.1' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-694'/>\n   <rect id='svg_871f90f873579365_e133' x='462.96' y='289.31' width='2.72' height='22.58' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-709'/>\n   <rect id='svg_871f90f873579365_e134' x='465.99' y='289.31' width='2.72' height='22.8' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-716'/>\n   <rect id='svg_871f90f873579365_e135' x='469.02' y='289.31' width='2.72' height='23.34' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-733'/>\n   <rect id='svg_871f90f873579365_e136' x='472.04' y='289.31' width='2.72' height='24.43' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-767'/>\n   <rect id='svg_871f90f873579365_e137' x='475.07' y='289.31' width='2.72' height='26.88' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-844'/>\n  <\/g>\n  <g clip-path='url(#svg_871f90f873579365_c1)'>\n   <polyline points='42.58,329.12 42.58,44.68' fill='none' stroke='#000000' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='square'/>\n   <text x='32.76' y='292.34' font-size='6.6pt' font-family='Liberation Sans'>0<\/text>\n   <text x='18.07' y='228.65' font-size='6.6pt' font-family='Liberation Sans'>2000<\/text>\n   <text x='18.07' y='164.96' font-size='6.6pt' font-family='Liberation Sans'>4000<\/text>\n   <text x='18.07' y='101.27' font-size='6.6pt' font-family='Liberation Sans'>6000<\/text>\n   <polyline points='39.84,289.31 42.58,289.31' fill='none' stroke='#000000' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='39.84,225.62 42.58,225.62' fill='none' stroke='#000000' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='39.84,161.93 42.58,161.93' fill='none' stroke='#000000' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='39.84,98.24 42.58,98.24' fill='none' stroke='#000000' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='42.58,329.12 498.52,329.12' fill='none' stroke='#000000' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='square'/>\n   <polyline points='61.64,331.86 61.64,329.12' fill='none' stroke='#000000' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='213.03,331.86 213.03,329.12' fill='none' stroke='#000000' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='364.41,331.86 364.41,329.12' fill='none' stroke='#000000' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <text x='59.2' y='340.1' font-size='6.6pt' font-family='Liberation Sans'>0<\/text>\n   <text x='208.13' y='340.1' font-size='6.6pt' font-family='Liberation Sans'>50<\/text>\n   <text x='357.07' y='340.1' font-size='6.6pt' font-family='Liberation Sans'>100<\/text>\n   <text x='250.98' y='352.24' font-size='8.25pt' font-family='Liberation Sans'>Chapter<\/text>\n   <text transform='translate(13.05,284.45) rotate(-90.00)' font-size='8.25pt' font-family='Liberation Sans'>Cumulative count of words by sentiment<\/text>\n   <rect x='208.02' y='5.48' width='125.07' height='28.24' fill='#FFFFFF' fill-opacity='1' stroke='none'/>\n   <rect x='213.5' y='10.96' width='17.28' height='17.28' fill='#FFFFFF' fill-opacity='1' stroke='none'/>\n   <line x1='215.22' y1='19.6' x2='229.05' y2='19.6' stroke='#EE0000' stroke-opacity='1' stroke-width='6.4' stroke-linejoin='round' stroke-linecap='butt'/>\n   <rect x='275.01' y='10.96' width='17.28' height='17.28' fill='#FFFFFF' fill-opacity='1' stroke='none'/>\n   <line x1='276.74' y1='19.6' x2='290.56' y2='19.6' stroke='#228B22' stroke-opacity='1' stroke-width='6.4' stroke-linejoin='round' stroke-linecap='butt'/>\n   <text x='236.26' y='22.63' font-size='6.6pt' font-family='Liberation Sans'>negative<\/text>\n   <text x='297.77' y='22.63' font-size='6.6pt' font-family='Liberation Sans'>positive<\/text>\n  <\/g>\n <\/g>\n<\/svg>","js":null,"uid":"svg_871f90f873579365","ratio":1.4,"settings":{"tooltip":{"css":".tooltip_SVGID_ { background-color:blue;color:white ; position:absolute;pointer-events:none;z-index:9999;}","placement":"doc","opacity":0.8,"offx":10,"offy":10,"use_cursor_pos":true,"use_fill":false,"use_stroke":false,"delay_over":200,"delay_out":500},"hover":{"css":".hover_data_SVGID_ { fill:orange;stroke:black;cursor:pointer; }\ntext.hover_data_SVGID_ { stroke:none;fill:orange; }\ncircle.hover_data_SVGID_ { fill:orange;stroke:black; }\nline.hover_data_SVGID_, polyline.hover_data_SVGID_ { fill:none;stroke:orange; }\nrect.hover_data_SVGID_, polygon.hover_data_SVGID_, path.hover_data_SVGID_ { fill:orange;stroke:none; }\nimage.hover_data_SVGID_ { stroke:orange; }","reactive":true,"nearest_distance":null,"linked":false},"hover_inv":{"css":".hover_inv_SVGID_ { opacity:0.1; }"},"hover_key":{"css":".hover_key_SVGID_ { fill:orange;stroke:black;cursor:pointer; }\ntext.hover_key_SVGID_ { stroke:none;fill:orange; }\ncircle.hover_key_SVGID_ { fill:orange;stroke:black; }\nline.hover_key_SVGID_, polyline.hover_key_SVGID_ { fill:none;stroke:orange; }\nrect.hover_key_SVGID_, polygon.hover_key_SVGID_, path.hover_key_SVGID_ { fill:orange;stroke:none; }\nimage.hover_key_SVGID_ { stroke:orange; }","reactive":true},"hover_theme":{"css":".hover_theme_SVGID_ { fill:orange;stroke:black;cursor:pointer; }\ntext.hover_theme_SVGID_ { stroke:none;fill:orange; }\ncircle.hover_theme_SVGID_ { fill:orange;stroke:black; }\nline.hover_theme_SVGID_, polyline.hover_theme_SVGID_ { fill:none;stroke:orange; }\nrect.hover_theme_SVGID_, polygon.hover_theme_SVGID_, path.hover_theme_SVGID_ { fill:orange;stroke:none; }\nimage.hover_theme_SVGID_ { stroke:orange; }","reactive":true},"select":{"css":".select_data_SVGID_ { fill:red;stroke:black;cursor:pointer; }\ntext.select_data_SVGID_ { stroke:none;fill:red; }\ncircle.select_data_SVGID_ { fill:red;stroke:black; }\nline.select_data_SVGID_, polyline.select_data_SVGID_ { fill:none;stroke:red; }\nrect.select_data_SVGID_, polygon.select_data_SVGID_, path.select_data_SVGID_ { fill:red;stroke:none; }\nimage.select_data_SVGID_ { stroke:red; }","type":"multiple","only_shiny":true,"selected":[],"linked":false},"select_inv":{"css":""},"select_key":{"css":".select_key_SVGID_ { fill:red;stroke:black;cursor:pointer; }\ntext.select_key_SVGID_ { stroke:none;fill:red; }\ncircle.select_key_SVGID_ { fill:red;stroke:black; }\nline.select_key_SVGID_, polyline.select_key_SVGID_ { fill:none;stroke:red; }\nrect.select_key_SVGID_, polygon.select_key_SVGID_, path.select_key_SVGID_ { fill:red;stroke:none; }\nimage.select_key_SVGID_ { stroke:red; }","type":"single","only_shiny":true,"selected":[]},"select_theme":{"css":".select_theme_SVGID_ { fill:red;stroke:black;cursor:pointer; }\ntext.select_theme_SVGID_ { stroke:none;fill:red; }\ncircle.select_theme_SVGID_ { fill:red;stroke:black; }\nline.select_theme_SVGID_, polyline.select_theme_SVGID_ { fill:none;stroke:red; }\nrect.select_theme_SVGID_, polygon.select_theme_SVGID_, path.select_theme_SVGID_ { fill:red;stroke:none; }\nimage.select_theme_SVGID_ { stroke:red; }","type":"single","only_shiny":true,"selected":[]},"zoom":{"min":1,"max":4,"duration":300,"default_on":false},"toolbar":{"position":"topright","pngname":"diagram","tooltips":null,"fixed":false,"hidden":[],"delay_over":200,"delay_out":500},"sizing":{"rescale":true,"width":1}}},"evals":[],"jsHooks":[]}</script>
+<div class="girafe html-widget html-fill-item" id="htmlwidget-2a508fe79abd9fcae6e9" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-2a508fe79abd9fcae6e9">{"x":{"html":"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' class='ggiraph-svg' role='graphics-document' id='svg_d7c6455e8c0714f8' viewBox='0 0 504 360'>\n <defs id='svg_d7c6455e8c0714f8_defs'>\n  <clipPath id='svg_d7c6455e8c0714f8_c1'>\n   <rect x='0' y='0' width='504' height='360'/>\n  <\/clipPath>\n  <clipPath id='svg_d7c6455e8c0714f8_c2'>\n   <rect x='42.58' y='44.68' width='455.94' height='284.44'/>\n  <\/clipPath>\n <\/defs>\n <g id='svg_d7c6455e8c0714f8_rootg' class='ggiraph-svg-rootg'>\n  <g clip-path='url(#svg_d7c6455e8c0714f8_c1)'>\n   <rect x='0' y='0' width='504' height='360' fill='#FFFFFF' fill-opacity='1' stroke='#FFFFFF' stroke-opacity='1' stroke-width='0.75' stroke-linejoin='round' stroke-linecap='round' class='ggiraph-svg-bg'/>\n   <rect x='0' y='0' width='504' height='360' fill='#FFFFFF' fill-opacity='1' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='round'/>\n  <\/g>\n  <g clip-path='url(#svg_d7c6455e8c0714f8_c2)'>\n   <rect x='42.58' y='44.68' width='455.94' height='284.44' fill='#FFFFFF' fill-opacity='1' stroke='none'/>\n   <polyline id='svg_d7c6455e8c0714f8_e1' points='434.05,107.89 437.07,107.86' fill='none' stroke='#228B22' stroke-opacity='1' stroke-width='6.4' stroke-linejoin='round' stroke-linecap='butt' data-id='positive' title='positive'/>\n   <rect id='svg_d7c6455e8c0714f8_e2' x='63.31' y='288.26' width='2.72' height='1.05' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='33'/>\n   <rect id='svg_d7c6455e8c0714f8_e3' x='66.34' y='288.99' width='2.72' height='0.32' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='10'/>\n   <rect id='svg_d7c6455e8c0714f8_e4' x='69.36' y='289.31' width='2.72' height='1.5' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-47'/>\n   <rect id='svg_d7c6455e8c0714f8_e5' x='72.39' y='289.31' width='2.72' height='2.13' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-67'/>\n   <rect id='svg_d7c6455e8c0714f8_e6' x='75.42' y='289.31' width='2.72' height='1.56' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-49'/>\n   <rect id='svg_d7c6455e8c0714f8_e7' x='78.45' y='289.31' width='2.72' height='1.21' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-38'/>\n   <rect id='svg_d7c6455e8c0714f8_e8' x='81.47' y='289.31' width='2.72' height='2.1' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-66'/>\n   <rect id='svg_d7c6455e8c0714f8_e9' x='84.5' y='289.31' width='2.72' height='1.4' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-44'/>\n   <rect id='svg_d7c6455e8c0714f8_e10' x='87.53' y='289.31' width='2.72' height='4.08' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-128'/>\n   <rect id='svg_d7c6455e8c0714f8_e11' x='90.56' y='289.31' width='2.72' height='3.89' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-122'/>\n   <rect id='svg_d7c6455e8c0714f8_e12' x='93.59' y='289.31' width='2.72' height='3.57' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-112'/>\n   <rect id='svg_d7c6455e8c0714f8_e13' x='96.61' y='289.31' width='2.72' height='3.95' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-124'/>\n   <rect id='svg_d7c6455e8c0714f8_e14' x='99.64' y='289.31' width='2.72' height='3.25' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-102'/>\n   <rect id='svg_d7c6455e8c0714f8_e15' x='102.67' y='289.31' width='2.72' height='3.31' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-104'/>\n   <rect id='svg_d7c6455e8c0714f8_e16' x='105.7' y='289.31' width='2.72' height='2.99' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-94'/>\n   <rect id='svg_d7c6455e8c0714f8_e17' x='108.72' y='289.31' width='2.72' height='2.77' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-87'/>\n   <rect id='svg_d7c6455e8c0714f8_e18' x='111.75' y='289.31' width='2.72' height='3.98' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-125'/>\n   <rect id='svg_d7c6455e8c0714f8_e19' x='114.78' y='289.31' width='2.72' height='4.01' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-126'/>\n   <rect id='svg_d7c6455e8c0714f8_e20' x='117.81' y='289.31' width='2.72' height='4.49' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-141'/>\n   <rect id='svg_d7c6455e8c0714f8_e21' x='120.83' y='289.31' width='2.72' height='4.14' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-130'/>\n   <rect id='svg_d7c6455e8c0714f8_e22' x='123.86' y='289.31' width='2.72' height='4.17' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-131'/>\n   <rect id='svg_d7c6455e8c0714f8_e23' x='126.89' y='289.31' width='2.72' height='3.89' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-122'/>\n   <rect id='svg_d7c6455e8c0714f8_e24' x='129.92' y='289.31' width='2.72' height='4.27' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-134'/>\n   <rect id='svg_d7c6455e8c0714f8_e25' x='132.94' y='289.31' width='2.72' height='3.38' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-106'/>\n   <rect id='svg_d7c6455e8c0714f8_e26' x='135.97' y='289.31' width='2.72' height='3.09' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-97'/>\n   <rect id='svg_d7c6455e8c0714f8_e27' x='139' y='289.31' width='2.72' height='2.93' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-92'/>\n   <rect id='svg_d7c6455e8c0714f8_e28' x='142.03' y='289.31' width='2.72' height='2.74' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-86'/>\n   <rect id='svg_d7c6455e8c0714f8_e29' x='145.06' y='289.31' width='2.72' height='2.67' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-84'/>\n   <rect id='svg_d7c6455e8c0714f8_e30' x='148.08' y='289.31' width='2.72' height='3.18' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-100'/>\n   <rect id='svg_d7c6455e8c0714f8_e31' x='151.11' y='289.31' width='2.72' height='3.25' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-102'/>\n   <rect id='svg_d7c6455e8c0714f8_e32' x='154.14' y='289.31' width='2.72' height='3.28' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-103'/>\n   <rect id='svg_d7c6455e8c0714f8_e33' x='157.17' y='289.31' width='2.72' height='3.28' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-103'/>\n   <rect id='svg_d7c6455e8c0714f8_e34' x='160.19' y='289.31' width='2.72' height='1.88' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-59'/>\n   <rect id='svg_d7c6455e8c0714f8_e35' x='163.22' y='289.31' width='2.72' height='1.56' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-49'/>\n   <rect id='svg_d7c6455e8c0714f8_e36' x='166.25' y='289.31' width='2.72' height='1.46' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-46'/>\n   <rect id='svg_d7c6455e8c0714f8_e37' x='169.28' y='289.31' width='2.72' height='1.37' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-43'/>\n   <rect id='svg_d7c6455e8c0714f8_e38' x='172.3' y='289.31' width='2.72' height='2.87' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-90'/>\n   <rect id='svg_d7c6455e8c0714f8_e39' x='175.33' y='289.31' width='2.72' height='2.99' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-94'/>\n   <rect id='svg_d7c6455e8c0714f8_e40' x='178.36' y='289.31' width='2.72' height='3.47' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-109'/>\n   <rect id='svg_d7c6455e8c0714f8_e41' x='181.39' y='289.31' width='2.72' height='3.34' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-105'/>\n   <rect id='svg_d7c6455e8c0714f8_e42' x='184.42' y='289.31' width='2.72' height='3.5' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-110'/>\n   <rect id='svg_d7c6455e8c0714f8_e43' x='187.44' y='289.31' width='2.72' height='6.91' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-217'/>\n   <rect id='svg_d7c6455e8c0714f8_e44' x='190.47' y='289.31' width='2.72' height='7.93' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-249'/>\n   <rect id='svg_d7c6455e8c0714f8_e45' x='193.5' y='289.31' width='2.72' height='7.93' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-249'/>\n   <rect id='svg_d7c6455e8c0714f8_e46' x='196.53' y='289.31' width='2.72' height='8.73' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-274'/>\n   <rect id='svg_d7c6455e8c0714f8_e47' x='199.55' y='289.31' width='2.72' height='9.43' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-296'/>\n   <rect id='svg_d7c6455e8c0714f8_e48' x='202.58' y='289.31' width='2.72' height='9.49' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-298'/>\n   <rect id='svg_d7c6455e8c0714f8_e49' x='205.61' y='289.31' width='2.72' height='9.81' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-308'/>\n   <rect id='svg_d7c6455e8c0714f8_e50' x='208.64' y='289.31' width='2.72' height='9.97' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-313'/>\n   <rect id='svg_d7c6455e8c0714f8_e51' x='211.66' y='289.31' width='2.72' height='9.9' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-311'/>\n   <rect id='svg_d7c6455e8c0714f8_e52' x='214.69' y='289.31' width='2.72' height='9.94' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-312'/>\n   <rect id='svg_d7c6455e8c0714f8_e53' x='217.72' y='289.31' width='2.72' height='10.48' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-329'/>\n   <rect id='svg_d7c6455e8c0714f8_e54' x='220.75' y='289.31' width='2.72' height='10.54' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-331'/>\n   <rect id='svg_d7c6455e8c0714f8_e55' x='223.77' y='289.31' width='2.72' height='10.13' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-318'/>\n   <rect id='svg_d7c6455e8c0714f8_e56' x='226.8' y='289.31' width='2.72' height='13.02' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-409'/>\n   <rect id='svg_d7c6455e8c0714f8_e57' x='229.83' y='289.31' width='2.72' height='11.85' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-372'/>\n   <rect id='svg_d7c6455e8c0714f8_e58' x='232.86' y='289.31' width='2.72' height='11.88' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-373'/>\n   <rect id='svg_d7c6455e8c0714f8_e59' x='235.89' y='289.31' width='2.72' height='10.95' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-344'/>\n   <rect id='svg_d7c6455e8c0714f8_e60' x='238.91' y='289.31' width='2.72' height='11.11' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-349'/>\n   <rect id='svg_d7c6455e8c0714f8_e61' x='241.94' y='289.31' width='2.72' height='11.15' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-350'/>\n   <rect id='svg_d7c6455e8c0714f8_e62' x='244.97' y='289.31' width='2.72' height='11.08' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-348'/>\n   <rect id='svg_d7c6455e8c0714f8_e63' x='248' y='289.31' width='2.72' height='11.18' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-351'/>\n   <rect id='svg_d7c6455e8c0714f8_e64' x='251.02' y='289.31' width='2.72' height='11.5' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-361'/>\n   <rect id='svg_d7c6455e8c0714f8_e65' x='254.05' y='289.31' width='2.72' height='11.62' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-365'/>\n   <rect id='svg_d7c6455e8c0714f8_e66' x='257.08' y='289.31' width='2.72' height='11.56' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-363'/>\n   <rect id='svg_d7c6455e8c0714f8_e67' x='260.11' y='289.31' width='2.72' height='11.66' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-366'/>\n   <rect id='svg_d7c6455e8c0714f8_e68' x='263.13' y='289.31' width='2.72' height='11.27' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-354'/>\n   <rect id='svg_d7c6455e8c0714f8_e69' x='266.16' y='289.31' width='2.72' height='11.62' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-365'/>\n   <rect id='svg_d7c6455e8c0714f8_e70' x='269.19' y='289.31' width='2.72' height='11.18' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-351'/>\n   <rect id='svg_d7c6455e8c0714f8_e71' x='272.22' y='289.31' width='2.72' height='10.25' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-322'/>\n   <rect id='svg_d7c6455e8c0714f8_e72' x='275.25' y='289.31' width='2.72' height='10.67' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-335'/>\n   <rect id='svg_d7c6455e8c0714f8_e73' x='278.27' y='289.31' width='2.72' height='10.64' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-334'/>\n   <rect id='svg_d7c6455e8c0714f8_e74' x='281.3' y='289.31' width='2.72' height='12.74' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-400'/>\n   <rect id='svg_d7c6455e8c0714f8_e75' x='284.33' y='289.31' width='2.72' height='13.44' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-422'/>\n   <rect id='svg_d7c6455e8c0714f8_e76' x='287.36' y='289.31' width='2.72' height='14.2' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-446'/>\n   <rect id='svg_d7c6455e8c0714f8_e77' x='290.38' y='289.31' width='2.72' height='14.3' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-449'/>\n   <rect id='svg_d7c6455e8c0714f8_e78' x='293.41' y='289.31' width='2.72' height='13.82' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-434'/>\n   <rect id='svg_d7c6455e8c0714f8_e79' x='296.44' y='289.31' width='2.72' height='13.69' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-430'/>\n   <rect id='svg_d7c6455e8c0714f8_e80' x='299.47' y='289.31' width='2.72' height='13.15' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-413'/>\n   <rect id='svg_d7c6455e8c0714f8_e81' x='302.49' y='289.31' width='2.72' height='12.48' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-392'/>\n   <rect id='svg_d7c6455e8c0714f8_e82' x='305.52' y='289.31' width='2.72' height='12.2' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-383'/>\n   <rect id='svg_d7c6455e8c0714f8_e83' x='308.55' y='289.31' width='2.72' height='12.1' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-380'/>\n   <rect id='svg_d7c6455e8c0714f8_e84' x='311.58' y='289.31' width='2.72' height='14.68' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-461'/>\n   <rect id='svg_d7c6455e8c0714f8_e85' x='314.6' y='289.31' width='2.72' height='14.17' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-445'/>\n   <rect id='svg_d7c6455e8c0714f8_e86' x='317.63' y='289.31' width='2.72' height='14.23' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-447'/>\n   <rect id='svg_d7c6455e8c0714f8_e87' x='320.66' y='289.31' width='2.72' height='13.92' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-437'/>\n   <rect id='svg_d7c6455e8c0714f8_e88' x='323.69' y='289.31' width='2.72' height='13.85' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-435'/>\n   <rect id='svg_d7c6455e8c0714f8_e89' x='326.72' y='289.31' width='2.72' height='13.28' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-417'/>\n   <rect id='svg_d7c6455e8c0714f8_e90' x='329.74' y='289.31' width='2.72' height='14.27' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-448'/>\n   <rect id='svg_d7c6455e8c0714f8_e91' x='332.77' y='289.31' width='2.72' height='14.27' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-448'/>\n   <rect id='svg_d7c6455e8c0714f8_e92' x='335.8' y='289.31' width='2.72' height='14.74' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-463'/>\n   <rect id='svg_d7c6455e8c0714f8_e93' x='338.83' y='289.31' width='2.72' height='14.58' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-458'/>\n   <rect id='svg_d7c6455e8c0714f8_e94' x='341.85' y='289.31' width='2.72' height='15' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-471'/>\n   <rect id='svg_d7c6455e8c0714f8_e95' x='344.88' y='289.31' width='2.72' height='15.16' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-476'/>\n   <rect id='svg_d7c6455e8c0714f8_e96' x='347.91' y='289.31' width='2.72' height='15.51' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-487'/>\n   <rect id='svg_d7c6455e8c0714f8_e97' x='350.94' y='289.31' width='2.72' height='14.87' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-467'/>\n   <rect id='svg_d7c6455e8c0714f8_e98' x='353.96' y='289.31' width='2.72' height='14.68' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-461'/>\n   <rect id='svg_d7c6455e8c0714f8_e99' x='356.99' y='289.31' width='2.72' height='15.29' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-480'/>\n   <rect id='svg_d7c6455e8c0714f8_e100' x='360.02' y='289.31' width='2.72' height='15.41' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-484'/>\n   <rect id='svg_d7c6455e8c0714f8_e101' x='363.05' y='289.31' width='2.72' height='14.81' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-465'/>\n   <rect id='svg_d7c6455e8c0714f8_e102' x='366.08' y='289.31' width='2.72' height='14.52' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-456'/>\n   <rect id='svg_d7c6455e8c0714f8_e103' x='369.1' y='289.31' width='2.72' height='14.84' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-466'/>\n   <rect id='svg_d7c6455e8c0714f8_e104' x='372.13' y='289.31' width='2.72' height='13.6' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-427'/>\n   <rect id='svg_d7c6455e8c0714f8_e105' x='375.16' y='289.31' width='2.72' height='13.28' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-417'/>\n   <rect id='svg_d7c6455e8c0714f8_e106' x='378.19' y='289.31' width='2.72' height='13.12' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-412'/>\n   <rect id='svg_d7c6455e8c0714f8_e107' x='381.21' y='289.31' width='2.72' height='13.18' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-414'/>\n   <rect id='svg_d7c6455e8c0714f8_e108' x='384.24' y='289.31' width='2.72' height='13.06' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-410'/>\n   <rect id='svg_d7c6455e8c0714f8_e109' x='387.27' y='289.31' width='2.72' height='13.76' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-432'/>\n   <rect id='svg_d7c6455e8c0714f8_e110' x='390.3' y='289.31' width='2.72' height='13.6' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-427'/>\n   <rect id='svg_d7c6455e8c0714f8_e111' x='393.32' y='289.31' width='2.72' height='13.5' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-424'/>\n   <rect id='svg_d7c6455e8c0714f8_e112' x='396.35' y='289.31' width='2.72' height='14.04' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-441'/>\n   <rect id='svg_d7c6455e8c0714f8_e113' x='399.38' y='289.31' width='2.72' height='15.89' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-499'/>\n   <rect id='svg_d7c6455e8c0714f8_e114' x='402.41' y='289.31' width='2.72' height='15.99' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-502'/>\n   <rect id='svg_d7c6455e8c0714f8_e115' x='405.43' y='289.31' width='2.72' height='16.85' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-529'/>\n   <rect id='svg_d7c6455e8c0714f8_e116' x='408.46' y='289.31' width='2.72' height='17.58' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-552'/>\n   <rect id='svg_d7c6455e8c0714f8_e117' x='411.49' y='289.31' width='2.72' height='17.26' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-542'/>\n   <rect id='svg_d7c6455e8c0714f8_e118' x='414.52' y='289.31' width='2.72' height='16.97' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-533'/>\n   <rect id='svg_d7c6455e8c0714f8_e119' x='417.55' y='289.31' width='2.72' height='17.13' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-538'/>\n   <rect id='svg_d7c6455e8c0714f8_e120' x='420.57' y='289.31' width='2.72' height='17.39' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-546'/>\n   <rect id='svg_d7c6455e8c0714f8_e121' x='423.6' y='289.31' width='2.72' height='17.8' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-559'/>\n   <rect id='svg_d7c6455e8c0714f8_e122' x='426.63' y='289.31' width='2.72' height='18.66' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-586'/>\n   <rect id='svg_d7c6455e8c0714f8_e123' x='429.66' y='289.31' width='2.72' height='18.85' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-592'/>\n   <rect id='svg_d7c6455e8c0714f8_e124' x='432.68' y='289.31' width='2.72' height='18.69' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-587'/>\n   <rect id='svg_d7c6455e8c0714f8_e125' x='438.74' y='289.31' width='2.72' height='19.49' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-612'/>\n   <rect id='svg_d7c6455e8c0714f8_e126' x='441.77' y='289.31' width='2.72' height='19.33' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-607'/>\n   <rect id='svg_d7c6455e8c0714f8_e127' x='444.79' y='289.31' width='2.72' height='20.51' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-644'/>\n   <rect id='svg_d7c6455e8c0714f8_e128' x='447.82' y='289.31' width='2.72' height='21.08' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-662'/>\n   <rect id='svg_d7c6455e8c0714f8_e129' x='450.85' y='289.31' width='2.72' height='21.21' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-666'/>\n   <rect id='svg_d7c6455e8c0714f8_e130' x='453.88' y='289.31' width='2.72' height='21.53' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-676'/>\n   <rect id='svg_d7c6455e8c0714f8_e131' x='456.91' y='289.31' width='2.72' height='21.88' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-687'/>\n   <rect id='svg_d7c6455e8c0714f8_e132' x='459.93' y='289.31' width='2.72' height='22.1' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-694'/>\n   <rect id='svg_d7c6455e8c0714f8_e133' x='462.96' y='289.31' width='2.72' height='22.58' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-709'/>\n   <rect id='svg_d7c6455e8c0714f8_e134' x='465.99' y='289.31' width='2.72' height='22.8' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-716'/>\n   <rect id='svg_d7c6455e8c0714f8_e135' x='469.02' y='289.31' width='2.72' height='23.34' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-733'/>\n   <rect id='svg_d7c6455e8c0714f8_e136' x='472.04' y='289.31' width='2.72' height='24.43' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-767'/>\n   <rect id='svg_d7c6455e8c0714f8_e137' x='475.07' y='289.31' width='2.72' height='26.88' fill='#4169E1' fill-opacity='1' stroke='none' data-id='positive' title='-844'/>\n  <\/g>\n  <g clip-path='url(#svg_d7c6455e8c0714f8_c1)'>\n   <polyline points='42.58,329.12 42.58,44.68' fill='none' stroke='#000000' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='square'/>\n   <text x='32.76' y='292.34' font-size='6.6pt' font-family='Liberation Sans'>0<\/text>\n   <text x='18.07' y='228.65' font-size='6.6pt' font-family='Liberation Sans'>2000<\/text>\n   <text x='18.07' y='164.96' font-size='6.6pt' font-family='Liberation Sans'>4000<\/text>\n   <text x='18.07' y='101.27' font-size='6.6pt' font-family='Liberation Sans'>6000<\/text>\n   <polyline points='39.84,289.31 42.58,289.31' fill='none' stroke='#000000' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='39.84,225.62 42.58,225.62' fill='none' stroke='#000000' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='39.84,161.93 42.58,161.93' fill='none' stroke='#000000' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='39.84,98.24 42.58,98.24' fill='none' stroke='#000000' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='42.58,329.12 498.52,329.12' fill='none' stroke='#000000' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='square'/>\n   <polyline points='61.64,331.86 61.64,329.12' fill='none' stroke='#000000' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='213.03,331.86 213.03,329.12' fill='none' stroke='#000000' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='364.41,331.86 364.41,329.12' fill='none' stroke='#000000' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <text x='59.2' y='340.1' font-size='6.6pt' font-family='Liberation Sans'>0<\/text>\n   <text x='208.13' y='340.1' font-size='6.6pt' font-family='Liberation Sans'>50<\/text>\n   <text x='357.07' y='340.1' font-size='6.6pt' font-family='Liberation Sans'>100<\/text>\n   <text x='250.98' y='352.24' font-size='8.25pt' font-family='Liberation Sans'>Chapter<\/text>\n   <text transform='translate(13.05,284.45) rotate(-90.00)' font-size='8.25pt' font-family='Liberation Sans'>Cumulative count of words by sentiment<\/text>\n   <rect x='208.02' y='5.48' width='125.07' height='28.24' fill='#FFFFFF' fill-opacity='1' stroke='none'/>\n   <rect x='213.5' y='10.96' width='17.28' height='17.28' fill='#FFFFFF' fill-opacity='1' stroke='none'/>\n   <line x1='215.22' y1='19.6' x2='229.05' y2='19.6' stroke='#EE0000' stroke-opacity='1' stroke-width='6.4' stroke-linejoin='round' stroke-linecap='butt'/>\n   <rect x='275.01' y='10.96' width='17.28' height='17.28' fill='#FFFFFF' fill-opacity='1' stroke='none'/>\n   <line x1='276.74' y1='19.6' x2='290.56' y2='19.6' stroke='#228B22' stroke-opacity='1' stroke-width='6.4' stroke-linejoin='round' stroke-linecap='butt'/>\n   <text x='236.26' y='22.63' font-size='6.6pt' font-family='Liberation Sans'>negative<\/text>\n   <text x='297.77' y='22.63' font-size='6.6pt' font-family='Liberation Sans'>positive<\/text>\n  <\/g>\n <\/g>\n<\/svg>","js":null,"uid":"svg_d7c6455e8c0714f8","ratio":1.4,"settings":{"tooltip":{"css":".tooltip_SVGID_ { background-color:blue;color:white ; position:absolute;pointer-events:none;z-index:9999;}","placement":"doc","opacity":0.8,"offx":10,"offy":10,"use_cursor_pos":true,"use_fill":false,"use_stroke":false,"delay_over":200,"delay_out":500},"hover":{"css":".hover_data_SVGID_ { fill:orange;stroke:black;cursor:pointer; }\ntext.hover_data_SVGID_ { stroke:none;fill:orange; }\ncircle.hover_data_SVGID_ { fill:orange;stroke:black; }\nline.hover_data_SVGID_, polyline.hover_data_SVGID_ { fill:none;stroke:orange; }\nrect.hover_data_SVGID_, polygon.hover_data_SVGID_, path.hover_data_SVGID_ { fill:orange;stroke:none; }\nimage.hover_data_SVGID_ { stroke:orange; }","reactive":true,"nearest_distance":null,"linked":false},"hover_inv":{"css":".hover_inv_SVGID_ { opacity:0.1; }"},"hover_key":{"css":".hover_key_SVGID_ { fill:orange;stroke:black;cursor:pointer; }\ntext.hover_key_SVGID_ { stroke:none;fill:orange; }\ncircle.hover_key_SVGID_ { fill:orange;stroke:black; }\nline.hover_key_SVGID_, polyline.hover_key_SVGID_ { fill:none;stroke:orange; }\nrect.hover_key_SVGID_, polygon.hover_key_SVGID_, path.hover_key_SVGID_ { fill:orange;stroke:none; }\nimage.hover_key_SVGID_ { stroke:orange; }","reactive":true},"hover_theme":{"css":".hover_theme_SVGID_ { fill:orange;stroke:black;cursor:pointer; }\ntext.hover_theme_SVGID_ { stroke:none;fill:orange; }\ncircle.hover_theme_SVGID_ { fill:orange;stroke:black; }\nline.hover_theme_SVGID_, polyline.hover_theme_SVGID_ { fill:none;stroke:orange; }\nrect.hover_theme_SVGID_, polygon.hover_theme_SVGID_, path.hover_theme_SVGID_ { fill:orange;stroke:none; }\nimage.hover_theme_SVGID_ { stroke:orange; }","reactive":true},"select":{"css":".select_data_SVGID_ { fill:red;stroke:black;cursor:pointer; }\ntext.select_data_SVGID_ { stroke:none;fill:red; }\ncircle.select_data_SVGID_ { fill:red;stroke:black; }\nline.select_data_SVGID_, polyline.select_data_SVGID_ { fill:none;stroke:red; }\nrect.select_data_SVGID_, polygon.select_data_SVGID_, path.select_data_SVGID_ { fill:red;stroke:none; }\nimage.select_data_SVGID_ { stroke:red; }","type":"multiple","only_shiny":true,"selected":[],"linked":false},"select_inv":{"css":""},"select_key":{"css":".select_key_SVGID_ { fill:red;stroke:black;cursor:pointer; }\ntext.select_key_SVGID_ { stroke:none;fill:red; }\ncircle.select_key_SVGID_ { fill:red;stroke:black; }\nline.select_key_SVGID_, polyline.select_key_SVGID_ { fill:none;stroke:red; }\nrect.select_key_SVGID_, polygon.select_key_SVGID_, path.select_key_SVGID_ { fill:red;stroke:none; }\nimage.select_key_SVGID_ { stroke:red; }","type":"single","only_shiny":true,"selected":[]},"select_theme":{"css":".select_theme_SVGID_ { fill:red;stroke:black;cursor:pointer; }\ntext.select_theme_SVGID_ { stroke:none;fill:red; }\ncircle.select_theme_SVGID_ { fill:red;stroke:black; }\nline.select_theme_SVGID_, polyline.select_theme_SVGID_ { fill:none;stroke:red; }\nrect.select_theme_SVGID_, polygon.select_theme_SVGID_, path.select_theme_SVGID_ { fill:red;stroke:none; }\nimage.select_theme_SVGID_ { stroke:red; }","type":"single","only_shiny":true,"selected":[]},"zoom":{"min":1,"max":4,"duration":300,"default_on":false},"toolbar":{"position":"topright","pngname":"diagram","tooltips":null,"fixed":false,"hidden":[],"delay_over":200,"delay_out":500},"sizing":{"rescale":true,"width":1}}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 </section>
@@ -1230,7 +1288,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWUsImV4ZXJjaXNlIjoiZXhfdzAzX2Jhc2ljIn0s
 </div>
 <div id="callout-5" class="callout-5-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
-<p>The tokenizer is the very first tidytext function this session taught, and tidytext ships a built-in data frame of English stopwords called <code>stop_words</code>.</p>
+<p>The tokeniser is the very first tidytext function this session taught, and tidytext ships a built-in data frame of English stopwords called <code>stop_words</code>.</p>
 </div>
 </div>
 </div>
@@ -1281,7 +1339,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWUsImV4ZXJjaXNlIjoiZXhfdzAzX2Jhc2ljIn0s
 </div>
 <div id="callout-10" class="callout-10-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Words rarely travel alone. Tokenise <em>Emma</em> into <strong>bigrams</strong> (pairs of consecutive words), split each pair, drop the pairs where either half is a stopword, and count what remains. Two blanks in the tokenizer call.</p>
+<p>Words rarely travel alone. Tokenise <em>Emma</em> into <strong>bigrams</strong> (pairs of consecutive words), split each pair, drop the pairs where either half is a stopword, and count what remains. Two blanks in the tokeniser call.</p>
 <div class="cell" data-exercise="ex_w03_inter">
 <div>
 <div id="webr-2" class="exercise-cell">
@@ -1358,7 +1416,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWUsImV4ZXJjaXNlIjoiZXhfdzAzX2ludGVyIn0s
 <p>These need live downloads and your own R session:</p>
 <ul>
 <li>Install the <a href="https://cran.r-project.org/web/packages/gutenbergr/vignettes/intro.html"><code>gutenbergr</code></a> package <code>install.packages("gutenbergr")</code>, pick a book from the library and download it to R, then carry out whichever sentiment analysis you prefer and plot it.</li>
-<li>Carry out sentiment analysis for a book of your choice using all sentiment lexicons available in the <code>get_sentiments()</code> function: <strong>AFINN</strong>, <strong>NRC</strong>, <strong>Bing</strong> and <strong>loughran</strong>. Describe each result and the differences between them.</li>
+<li>Carry out sentiment analysis for a book of your choice using all sentiment lexicons available in the <code>get_sentiments()</code> function: <strong>AFINN</strong>, <strong>NRC</strong>, <strong>Bing</strong> and <strong>Loughran</strong>. Describe each result and the differences between them.</li>
 <li>Write a function that downloads and cleans the text of any book in Project Gutenberg, and another that does sentiment analysis of any book in Project Gutenberg.</li>
 </ul>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -1375,7 +1433,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWUsImV4ZXJjaXNlIjoiZXhfdzAzX2ludGVyIn0s
 <div class="callout-body-container callout-body">
 <div class="cell">
 <details class="code-fold">
-<summary>Code</summary>
+<summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gutenbergr)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidytext)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
@@ -1387,71 +1445,65 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWUsImV4ZXJjaXNlIjoiZXhfdzAzX2ludGVyIn0s
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">as_tibble</span>() <span class="sc">|&gt;</span></span>
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>                     dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="at">word=</span><span class="dv">1</span>),</span>
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>                   <span class="at">by=</span><span class="st">"word"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">left_join</span>(<span class="fu">get_sentiments</span>(<span class="st">"afinn"</span>), <span class="at">by=</span><span class="st">"word"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(value) <span class="sc">|&gt;</span></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">n =</span> <span class="fu">n</span>(),</span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>                <span class="at">p =</span> n<span class="sc">/</span><span class="fu">sum</span>(n),</span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>                <span class="at">c =</span> <span class="fu">case_when</span>(value<span class="sc">&lt;</span><span class="dv">0</span> <span class="sc">~</span> <span class="st">"Negative"</span>,</span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>                              value<span class="sc">==</span><span class="dv">0</span> <span class="sc">~</span> <span class="st">"Neutral"</span>,</span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>                              value<span class="sc">&gt;</span><span class="dv">0</span> <span class="sc">~</span> <span class="st">"Positive"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">factor</span>()) <span class="sc">|&gt;</span></span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>value,<span class="at">y=</span>n,<span class="at">color=</span>c))<span class="sc">+</span></span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">show.legend =</span> <span class="cn">FALSE</span>)<span class="sc">+</span></span>
-<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>)<span class="sc">+</span></span>
-<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks=</span><span class="fu">seq</span>(<span class="at">from=</span><span class="sc">-</span><span class="dv">5</span>,<span class="at">to=</span><span class="dv">5</span>,<span class="at">by=</span><span class="dv">1</span>))<span class="sc">+</span></span>
-<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">"Set1"</span>)<span class="sc">+</span></span>
-<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>,<span class="at">x=</span><span class="sc">-</span><span class="dv">4</span>,<span class="at">y=</span><span class="dv">1000000</span>, <span class="at">label =</span><span class="st">"Negative"</span>, <span class="at">color =</span> <span class="st">"red"</span>)<span class="sc">+</span></span>
-<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>,<span class="at">x=</span><span class="dv">4</span>,<span class="at">y=</span><span class="dv">1000000</span>, <span class="at">label =</span><span class="st">"Positive"</span>, <span class="at">color =</span> <span class="st">"blue"</span>)<span class="sc">+</span></span>
-<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"The Descent of Man (Charles Darwin, 1871)"</span>,</span>
-<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Sentiment analysis"</span>,</span>
-<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">x=</span><span class="st">"AFINN lexicon"</span>,</span>
-<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">y=</span> <span class="st">"Word frequency"</span>,</span>
-<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Source: R4DEV workshop"</span>)</span>
-<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Through a function ####</span></span>
-<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>book_sentiments <span class="ot">&lt;-</span> <span class="cf">function</span>(author_name,book_name) {</span>
-<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Extract ID </span></span>
-<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>  gutenbergr<span class="sc">::</span><span class="fu">gutenberg_works</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="fu">str_detect</span>(author,author_name), <span class="fu">str_detect</span>(title,book_name)) <span class="sc">|&gt;</span> </span>
-<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">select</span>(gutenberg_id) <span class="sc">|&gt;</span> </span>
-<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.numeric</span>() <span class="sc">|&gt;</span></span>
-<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Download book</span></span>
-<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>    gutenbergr<span class="sc">::</span><span class="fu">gutenberg_download</span>(<span class="at">mirror =</span> <span class="st">"http://mirrors.xmission.com/gutenberg/"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>    <span class="co"># unnest tokens</span></span>
-<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>    tidytext<span class="sc">::</span><span class="fu">unnest_tokens</span>(word, text) <span class="sc">|&gt;</span></span>
-<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Exclude stopwords</span></span>
-<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">anti_join</span>(stopwords<span class="sc">::</span><span class="fu">stopwords</span>(<span class="at">language =</span> <span class="st">"en"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">as_tibble</span>() <span class="sc">|&gt;</span></span>
-<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>                     dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="at">word=</span><span class="dv">1</span>),</span>
-<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>                   <span class="at">by=</span><span class="st">"word"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Join sentiments</span></span>
-<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">left_join</span>(<span class="fu">get_sentiments</span>(<span class="st">"afinn"</span>), <span class="at">by=</span><span class="st">"word"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">group_by</span>(value) <span class="sc">|&gt;</span></span>
-<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">n =</span> <span class="fu">n</span>(),</span>
-<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a>                <span class="at">p =</span> n<span class="sc">/</span><span class="fu">sum</span>(n),</span>
-<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>                <span class="at">c =</span> <span class="fu">case_when</span>(value<span class="sc">&lt;</span><span class="dv">0</span> <span class="sc">~</span> <span class="st">"Negative"</span>,</span>
-<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>                              value<span class="sc">==</span><span class="dv">0</span> <span class="sc">~</span> <span class="st">"Neutral"</span>,</span>
-<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a>                              value<span class="sc">&gt;</span><span class="dv">0</span> <span class="sc">~</span> <span class="st">"Positive"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">factor</span>()) <span class="sc">|&gt;</span></span>
-<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Plot results</span></span>
-<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>value,<span class="at">y=</span>n,<span class="at">color=</span>c))<span class="sc">+</span></span>
-<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_col</span>(<span class="at">show.legend =</span> <span class="cn">FALSE</span>)<span class="sc">+</span></span>
-<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>)<span class="sc">+</span></span>
-<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_continuous</span>(<span class="at">breaks=</span><span class="fu">seq</span>(<span class="at">from=</span><span class="sc">-</span><span class="dv">5</span>,<span class="at">to=</span><span class="dv">5</span>,<span class="at">by=</span><span class="dv">1</span>))<span class="sc">+</span></span>
-<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">"Set1"</span>)<span class="sc">+</span></span>
-<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a>    <span class="fu">annotate</span>(<span class="st">"text"</span>,<span class="at">x=</span><span class="sc">-</span><span class="dv">4</span>,<span class="at">y=</span><span class="dv">1000000</span>, <span class="at">label =</span><span class="st">"Negative"</span>, <span class="at">color =</span> <span class="st">"red"</span>)<span class="sc">+</span></span>
-<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a>    <span class="fu">annotate</span>(<span class="st">"text"</span>,<span class="at">x=</span><span class="dv">4</span>,<span class="at">y=</span><span class="dv">1000000</span>, <span class="at">label =</span><span class="st">"Positive"</span>, <span class="at">color =</span> <span class="st">"blue"</span>)<span class="sc">+</span></span>
-<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste0</span>(<span class="st">"Sentiment analysis for "</span>,<span class="fu">print</span>(book_name),<span class="st">" by "</span>,<span class="fu">print</span>(author_name)), </span>
-<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a>           <span class="at">subtitle =</span> <span class="st">"Book from Project Gutenberg"</span>,</span>
-<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a>    <span class="at">x=</span><span class="st">"Sentiment AFINN"</span>,</span>
-<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a>    <span class="at">y=</span> <span class="st">"Word frequency"</span>,</span>
-<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Source: R4DEV workshop"</span>)</span>
-<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot a book based on the author name and title ####</span></span>
-<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a><span class="fu">book_sentiments</span>(<span class="st">"Hume, David"</span>,<span class="st">"A Treatise of Human Nature"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">inner_join</span>(<span class="fu">get_sentiments</span>(<span class="st">"afinn"</span>), <span class="at">by=</span><span class="st">"word"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">count</span>(value) <span class="sc">|&gt;</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">c =</span> <span class="fu">case_when</span>(value<span class="sc">&lt;</span><span class="dv">0</span> <span class="sc">~</span> <span class="st">"Negative"</span>,</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>                              value<span class="sc">&gt;</span><span class="dv">0</span> <span class="sc">~</span> <span class="st">"Positive"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">factor</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>value,<span class="at">y=</span>n,<span class="at">fill=</span>c))<span class="sc">+</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">show.legend =</span> <span class="cn">FALSE</span>)<span class="sc">+</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>)<span class="sc">+</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks=</span><span class="fu">seq</span>(<span class="at">from=</span><span class="sc">-</span><span class="dv">5</span>,<span class="at">to=</span><span class="dv">5</span>,<span class="at">by=</span><span class="dv">1</span>))<span class="sc">+</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Set1"</span>)<span class="sc">+</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>,<span class="at">x=</span><span class="sc">-</span><span class="dv">4</span>,<span class="at">y=</span><span class="cn">Inf</span>, <span class="at">vjust=</span><span class="fl">1.5</span>, <span class="at">label =</span><span class="st">"Negative"</span>, <span class="at">color =</span> <span class="st">"red"</span>)<span class="sc">+</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>,<span class="at">x=</span><span class="dv">4</span>,<span class="at">y=</span><span class="cn">Inf</span>, <span class="at">vjust=</span><span class="fl">1.5</span>, <span class="at">label =</span><span class="st">"Positive"</span>, <span class="at">color =</span> <span class="st">"blue"</span>)<span class="sc">+</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"The Descent of Man (Charles Darwin, 1871)"</span>,</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Sentiment analysis"</span>,</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">x=</span><span class="st">"AFINN lexicon"</span>,</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">y=</span> <span class="st">"Word frequency"</span>,</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Source: R4DEV workshop"</span>)</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Through a function ####</span></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>book_sentiments <span class="ot">&lt;-</span> <span class="cf">function</span>(author_name,book_name) {</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Extract ID </span></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>  gutenbergr<span class="sc">::</span><span class="fu">gutenberg_works</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="fu">str_detect</span>(author,author_name), <span class="fu">str_detect</span>(title,book_name)) <span class="sc">|&gt;</span> </span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">pull</span>(gutenberg_id) <span class="sc">|&gt;</span></span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>    <span class="fu">head</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Download book</span></span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>    gutenbergr<span class="sc">::</span><span class="fu">gutenberg_download</span>(<span class="at">mirror =</span> <span class="st">"http://mirrors.xmission.com/gutenberg/"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>    <span class="co"># unnest tokens</span></span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>    tidytext<span class="sc">::</span><span class="fu">unnest_tokens</span>(word, text) <span class="sc">|&gt;</span></span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Exclude stopwords</span></span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">anti_join</span>(stopwords<span class="sc">::</span><span class="fu">stopwords</span>(<span class="at">language =</span> <span class="st">"en"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">as_tibble</span>() <span class="sc">|&gt;</span></span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>                     dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="at">word=</span><span class="dv">1</span>),</span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>                   <span class="at">by=</span><span class="st">"word"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Join sentiments and count words per sentiment value</span></span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">inner_join</span>(<span class="fu">get_sentiments</span>(<span class="st">"afinn"</span>), <span class="at">by=</span><span class="st">"word"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">count</span>(value) <span class="sc">|&gt;</span></span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">c =</span> <span class="fu">case_when</span>(value<span class="sc">&lt;</span><span class="dv">0</span> <span class="sc">~</span> <span class="st">"Negative"</span>,</span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>                                value<span class="sc">&gt;</span><span class="dv">0</span> <span class="sc">~</span> <span class="st">"Positive"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">factor</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Plot results</span></span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>value,<span class="at">y=</span>n,<span class="at">fill=</span>c))<span class="sc">+</span></span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_col</span>(<span class="at">show.legend =</span> <span class="cn">FALSE</span>)<span class="sc">+</span></span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>)<span class="sc">+</span></span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_continuous</span>(<span class="at">breaks=</span><span class="fu">seq</span>(<span class="at">from=</span><span class="sc">-</span><span class="dv">5</span>,<span class="at">to=</span><span class="dv">5</span>,<span class="at">by=</span><span class="dv">1</span>))<span class="sc">+</span></span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Set1"</span>)<span class="sc">+</span></span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a>    <span class="fu">annotate</span>(<span class="st">"text"</span>,<span class="at">x=</span><span class="sc">-</span><span class="dv">4</span>,<span class="at">y=</span><span class="cn">Inf</span>, <span class="at">vjust=</span><span class="fl">1.5</span>, <span class="at">label =</span><span class="st">"Negative"</span>, <span class="at">color =</span> <span class="st">"red"</span>)<span class="sc">+</span></span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>    <span class="fu">annotate</span>(<span class="st">"text"</span>,<span class="at">x=</span><span class="dv">4</span>,<span class="at">y=</span><span class="cn">Inf</span>, <span class="at">vjust=</span><span class="fl">1.5</span>, <span class="at">label =</span><span class="st">"Positive"</span>, <span class="at">color =</span> <span class="st">"blue"</span>)<span class="sc">+</span></span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste0</span>(<span class="st">"Sentiment analysis for "</span>,book_name,<span class="st">" by "</span>,author_name), </span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a>           <span class="at">subtitle =</span> <span class="st">"Book from Project Gutenberg"</span>,</span>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a>    <span class="at">x=</span><span class="st">"Sentiment AFINN"</span>,</span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a>    <span class="at">y=</span> <span class="st">"Word frequency"</span>,</span>
+<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Source: R4DEV workshop"</span>)</span>
+<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot a book based on the author name and title ####</span></span>
+<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a><span class="fu">book_sentiments</span>(<span class="st">"Hume, David"</span>,<span class="st">"A Treatise of Human Nature"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 </div>
@@ -1607,6 +1659,57 @@ window._ojs.runtime.interpretFromScriptTags();
       });
       clipboardModal.on('success', onCopySuccess);
     }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
         var filterRegex = new RegExp("https:\/\/nelsonamayad\.github\.io\/R4DEV\/");
@@ -1623,6 +1726,11 @@ window._ojs.runtime.interpretFromScriptTags();
           if (link.dataset.originalHref !== undefined) {
             link.href = link.dataset.originalHref;
           }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
         }
       }
     function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
@@ -1877,25 +1985,64 @@ window._ojs.runtime.interpretFromScriptTags();
           }
         };
       }
-        // Attach click handler to the DT
-        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
-        for (const annoteDlNode of annoteDls) {
-          annoteDlNode.addEventListener('click', (event) => {
-            const clickedEl = event.target;
-            if (clickedEl !== selectedAnnoteEl) {
-              unselectCodeLines();
-              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
-              if (activeEl) {
-                activeEl.classList.remove('code-annotation-active');
-              }
-              selectCodeLines(clickedEl);
-              clickedEl.classList.add('code-annotation-active');
-            } else {
-              // Unselect the line
-              unselectCodeLines();
-              clickedEl.classList.remove('code-annotation-active');
+        const annoteTargets = window.document.querySelectorAll('.code-annotation-anchor');
+        for (let i=0; i<annoteTargets.length; i++) {
+          const annoteTarget = annoteTargets[i];
+          const targetCell = annoteTarget.getAttribute("data-target-cell");
+          const targetAnnotation = annoteTarget.getAttribute("data-target-annotation");
+          const contentFn = () => {
+            const content = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+            if (content) {
+              const tipContent = content.cloneNode(true);
+              tipContent.classList.add("code-annotation-tip-content");
+              return tipContent.outerHTML;
             }
-          });
+          }
+          const config = {
+            allowHTML: true,
+            content: contentFn,
+            onShow: (instance) => {
+              selectCodeLines(instance.reference);
+              instance.reference.classList.add('code-annotation-active');
+              window.tippy.hideAll();
+            },
+            onHide: (instance) => {
+              unselectCodeLines();
+              instance.reference.classList.remove('code-annotation-active');
+            },
+            maxWidth: 300,
+            delay: [50, 0],
+            duration: [200, 0],
+            offset: [5, 10],
+            arrow: true,
+            appendTo: function(el) {
+              return el.parentElement.parentElement.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'quarto',
+            placement: 'right',
+            popperOptions: {
+              modifiers: [
+              {
+                name: 'flip',
+                options: {
+                  flipVariations: false, // true by default
+                  allowedAutoPlacements: ['right'],
+                  fallbackPlacements: ['right', 'top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left'],
+                },
+              },
+              {
+                name: 'preventOverflow',
+                options: {
+                  mainAxis: false,
+                  altAxis: false
+                }
+              }
+              ]        
+            }      
+          };
+          window.tippy(annoteTarget, config); 
         }
     const findCites = (el) => {
       const parentEl = el.parentElement;
@@ -1950,8 +2097,41 @@ window._ojs.runtime.interpretFromScriptTags();
 </div>
   </div>
 </footer>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 
 
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

@@ -8,7 +8,7 @@
 
 <meta name="author" content="Nelson Amaya">
 <meta name="dcterms.date" content="2026-07-05">
-<meta name="description" content="Functions instead of loops; do multiple things at the same time. Learn purrr’s functional style, then parallelize it with a single wrapper function.">
+<meta name="description" content="Functions instead of loops; do multiple things at the same time. Learn purrr’s functional style, then parallelise it with a single wrapper function.">
 
 <title>Do it well, do it fast 🏎️ – R4DEV</title>
 <style>
@@ -80,14 +80,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-38657194d1c30378fa75d534d26568ab.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-a9fd7636a0121265c406fb04c3bba8e4.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-38657194d1c30378fa75d534d26568ab.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-73e373f4a43393be879eaa7f5bec20f5.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-7866983ca643604dcd4b1790e1c86039.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-73e373f4a43393be879eaa7f5bec20f5.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-38b5f4fe42bbed99db7c38154f53ea48.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-dark-05ee19f90ada4fec87197611c2da017c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../site_libs/bootstrap/bootstrap-38b5f4fe42bbed99db7c38154f53ea48.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-f247766226bcc895e77c705a5b584f22.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-fd704f46ef880e09e0b4cd7807fb6275.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-f247766226bcc895e77c705a5b584f22.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script src="../../site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
 <link href="../../site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
 <link href="../../site_libs/quarto-contrib/fontawesome6-1.2.0/all.min.css" rel="stylesheet">
@@ -145,6 +145,7 @@ cookieconsent.run({
 });
 </script> 
   
+<style>html{ scroll-behavior: smooth; }</style>
 <script async="" src="https://hypothes.is/embed.js"></script>
 <script>
   window.document.addEventListener("DOMContentLoaded", function (_event) {
@@ -155,6 +156,7 @@ cookieconsent.run({
 <link href="../../site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
 
 
+<link rel="stylesheet" href="../../style.css">
 <meta property="og:title" content="R4DEV">
 <meta property="og:description" content="Data workshop created by Nelson Amaya D.">
 <meta property="og:image" content="https://nelsonamayad.github.io/R4DEV/sessions_workshop/10-parallel/xmen.gif">
@@ -166,7 +168,7 @@ cookieconsent.run({
 <meta name="twitter:card" content="summary">
 </head>
 
-<body class="nav-fixed fullcontent quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+<body class="floating nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
     const toggleBodyColorMode = (bsSheetEl) => {
       const mode = bsSheetEl.getAttribute("data-mode");
       const bodyEl = window.document.querySelector("body");
@@ -309,7 +311,8 @@ cookieconsent.run({
       }
     };
     const authorPrefersDark = false;
-    const darkModeDefault = authorPrefersDark;
+    const queryPrefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    const darkModeDefault = queryPrefersDark.matches;
       document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
       document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
     let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
@@ -322,6 +325,14 @@ cookieconsent.run({
       toggleGiscusIfUsed(toAlternate, darkModeDefault);
       window.dispatchEvent(new Event('resize'));
     };
+    queryPrefersDark.addEventListener("change", e => {
+      if(window.localStorage.getItem("quarto-color-scheme") !== null)
+        return;
+      const alternate = e.matches
+      toggleColorMode(alternate);
+      localAlternateSentinel = e.matches ? 'alternate' : 'default'; // this is used alongside local storage!
+      toggleGiscusIfUsed(alternate, darkModeDefault);
+    });
     // Switch to dark mode if need be
     if (hasAlternateSentinel()) {
       toggleColorMode(true);
@@ -531,16 +542,38 @@ cookieconsent.run({
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#you-will-learn-to" id="toc-you-will-learn-to" class="nav-link active" data-scroll-target="#you-will-learn-to">You will learn to</a></li>
+  <li><a href="#part-i-the-for-loop-has-to-go" id="toc-part-i-the-for-loop-has-to-go" class="nav-link" data-scroll-target="#part-i-the-for-loop-has-to-go">PART I: The for-loop has to go</a>
+  <ul class="collapse">
+  <li><a href="#a-real-slightly-slow-example" id="toc-a-real-slightly-slow-example" class="nav-link" data-scroll-target="#a-real-slightly-slow-example">A real (slightly slow) example</a></li>
+  </ul></li>
+  <li><a href="#part-ii-when-parallel-is-actually-worth-it" id="toc-part-ii-when-parallel-is-actually-worth-it" class="nav-link" data-scroll-target="#part-ii-when-parallel-is-actually-worth-it">PART II: When parallel is actually worth it</a></li>
+  <li><a href="#part-iii-mirai-purrrs-parallel-engine" id="toc-part-iii-mirai-purrrs-parallel-engine" class="nav-link" data-scroll-target="#part-iii-mirai-purrrs-parallel-engine">PART III: mirai, purrr’s parallel engine</a></li>
+  <li><a href="#part-iv-the-one-line-bridge-purrrin_parallel" id="toc-part-iv-the-one-line-bridge-purrrin_parallel" class="nav-link" data-scroll-target="#part-iv-the-one-line-bridge-purrrin_parallel">PART IV: The one-line bridge –<code>purrr::in_parallel()</code></a></li>
+  <li><a href="#part-v-the-gotcha-parallel-functions-must-be-self-contained" id="toc-part-v-the-gotcha-parallel-functions-must-be-self-contained" class="nav-link" data-scroll-target="#part-v-the-gotcha-parallel-functions-must-be-self-contained">PART V: The gotcha –parallel functions must be self-contained</a></li>
+  <li><a href="#already-used-this-one-level-up" id="toc-already-used-this-one-level-up" class="nav-link" data-scroll-target="#already-used-this-one-level-up">Already used this, one level up</a></li>
+  <li><a href="#practice-10-map-first-parallelise-second" id="toc-practice-10-map-first-parallelise-second" class="nav-link" data-scroll-target="#practice-10-map-first-parallelise-second">🏗 Practice 10: Map first, parallelise second</a></li>
+  <li><a href="#key-takeaways" id="toc-key-takeaways" class="nav-link" data-scroll-target="#key-takeaways">Key takeaways</a></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Do it well, do it fast 🏎️</h1>
-<p class="subtitle lead">Functional programming with purrr, parallelized with mirai</p>
+<div class="quarto-title-block"><div><h1 class="title">Do it well, do it fast 🏎️</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li></ul></div></div>
+<p class="subtitle lead">Functional programming with purrr, parallelised with mirai</p>
   <div class="quarto-categories">
     <div class="quarto-category">purrr</div>
     <div class="quarto-category">functional programming</div>
@@ -551,7 +584,7 @@ cookieconsent.run({
 
 <div>
   <div class="description">
-    Functions instead of loops; do multiple things at the same time. Learn purrr’s functional style, then parallelize it with a single wrapper function.
+    Functions instead of loops; do multiple things at the same time. Learn purrr’s functional style, then parallelise it with a single wrapper function.
   </div>
 </div>
 
@@ -575,7 +608,7 @@ cookieconsent.run({
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">October 6, 2026</p>
+      <p class="date-modified">November 7, 2026</p>
     </div>
   </div>
     
@@ -612,13 +645,16 @@ cookieconsent.run({
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> purrr<span class="sc">::</span><span class="fu">map</span>(inputs, some_function)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><code>map()</code> always returns a list. Its typed siblings return a vector instead, and fail loudly if your function doesn’t produce the type you promised –a feature, not an inconvenience: silently getting a list back when you expected numbers is a classic source of bugs.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-3"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-3-1"><a href="#annotated-cell-3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(purrr)</span>
 <span id="annotated-cell-3-2"><a href="#annotated-cell-3-2" aria-hidden="true" tabindex="-1"></a></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-3-3" class="code-annotation-target"><a href="#annotated-cell-3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">map_dbl</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, \(x) x<span class="sc">^</span><span class="dv">2</span>)</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-3-4" class="code-annotation-target"><a href="#annotated-cell-3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">map_chr</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, \(x) <span class="fu">paste</span>(<span class="st">"Number"</span>, x))</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="3" onclick="event.preventDefault();">3</a><span id="annotated-cell-3-5" class="code-annotation-target"><a href="#annotated-cell-3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">map</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, \(x) x<span class="sc">^</span><span class="dv">2</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="1">1</button><span id="annotated-cell-3-3" class="code-annotation-target"><a href="#annotated-cell-3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">map_dbl</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, \(x) x<span class="sc">^</span><span class="dv">2</span>)</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="2">2</button><span id="annotated-cell-3-4" class="code-annotation-target"><a href="#annotated-cell-3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">map_chr</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, \(x) <span class="fu">paste</span>(<span class="st">"Number"</span>, x))</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="3">3</button><span id="annotated-cell-3-5" class="code-annotation-target"><a href="#annotated-cell-3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">map</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, \(x) x<span class="sc">^</span><span class="dv">2</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-annotation">
-<dl class="code-annotation-container-grid">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-3" data-target-annotation="1">1</dt>
 <dd>
 <span data-code-cell="annotated-cell-3" data-code-lines="3" data-code-annotation="1"><code>map_dbl()</code> –always returns a double vector, errors if a result isn’t length-1 numeric.</span>
@@ -648,19 +684,22 @@ cookieconsent.run({
 </div>
 <p><code>map2()</code> and <code>pmap()</code> extend this to two or many parallel inputs walked together:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-4"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><a class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-4-1" class="code-annotation-target"><a href="#annotated-cell-4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map2_dbl</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="dv">4</span><span class="sc">:</span><span class="dv">6</span>, \(x, y) x <span class="sc">+</span> y)</span>
+<details open="" class="code-fold">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-4"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><button class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="1">1</button><span id="annotated-cell-4-1" class="code-annotation-target"><a href="#annotated-cell-4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map2_dbl</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="dv">4</span><span class="sc">:</span><span class="dv">6</span>, \(x, y) x <span class="sc">+</span> y)</span>
 <span id="annotated-cell-4-2"><a href="#annotated-cell-4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="annotated-cell-4-3"><a href="#annotated-cell-4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="at">a =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">b =</span> <span class="dv">4</span><span class="sc">:</span><span class="dv">6</span>, <span class="at">c =</span> <span class="dv">7</span><span class="sc">:</span><span class="dv">9</span>) <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-4-4" class="code-annotation-target"><a href="#annotated-cell-4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pmap_dbl</span>(\(a, b, c) <span class="fu">mean</span>(<span class="fu">c</span>(a, b, c)))</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="2">2</button><span id="annotated-cell-4-4" class="code-annotation-target"><a href="#annotated-cell-4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pmap_dbl</span>(\(a, b, c) <span class="fu">mean</span>(<span class="fu">c</span>(a, b, c)))</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-annotation">
-<dl class="code-annotation-container-grid">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-4" data-target-annotation="1">1</dt>
 <dd>
 <span data-code-cell="annotated-cell-4" data-code-lines="1" data-code-annotation="1"><code>map2_dbl()</code> walks two vectors together, element by element.</span>
 </dd>
 <dt data-target-cell="annotated-cell-4" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-4" data-code-lines="4" data-code-annotation="2"><code>pmap_dbl()</code> generalizes this to as many parallel inputs as you like, taken from a list.</span>
+<span data-code-cell="annotated-cell-4" data-code-lines="4" data-code-annotation="2"><code>pmap_dbl()</code> generalises this to as many parallel inputs as you like, taken from a list.</span>
 </dd>
 </dl>
 </div>
@@ -671,7 +710,10 @@ cookieconsent.run({
 </div>
 <p>And when you want the <em>side effect</em>, not the return value –printing, saving a file, sending a Slack message– <code>walk()</code> is <code>map()</code>’s quiet twin: it runs your function for every element and returns its input invisibly, so nothing clutters your console.</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">:</span><span class="dv">3</span> <span class="sc">|&gt;</span> <span class="fu">walk</span>(\(x) <span class="fu">cat</span>(<span class="st">"Processing"</span>, x, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Processing 1 
 Processing 2 
@@ -682,21 +724,24 @@ Processing 3 </code></pre>
 <h3 class="anchored" data-anchor-id="a-real-slightly-slow-example">A real (slightly slow) example</h3>
 <p>Here’s where this stops being a toy. Say you need to fit a model <strong>per group</strong> –a common pattern: split a dataset, fit the same model shape to every piece, compare the results. We’ll pretend each fit takes real work (a tenth of a second) so the timing later in this session means something:</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-6"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-6-1"><a href="#annotated-cell-6-1" aria-hidden="true" tabindex="-1"></a>slow_lm <span class="ot">&lt;-</span> <span class="cf">function</span>(formula, data) {</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-6-2" class="code-annotation-target"><a href="#annotated-cell-6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Sys.sleep</span>(<span class="fl">0.1</span>)</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="1">1</button><span id="annotated-cell-6-2" class="code-annotation-target"><a href="#annotated-cell-6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Sys.sleep</span>(<span class="fl">0.1</span>)</span>
 <span id="annotated-cell-6-3"><a href="#annotated-cell-6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lm</span>(formula, data)</span>
 <span id="annotated-cell-6-4"><a href="#annotated-cell-6-4" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="annotated-cell-6-5"><a href="#annotated-cell-6-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="annotated-cell-6-6"><a href="#annotated-cell-6-6" aria-hidden="true" tabindex="-1"></a>t0 <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
 <span id="annotated-cell-6-7"><a href="#annotated-cell-6-7" aria-hidden="true" tabindex="-1"></a>models <span class="ot">&lt;-</span> mtcars <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-6-8" class="code-annotation-target"><a href="#annotated-cell-6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">split</span>(mtcars<span class="sc">$</span>cyl) <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="3" onclick="event.preventDefault();">3</a><span id="annotated-cell-6-9" class="code-annotation-target"><a href="#annotated-cell-6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(\(df) <span class="fu">slow_lm</span>(mpg <span class="sc">~</span> wt <span class="sc">+</span> hp, <span class="at">data =</span> df))</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="2">2</button><span id="annotated-cell-6-8" class="code-annotation-target"><a href="#annotated-cell-6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">split</span>(mtcars<span class="sc">$</span>cyl) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="3">3</button><span id="annotated-cell-6-9" class="code-annotation-target"><a href="#annotated-cell-6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(\(df) <span class="fu">slow_lm</span>(mpg <span class="sc">~</span> wt <span class="sc">+</span> hp, <span class="at">data =</span> df))</span>
 <span id="annotated-cell-6-10"><a href="#annotated-cell-6-10" aria-hidden="true" tabindex="-1"></a>t1 <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
 <span id="annotated-cell-6-11"><a href="#annotated-cell-6-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="annotated-cell-6-12"><a href="#annotated-cell-6-12" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Sequential time:"</span>, <span class="fu">round</span>(<span class="fu">as.numeric</span>(t1 <span class="sc">-</span> t0, <span class="at">units =</span> <span class="st">"secs"</span>), <span class="dv">2</span>), <span class="st">"sec</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="4" onclick="event.preventDefault();">4</a><span id="annotated-cell-6-13" class="code-annotation-target"><a href="#annotated-cell-6-13" aria-hidden="true" tabindex="-1"></a>models <span class="sc">|&gt;</span> <span class="fu">map</span>(summary) <span class="sc">|&gt;</span> <span class="fu">map_dbl</span>(<span class="st">"r.squared"</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="4">4</button><span id="annotated-cell-6-13" class="code-annotation-target"><a href="#annotated-cell-6-13" aria-hidden="true" tabindex="-1"></a>models <span class="sc">|&gt;</span> <span class="fu">map</span>(summary) <span class="sc">|&gt;</span> <span class="fu">map_dbl</span>(<span class="st">"r.squared"</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-annotation">
-<dl class="code-annotation-container-grid">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-6" data-target-annotation="1">1</dt>
 <dd>
 <span data-code-cell="annotated-cell-6" data-code-lines="2" data-code-annotation="1">Stand-in for “this is genuinely slow” –a database query, an API call, a heavy computation.</span>
@@ -716,7 +761,7 @@ Processing 3 </code></pre>
 </dl>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Sequential time: 0.38 sec
+<pre><code>Sequential time: 0.34 sec
         4         6         8 
 0.6807065 0.5889239 0.4970692 </code></pre>
 </div>
@@ -754,27 +799,30 @@ Processing 3 </code></pre>
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Spinning up parallel workers has fixed overhead –starting processes, sending data and code to them, collecting results back. For <strong>quick operations</strong> (simple arithmetic, a fast filter, anything sub-millisecond), that overhead outweighs the work itself. Sequential <code>map()</code> will often be <em>faster</em> on small, fast tasks. Parallelize the slow thing, not the whole script.</p>
+<p>Spinning up parallel workers has fixed overhead –starting processes, sending data and code to them, collecting results back. For <strong>quick operations</strong> (simple arithmetic, a fast filter, anything sub-millisecond), that overhead outweighs the work itself. Sequential <code>map()</code> will often be <em>faster</em> on small, fast tasks. Parallelise the slow thing, not the whole script.</p>
 </div>
 </div>
-<p>This is a judgment call, not a rule you can memorize –the right response to “should I parallelize this?” is usually to time both versions and look, which is exactly what the rest of this session does.</p>
+<p>This is a judgement call, not a rule you can memorise –the right response to “should I parallelise this?” is usually to time both versions and look, which is exactly what the rest of this session does.</p>
 </section>
 <section id="part-iii-mirai-purrrs-parallel-engine" class="level2">
 <h2 class="anchored" data-anchor-id="part-iii-mirai-purrrs-parallel-engine">PART III: mirai, purrr’s parallel engine</h2>
 <p><a href="https://mirai.r-lib.org/"><strong><code>mirai</code></strong></a> is a lightweight async/parallel framework from Posit’s Charlie Gao, and as of <code>purrr</code> 1.1.0 it’s purrr’s own official parallel backend. <code>daemons()</code> launches persistent background R processes (“daemons”) that stick around waiting for work:</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-7"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-7-1"><a href="#annotated-cell-7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mirai)</span>
 <span id="annotated-cell-7-2"><a href="#annotated-cell-7-2" aria-hidden="true" tabindex="-1"></a></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-7-3" class="code-annotation-target"><a href="#annotated-cell-7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">daemons</span>(<span class="dv">4</span>)</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="1">1</button><span id="annotated-cell-7-3" class="code-annotation-target"><a href="#annotated-cell-7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">daemons</span>(<span class="dv">4</span>)</span>
 <span id="annotated-cell-7-4"><a href="#annotated-cell-7-4" aria-hidden="true" tabindex="-1"></a></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-7-5" class="code-annotation-target"><a href="#annotated-cell-7-5" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">mirai</span>({ <span class="fu">Sys.sleep</span>(<span class="fl">0.2</span>); <span class="fu">mean</span>(<span class="fu">rnorm</span>(<span class="fl">1e5</span>)) })</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="3" onclick="event.preventDefault();">3</a><span id="annotated-cell-7-6" class="code-annotation-target"><a href="#annotated-cell-7-6" aria-hidden="true" tabindex="-1"></a><span class="fu">unresolved</span>(m)</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="2">2</button><span id="annotated-cell-7-5" class="code-annotation-target"><a href="#annotated-cell-7-5" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">mirai</span>({ <span class="fu">Sys.sleep</span>(<span class="fl">0.2</span>); <span class="fu">mean</span>(<span class="fu">rnorm</span>(<span class="fl">1e5</span>)) })</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="3">3</button><span id="annotated-cell-7-6" class="code-annotation-target"><a href="#annotated-cell-7-6" aria-hidden="true" tabindex="-1"></a><span class="fu">unresolved</span>(m)</span>
 <span id="annotated-cell-7-7"><a href="#annotated-cell-7-7" aria-hidden="true" tabindex="-1"></a><span class="fu">Sys.sleep</span>(<span class="fl">0.5</span>)</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="4" onclick="event.preventDefault();">4</a><span id="annotated-cell-7-8" class="code-annotation-target"><a href="#annotated-cell-7-8" aria-hidden="true" tabindex="-1"></a>m[]</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="4">4</button><span id="annotated-cell-7-8" class="code-annotation-target"><a href="#annotated-cell-7-8" aria-hidden="true" tabindex="-1"></a>m[]</span>
 <span id="annotated-cell-7-9"><a href="#annotated-cell-7-9" aria-hidden="true" tabindex="-1"></a></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="5" onclick="event.preventDefault();">5</a><span id="annotated-cell-7-10" class="code-annotation-target"><a href="#annotated-cell-7-10" aria-hidden="true" tabindex="-1"></a><span class="fu">daemons</span>(<span class="dv">0</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="5">5</button><span id="annotated-cell-7-10" class="code-annotation-target"><a href="#annotated-cell-7-10" aria-hidden="true" tabindex="-1"></a><span class="fu">daemons</span>(<span class="dv">0</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-annotation">
-<dl class="code-annotation-container-grid">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-7" data-target-annotation="1">1</dt>
 <dd>
 <span data-code-cell="annotated-cell-7" data-code-lines="3" data-code-annotation="1">Launch 4 background R processes, sitting idle and ready.</span>
@@ -799,14 +847,14 @@ Processing 3 </code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] TRUE
-[1] 0.001023383</code></pre>
+[1] 0.001709528</code></pre>
 </div>
 </div>
 <p>For mapping many inputs at once, <code>mirai_map()</code> does the same thing <code>map()</code> does, distributed across daemons:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-8"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-8-1"><a href="#annotated-cell-8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">daemons</span>(<span class="dv">4</span>)</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-8-2" class="code-annotation-target"><a href="#annotated-cell-8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mirai_map</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>, \(x) { <span class="fu">Sys.sleep</span>(<span class="fl">0.2</span>); x<span class="sc">^</span><span class="dv">2</span> })[.progress, .flat]</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="1">1</button><span id="annotated-cell-8-2" class="code-annotation-target"><a href="#annotated-cell-8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mirai_map</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>, \(x) { <span class="fu">Sys.sleep</span>(<span class="fl">0.2</span>); x<span class="sc">^</span><span class="dv">2</span> })[.progress, .flat]</span>
 <span id="annotated-cell-8-3"><a href="#annotated-cell-8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">daemons</span>(<span class="dv">0</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<dl class="code-annotation-container-grid">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-8" data-target-annotation="1">1</dt>
 <dd>
 <span data-code-cell="annotated-cell-8" data-code-lines="2" data-code-annotation="1"><code>.progress</code> shows a live progress bar; <code>.flat</code> returns a flat vector instead of a list of length-1 results –both are optional subsetting flags on the result.</span>
@@ -817,32 +865,35 @@ Processing 3 </code></pre>
 <h2 class="anchored" data-anchor-id="part-iv-the-one-line-bridge-purrrin_parallel">PART IV: The one-line bridge –<code>purrr::in_parallel()</code></h2>
 <p>You don’t have to rewrite your <code>map()</code> calls to use <code>mirai</code> directly. <code>purrr::in_parallel()</code> wraps the function you’re already passing to <code>map()</code>, and purrr routes the work to whatever daemons are running:</p>
 <div class="cell">
+<details open="" class="code-fold">
+<summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-9"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-9-1"><a href="#annotated-cell-9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">daemons</span>(<span class="dv">4</span>)</span>
 <span id="annotated-cell-9-2"><a href="#annotated-cell-9-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="annotated-cell-9-3"><a href="#annotated-cell-9-3" aria-hidden="true" tabindex="-1"></a>t0 <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
 <span id="annotated-cell-9-4"><a href="#annotated-cell-9-4" aria-hidden="true" tabindex="-1"></a>models_parallel <span class="ot">&lt;-</span> mtcars <span class="sc">|&gt;</span></span>
 <span id="annotated-cell-9-5"><a href="#annotated-cell-9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">split</span>(mtcars<span class="sc">$</span>cyl) <span class="sc">|&gt;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-9-6" class="code-annotation-target"><a href="#annotated-cell-9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(<span class="fu">in_parallel</span>(\(df) <span class="fu">slow_lm</span>(mpg <span class="sc">~</span> wt <span class="sc">+</span> hp, <span class="at">data =</span> df), <span class="at">slow_lm =</span> slow_lm))</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="1">1</button><span id="annotated-cell-9-6" class="code-annotation-target"><a href="#annotated-cell-9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(<span class="fu">in_parallel</span>(\(df) <span class="fu">slow_lm</span>(mpg <span class="sc">~</span> wt <span class="sc">+</span> hp, <span class="at">data =</span> df), <span class="at">slow_lm =</span> slow_lm))</span>
 <span id="annotated-cell-9-7"><a href="#annotated-cell-9-7" aria-hidden="true" tabindex="-1"></a>t1 <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
 <span id="annotated-cell-9-8"><a href="#annotated-cell-9-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="annotated-cell-9-9"><a href="#annotated-cell-9-9" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Parallel time:"</span>, <span class="fu">round</span>(<span class="fu">as.numeric</span>(t1 <span class="sc">-</span> t0, <span class="at">units =</span> <span class="st">"secs"</span>), <span class="dv">2</span>), <span class="st">"sec</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-9-10" class="code-annotation-target"><a href="#annotated-cell-9-10" aria-hidden="true" tabindex="-1"></a>models_parallel <span class="sc">|&gt;</span> <span class="fu">map</span>(summary) <span class="sc">|&gt;</span> <span class="fu">map_dbl</span>(<span class="st">"r.squared"</span>)</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="2">2</button><span id="annotated-cell-9-10" class="code-annotation-target"><a href="#annotated-cell-9-10" aria-hidden="true" tabindex="-1"></a>models_parallel <span class="sc">|&gt;</span> <span class="fu">map</span>(summary) <span class="sc">|&gt;</span> <span class="fu">map_dbl</span>(<span class="st">"r.squared"</span>)</span>
 <span id="annotated-cell-9-11"><a href="#annotated-cell-9-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="annotated-cell-9-12"><a href="#annotated-cell-9-12" aria-hidden="true" tabindex="-1"></a><span class="fu">daemons</span>(<span class="dv">0</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-annotation">
-<dl class="code-annotation-container-grid">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-9" data-target-annotation="1">1</dt>
 <dd>
 <span data-code-cell="annotated-cell-9" data-code-lines="6" data-code-annotation="1">The <strong>only</strong> change from PART I’s code: <code>slow_lm(...)</code> wrapped in <code>in_parallel(...)</code>, with <code>slow_lm = slow_lm</code> passed through explicitly (more on why in PART V).</span>
 </dd>
 <dt data-target-cell="annotated-cell-9" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-9" data-code-lines="10" data-code-annotation="2">Same R² values as the sequential version –parallelizing doesn’t change <em>what</em> you compute, only <em>how long it takes</em>.</span>
+<span data-code-cell="annotated-cell-9" data-code-lines="10" data-code-annotation="2">Same R² values as the sequential version –parallelising doesn’t change <em>what</em> you compute, only <em>how long it takes</em>.</span>
 </dd>
 </dl>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Parallel time: 0.2 sec
+<pre><code>Parallel time: 0.14 sec
         4         6         8 
 0.6807065 0.5889239 0.4970692 </code></pre>
 </div>
@@ -851,7 +902,7 @@ Processing 3 </code></pre>
 </section>
 <section id="part-v-the-gotcha-parallel-functions-must-be-self-contained" class="level2">
 <h2 class="anchored" data-anchor-id="part-v-the-gotcha-parallel-functions-must-be-self-contained">PART V: The gotcha –parallel functions must be self-contained</h2>
-<p>A <code>mirai</code> daemon is a <strong>separate R process</strong> with no access to your R session’s workspace. Whatever <code>in_parallel()</code> wraps gets serialized and sent over, which means it can’t casually reach for variables sitting in your global environment:</p>
+<p>A <code>mirai</code> daemon is a <strong>separate R process</strong> with no access to your R session’s workspace. Whatever <code>in_parallel()</code> wraps gets serialised and sent over, which means it can’t casually reach for variables sitting in your global environment:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">map</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="fu">in_parallel</span>(\(x) <span class="fu">mean</span>(my_data)))          <span class="co"># ❌ errors: my_data doesn't exist over there</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">map</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="fu">in_parallel</span>(\(x) <span class="fu">mean</span>(my_data), <span class="at">my_data =</span> my_data)) <span class="co"># ✅ passed explicitly</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -878,7 +929,7 @@ Processing 3 </code></pre>
 </section>
 <section id="already-used-this-one-level-up" class="level2">
 <h2 class="anchored" data-anchor-id="already-used-this-one-level-up">Already used this, one level up</h2>
-<p>The AI track’s <code>ellmer::parallel_chat_structured()</code> (from <a href="../../sessions_ai/01-llm/01-llm.html">Talking to machines</a>) –scoring 48 songs concurrently– is this exact idea, wrapped: ellmer manages the daemons and the request batching for you, because “call this LLM prompt many times at once” is common enough to deserve its own shortcut. Now you know what’s underneath it, and that the same mechanism is available for <em>any</em> R function, not just LLM calls.</p>
+<p>The AI track’s <code>ellmer::parallel_chat_structured()</code> (from <a href="../../sessions_ai/01-llm/01-llm.html">Talking to machines</a>) –scoring 48 songs concurrently– is this idea applied to <em>waiting</em>: ellmer fires many requests at the model provider at once and collects the answers as they arrive, because “call this LLM prompt many times at once” is common enough to deserve its own shortcut. It doesn’t need daemons, since the slow part happens on someone else’s server (it sends the requests in parallel with <code>httr2</code>). <code>in_parallel()</code> is the general version: the same overlap, for <em>any</em> R function, including the ones whose slow part runs on your own cores.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -893,8 +944,8 @@ Processing 3 </code></pre>
 </div>
 </div>
 </section>
-<section id="practice-10-map-first-parallelize-second" class="level2 unnumbered">
-<h2 class="unnumbered anchored" data-anchor-id="practice-10-map-first-parallelize-second">🏗 Practice 10: Map first, parallelize second</h2>
+<section id="practice-10-map-first-parallelise-second" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="practice-10-map-first-parallelise-second">🏗 Practice 10: Map first, parallelise second</h2>
 <p>The purrr half of this session runs right here in your browser – the mirai half needs real CPU cores, so it waits for your own R session in the Advanced tier.</p>
 <div class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
@@ -1043,8 +1094,8 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWUsImV4ZXJjaXNlIjoiZXhfdzEwX2ludGVyIn0s
 <div class="callout-body-container callout-body">
 <p>Parallelism needs real cores – these run in your own R session:</p>
 <ul>
-<li>Take one of session 7’s scraping functions (fetching one page per artist/URL) and parallelize the fetch with <code>daemons()</code> + <code>in_parallel()</code>. Time both versions –I/O-bound tasks like network requests often parallelize <em>better</em> than CPU-bound ones, since the wait, not the computation, is what overlaps.</li>
-<li>Deliberately break the self-containment rule (reference a variable from your global environment without passing it to <code>in_parallel()</code>) and read the resulting error –this is the error you want to recognize instantly in the wild.</li>
+<li>Take one of session 7’s scraping functions (fetching one page per artist/URL) and parallelise the fetch with <code>daemons()</code> + <code>in_parallel()</code>. Time both versions –I/O-bound tasks like network requests often parallelise <em>better</em> than CPU-bound ones, since the wait, not the computation, is what overlaps.</li>
+<li>Deliberately break the self-containment rule (reference a variable from your global environment without passing it to <code>in_parallel()</code>) and read the resulting error –this is the error you want to recognise instantly in the wild.</li>
 <li>Time the sequential PART I example again with 6 groups instead of 3 –does the gap between sequential and parallel grow?</li>
 <li>Read <code>mirai</code>’s docs on remote daemons (SSH, or an HPC scheduler like Slurm) –the <code>purrr</code> code you write doesn’t change at all; only the <code>daemons()</code> call does. What does that separation buy you?</li>
 </ul>
@@ -1192,6 +1243,57 @@ window._ojs.runtime.interpretFromScriptTags();
       });
       clipboardModal.on('success', onCopySuccess);
     }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
         var filterRegex = new RegExp("https:\/\/nelsonamayad\.github\.io\/R4DEV\/");
@@ -1208,6 +1310,11 @@ window._ojs.runtime.interpretFromScriptTags();
           if (link.dataset.originalHref !== undefined) {
             link.href = link.dataset.originalHref;
           }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
         }
       }
     function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
@@ -1462,25 +1569,64 @@ window._ojs.runtime.interpretFromScriptTags();
           }
         };
       }
-        // Attach click handler to the DT
-        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
-        for (const annoteDlNode of annoteDls) {
-          annoteDlNode.addEventListener('click', (event) => {
-            const clickedEl = event.target;
-            if (clickedEl !== selectedAnnoteEl) {
-              unselectCodeLines();
-              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
-              if (activeEl) {
-                activeEl.classList.remove('code-annotation-active');
-              }
-              selectCodeLines(clickedEl);
-              clickedEl.classList.add('code-annotation-active');
-            } else {
-              // Unselect the line
-              unselectCodeLines();
-              clickedEl.classList.remove('code-annotation-active');
+        const annoteTargets = window.document.querySelectorAll('.code-annotation-anchor');
+        for (let i=0; i<annoteTargets.length; i++) {
+          const annoteTarget = annoteTargets[i];
+          const targetCell = annoteTarget.getAttribute("data-target-cell");
+          const targetAnnotation = annoteTarget.getAttribute("data-target-annotation");
+          const contentFn = () => {
+            const content = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+            if (content) {
+              const tipContent = content.cloneNode(true);
+              tipContent.classList.add("code-annotation-tip-content");
+              return tipContent.outerHTML;
             }
-          });
+          }
+          const config = {
+            allowHTML: true,
+            content: contentFn,
+            onShow: (instance) => {
+              selectCodeLines(instance.reference);
+              instance.reference.classList.add('code-annotation-active');
+              window.tippy.hideAll();
+            },
+            onHide: (instance) => {
+              unselectCodeLines();
+              instance.reference.classList.remove('code-annotation-active');
+            },
+            maxWidth: 300,
+            delay: [50, 0],
+            duration: [200, 0],
+            offset: [5, 10],
+            arrow: true,
+            appendTo: function(el) {
+              return el.parentElement.parentElement.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'quarto',
+            placement: 'right',
+            popperOptions: {
+              modifiers: [
+              {
+                name: 'flip',
+                options: {
+                  flipVariations: false, // true by default
+                  allowedAutoPlacements: ['right'],
+                  fallbackPlacements: ['right', 'top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left'],
+                },
+              },
+              {
+                name: 'preventOverflow',
+                options: {
+                  mainAxis: false,
+                  altAxis: false
+                }
+              }
+              ]        
+            }      
+          };
+          window.tippy(annoteTarget, config); 
         }
     const findCites = (el) => {
       const parentEl = el.parentElement;
@@ -1539,4 +1685,5 @@ window._ojs.runtime.interpretFromScriptTags();
 
 
 
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>
