@@ -141,95 +141,91 @@ dag_plot <- function(sc, alpha, beta, delta, controlled) {
 }
 
 # ---- UI ----------------------------------------------------------------
-ui <- bslib::page_fillable(
-  theme = bslib::bs_theme(
-    bootswatch = "journal",
-    base_font = bslib::font_google("Roboto Condensed"),
-    primary = UI_TEAL,
-    brand = FALSE
-  ),
-  padding = "1rem",
+r4dev_theme <- bslib::bs_theme(
+  version = 5,
+  primary = UI_TEAL, secondary = "#5C6B70",
+  success = "#2E7D5B", warning = "#B45309", danger = "#C2401F",
+  base_font = bslib::font_google("Roboto Condensed", wght = c(400, 700)),
+  code_font = bslib::font_google("Fira Code"),
+  "navbar-bg" = UI_TEAL,
+  brand = FALSE
+) |>
+  bslib::bs_add_rules("
+    .bslib-value-box .value-box-title { font-size: .85rem; margin-bottom: .1rem; }
+    .bslib-value-box .value-box-value { font-weight: 700; font-size: 1.7rem; }
+    .bslib-value-box .value-box-area { padding: .55rem .9rem; }
+    .bslib-grid > * { min-width: 0; }
+    .bslib-grid-item > .shiny-html-output { display: flex; height: 100%; }
+    .bslib-grid-item > .shiny-html-output > .bslib-value-box { flex: 1; margin-bottom: 0; }
+    .card-header { font-weight: 700; }
+    .r4-caption { font-size: .82rem; color: var(--bs-secondary-color); }
+  ")
 
+app_title <- function(text) {
   tags$div(
-    style = "display:flex; align-items:center; gap:10px; margin-bottom:0.4rem;",
-    tags$img(src = "r4dev_logo.png", height = "32px"),
-    tags$strong("R4DEV · Omitted variable bias", style = paste0("color:", UI_TEAL, "; font-size:1.1rem;")),
-    tags$a(
-      "session ↗", href = "https://nelsonamayad.github.io/R4DEV/sessions_thinking/04-causal/04-causal.html",
-      target = "_blank", style = "margin-left:auto; font-size:0.85rem;"
+    class = "d-flex align-items-center gap-2 w-100",
+    tags$img(src = "r4dev_logo.png", height = "28px", alt = "R4DEV logo"),
+    text,
+    tags$a("lesson ↗", class = "ms-auto small text-white",
+           href = "https://nelsonamayad.github.io/R4DEV/sessions_thinking/04-causal/04-causal.html",
+           target = "_blank")
+  )
+}
+
+ui <- bslib::page_sidebar(
+  title = app_title("Omitted variable bias, live"),
+  theme = r4dev_theme,
+  sidebar = sidebar(
+    width = 330,
+    selectInput(
+      "scenario", "Story",
+      choices = setNames(names(scenarios), vapply(scenarios, `[[`, "", "label"))
+    ),
+    sliderInput("alpha", "True effect of X on Y (α)", min = -1, max = 1, value = 0.5, step = 0.1),
+    sliderInput("beta", "Effect of Z on Y (β)", min = -1, max = 1, value = 0.6, step = 0.1),
+    sliderInput("delta", "How strongly Z sorts into X (δ)", min = -0.9, max = 0.9, value = 0.6, step = 0.1),
+    input_switch("controlled", "Control for Z (long regression)", value = FALSE),
+    actionButton("resample", "Draw a new sample", icon = icon("dice"), class = "btn-outline-primary btn-sm"),
+    accordion(
+      open = FALSE,
+      accordion_panel(
+        "Guided tour", icon = bs_icon("signpost"),
+        tags$ol(
+          style = "font-size:0.83rem; padding-left:1.1rem;",
+          tags$li("Look at the point colors: dark points (high Z) sit to one side of X AND higher in Y. That double role is the whole problem."),
+          tags$li("Check the identity card: the bias you observe equals β̂ × δ̂ exactly — not approximately."),
+          tags$li("Set δ to 0: Z still causes Y, but with no sorting into X there is no bias."),
+          tags$li("Set β to 0: Z sorts into X but doesn't touch Y — again no bias. It takes both."),
+          tags$li("Pick the coffee story: a pure phantom effect, invented by the omitted variable."),
+          tags$li("Pick class size: flip δ negative and watch the bias flip sign with it."),
+          tags$li("Switch on the control and see the parallel lines: the adjusted slope is the slope at any fixed level of Z.")
+        )
+      )
     )
   ),
 
-  layout_sidebar(
-    sidebar = sidebar(
-      width = 330,
-      selectInput(
-        "scenario", "Story",
-        choices = setNames(names(scenarios), vapply(scenarios, `[[`, "", "label"))
-      ),
-      sliderInput("alpha", "True effect of X on Y (α)", min = -1, max = 1, value = 0.5, step = 0.1),
-      sliderInput("beta", "Effect of Z on Y (β)", min = -1, max = 1, value = 0.6, step = 0.1),
-      sliderInput("delta", "How strongly Z sorts into X (δ)", min = -0.9, max = 0.9, value = 0.6, step = 0.1),
-      input_switch("controlled", "Control for Z (long regression)", value = FALSE),
-      actionButton("resample", "Draw a new sample", icon = icon("dice"), class = "btn-sm"),
-      accordion(
-        open = FALSE,
-        accordion_panel(
-          "Guided tour", icon = bs_icon("signpost"),
-          tags$ol(
-            style = "font-size:0.83rem; padding-left:1.1rem;",
-            tags$li("Look at the point colors: dark points (high Z) sit to one side of X AND higher in Y. That double role is the whole problem."),
-            tags$li("Check the identity card: the bias you observe equals β̂ × δ̂ exactly — not approximately."),
-            tags$li("Set δ to 0: Z still causes Y, but with no sorting into X there is no bias."),
-            tags$li("Set β to 0: Z sorts into X but doesn't touch Y — again no bias. It takes both."),
-            tags$li("Pick the coffee story: a pure phantom effect, invented by the omitted variable."),
-            tags$li("Pick class size: flip δ negative and watch the bias flip sign with it."),
-            tags$li("Switch on the control and see the parallel lines: the adjusted slope is the slope at any fixed level of Z.")
-          )
-        )
-      )
+  layout_columns(
+    fill = FALSE,
+    uiOutput("true_box"), uiOutput("short_box"), uiOutput("long_box"), uiOutput("bias_box")
+  ),
+  uiOutput("identity_card"),
+  layout_columns(
+    col_widths = c(5, 7),
+    navset_card_underline(
+      full_screen = TRUE,
+      nav_panel("Causal graph",
+                bslib::card_body(class = "p-1", plotOutput("dag", height = "100%"))),
+      nav_panel("Which way does the bias go?",
+                bslib::card_body(uiOutput("sign_table")))
     ),
-
-    layout_columns(
-      col_widths = c(3, 3, 3, 3),
-      fill = FALSE,
-      uiOutput("true_box"),
-      uiOutput("short_box"),
-      uiOutput("long_box"),
-      uiOutput("bias_box")
-    ),
-
-    uiOutput("identity_card"),
-    uiOutput("explain"),
-
-    layout_columns(
-      col_widths = c(5, 7),
-      tagList(
-        bslib::card(
-          full_screen = TRUE,
-          bslib::card_header("The causal graph", class = "py-1"),
-          bslib::card_body(
-            class = "d-flex justify-content-center align-items-center p-1",
-            plotOutput("dag", height = "250px", width = "100%")
-          )
-        ),
-        bslib::card(
-          bslib::card_header("Which way does the bias go?", class = "py-1"),
-          bslib::card_body(class = "p-2", uiOutput("sign_table"))
-        )
-      ),
-      tagList(
-        bslib::card(
-          full_screen = TRUE,
-          bslib::card_header(uiOutput("scatter_title", inline = TRUE), class = "py-1"),
-          plotOutput("scatter", height = "330px")
-        ),
-        bslib::card(
-          full_screen = TRUE,
-          bslib::card_header(uiOutput("fs_title", inline = TRUE), class = "py-1"),
-          plotOutput("first_stage", height = "170px")
-        )
-      )
+    navset_card_underline(
+      full_screen = TRUE,
+      nav_panel("Naive vs adjusted",
+                div(class = "r4-caption px-3 pt-2", uiOutput("scatter_title", inline = TRUE)),
+                plotOutput("scatter", height = "100%")),
+      nav_panel("The sorting itself",
+                div(class = "r4-caption px-3 pt-2", uiOutput("fs_title", inline = TRUE)),
+                plotOutput("first_stage", height = "100%"))
     )
   )
 )
@@ -266,20 +262,20 @@ server <- function(input, output, session) {
 
   # ---- value boxes
   output$true_box <- renderUI({
-    value_box(title = "True α", value = sprintf("%.2f", input$alpha), theme = "secondary")
+    value_box(title = "True α", value = sprintf("%.2f", input$alpha))
   })
   output$short_box <- renderUI({
     value_box(
       title = sprintf("Naive: %s ~ %s", sc()$y_lab, sc()$x_lab),
       value = sprintf("%.2f", fits()$short),
-      theme = if (input$controlled) "secondary" else "primary"
+      theme = if (!input$controlled) "primary"
     )
   })
   output$long_box <- renderUI({
     value_box(
       title = sprintf("Adjusted: + %s", sc()$z_lab),
       value = sprintf("%.2f", fits()$long_x),
-      theme = if (input$controlled) "primary" else "secondary"
+      theme = if (input$controlled) "primary"
     )
   })
   output$bias_box <- renderUI({
@@ -287,8 +283,7 @@ server <- function(input, output, session) {
     value_box(
       title = "Bias (naive − adjusted)",
       value = sprintf("%+.2f", bias()),
-      theme = if (off) "danger" else "success",
-      showcase = bs_icon(if (off) "exclamation-triangle" else "check-circle")
+      theme = if (off) "danger" else "success"
     )
   })
 
@@ -300,7 +295,7 @@ server <- function(input, output, session) {
       bslib::card_body(
         class = "py-2 text-center",
         tags$div(
-          style = "font-size:1.15rem; font-family:'Fira Code', monospace;",
+          style = "font-size:1.25rem;",
           tags$span("bias = β̂ × δ̂ :   ", style = "color:grey;"),
           tags$span(sprintf("%+.2f", bias()), style = paste0("color:", COL_NAIVE, "; font-weight:bold;")),
           tags$span(" = "),
@@ -312,19 +307,11 @@ server <- function(input, output, session) {
           class = "text-muted", style = "font-size:0.8rem;",
           sprintf("β̂ = effect of %s in the long model · δ̂ = slope of %s ~ %s. The identity is exact in every sample — not an approximation.",
                   tolower(sc()$z_lab), tolower(sc()$z_lab), tolower(sc()$x_lab))
+        ),
+        tags$p(
+          class = "mb-0 mt-2 text-start", style = "font-size:0.92rem;",
+          if (input$controlled) sc()$control_story else sc()$story
         )
-      )
-    )
-  })
-
-  # ---- dynamic explanation
-  output$explain <- renderUI({
-    s <- sc()
-    bslib::card(
-      class = "mb-2", style = "flex:none;",
-      bslib::card_body(
-        class = "py-2", style = "font-size:0.93rem;",
-        tags$p(class = "mb-0", if (input$controlled) s$control_story else s$story)
       )
     )
   })
@@ -351,7 +338,7 @@ server <- function(input, output, session) {
         if (pos) "bias + (pushed up)" else "bias − (pushed down)"
       )
     }
-    hdr_style <- "padding:6px 10px; font-size:0.8rem; color:grey; border:1px solid #dee2e6;"
+    hdr_style <- "padding:6px 10px; font-size:0.8rem; color:grey; border:1px solid #dee2e6; white-space:nowrap;"
     tagList(
       tags$table(
         style = "width:100%; border-collapse:collapse;",
@@ -419,7 +406,7 @@ server <- function(input, output, session) {
       geom_smooth(method = "lm", se = FALSE, formula = y ~ x, color = UI_TEAL, linewidth = 1.2) +
       scale_y_continuous(breaks = c(-2, 0, 2)) +
       labs(x = s$x_lab, y = s$z_lab) +
-      theme_minimal(base_size = 12) +
+      theme_minimal(base_size = 14) +
       theme(panel.grid.minor = element_blank())
   }, res = 110)
 }

@@ -141,93 +141,97 @@ dag_plot <- function(sc, xy_on, xy, xz, yz, mode) {
 }
 
 # ---- UI ----------------------------------------------------------------
-ui <- bslib::page_fillable(
-  theme = bslib::bs_theme(
-    bootswatch = "journal",
-    base_font = bslib::font_google("Roboto Condensed"),
-    primary = UI_TEAL,
-    brand = FALSE
-  ),
-  padding = "1rem",
+r4dev_theme <- bslib::bs_theme(
+  version = 5,
+  primary = UI_TEAL, secondary = "#5C6B70",
+  success = "#2E7D5B", warning = "#B45309", danger = "#C2401F",
+  base_font = bslib::font_google("Roboto Condensed", wght = c(400, 700)),
+  code_font = bslib::font_google("Fira Code"),
+  "navbar-bg" = UI_TEAL,
+  brand = FALSE
+) |>
+  bslib::bs_add_rules("
+    .bslib-value-box .value-box-title { font-size: .85rem; margin-bottom: .1rem; }
+    .bslib-value-box .value-box-value { font-weight: 700; font-size: 1.7rem; }
+    .bslib-value-box .value-box-area { padding: .55rem .9rem; }
+    .bslib-grid > * { min-width: 0; }
+    .bslib-grid-item > .shiny-html-output { display: flex; height: 100%; }
+    .bslib-grid-item > .shiny-html-output > .bslib-value-box { flex: 1; margin-bottom: 0; }
+    .card-header { font-weight: 700; }
+    .r4-caption { font-size: .82rem; color: var(--bs-secondary-color); }
+  ")
 
+app_title <- function(text) {
   tags$div(
-    style = "display:flex; align-items:center; gap:10px; margin-bottom:0.4rem;",
-    tags$img(src = "r4dev_logo.png", height = "32px"),
-    tags$strong("R4DEV · Collider bias", style = paste0("color:", UI_TEAL, "; font-size:1.1rem;")),
-    tags$a(
-      "session ↗", href = "https://nelsonamayad.github.io/R4DEV/sessions_thinking/04-causal/04-causal.html",
-      target = "_blank", style = "margin-left:auto; font-size:0.85rem;"
+    class = "d-flex align-items-center gap-2 w-100",
+    tags$img(src = "r4dev_logo.png", height = "28px", alt = "R4DEV logo"),
+    text,
+    tags$a("lesson ↗", class = "ms-auto small text-white",
+           href = "https://nelsonamayad.github.io/R4DEV/sessions_thinking/04-causal/04-causal.html",
+           target = "_blank")
+  )
+}
+
+ui <- bslib::page_sidebar(
+  title = app_title("Collider bias, live"),
+  theme = r4dev_theme,
+  sidebar = sidebar(
+    width = 330,
+    selectInput(
+      "scenario", "Story",
+      choices = setNames(names(scenarios), vapply(scenarios, `[[`, "", "label"))
+    ),
+    radioButtons(
+      "mode", "How do you condition on the collider?",
+      choices = c(
+        "Not at all (leave Z alone)" = "none",
+        "Select: keep only high-Z units" = "select",
+        "Control: put Z in the regression" = "control"
+      ),
+      selected = "none"
+    ),
+    hr(),
+    input_switch("xy_on", "True X → Y effect exists", value = FALSE),
+    conditionalPanel(
+      "input.xy_on",
+      sliderInput("xy", NULL, min = 0, max = 1, value = 0.4, step = 0.05)
+    ),
+    sliderInput("xz", "X → Z strength", min = 0, max = 1, value = 0.7, step = 0.05),
+    sliderInput("yz", "Y → Z strength", min = 0, max = 1, value = 0.7, step = 0.05),
+    actionButton("resample", "Draw a new sample", icon = icon("dice"), class = "btn-outline-primary btn-sm"),
+    accordion(
+      open = FALSE,
+      accordion_panel(
+        "Guided tour", icon = bs_icon("signpost"),
+        tags$ol(
+          style = "font-size:0.83rem; padding-left:1.1rem;",
+          tags$li("Start unadjusted: the cloud is round, the slope sits near the true effect (zero)."),
+          tags$li("Choose ", tags$em("Select high-Z"), ": a negative slope appears out of nowhere."),
+          tags$li("Switch the true X → Y effect on: conditioning now distorts a real effect instead of inventing one."),
+          tags$li("Try ", tags$em("Control"), ": putting the collider in the regression is just as bad as selecting on it."),
+          tags$li("Draw new samples: the bias never washes out. It is not noise."),
+          tags$li("Drag either arrow to 0: the bias disappears — the collider needs both parents.")
+        )
+      )
     )
   ),
 
-  layout_sidebar(
-    sidebar = sidebar(
-      width = 330,
-      selectInput(
-        "scenario", "Story",
-        choices = setNames(names(scenarios), vapply(scenarios, `[[`, "", "label"))
-      ),
-      radioButtons(
-        "mode", "How do you condition on the collider?",
-        choices = c(
-          "Not at all (leave Z alone)" = "none",
-          "Select: keep only high-Z units" = "select",
-          "Control: put Z in the regression" = "control"
-        ),
-        selected = "none"
-      ),
-      hr(),
-      input_switch("xy_on", "True X → Y effect exists", value = FALSE),
-      conditionalPanel(
-        "input.xy_on",
-        sliderInput("xy", NULL, min = 0, max = 1, value = 0.4, step = 0.05)
-      ),
-      sliderInput("xz", "X → Z strength", min = 0, max = 1, value = 0.7, step = 0.05),
-      sliderInput("yz", "Y → Z strength", min = 0, max = 1, value = 0.7, step = 0.05),
-      actionButton("resample", "Draw a new sample", icon = icon("dice"), class = "btn-sm"),
-      accordion(
-        open = FALSE,
-        accordion_panel(
-          "Guided tour", icon = bs_icon("signpost"),
-          tags$ol(
-            style = "font-size:0.83rem; padding-left:1.1rem;",
-            tags$li("Start unadjusted: the cloud is round, the slope sits near the true effect (zero)."),
-            tags$li("Choose ", tags$em("Select high-Z"), ": a negative slope appears out of nowhere."),
-            tags$li("Switch the true X → Y effect on: conditioning now distorts a real effect instead of inventing one."),
-            tags$li("Try ", tags$em("Control"), ": putting the collider in the regression is just as bad as selecting on it."),
-            tags$li("Draw new samples: the bias never washes out. It is not noise."),
-            tags$li("Drag either arrow to 0: the bias disappears — the collider needs both parents.")
-          )
-        )
-      )
+  layout_columns(
+    fill = FALSE,
+    uiOutput("true_box"), uiOutput("est_box"), uiOutput("bias_box"), uiOutput("n_box")
+  ),
+  uiOutput("explain"),
+  layout_columns(
+    col_widths = c(5, 7),
+    bslib::card(
+      full_screen = TRUE,
+      bslib::card_header("The causal graph"),
+      bslib::card_body(class = "p-1", plotOutput("dag", height = "100%"))
     ),
-
-    layout_columns(
-      col_widths = c(3, 3, 3, 3),
-      fill = FALSE,
-      uiOutput("true_box"),
-      uiOutput("est_box"),
-      uiOutput("bias_box"),
-      uiOutput("n_box")
-    ),
-
-    uiOutput("explain"),
-
-    layout_columns(
-      col_widths = c(5, 7),
-      bslib::card(
-        full_screen = TRUE,
-        bslib::card_header("The causal graph", class = "py-1"),
-        bslib::card_body(
-          class = "d-flex justify-content-center align-items-center p-1",
-          plotOutput("dag", height = "300px", width = "100%")
-        )
-      ),
-      bslib::card(
-        full_screen = TRUE,
-        bslib::card_header(uiOutput("scatter_title", inline = TRUE), class = "py-1"),
-        plotOutput("scatter", height = "360px")
-      )
+    bslib::card(
+      full_screen = TRUE,
+      bslib::card_header(uiOutput("scatter_title", inline = TRUE)),
+      plotOutput("scatter", height = "100%")
     )
   )
 )
@@ -266,7 +270,7 @@ server <- function(input, output, session) {
   output$true_box <- renderUI({
     value_box(
       title = sprintf("True %s → %s effect", sc()$x_lab, sc()$y_lab),
-      value = sprintf("%.2f", true_effect()), theme = "secondary"
+      value = sprintf("%.2f", true_effect())
     )
   })
   output$est_box <- renderUI({
@@ -283,15 +287,14 @@ server <- function(input, output, session) {
     value_box(
       title = "Bias (estimate − truth)",
       value = sprintf("%+.2f", bias()),
-      theme = if (off) "danger" else "success",
-      showcase = bs_icon(if (off) "exclamation-triangle" else "check-circle")
+      theme = if (off) "danger" else "success"
     )
   })
   output$n_box <- renderUI({
     value_box(
       title = "Observations used",
       value = format(n_used(), big.mark = ","),
-      theme = if (input$mode == "select") "warning" else "secondary"
+      theme = if (input$mode == "select") "warning"
     )
   })
 

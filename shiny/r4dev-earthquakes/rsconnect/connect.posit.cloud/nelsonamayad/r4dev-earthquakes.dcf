@@ -1,10 +1,10 @@
 name: r4dev-earthquakes
-title:
+title: R4DEV - Global Earthquakes
 username: nelsonamayad
 account: nelsonamayad
 server: connect.posit.cloud
 hostUrl: https://api.connect.posit.cloud/v1
-appId: 01a10d6c-3c68-aeb3-bff2-c1503b6f1574
+appId: 01a1b7a3-1f7c-32bb-3799-3cde672905bb
 bundleId:
-url: https://connect.posit.cloud/nelsonamayad/content/01a10d6c-3c68-aeb3-bff2-c1503b6f1574
+url: https://connect.posit.cloud/nelsonamayad/content/01a1b7a3-1f7c-32bb-3799-3cde672905bb
 version: 1

@@ -195,7 +195,7 @@ maddison_girafe
 ## Example: Shiny
 
 ```{=html}
-<iframe id="earthquakes" src="https://nelsonamayad-r4dev-earthquakes.share.connect.posit.cloud/" style="border: none; width: 100%; height: 550px" frameborder="0" title="Global Earthquakes Shiny app">
+<iframe id="earthquakes" src="https://01a1b7a3-1f7c-32bb-3799-3cde672905bb.share.connect.posit.cloud/" style="border: none; width: 100%; height: 550px" frameborder="0" title="Global Earthquakes Shiny app">
 </iframe>
 ```
 

@@ -26,3 +26,6 @@
 
 # Unused 120 MB Kontur population file (over GitHub's 100 MB limit) — kept locally only
 **/kontur_population_*.gpkg
+
+# shinychat/querychat conversation history written by local app runs
+.shinychat/
