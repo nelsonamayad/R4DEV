@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.10.11">
+<meta name="generator" content="quarto-1.12.1">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -12,10 +12,13 @@
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -40,18 +43,19 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/cookie-consent/cookie-consent.css" rel="stylesheet">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/scrollable-regions/scrollable-regions.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-73e373f4a43393be879eaa7f5bec20f5.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-7866983ca643604dcd4b1790e1c86039.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-73e373f4a43393be879eaa7f5bec20f5.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-e968faae8403244f20eb603d7cf50726.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-4246548b5b408873968915ceaf77352e.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-e968faae8403244f20eb603d7cf50726.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-096f48bc9812ee6417bed5289604b2b1.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-df63bb3cabdf6632a2ac05be1b5d778c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-096f48bc9812ee6417bed5289604b2b1.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-118acc1f35295c804e15436c7de2147f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-8259948f9af0ad08d702d370e705c5e5.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-118acc1f35295c804e15436c7de2147f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <link href="site_libs/quarto-contrib/fontawesome6-1.2.0/all.min.css" rel="stylesheet">
 <link href="site_libs/quarto-contrib/fontawesome6-1.2.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -102,12 +106,6 @@ ul.task-list li input[type="checkbox"] {
       window['quarto-listing-loaded']();
     }
   });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
   
 
   window.document.addEventListener("DOMContentLoaded", function (_event) {
@@ -130,12 +128,6 @@ ul.task-list li input[type="checkbox"] {
       window['quarto-listing-loaded']();
     }
   });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
   
 
   window.document.addEventListener("DOMContentLoaded", function (_event) {
@@ -158,12 +150,6 @@ ul.task-list li input[type="checkbox"] {
       window['quarto-listing-loaded']();
     }
   });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
   
 
   window.document.addEventListener("DOMContentLoaded", function (_event) {
@@ -186,12 +172,6 @@ ul.task-list li input[type="checkbox"] {
       window['quarto-listing-loaded']();
     }
   });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
   </script>
 <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-CE27LT98M2"></script>
 
@@ -229,7 +209,7 @@ cookieconsent.run({
 </script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -270,11 +250,9 @@ window.Quarto = {
 <meta name="twitter:image" content="https://nelsonamayad.github.io/R4DEV/logo/r4dev_dalle_1.png">
 <meta name="twitter:creator" content="@nelsonamayad">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image-height" content="584">
-<meta name="twitter:image-width" content="478">
 </head>
 
-<body class="floating nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+<body class="floating nav-fixed quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a><script id="quarto-html-before-body" type="application/javascript">
     const toggleBodyColorMode = (bsSheetEl) => {
       const mode = bsSheetEl.getAttribute("data-mode");
       const bodyEl = window.document.querySelector("body");
@@ -297,6 +275,7 @@ window.Quarto = {
       for (let i=0; i < toggles.length; i++) {
         const toggle = toggles[i];
         if (toggle) {
+          toggle.setAttribute("aria-checked", alternate ? "true" : "false");
           if (alternate) {
             toggle.classList.add("alternate");
           } else {
@@ -326,13 +305,19 @@ window.Quarto = {
       manageTransitions('#quarto-margin-sidebar .nav-link', true);
       // Switch the toggles
       setColorSchemeToggle(alternate)
-      // Hack to workaround the fact that safari doesn't
-      // properly recolor the scrollbar when toggling (#1455)
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455).
+    // Not run on load: stylesheets are set before first paint there, and
+    // scrolling would undo the scroll to a URL fragment (#14973).
+    // The one pixel nudge keeps the reader where they were.
+    const refreshSafariScrollbar = () => {
       if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
         manageTransitions("body", false);
-        window.scrollTo(0, 1);
+        const scrollY = window.scrollY;
+        window.scrollTo(0, scrollY > 0 ? scrollY - 1 : 1);
         setTimeout(() => {
-          window.scrollTo(0, 0);
+          window.scrollTo(0, scrollY);
           manageTransitions("body", true);
         }, 40);
       }
@@ -427,6 +412,7 @@ window.Quarto = {
       // Read the current dark / light value
       let toAlternate = !hasAlternateSentinel();
       toggleColorMode(toAlternate);
+      refreshSafariScrollbar();
       setStyleSentinel(toAlternate);
       toggleGiscusIfUsed(toAlternate, darkModeDefault);
       window.dispatchEvent(new Event('resize'));
@@ -436,6 +422,7 @@ window.Quarto = {
         return;
       const alternate = e.matches
       toggleColorMode(alternate);
+      refreshSafariScrollbar();
       localAlternateSentinel = e.matches ? 'alternate' : 'default'; // this is used alongside local storage!
       toggleGiscusIfUsed(alternate, darkModeDefault);
     });
@@ -449,7 +436,7 @@ window.Quarto = {
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark" aria-label="Site">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a href="./index.html" class="navbar-brand navbar-brand-logo">
@@ -457,8 +444,7 @@ window.Quarto = {
     <img src="./logo/r4dev_dalle_1.png" alt="" class="navbar-logo dark-content">
     </a>
   </div>
-            <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -640,8 +626,9 @@ window.Quarto = {
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
-  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+  <button type="button" role="switch" aria-checked="false" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode" aria-label="Toggle dark mode"><i class="bi"></i></button>
 </div>
+            <div id="quarto-search" class="" title="Search"></div>
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -653,7 +640,7 @@ window.Quarto = {
 <!-- margin-sidebar -->
     
 <!-- main -->
-<main class="content column-page" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><h1 class="title display-7">R4DEV</h1></header>
+<main class="content column-page" id="quarto-document-content" tabindex="-1"><header id="title-block-header" class="quarto-title-block"><h1 class="title display-7">R4DEV</h1></header>
 
 
 <header id="title-block-header">
@@ -715,7 +702,7 @@ window.Quarto = {
 <div id="listing-build-with-r" class="quarto-listing quarto-listing-container-grid">
 <div class="list grid quarto-listing-cols-3">
 <div class="g-col-1" data-index="0" data-categories="bmV0bGlmeSUyQ3F1YXJ0byUyQ3dlYnNpdGUlMkNibG9nJTJDaHlwb3RoZXNpcyUyQ2Jvb3Rzd2F0Y2g=" data-listing-date-sort="1659132000000" data-listing-file-modified-sort="1794076112280" data-listing-date-modified-sort="1794076112000" data-listing-reading-time-sort="8" data-listing-word-count-sort="1531">
-<a href="./sessions_workshop/01-quarto/01-quarto.html" class="quarto-grid-link">
+<a href="./sessions_workshop/01-quarto/01-quarto.html" class="quarto-grid-link no-external-icon">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
 <img loading="lazy" src="./sessions_workshop/01-quarto/swordfish.gif" class="thumbnail-image card-img" style="height: 150px;">
@@ -724,14 +711,14 @@ window.Quarto = {
 <h5 class="no-anchor card-title listing-title">
 Blogging with Quarto 📓
 </h5>
-<div class="card-text listing-description delink">
+<div class="card-text listing-description">
 <p>Learn to work with Quarto, to write prose and analyse data at the same time. Create and update a blog using Quarto and then publish it online using Netlify</p>
 </div>
 </div>
 </div></a>
 </div>
 <div class="g-col-1" data-index="1" data-categories="QVBJJTJDaHR0cjIlMkNpbnRlcmFjdGl2ZSUyQ2dncGxvdDIlMkNwbG90bHklMkNnZ2lyYXBo" data-listing-date-sort="1659218400000" data-listing-file-modified-sort="1794076112296" data-listing-date-modified-sort="1794076112000" data-listing-reading-time-sort="33" data-listing-word-count-sort="6519">
-<a href="./sessions_workshop/02-plots/02-plots.html" class="quarto-grid-link">
+<a href="./sessions_workshop/02-plots/02-plots.html" class="quarto-grid-link no-external-icon">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
 <img loading="lazy" src="./sessions_workshop/02-plots/thom-dance.gif" class="thumbnail-image card-img" style="height: 150px;">
@@ -740,14 +727,14 @@ Blogging with Quarto 📓
 <h5 class="no-anchor card-title listing-title">
 Everything in its right place 🎼
 </h5>
-<div class="card-text listing-description delink">
+<div class="card-text listing-description">
 <p>Learn how to get information from APIs with httr2, and create interactive visualisations of historical GDP, Kyoto weather and archived Spotify songs using ggplot2, plotly…</p>
 </div>
 </div>
 </div></a>
 </div>
 <div class="g-col-1" data-index="2" data-categories="dGV4dCUyQ3NlbnRpbWVudCUyQ3BkZiUyQ2Jvb2slMkNyZWdleCUyQ3dvcmRjbG91ZA==" data-listing-date-sort="1659218400000" data-listing-file-modified-sort="1794076180638" data-listing-date-modified-sort="1794076180000" data-listing-reading-time-sort="24" data-listing-word-count-sort="4650">
-<a href="./sessions_workshop/03-text/03-text.html" class="quarto-grid-link">
+<a href="./sessions_workshop/03-text/03-text.html" class="quarto-grid-link no-external-icon">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
 <img loading="lazy" src="./sessions_workshop/03-text/darwin.gif" class="thumbnail-image card-img" style="height: 150px;">
@@ -756,14 +743,14 @@ Everything in its right place 🎼
 <h5 class="no-anchor card-title listing-title">
 Data from words 📚
 </h5>
-<div class="card-text listing-description delink">
+<div class="card-text listing-description">
 <p>Import, clean, tokenise and stem text, score its sentiment, and learn how functions in R make your work so much easier.</p>
 </div>
 </div>
 </div></a>
 </div>
 <div class="g-col-1" data-index="3" data-categories="dGV4dCUyQ3RvcGljJTIwbW9kZWxsaW5nJTJDTERBJTJDbmdyYW1zJTJDbmV0d29yayUyQ2Jvb2s=" data-listing-date-sort="1659218400000" data-listing-file-modified-sort="1794076165587" data-listing-date-modified-sort="1794076165000" data-listing-reading-time-sort="20" data-listing-word-count-sort="3887">
-<a href="./sessions_workshop/04-topics/04-topics.html" class="quarto-grid-link">
+<a href="./sessions_workshop/04-topics/04-topics.html" class="quarto-grid-link no-external-icon">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
 <img loading="lazy" src="./sessions_workshop/04-topics/elliot-reads.gif" class="thumbnail-image card-img" style="height: 150px;">
@@ -772,14 +759,14 @@ Data from words 📚
 <h5 class="no-anchor card-title listing-title">
 What books are about 📖
 </h5>
-<div class="card-text listing-description delink">
+<div class="card-text listing-description">
 <p>Shuffle the chapters of six classic books and let topic modelling (LDA) stitch them back together, then map how David Hume’s ideas connect as a network of word pairs.</p>
 </div>
 </div>
 </div></a>
 </div>
 <div class="g-col-1" data-index="4" data-categories="Z2dhbmltYXRlJTJDY2F1c2FsJTIwaW5mZXJlbmNlJTJDZ2dwbG90MiUyQ2dnaW1hZ2UlMkNnZ3BwJTJDdHJlZW1hcA==" data-listing-date-sort="1659218400000" data-listing-file-modified-sort="1794076293093" data-listing-date-modified-sort="1794076293000" data-listing-reading-time-sort="27" data-listing-word-count-sort="5280">
-<a href="./sessions_workshop/05-animate/05-animate.html" class="quarto-grid-link">
+<a href="./sessions_workshop/05-animate/05-animate.html" class="quarto-grid-link no-external-icon">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
 <img loading="lazy" src="./sessions_workshop/05-animate/homer.gif" class="thumbnail-image card-img" style="height: 150px;">
@@ -788,14 +775,14 @@ What books are about 📖
 <h5 class="no-anchor card-title listing-title">
 Making data move 🚶
 </h5>
-<div class="card-text listing-description delink">
+<div class="card-text listing-description">
 <p>Transform static plots into animations using gganimate. Examples include millennia of cherry tree blossoms, COVID-19 aftermath and why causation does not imply correlation.</p>
 </div>
 </div>
 </div></a>
 </div>
 <div class="g-col-1" data-index="5" data-categories="bWFwJTJDQVBJJTJDaW50ZXJhY3RpdmUlMkNsZWFmbGV0JTJDc2YlMkNnZ2lyYXBoJTJDcmF5c2hhZGVy" data-listing-date-sort="1659218400000" data-listing-file-modified-sort="1794076293099" data-listing-date-modified-sort="1794076293000" data-listing-reading-time-sort="31" data-listing-word-count-sort="6152">
-<a href="./sessions_workshop/06-maps/06-maps.html" class="quarto-grid-link">
+<a href="./sessions_workshop/06-maps/06-maps.html" class="quarto-grid-link no-external-icon">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
 <img loading="lazy" src="./sessions_workshop/06-maps/map-fractal.gif" class="thumbnail-image card-img" style="height: 150px;">
@@ -804,14 +791,14 @@ Making data move 🚶
 <h5 class="no-anchor card-title listing-title">
 Mapping despair in the USA 🗺️
 </h5>
-<div class="card-text listing-description delink">
+<div class="card-text listing-description">
 <p>Learn how to find, download and visualise spatial data. We’ll create static and interactive maps using ggplot2 and leaflet, using data on the opioid epidemic in the United…</p>
 </div>
 </div>
 </div></a>
 </div>
 <div class="g-col-1" data-index="6" data-categories="cnZlc3QlMkNzZW50aW1lbnQlMkNyZWFjdGFibGUlMkN3aGlsZSUyQ3NjcmFwaW5n" data-listing-date-sort="1659218400000" data-listing-file-modified-sort="1794076293103" data-listing-date-modified-sort="1794076293000" data-listing-reading-time-sort="16" data-listing-word-count-sort="3177">
-<a href="./sessions_workshop/07-scrap/07-scrap.html" class="quarto-grid-link">
+<a href="./sessions_workshop/07-scrap/07-scrap.html" class="quarto-grid-link no-external-icon">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
 <img loading="lazy" src="./sessions_workshop/07-scrap/bono-wink.gif" class="thumbnail-image card-img" style="height: 150px;">
@@ -820,14 +807,14 @@ Mapping despair in the USA 🗺️
 <h5 class="no-anchor card-title listing-title">
 Just take it 🌏
 </h5>
-<div class="card-text listing-description delink">
+<div class="card-text listing-description">
 <p>Sometimes you need to bring data straight from a website. Scrape IMDb movie rankings, U2 lyrics and untranslatable words.</p>
 </div>
 </div>
 </div></a>
 </div>
-<div class="g-col-1" data-index="7" data-categories="c2hpbnklMkNkYXNoYm9hcmQlMkNxdWFydG8lMkN3ZWJzaXRlJTJDbWFwJTJDcmVhY3RpdmUlMkNwcmVzZW50YXRpb24lMkNyZXZlYWxqcw==" data-listing-date-sort="1659218400000" data-listing-file-modified-sort="1794230134935" data-listing-date-modified-sort="1794230134000" data-listing-reading-time-sort="41" data-listing-word-count-sort="8048">
-<a href="./sessions_workshop/08-shiny/08-shiny.html" class="quarto-grid-link">
+<div class="g-col-1" data-index="7" data-categories="c2hpbnklMkNkYXNoYm9hcmQlMkNxdWFydG8lMkN3ZWJzaXRlJTJDbWFwJTJDcmVhY3RpdmUlMkNwcmVzZW50YXRpb24lMkNyZXZlYWxqcw==" data-listing-date-sort="1659218400000" data-listing-file-modified-sort="1794465783550" data-listing-date-modified-sort="1794465783000" data-listing-reading-time-sort="41" data-listing-word-count-sort="8048">
+<a href="./sessions_workshop/08-shiny/08-shiny.html" class="quarto-grid-link no-external-icon">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
 <img loading="lazy" src="./sessions_workshop/08-shiny/shining.gif" class="thumbnail-image card-img" style="height: 150px;">
@@ -836,14 +823,14 @@ Just take it 🌏
 <h5 class="no-anchor card-title listing-title">
 Make it shine 🌟
 </h5>
-<div class="card-text listing-description delink">
+<div class="card-text listing-description">
 <p>These are the best sessions, bringing together all the tools from previous sessions to create interactive apps. You’ll learn how to build and publish Shiny dashboards and…</p>
 </div>
 </div>
 </div></a>
 </div>
 <div class="g-col-1" data-index="8" data-categories="cXVhcnRvJTJDcGRmJTJDaHRtbCUyQ3dvcmQlMkNwYXJhbWV0ZXJpc2VkJTIwcmVwb3J0cyUyQ3pvdGVybw==" data-listing-date-sort="1659218400000" data-listing-file-modified-sort="1794078393987" data-listing-date-modified-sort="1794078393000" data-listing-reading-time-sort="10" data-listing-word-count-sort="1868">
-<a href="./sessions_workshop/09-reports/09-reports.html" class="quarto-grid-link">
+<a href="./sessions_workshop/09-reports/09-reports.html" class="quarto-grid-link no-external-icon">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
 <img loading="lazy" src="./sessions_workshop/09-reports/smart.gif" class="thumbnail-image card-img" style="height: 150px;">
@@ -852,14 +839,14 @@ Make it shine 🌟
 <h5 class="no-anchor card-title listing-title">
 Smart reports 🧠
 </h5>
-<div class="card-text listing-description delink">
+<div class="card-text listing-description">
 <p>Create parameterised reports and learn to work with references using Zotero.</p>
 </div>
 </div>
 </div></a>
 </div>
 <div class="g-col-1" data-index="9" data-categories="cHVycnIlMkNmdW5jdGlvbmFsJTIwcHJvZ3JhbW1pbmclMkNtaXJhaSUyQ3BhcmFsbGVsJTIwY29tcHV0aW5n" data-listing-date-sort="1783202400000" data-listing-file-modified-sort="1794076385514" data-listing-date-modified-sort="1794076385000" data-listing-reading-time-sort="10" data-listing-word-count-sort="1985">
-<a href="./sessions_workshop/10-parallel/10-parallel.html" class="quarto-grid-link">
+<a href="./sessions_workshop/10-parallel/10-parallel.html" class="quarto-grid-link no-external-icon">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
 <img loading="lazy" src="./sessions_workshop/10-parallel/xmen.gif" class="thumbnail-image card-img" style="height: 150px;">
@@ -868,7 +855,7 @@ Smart reports 🧠
 <h5 class="no-anchor card-title listing-title">
 Do it well, do it fast 🏎️
 </h5>
-<div class="card-text listing-description delink">
+<div class="card-text listing-description">
 <p>Functions instead of loops; do multiple things at the same time. Learn purrr’s functional style, then parallelise it with a single wrapper function.</p>
 </div>
 </div>
@@ -883,7 +870,7 @@ Do it well, do it fast 🏎️
 <div id="listing-work-with-ai" class="quarto-listing quarto-listing-container-grid">
 <div class="list grid quarto-listing-cols-3">
 <div class="g-col-1" data-index="0" data-categories="TExNJTJDZWxsbWVyJTJDQUklMkNzdHJ1Y3R1cmVkJTIwZGF0YSUyQ0FQSQ==" data-listing-date-sort="1783116000000" data-listing-file-modified-sort="1794076426654" data-listing-date-modified-sort="1794076426000" data-listing-reading-time-sort="13" data-listing-word-count-sort="2426">
-<a href="./sessions_ai/01-llm/01-llm.html" class="quarto-grid-link">
+<a href="./sessions_ai/01-llm/01-llm.html" class="quarto-grid-link no-external-icon">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
 <img loading="lazy" src="./sessions_ai/01-llm/robot.gif" class="thumbnail-image card-img" style="height: 150px;">
@@ -892,14 +879,14 @@ Do it well, do it fast 🏎️
 <h5 class="no-anchor card-title listing-title">
 Talking to machines 🤖
 </h5>
-<div class="card-text listing-description delink">
+<div class="card-text listing-description">
 <p>LLMs are not just chatbots: they are functions you can call from R. Learn to chat, design prompts, extract structured data from text, and give models tools –all with ellmer.</p>
 </div>
 </div>
 </div></a>
 </div>
 <div class="g-col-1" data-index="1" data-categories="TExNJTJDc2hpbnklMkNzaGlueWNoYXQlMkNxdWVyeWNoYXQlMkNnZ3NxbCUyQ1NRTA==" data-listing-date-sort="1783116000000" data-listing-file-modified-sort="1794076426669" data-listing-date-modified-sort="1794076426000" data-listing-reading-time-sort="9" data-listing-word-count-sort="1657">
-<a href="./sessions_ai/02-llm-apps/02-llm-apps.html" class="quarto-grid-link">
+<a href="./sessions_ai/02-llm-apps/02-llm-apps.html" class="quarto-grid-link no-external-icon">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
 <img loading="lazy" src="./sessions_ai/02-llm-apps/her.gif" class="thumbnail-image card-img" style="height: 150px;">
@@ -908,14 +895,14 @@ Talking to machines 🤖
 <h5 class="no-anchor card-title listing-title">
 Chat with your data 💬
 </h5>
-<div class="card-text listing-description delink">
+<div class="card-text listing-description">
 <p>Put a language model inside your Shiny apps: streaming chat UIs with shinychat, natural-language data filtering with querychat, and SQL that draws its own charts with ggsql.</p>
 </div>
 </div>
 </div></a>
 </div>
 <div class="g-col-1" data-index="2" data-categories="UkFHJTJDcmFnbmFyJTJDZWxsbWVyJTJDZW1iZWRkaW5ncyUyQ3ZlY3RvciUyMHNlYXJjaCUyQ29sbGFtYQ==" data-listing-date-sort="1783116000000" data-listing-file-modified-sort="1794076426730" data-listing-date-modified-sort="1794076426000" data-listing-reading-time-sort="15" data-listing-word-count-sort="2820">
-<a href="./sessions_ai/03-ragnar/03-ragnar.html" class="quarto-grid-link">
+<a href="./sessions_ai/03-ragnar/03-ragnar.html" class="quarto-grid-link no-external-icon">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
 <img loading="lazy" src="./sessions_ai/03-ragnar/ragnar.png" class="thumbnail-image card-img" style="height: 150px;">
@@ -924,14 +911,14 @@ Chat with your data 💬
 <h5 class="no-anchor card-title listing-title">
 Grounded in truth 🧭
 </h5>
-<div class="card-text listing-description delink">
+<div class="card-text listing-description">
 <p>Build a real RAG pipeline end to end with ragnar: crawl a site, chunk it, embed it for free with a local model, store it in DuckDB, retrieve two different ways, and hand…</p>
 </div>
 </div>
 </div></a>
 </div>
 <div class="g-col-1" data-index="3" data-categories="QUklMkNhZ2VudHMlMkNMTE0lMkNDbGF1ZGUlMjBDb2RlJTJDTUNQ" data-listing-date-sort="1783202400000" data-listing-file-modified-sort="1794076426738" data-listing-date-modified-sort="1794076426000" data-listing-reading-time-sort="16" data-listing-word-count-sort="3066">
-<a href="./sessions_ai/04-agentic/04-agentic.html" class="quarto-grid-link">
+<a href="./sessions_ai/04-agentic/04-agentic.html" class="quarto-grid-link no-external-icon">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
 <img loading="lazy" src="./sessions_ai/04-agentic/cat-computer.gif" class="thumbnail-image card-img" style="height: 150px;">
@@ -940,7 +927,7 @@ Grounded in truth 🧭
 <h5 class="no-anchor card-title listing-title">
 Agentic coding 🦾
 </h5>
-<div class="card-text listing-description delink">
+<div class="card-text listing-description">
 <p>An agent is an LLM in a loop with tools. Learn what that actually means, meet the main agentic coding tools –Claude Code, Codex, OpenClaw, Antigravity– and the vocabulary…</p>
 </div>
 </div>
@@ -955,7 +942,7 @@ Agentic coding 🦾
 <div id="listing-think-with-data" class="quarto-listing quarto-listing-container-grid">
 <div class="list grid quarto-listing-cols-3">
 <div class="g-col-1" data-index="0" data-categories="c3RhdGlzdGljcyUyQ3Byb2JhYmlsaXR5JTJDc2ltdWxhdGlvbiUyQ2luZmVyZW5jZQ==" data-listing-date-sort="1782856800000" data-listing-file-modified-sort="1794076487833" data-listing-date-modified-sort="1794076487000" data-listing-reading-time-sort="9" data-listing-word-count-sort="1780">
-<a href="./sessions_thinking/01-uncertainty/01-uncertainty.html" class="quarto-grid-link">
+<a href="./sessions_thinking/01-uncertainty/01-uncertainty.html" class="quarto-grid-link no-external-icon">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
 <img loading="lazy" src="./sessions_thinking/01-uncertainty/uncertainty.png" class="thumbnail-image card-img" style="height: 150px;">
@@ -964,14 +951,14 @@ Agentic coding 🦾
 <h5 class="no-anchor card-title listing-title">
 Embrace the noise 🎲
 </h5>
-<div class="card-text listing-description delink">
+<div class="card-text listing-description">
 <p>Every number you compute from data could have come out differently. Learn to see sampling variation by simulating it: random draws, the law of large numbers, and the central…</p>
 </div>
 </div>
 </div></a>
 </div>
 <div class="g-col-1" data-index="1" data-categories="c3RhdGlzdGljcyUyQ2luZmVyZW5jZSUyQ2Jvb3RzdHJhcCUyQ2luZmVyJTJDcC12YWx1ZQ==" data-listing-date-sort="1782943200000" data-listing-file-modified-sort="1794076487841" data-listing-date-modified-sort="1794076487000" data-listing-reading-time-sort="9" data-listing-word-count-sort="1783">
-<a href="./sessions_thinking/02-inference/02-inference.html" class="quarto-grid-link">
+<a href="./sessions_thinking/02-inference/02-inference.html" class="quarto-grid-link no-external-icon">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
 <img loading="lazy" src="./sessions_thinking/02-inference/inference.png" class="thumbnail-image card-img" style="height: 150px;">
@@ -980,14 +967,14 @@ Embrace the noise 🎲
 <h5 class="no-anchor card-title listing-title">
 There is only one test 🃏
 </h5>
-<div class="card-text listing-description delink">
+<div class="card-text listing-description">
 <p>All of hypothesis testing is one idea: build a world where nothing is going on, simulate it, and ask if your data would be surprising there. Learn it by shuffling with the…</p>
 </div>
 </div>
 </div></a>
 </div>
 <div class="g-col-1" data-index="2" data-categories="c3RhdGlzdGljcyUyQ3JlZ3Jlc3Npb24lMkNicm9vbSUyQ3VuY2VydGFpbnR5JTJDbW9kZWxsaW5n" data-listing-date-sort="1783029600000" data-listing-file-modified-sort="1794076487847" data-listing-date-modified-sort="1794076487000" data-listing-reading-time-sort="9" data-listing-word-count-sort="1798">
-<a href="./sessions_thinking/03-regression/03-regression.html" class="quarto-grid-link">
+<a href="./sessions_thinking/03-regression/03-regression.html" class="quarto-grid-link no-external-icon">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
 <img loading="lazy" src="./sessions_thinking/03-regression/regression.png" class="thumbnail-image card-img" style="height: 150px;">
@@ -996,14 +983,14 @@ There is only one test 🃏
 <h5 class="no-anchor card-title listing-title">
 All models are wrong 📏
 </h5>
-<div class="card-text listing-description delink">
+<div class="card-text listing-description">
 <p>The regression line is the most used –and most over-trusted– model on Earth. Learn to fit it, tidy it with broom, dress it in honest uncertainty with the bootstrap, and…</p>
 </div>
 </div>
 </div></a>
 </div>
 <div class="g-col-1" data-index="3" data-categories="c3RhdGlzdGljcyUyQ2NhdXNhbGl0eSUyQ0RBRyUyQ2dnZGFnJTJDc2ltdWxhdGlvbg==" data-listing-date-sort="1783116000000" data-listing-file-modified-sort="1794076487915" data-listing-date-modified-sort="1794076487000" data-listing-reading-time-sort="13" data-listing-word-count-sort="2465">
-<a href="./sessions_thinking/04-causal/04-causal.html" class="quarto-grid-link">
+<a href="./sessions_thinking/04-causal/04-causal.html" class="quarto-grid-link no-external-icon">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
 <img loading="lazy" src="./sessions_thinking/04-causal/causal.png" class="thumbnail-image card-img" style="height: 150px;">
@@ -1012,14 +999,14 @@ All models are wrong 📏
 <h5 class="no-anchor card-title listing-title">
 Draw your assumptions before drawing your conclusions 🔀
 </h5>
-<div class="card-text listing-description delink">
+<div class="card-text listing-description">
 <p>Correlation is not causation –but why, exactly? Learn the three atoms of causal structure (fork, chain, collider), draw them as DAGs, and simulate each one to see when…</p>
 </div>
 </div>
 </div></a>
 </div>
 <div class="g-col-1" data-index="4" data-categories="c3RhdGlzdGljcyUyQ2NhdXNhbGl0eSUyQ0RBRyUyQ25hdHVyYWwlMjBleHBlcmltZW50cyUyQ3NpbXVsYXRpb24=" data-listing-date-sort="1783116000000" data-listing-file-modified-sort="1794076487886" data-listing-date-modified-sort="1794076487000" data-listing-reading-time-sort="45" data-listing-word-count-sort="8965">
-<a href="./sessions_thinking/05-designs/05-designs.html" class="quarto-grid-link">
+<a href="./sessions_thinking/05-designs/05-designs.html" class="quarto-grid-link no-external-icon">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
 <img loading="lazy" src="./sessions_thinking/05-designs/designs.png" class="thumbnail-image card-img" style="height: 150px;">
@@ -1028,14 +1015,14 @@ Draw your assumptions before drawing your conclusions 🔀
 <h5 class="no-anchor card-title listing-title">
 Earning the arrow 🎛️
 </h5>
-<div class="card-text listing-description delink">
+<div class="card-text listing-description">
 <p>How do you ever get to say ‘causes’? By design. See why randomisation removes arrows instead of arguing about them, how one post-treatment control can ruin a perfect…</p>
 </div>
 </div>
 </div></a>
 </div>
 <div class="g-col-1" data-index="5" data-categories="c3RhdGlzdGljcyUyQ3Byb2JhYmlsaXR5JTJDYmF5ZXM=" data-listing-date-sort="1783202400000" data-listing-file-modified-sort="1794076487924" data-listing-date-modified-sort="1794076487000" data-listing-reading-time-sort="8" data-listing-word-count-sort="1571">
-<a href="./sessions_thinking/06-bayes/06-bayes.html" class="quarto-grid-link">
+<a href="./sessions_thinking/06-bayes/06-bayes.html" class="quarto-grid-link no-external-icon">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
 <img loading="lazy" src="./sessions_thinking/06-bayes/bayes_globe.png" class="thumbnail-image card-img" style="height: 150px;">
@@ -1044,7 +1031,7 @@ Earning the arrow 🎛️
 <h5 class="no-anchor card-title listing-title">
 Think Bayes 🤔
 </h5>
-<div class="card-text listing-description delink">
+<div class="card-text listing-description">
 <p>Toss a globe, count the water, and watch a probability distribution learn. A gentle first contact with Bayesian inference, animated with the tools from session 5.</p>
 </div>
 </div>
@@ -1060,7 +1047,7 @@ Think Bayes 🤔
 <div id="listing-tools" class="quarto-listing quarto-listing-container-grid">
 <div class="list grid quarto-listing-cols-3">
 <div class="g-col-1" data-index="0" data-categories="d2ViciUyQ3Rlc3Q=" data-listing-date-sort="1659218400000" data-listing-file-modified-sort="1794076385514" data-listing-date-modified-sort="1794076385000" data-listing-reading-time-sort="2" data-listing-word-count-sort="294">
-<a href="./sessions_tools/01-practice/01-practice.html" class="quarto-grid-link">
+<a href="./sessions_tools/01-practice/01-practice.html" class="quarto-grid-link no-external-icon">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
 <img loading="lazy" src="./sessions_tools/01-practice/jackie.gif" class="thumbnail-image card-img" style="height: 150px;">
@@ -1069,14 +1056,14 @@ Think Bayes 🤔
 <h5 class="no-anchor card-title listing-title">
 Practice, test 💪
 </h5>
-<div class="card-text listing-description delink">
+<div class="card-text listing-description">
 <p>Every session’s practice section in one index, plus a taste of in-browser R: no installation needed, thanks to the quarto-live extension.</p>
 </div>
 </div>
 </div></a>
 </div>
 <div class="g-col-1" data-index="1" data-categories="Ym9vayUyQ3N0YXRpc3RpY3MlMkNwcm9iYWJpbGl0eSUyQ2Jsb2clMkNzcGF0aWFsJTJDc2hpbnklMkNjYXVzYWxpdHk=" data-listing-date-sort="1659218400000" data-listing-file-modified-sort="1794076487930" data-listing-date-modified-sort="1794076487000" data-listing-reading-time-sort="2" data-listing-word-count-sort="396">
-<a href="./sessions_tools/02-resources/02-resources.html" class="quarto-grid-link">
+<a href="./sessions_tools/02-resources/02-resources.html" class="quarto-grid-link no-external-icon">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
 <img loading="lazy" src="./sessions_tools/02-resources/mind-blow.gif" class="thumbnail-image card-img" style="height: 150px;">
@@ -1085,14 +1072,14 @@ Practice, test 💪
 <h5 class="no-anchor card-title listing-title">
 R-sources 📙
 </h5>
-<div class="card-text listing-description delink">
+<div class="card-text listing-description">
 <p>This is just the beginning. Here you will find a repository of resources to learn more by topic: statistics, geocomputation, text analysis, building apps, etc.</p>
 </div>
 </div>
 </div></a>
 </div>
 <div class="g-col-1" data-index="2" data-categories="ZmVlZGJhY2s=" data-listing-date-sort="1680472800000" data-listing-file-modified-sort="1794076488000" data-listing-date-modified-sort="1794076488000" data-listing-reading-time-sort="1" data-listing-word-count-sort="39">
-<a href="./sessions_tools/03-feedback/03-feedback.html" class="quarto-grid-link">
+<a href="./sessions_tools/03-feedback/03-feedback.html" class="quarto-grid-link no-external-icon">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
 <img loading="lazy" src="./sessions_tools/03-feedback/patrick-bateman.gif" class="thumbnail-image card-img" style="height: 150px;">
@@ -1101,7 +1088,7 @@ R-sources 📙
 <h5 class="no-anchor card-title listing-title">
 Feedback 🔁
 </h5>
-<div class="card-text listing-description delink">
+<div class="card-text listing-description">
 <p>Take a minute to tell me what you liked, what you didn’t like, and how to improve the workshop. Anonymously, if you’d like.</p>
 </div>
 </div>
@@ -1123,15 +1110,50 @@ Feedback 🔁
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right
     if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
-      const a = window.document.createElement('a');
-      a.classList.add('top-right');
-      a.classList.add('quarto-color-scheme-toggle');
-      a.href = "";
-      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const toggle = window.document.createElement('button');
+      toggle.type = "button";
+      toggle.setAttribute("role", "switch");
+      toggle.setAttribute("aria-checked", "false");
+      toggle.classList.add('top-right');
+      toggle.classList.add('quarto-color-scheme-toggle');
+      toggle.setAttribute("aria-label", "Toggle dark mode");
+      toggle.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
       const i = window.document.createElement("i");
       i.classList.add('bi');
-      a.appendChild(i);
-      window.document.body.appendChild(a);
+      toggle.appendChild(i);
+      // Put the toggle in a landmark of its own, so that landmark navigation
+      // can reach it.
+      //
+      // The container is always a fresh direct child of body, and the toggle is
+      // never moved into page furniture that the theme or the author controls.
+      // The toggle is positioned against the page, so any ancestor that
+      // establishes a containing block captures it: a positioned element or a
+      // grid for position: absolute, and transform, filter, will-change or
+      // contain for position: fixed. A direct child of body has none of these
+      // to inherit, and the shift when one appears is silent and visual.
+      //
+      // ARIA says a document should have at most one banner, and axe reports a
+      // duplicate whether or not the banners carry distinct labels. So use a
+      // header when the page has no banner yet, and a named region otherwise.
+      //
+      // A header is a banner wherever it sits, unless it is inside sectioning
+      // content, so this cannot just look at the children of body: a custom
+      // page layout wraps the title block header in a plain div. An explicit
+      // role="banner" always counts.
+      const sectioning = 'article, aside, main, nav, section, [role="article"], [role="complementary"], [role="main"], [role="navigation"], [role="region"]';
+      const hasBanner = Array.from(
+        window.document.querySelectorAll('header:not([role]), [role="banner"]')
+      ).some(function(el) {
+        return el.hasAttribute("role") || el.closest(sectioning) === null;
+      });
+      const container = window.document.createElement(hasBanner ? "div" : "header");
+      if (hasBanner) {
+        container.setAttribute("role", "region");
+        container.setAttribute("aria-label", "Toggle dark mode");
+      }
+      container.classList.add('quarto-color-scheme-toggle-container');
+      container.appendChild(toggle);
+      window.document.body.appendChild(container);
     }
     setColorSchemeToggle(hasAlternateSentinel())
     const icon = "";
@@ -1224,16 +1246,16 @@ Feedback 🔁
     }
     function toggleCodeHandler(show) {
       return function(e) {
-        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
-        for (let i=0; i<detailsSrc.length; i++) {
-          const details = detailsSrc[i].parentElement;
+        const cellDetails = window.document.querySelectorAll(".cell details.code-fold");
+        for (let i=0; i<cellDetails.length; i++) {
+          const details = cellDetails[i];
           if (show) {
             details.open = true;
           } else {
             details.removeAttribute("open");
           }
         }
-        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const cellCodeDivs = window.document.querySelectorAll(".cell div.sourceCode.cell-code");
         const fromCls = show ? "hidden" : "unhidden";
         const toCls = show ? "unhidden" : "hidden";
         for (let i=0; i<cellCodeDivs.length; i++) {
@@ -1257,11 +1279,34 @@ Feedback 🔁
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
         var filterRegex = new RegExp("https:\/\/nelsonamayad\.github\.io\/R4DEV\/");
+      const newWindowLabel = "(opens in a new tab)";
+      const newWindowNoteId = "quarto-ext-newwindow-label";
+      // Links reference one hidden label through aria-describedby, so the
+      // announcement never changes their accessible name.
+      var describeNewWindow = (link) => {
+        if (!window.document.getElementById(newWindowNoteId)) {
+          var newWindowNote = window.document.createElement("span");
+          newWindowNote.id = newWindowNoteId;
+          newWindowNote.hidden = true;
+          newWindowNote.textContent = newWindowLabel;
+          window.document.body.appendChild(newWindowNote);
+        }
+        var describedBy = (link.getAttribute("aria-describedby") || "").split(/\s+/).filter(Boolean);
+        if (!describedBy.includes(newWindowNoteId)) {
+          describedBy.push(newWindowNoteId);
+          link.setAttribute("aria-describedby", describedBy.join(" "));
+        }
+      }
+      var opensNewContext = (link) => {
+        var target = (link.getAttribute("target") || "").toLowerCase();
+        return target !== "" && !["_self", "_parent", "_top"].includes(target);
+      }
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
       // Inspect non-navigation links and adorn them if external
-     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      window.quartoDecorateExternalLinks = function (root) {
+     var links = (root || window.document).querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
       for (var i=0; i<links.length; i++) {
         const link = links[i];
         if (!isInternal(link.href)) {
@@ -1270,13 +1315,79 @@ Feedback 🔁
           if (link.dataset.originalHref !== undefined) {
             link.href = link.dataset.originalHref;
           }
-            // target, if specified
-            link.setAttribute("target", "_blank");
-            if (link.getAttribute("rel") === null) {
+            // an explicit target wins over the site-wide setting
+            if (link.getAttribute("target") === null) {
+              link.setAttribute("target", "_blank");
+            }
+            if (link.getAttribute("rel") === null && opensNewContext(link)) {
               link.setAttribute("rel", "noopener");
             }
+          if (!link.classList.contains('no-external-icon')) {
+          }
+        }
+        if (opensNewContext(link)) {
+          describeNewWindow(link);
         }
       }
+      };
+      window.quartoDecorateExternalLinks(window.document);
+    // Esc closes the popup (WCAG 1.4.13) and focus leaving both trigger and
+    // popup closes it (WCAG 2.4.11); tippy handles neither for interactive popups.
+    const hideOnEscAndFocusOut = {
+      name: 'hideOnEscAndFocusOut',
+      defaultValue: true,
+      fn(instance) {
+        const dismiss = () => {
+          // A show scheduled by the trigger delay would otherwise reopen it
+          instance.clearDelayTimeouts();
+          instance.hide();
+        };
+        const onKeyDown = (event) => {
+          if (event.key !== 'Escape') {
+            return;
+          }
+          // Keep Esc from also reaching page handlers (e.g. reveal.js overview),
+          // except an open reveal.js slide menu, which Esc should close too.
+          // The menu handles keys only when its keyboard option is on.
+          const menuHandlesEsc = window.Reveal?.getPlugin?.('menu')?.isOpen() &&
+            window.Reveal.getConfig().menu?.keyboard !== false;
+          if (!menuHandlesEsc) {
+            event.stopPropagation();
+          }
+          if (instance.popper.contains(window.document.activeElement)) {
+            // Disabled while refocusing so the focus trigger does not reopen it
+            instance.disable();
+            instance.reference.focus();
+            instance.enable();
+          }
+          dismiss();
+        };
+        const onFocusOut = (event) => {
+          const target = event.relatedTarget;
+          if (target && !instance.reference.contains(target) &&
+              !instance.popper.contains(target)) {
+            dismiss();
+          }
+        };
+        // On the trigger too: a click trigger (code-annotations: select) has no
+        // blur handling. Attached for the instance's lifetime so leaving the
+        // trigger also cancels a show still pending on the trigger delay.
+        instance.reference.addEventListener('focusout', onFocusOut);
+        return {
+          onShow() {
+            window.document.addEventListener('keydown', onKeyDown, true);
+            instance.popper.addEventListener('focusout', onFocusOut);
+          },
+          onHide() {
+            window.document.removeEventListener('keydown', onKeyDown, true);
+            instance.popper.removeEventListener('focusout', onFocusOut);
+          },
+          onDestroy() {
+            instance.reference.removeEventListener('focusout', onFocusOut);
+          },
+        };
+      },
+    };
     function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
       const config = {
         allowHTML: true,
@@ -1290,6 +1401,7 @@ Feedback 🔁
         interactiveBorder: 10,
         theme: 'quarto',
         placement: 'bottom-start',
+        plugins: [hideOnEscAndFocusOut],
       };
       if (contentFn) {
         config.content = contentFn;
@@ -1452,44 +1564,54 @@ Feedback 🔁
           const lineIds = lines.map((line) => {
             return targetCell + "-" + line;
           })
-          let top = null;
-          let height = null;
-          let parent = null;
+          // Each band is positioned against its own containing block, which is
+          // not the offsetParent of the lines, so place it from client rects.
+          const placeBand = (band, firstEl, lastEl, codeBlock) => {
+            const container = band.offsetParent;
+            if (container === null) {
+              return;
+            }
+            const containerRect = container.getBoundingClientRect();
+            // Reveal.js scales slides with a transform, so convert client
+            // pixels back to the CSS pixels of the container.
+            const scale = containerRect.height / container.offsetHeight || 1;
+            const firstRect = firstEl.getBoundingClientRect();
+            const lastRect = lastEl.getBoundingClientRect();
+            const top = (firstRect.top - containerRect.top) / scale - container.clientTop + container.scrollTop;
+            const height = (lastRect.bottom - firstRect.top) / scale;
+            band.style.top = top - 2 + "px";
+            band.style.height = height + 4 + "px";
+            if (codeBlock) {
+              // Without the copy button wrapper, the containing block is wider
+              // than the code block, so span the code block explicitly.
+              const blockRect = codeBlock.getBoundingClientRect();
+              band.style.left = (blockRect.left - containerRect.left) / scale - container.clientLeft + container.scrollLeft + "px";
+              band.style.width = blockRect.width / scale + "px";
+            }
+          };
           if (lineIds.length > 0) {
-              //compute the position of the single el (top and bottom and make a div)
-              const el = window.document.getElementById(lineIds[0]);
-              top = el.offsetTop;
-              height = el.offsetHeight;
-              parent = el.parentElement.parentElement;
-            if (lineIds.length > 1) {
-              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
-              height = bottom - top;
+            const el = window.document.getElementById(lineIds[0]);
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const parent = el.parentElement.parentElement;
+            // cook up a div (if necessary) and position it
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
             }
-            if (top !== null && height !== null && parent !== null) {
-              // cook up a div (if necessary) and position it 
-              let div = window.document.getElementById("code-annotation-line-highlight");
-              if (div === null) {
-                div = window.document.createElement("div");
-                div.setAttribute("id", "code-annotation-line-highlight");
-                div.style.position = 'absolute';
-                parent.appendChild(div);
-              }
-              div.style.top = top - 2 + "px";
-              div.style.height = height + 4 + "px";
-              div.style.left = 0;
-              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-              if (gutterDiv === null) {
-                gutterDiv = window.document.createElement("div");
-                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-                gutterDiv.style.position = 'absolute';
-                const codeCell = window.document.getElementById(targetCell);
-                const gutter = codeCell.querySelector('.code-annotation-gutter');
-                gutter.appendChild(gutterDiv);
-              }
-              gutterDiv.style.top = top - 2 + "px";
-              gutterDiv.style.height = height + 4 + "px";
+            placeBand(div, el, lastEl, parent.closest("div.sourceCode") || parent);
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
             }
+            placeBand(gutterDiv, el, lastEl);
             selectedAnnoteEl = annoteEl;
           }
         };
@@ -1566,6 +1688,7 @@ Feedback 🔁
             interactiveBorder: 10,
             theme: 'quarto',
             placement: 'right',
+            plugins: [hideOnEscAndFocusOut],
             popperOptions: {
               modifiers: [
               {
@@ -1626,6 +1749,9 @@ Feedback 🔁
       }
     }
   });
+  </script>
+  <script type="application/javascript">
+  window.quartoScrollableRegionsLabels = {"code":"Scrollable code","output":"Scrollable output"};
   </script>
 </div> <!-- /content -->
 <footer class="footer">
